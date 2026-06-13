@@ -215,13 +215,13 @@
               <input type="text" value="保定（固定）" disabled />
             </label>
             <label>年总收入（元）
-              <input type="number" name="annual_income" min="1000" value="60000" required />
+              <input type="number" name="annual_income" min="0" value="0" required />
             </label>
             <label>年盈余（元）
-              <input type="number" name="annual_surplus" min="-100000" value="8000" required />
+              <input type="number" name="annual_surplus" min="-100000" value="0" required />
             </label>
             <label>住房面积（平方米）
-              <input type="number" name="housing_area" min="20" value="100" required />
+              <input type="number" name="housing_area" min="0" value="0" required />
             </label>
             <label>当前取暖方式
               <select name="heating_method">
@@ -232,7 +232,7 @@
               </select>
             </label>
             <label>一个冬天取暖花费（元）
-              <input type="number" name="winter_cost" min="500" value="12000" required />
+              <input type="number" name="winter_cost" min="0" value="0" required />
             </label>
           </div>
           <h3>结局判定阈值</h3>
@@ -246,8 +246,8 @@
             <label>成功阈值：排放达标度（>=）
               <input type="number" name="success_emission_threshold" min="0" max="100" value="80" required />
             </label>
-            <label>成功阈值：法律合规度（=）
-              <input type="number" name="success_compliance_exact" min="0" max="100" value="100" required />
+            <label>成功阈值：法律合规度（>=）
+              <input type="number" name="success_compliance_min" min="0" max="100" value="80" required />
             </label>
             <label>成功阈值：能耗负担率（<=，%）
               <input type="number" name="success_energy_burden_max" min="1" max="100" value="10" required />
@@ -301,6 +301,9 @@
         thresholds: null
       };
 
+      const BAODING_GAS_PRICE_PER_M3 = 3.25;
+      const SUBSIDY_REDUCTION_PER_M3 = 0.5;
+
       const profileForm = document.getElementById("profileForm");
       const resetBtn = document.getElementById("resetBtn");
       const playArea = document.getElementById("playArea");
@@ -318,6 +321,10 @@
 
       function burdenPercent() {
         return (state.user.heatingCost / Math.max(1, state.user.income)) * 100;
+      }
+
+      function estimatedGasVolume() {
+        return state.user.initialHeatingCost / BAODING_GAS_PRICE_PER_M3;
       }
 
       function pushLog(text) {
@@ -385,7 +392,7 @@
         const burden = burdenPercent();
         const success =
           state.user.emission >= state.thresholds.successEmission &&
-          state.user.compliance === state.thresholds.successCompliance &&
+          state.user.compliance >= state.thresholds.successComplianceMin &&
           burden <= state.thresholds.successBurden;
         if (success) {
           finish(
@@ -424,7 +431,8 @@
             );
           } else {
             state.user.surplus -= 900;
-            state.user.compliance = clamp(state.user.compliance + 10, 0, 100);
+            state.user.compliance = clamp(state.user.compliance + 20, 0, 100);
+            state.user.emission = clamp(state.user.emission + 10, 0, 100);
             state.turn += 1;
             note = "提前准备转型，短期现金流下降。";
             pushLog(`回合1：${label} -> ${note}`);
@@ -469,7 +477,8 @@
             );
           } else {
             state.user.surplus -= 800;
-            state.user.compliance = clamp(state.user.compliance + 18, 0, 100);
+            state.user.compliance = clamp(state.user.compliance + 30, 0, 100);
+            state.user.emission = clamp(state.user.emission + 8, 0, 100);
             state.nonRectifyStreak = 0;
             state.turn += 1;
             note = "申请整改后进入技术选择。";
@@ -495,8 +504,8 @@
           }
           state.user.surplus -= invest + (id === "B" ? 1200 : 900);
           state.user.heatingCost = Math.round(heatingMap[id] * areaFactor);
-          state.user.compliance = clamp(state.user.compliance + (id === "A" ? 22 : 26), 0, 100);
-          state.user.emission = clamp(state.user.emission + (id === "A" ? 24 : 28), 0, 100);
+          state.user.compliance = clamp(state.user.compliance + (id === "A" ? 55 : 65), 0, 100);
+          state.user.emission = clamp(state.user.emission + (id === "A" ? 60 : 75), 0, 100);
           state.turn += 1;
           note = `完成技术改造，投入 ${invest} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
@@ -513,12 +522,13 @@
           if (id === "A") {
             state.user.income += 8000;
             state.user.surplus += 3500;
-            state.user.emission = clamp(state.user.emission + 2, 0, 100);
+            state.user.emission = clamp(state.user.emission + 5, 0, 100);
             note = "副业提升收入，但对减排帮助有限。";
           } else {
             state.user.heatingCost = Math.max(500, state.user.heatingCost - 1600);
             state.user.surplus += 1800;
-            state.user.emission = clamp(state.user.emission + 10, 0, 100);
+            state.user.compliance = clamp(state.user.compliance + 5, 0, 100);
+            state.user.emission = clamp(state.user.emission + 15, 0, 100);
             note = "节能降耗显著降低取暖费。";
           }
           state.turn += 1;
@@ -530,15 +540,16 @@
             [{ id: "SETTLE", label: "结算回合5（补贴减少）" }]
           );
         } else if (state.stage.startsWith("回合5")) {
-          const rise = Math.round(Math.max(600, state.user.heatingCost * 0.15));
+          const gasVolume = estimatedGasVolume();
+          const rise = Math.round(gasVolume * SUBSIDY_REDUCTION_PER_M3);
           state.user.heatingCost += rise;
-          state.user.surplus -= 1800;
+          state.user.surplus -= rise;
           state.user.emission = clamp(state.user.emission + 1, 0, 100);
           eventBoxEl.innerHTML = `
             <p class="pill bad">事件：补贴减少</p>
-            <p class="small">取暖成本增加 ${rise} 元，家庭现金流承压。</p>
+            <p class="small">按保定天然气取暖单价 ${BAODING_GAS_PRICE_PER_M3} 元/立方米估算：用气量 = 初始年取暖花费 ${state.user.initialHeatingCost} ÷ ${BAODING_GAS_PRICE_PER_M3} ≈ ${gasVolume.toFixed(1)} 立方米；补贴减少按固定单价差 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米计算，所以取暖成本增加 ${rise} 元。</p>
           `;
-          pushLog(`回合5：补贴减少 -> 取暖成本 +${rise} 元。`);
+          pushLog(`回合5：补贴减少 -> 估算用气量 ${gasVolume.toFixed(1)} 立方米，取暖成本 +${rise} 元。`);
           renderStats();
           finalRoundSettle();
         }
@@ -555,6 +566,7 @@
           surplus: Number(data.get("annual_surplus")),
           area: Number(data.get("housing_area")),
           heatingCost: Number(data.get("winter_cost")),
+          initialHeatingCost: Number(data.get("winter_cost")),
           compliance: 0,
           emission: 0
         };
@@ -562,7 +574,7 @@
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")),
           seized: Number(data.get("seized_compliance_threshold")),
           successEmission: Number(data.get("success_emission_threshold")),
-          successCompliance: Number(data.get("success_compliance_exact")),
+          successComplianceMin: Number(data.get("success_compliance_min")),
           successBurden: Number(data.get("success_energy_burden_max"))
         };
         state.stage = "turn1";
