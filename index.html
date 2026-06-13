@@ -1,277 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clean Heating Policy Simulator — Project Overview</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; }
-
-    :root {
-      --text: #1a1a1a;
-      --muted: #5c5c5c;
-      --border: #e8e8e8;
-      --accent: #2d5a3d;
-      --bg: #fafafa;
-    }
-
-    html {
-      font-size: 17px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body {
-      margin: 0;
-      padding: 3rem 1.5rem 5rem;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      line-height: 1.65;
-      color: var(--text);
-      background: var(--bg);
-    }
-
-    main {
-      max-width: 38rem;
-      margin: 0 auto;
-    }
-
-    header {
-      margin-bottom: 3.5rem;
-      padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    h1 {
-      margin: 0 0 0.75rem;
-      font-size: 1.65rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.25;
-    }
-
-    .subtitle {
-      margin: 0;
-      font-size: 1rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    section {
-      margin-bottom: 3rem;
-    }
-
-    h2 {
-      margin: 0 0 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-    }
-
-    p {
-      margin: 0 0 1rem;
-    }
-
-    p:last-child {
-      margin-bottom: 0;
-    }
-
-    ul {
-      margin: 0 0 1rem;
-      padding-left: 1.25rem;
-    }
-
-    li {
-      margin-bottom: 0.5rem;
-    }
-
-    li:last-child {
-      margin-bottom: 0;
-    }
-
-    .label {
-      display: inline-block;
-      margin-bottom: 0.35rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .flow {
-      margin: 1.25rem 0 0;
-      padding: 1.25rem 1.5rem;
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .flow strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    footer {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <header>
-      <h1>Clean Heating Policy Simulator</h1>
-      <p class="subtitle">
-        An AI-assisted interactive website exploring the human cost of coal-to-gas
-        policies in rural Hebei — for villagers, classmates, and policy thinkers.
-      </p>
-    </header>
-
-    <section>
-      <h2>The Social Issue</h2>
-      <p>
-        Across Baoding, Zhangjiakou, and Shijiazhuang, rural families face a
-        painful trade-off under clean-heating regulations: comply with costly
-        fuel transitions, absorb unsustainable winter expenses, or continue
-        banned heating methods and risk enforcement. Policies such as
-        <em>coal-to-gas</em> (煤改气) often lack tiered, income-sensitive
-        subsidies — leaving low-income households stuck between freezing and
-        breaking the rules.
-      </p>
-      <p>
-        This project turns that structural dilemma into something people can
-        experience step by step, rather than read about in abstract terms.
-      </p>
-    </section>
-
-    <section>
-      <h2>Who It Is For</h2>
-      <ul>
-        <li>
-          <strong>Rural residents in Hebei</strong> — families navigating real
-          heating costs, subsidies, and compliance pressure.
-        </li>
-        <li>
-          <strong>Classmates and peers</strong> — students who may never visit
-          a village but need to understand how policy feels on the ground.
-        </li>
-        <li>
-          <strong>Policy-minded users</strong> — anyone who wants to test how a
-          rule change might affect households at different income levels.
-        </li>
-      </ul>
-      <p>
-        Field interviews in all three cities already confirm the problem exists;
-        this tool lets others walk through it interactively.
-      </p>
-    </section>
-
-    <section>
-      <h2>Product Type</h2>
-      <p>
-        <strong>Not a small game — an interactive policy simulation website.</strong>
-      </p>
-      <p>
-        Users chat with an AI-powered chatbot inside a structured web flow. They
-        choose a role, a city, and household details; the system branches through
-        decisions and outcomes. It borrows the clarity of a choice-based narrative,
-        but the goal is education and research — not entertainment or scoring.
-      </p>
-
-      <p class="label">Two roles</p>
-      <ul>
-        <li>
-          <strong>Rural resident</strong> — select a city; enter income, household
-          size, housing area, heating method, usage, and winter cost. The system
-          checks local rules (from scraped policies and regulations), surfaces the
-          household’s dilemma, and offers paths such as continuing non-compliant
-          heating or green transition (natural gas, ground-source heat pump), plus
-          coping strategies (solar, live-stream sales, reduced usage).
-        </li>
-        <li>
-          <strong>Policy maker</strong> — select a region, draft or paste heating
-          policy text, and see how it interacts with existing local law and affects
-          people at different income levels.
-        </li>
-      </ul>
-
-      <div class="flow">
-        <strong>Resident path (simplified):</strong><br>
-        Role &amp; city → household data → problem analysis → binary choice →
-        transition options &amp; cost forecast → income/coping choices →
-        ending (seized / bankrupt / successful transition) →
-        <strong>AI diagnostic summary</strong>
-      </div>
-    </section>
-
-    <section>
-      <h2>How User Feedback Is Collected</h2>
-      <p>
-        Every session is designed to leave a research-ready record while keeping
-        participants anonymous.
-      </p>
-      <ul>
-        <li>
-          <strong>Pre- and post-simulation surveys</strong> — short Likert-scale
-          questions on policy fairness, subsidy awareness, and understanding of
-          rural heating burdens (administered in Chinese for rural users).
-        </li>
-        <li>
-          <strong>Behavioral logs</strong> — role, city, key choices at each
-          branch, final outcome, and session duration stored without names or
-          contact details.
-        </li>
-        <li>
-          <strong>Open-ended prompts</strong> — after the simulation: which
-          decision was hardest, whether views changed, and what policy change
-          they would recommend.
-        </li>
-        <li>
-          <strong>Informed consent</strong> — participants agree that data is
-          confidential and used only for the AIGeneration research paper.
-        </li>
-      </ul>
-      <p>
-        Target sample: <strong>20+ users</strong>, split between classmates and
-        rural participants recruited with help from village cadres.
-      </p>
-    </section>
-
-    <section>
-      <h2>How Feedback Supports the Research Paper</h2>
-      <p>
-        The paper (4,000–5,000 words, English) combines two evidence layers:
-      </p>
-      <ul>
-        <li>
-          <strong>Primary fieldwork</strong> — prior interviews in Baoding,
-          Zhangjiakou, and Shijiazhuang that document the policy–livelihood gap
-          and calibrate simulation parameters (costs, subsidies, compliance rules).
-        </li>
-        <li>
-          <strong>Post-use study</strong> — quantitative and qualitative data
-          from 20+ people who completed the simulator, showing whether interactive
-          exposure shifts understanding of “one-size-fits-all” clean-heating policy.
-        </li>
-      </ul>
-      <p>
-        Survey scores reveal changes in policy literacy; choice logs show which
-        dilemmas users encounter most (e.g., illegal heating vs. unaffordable
-        transition); open responses and AI diagnostic summaries provide quotable
-        themes for the Discussion section. Together, they answer:
-        <em>Does an AI-assisted simulation make the structural unfairness of
-        current heating policy more visible — and what design lessons follow?</em>
-      </p>
-    </section>
-
-    <footer>
-      AIGeneration Project · Peking University Stanford Middle School · 2025–26
-    </footer>
-  </main>
-</body>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>保定农户清洁取暖转型模拟器</title>
+    <meta http-equiv="refresh" content="0; url=./claude-chatbot-starter/index.html" />
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background: #f6f8fb;
+        color: #17212b;
+      }
+      .card {
+        max-width: 680px;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid #d0d7de;
+        border-radius: 12px;
+      }
+      a {
+        color: #1f6feb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <p>正在进入作品页。如果没有自动跳转，请点击：</p>
+      <p><a href="./claude-chatbot-starter/index.html">打开保定农户清洁取暖转型模拟器</a></p>
+    </div>
+  </body>
 </html>

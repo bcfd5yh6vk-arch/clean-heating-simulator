@@ -1,0 +1,163 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f6f7fb;
+  color: #1f2937;
+}
+
+.container {
+  max-width: 900px;
+  margin: 24px auto;
+  padding: 0 16px 32px;
+}
+
+h1 {
+  margin-bottom: 8px;
+}
+
+.hint {
+  color: #6b7280;
+  margin-top: 0;
+}
+
+.profile-form,
+.dashboard,
+.log-box,
+.choice-box {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  color: #374151;
+}
+
+input,
+select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: #fff;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  background: #111827;
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 12px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.stat {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.stat span {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.stat strong {
+  font-size: 20px;
+}
+
+.log-box {
+  min-height: 220px;
+  max-height: 420px;
+  overflow-y: auto;
+}
+
+.log-item {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #f9fafb;
+}
+
+.log-item h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.log-item p {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+.log-item.user {
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.log-item.assistant {
+  border-color: #d1fae5;
+  background: #ecfdf5;
+}
+
+.log-item.event {
+  border-color: #fde68a;
+  background: #fffbeb;
+}
+
+.log-item.ending {
+  border-color: #fbcfe8;
+  background: #fdf2f8;
+}
+
+.log-item.error {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.choice-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.choice-btn {
+  margin-top: 0;
+  background: #1d4ed8;
+}
+
+.hidden {
+  display: none;
+}

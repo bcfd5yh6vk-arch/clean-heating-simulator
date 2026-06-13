@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>保定农户清洁取暖转型模拟器（单文件作品页）</title>
+    <style>
+      :root {
+        --bg: #f6f8fb;
+        --card: #ffffff;
+        --text: #17212b;
+        --muted: #5a6b7b;
+        --primary: #1f6feb;
+        --good: #1a7f37;
+        --bad: #cf222e;
+        --warn: #9a6700;
+        --border: #d0d7de;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 20px 16px 40px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 14px;
+      }
+      h1,
+      h2,
+      h3 {
+        margin: 0 0 8px;
+        line-height: 1.35;
+      }
+      h1 {
+        font-size: 1.7rem;
+      }
+      h2 {
+        font-size: 1.2rem;
+        margin-top: 2px;
+      }
+      h3 {
+        font-size: 1rem;
+        margin-top: 8px;
+      }
+      p {
+        margin: 8px 0;
+      }
+      .hint {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+      }
+      label {
+        font-size: 0.92rem;
+        color: var(--muted);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      input,
+      select,
+      button,
+      textarea {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 0.95rem;
+        font: inherit;
+        background: #fff;
+      }
+      button {
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+      .pill {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        border: 1px solid var(--border);
+        background: #f3f4f6;
+        color: #344454;
+      }
+      .pill.good {
+        color: var(--good);
+        border-color: #8fce9a;
+        background: #edf9ef;
+      }
+      .pill.bad {
+        color: var(--bad);
+        border-color: #f1aeb5;
+        background: #fff1f2;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 8px;
+      }
+      .stat {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 8px;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 0.83rem;
+        display: block;
+      }
+      .stat strong {
+        font-size: 1.05rem;
+      }
+      ul {
+        margin: 6px 0 6px 18px;
+        padding: 0;
+      }
+      .log {
+        max-height: 300px;
+        overflow: auto;
+        border: 1px dashed var(--border);
+        border-radius: 8px;
+        padding: 8px;
+        background: #fafcff;
+      }
+      .log p {
+        margin: 0 0 8px;
+      }
+      .ending {
+        border-left: 4px solid var(--border);
+        padding-left: 10px;
+      }
+      .ending.success {
+        border-left-color: var(--good);
+      }
+      .ending.bankrupt,
+      .ending.seized {
+        border-left-color: var(--bad);
+      }
+      .small {
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
+      .kbd {
+        font-family: ui-monospace, Menlo, Consolas, monospace;
+        border: 1px solid var(--border);
+        border-bottom-width: 2px;
+        background: #fff;
+        border-radius: 6px;
+        padding: 1px 5px;
+        font-size: 0.8rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="card">
+        <h1>保定农户清洁取暖转型模拟器（MVP）</h1>
+        <p>
+          这是一个面向论文展示的单文件作品页：它把“清洁取暖为什么在现实中容易卡在可负担性”这个社会议题，做成一个可直接在浏览器里运行的 5 回合互动小模拟。
+        </p>
+        <p class="hint">
+          议题：北方农村清洁取暖（保定）在“改得起”和“用得起”之间的张力。<br />
+          形式：网页工具/轻量小游戏。<br />
+          用户：课堂展示的学生、老师、同学（零门槛点开即用）。
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>你原有的MVP边界（保留）</h2>
+        <ul>
+          <li>只保留一个玩家角色：农民家庭（暂不做政府/多主体博弈）。</li>
+          <li>
+            六项核心指标固定为：当前取暖年花费、年收入、年盈余、法律合规度、排放达标度、能耗负担率（取暖年花费/年收入*100%）。
+          </li>
+          <li>数值变化不由前端硬编码，现实版由 AI 计算；本单文件版用规则近似，便于离线演示。</li>
+          <li>回合2若持续拒绝整改可能被处罚；回合5最终仅输出经济破产 / 成功转型。</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h2>开始模拟（可直接操作）</h2>
+        <form id="profileForm">
+          <div class="grid">
+            <label>游戏角色（固定）
+              <input type="text" value="农民家庭（固定）" disabled />
+            </label>
+            <label>地区（固定）
+              <input type="text" value="保定（固定）" disabled />
+            </label>
+            <label>年总收入（元）
+              <input type="number" name="annual_income" min="1000" value="60000" required />
+            </label>
+            <label>年盈余（元）
+              <input type="number" name="annual_surplus" min="-100000" value="8000" required />
+            </label>
+            <label>住房面积（平方米）
+              <input type="number" name="housing_area" min="20" value="100" required />
+            </label>
+            <label>当前取暖方式
+              <select name="heating_method">
+                <option value="散煤炉">散煤炉</option>
+                <option value="天然气">天然气</option>
+                <option value="地源热泵">地源热泵</option>
+                <option value="空气源热泵">空气源热泵</option>
+              </select>
+            </label>
+            <label>一个冬天取暖花费（元）
+              <input type="number" name="winter_cost" min="500" value="12000" required />
+            </label>
+          </div>
+          <h3>结局判定阈值</h3>
+          <div class="grid">
+            <label>经济破产阈值：能耗负担率（%）
+              <input type="number" name="bankrupt_energy_burden_threshold" min="1" max="100" value="10" required />
+            </label>
+            <label>被处罚阈值：法律合规度（<）
+              <input type="number" name="seized_compliance_threshold" min="0" max="100" value="30" required />
+            </label>
+            <label>成功阈值：排放达标度（>=）
+              <input type="number" name="success_emission_threshold" min="0" max="100" value="80" required />
+            </label>
+            <label>成功阈值：法律合规度（=）
+              <input type="number" name="success_compliance_exact" min="0" max="100" value="100" required />
+            </label>
+            <label>成功阈值：能耗负担率（<=，%）
+              <input type="number" name="success_energy_burden_max" min="1" max="100" value="10" required />
+            </label>
+          </div>
+          <p class="hint">点击开始后，系统将按回合给出按钮决策，不需要命令行或后端服务。</p>
+          <div class="btn-row">
+            <button type="submit" class="btn-primary">开始模拟</button>
+            <button type="button" id="resetBtn">重置</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card" id="playArea" style="display:none;">
+        <h2>当前状态</h2>
+        <div class="stats" id="stats"></div>
+        <p id="stageTitle" class="pill"></p>
+        <p id="narrative"></p>
+        <div id="eventBox"></div>
+        <div class="btn-row" id="choices"></div>
+        <div id="endingBox"></div>
+      </section>
+
+      <section class="card">
+        <h2>研究摘要（来自你的 .md）</h2>
+        <p>
+          该议题已知结论是：清洁取暖在空气质量和散煤替代方面成效明显，但农户运行成本受补贴退坡影响非常大，存在“改得起、用不起”的结构性问题。
+          争论焦点在于短期合规和长期可持续之间如何平衡，以及不同县域政策执行差异如何影响农户行为。
+        </p>
+        <p>
+          你的切入空白是“户级、回合制、可交互”的解释工具：把年收入、取暖费、合规和排放放进同一个流程里，帮助课堂理解为什么同一政策在微观层面会走向不同结局。
+        </p>
+        <p class="small">
+          参考资料已在仓库保留：<span class="kbd">spec.md</span>、<span class="kbd">research/summary.md</span>、<span class="kbd">research/sources.md</span>、<span class="kbd">research/data/*</span>。
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>操作日志</h2>
+        <div class="log" id="logBox"></div>
+      </section>
+    </div>
+
+    <script>
+      const state = {
+        active: false,
+        stage: "turn1",
+        turn: 1,
+        nonRectifyStreak: 0,
+        user: null,
+        thresholds: null
+      };
+
+      const profileForm = document.getElementById("profileForm");
+      const resetBtn = document.getElementById("resetBtn");
+      const playArea = document.getElementById("playArea");
+      const statsEl = document.getElementById("stats");
+      const stageTitleEl = document.getElementById("stageTitle");
+      const narrativeEl = document.getElementById("narrative");
+      const eventBoxEl = document.getElementById("eventBox");
+      const choicesEl = document.getElementById("choices");
+      const endingBoxEl = document.getElementById("endingBox");
+      const logBoxEl = document.getElementById("logBox");
+
+      function clamp(v, min, max) {
+        return Math.max(min, Math.min(max, v));
+      }
+
+      function burdenPercent() {
+        return (state.user.heatingCost / Math.max(1, state.user.income)) * 100;
+      }
+
+      function pushLog(text) {
+        const p = document.createElement("p");
+        p.textContent = text;
+        logBoxEl.prepend(p);
+      }
+
+      function renderStats() {
+        const burden = burdenPercent();
+        statsEl.innerHTML = `
+          <div class="stat"><span>当前取暖年花费（元）</span><strong>${Math.round(state.user.heatingCost)}</strong></div>
+          <div class="stat"><span>年收入（元）</span><strong>${Math.round(state.user.income)}</strong></div>
+          <div class="stat"><span>年盈余（元）</span><strong>${Math.round(state.user.surplus)}</strong></div>
+          <div class="stat"><span>法律合规度（0-100）</span><strong>${Math.round(state.user.compliance)}</strong></div>
+          <div class="stat"><span>排放达标度（0-100）</span><strong>${Math.round(state.user.emission)}</strong></div>
+          <div class="stat"><span>能耗负担率（%）</span><strong>${burden.toFixed(1)}</strong></div>
+        `;
+      }
+
+      function setStage(stageName, narrative, options) {
+        state.stage = stageName;
+        stageTitleEl.textContent = `第 ${state.turn} 回合 · ${stageName}`;
+        narrativeEl.textContent = narrative;
+        eventBoxEl.innerHTML = "";
+        choicesEl.innerHTML = "";
+        options.forEach((opt) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.textContent = opt.label;
+          btn.addEventListener("click", () => runChoice(opt.id, opt.label));
+          choicesEl.appendChild(btn);
+        });
+        renderStats();
+      }
+
+      function finish(type, summary, diagnosis) {
+        state.active = false;
+        choicesEl.innerHTML = "";
+        const cls = type === "success" ? "success" : "bankrupt";
+        endingBoxEl.innerHTML = `
+          <div class="ending ${cls}">
+            <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "被处罚" : "经济破产"}</h3>
+            <p>${summary}</p>
+            <p><strong>政策诊断：</strong>${diagnosis}</p>
+          </div>
+        `;
+        pushLog(`【终局】${summary}`);
+      }
+
+      function evaluateEarlyEnding() {
+        const burden = burdenPercent();
+        if (burden >= state.thresholds.bankrupt && state.user.surplus <= 0) {
+          finish(
+            "bankrupt",
+            "能耗负担率过高且可支配资金不足，家庭进入经济破产状态。",
+            "你的取暖成本与收入结构失衡，现金流无法覆盖冬季支出。后续应优先降低运行费用或提升稳定收入。"
+          );
+          return true;
+        }
+        return false;
+      }
+
+      function finalRoundSettle() {
+        const burden = burdenPercent();
+        const success =
+          state.user.emission >= state.thresholds.successEmission &&
+          state.user.compliance === state.thresholds.successCompliance &&
+          burden <= state.thresholds.successBurden;
+        if (success) {
+          finish(
+            "success",
+            "排放、合规、能耗负担率三项同时达标，成功实现绿色转型。",
+            "你在技术路线、合规行为与家庭财务之间建立了稳定平衡，补贴退坡冲击后仍能维持可持续状态。"
+          );
+        } else {
+          finish(
+            "bankrupt",
+            "回合5发生补贴减少后，家庭未达到成功条件，判定为经济破产。",
+            "关键问题在于运行阶段抗风险能力不足。下一步应优先做保温/降耗，避免单纯依赖补贴。"
+          );
+        }
+      }
+
+      function runChoice(id, label) {
+        if (!state.active) return;
+        let note = "";
+
+        if (state.stage === "turn1" || state.stage.startsWith("回合1")) {
+          if (id === "A") {
+            state.user.compliance = clamp(state.user.compliance - 6, 0, 100);
+            state.user.emission = clamp(state.user.emission - 8, 0, 100);
+            state.turn += 1;
+            note = "继续现状，合规和排放表现下降。";
+            pushLog(`回合1：${label} -> ${note}`);
+            if (evaluateEarlyEnding()) return;
+            setStage(
+              "回合2：合规压力应对",
+              "你进入执法风险回合：可继续不整改，也可申请整改后进入技术转型。",
+              [
+                { id: "1", label: "夜间继续违规取暖" },
+                { id: "2", label: "申请整改" }
+              ]
+            );
+          } else {
+            state.user.surplus -= 900;
+            state.user.compliance = clamp(state.user.compliance + 10, 0, 100);
+            state.turn += 1;
+            note = "提前准备转型，短期现金流下降。";
+            pushLog(`回合1：${label} -> ${note}`);
+            setStage(
+              "回合3：技术路线选择",
+              "请选择技术路线（会产生一次性投入并改变后续成本）。",
+              [
+                { id: "A", label: "天然气（3000元/100㎡）" },
+                { id: "B", label: "地源热泵（10000元/100㎡）" },
+                { id: "C", label: "空气源热泵（7000元/100㎡）" }
+              ]
+            );
+          }
+        } else if (state.stage.startsWith("回合2")) {
+          if (id === "1") {
+            const drop = Math.max(8, 6 + state.nonRectifyStreak * 4);
+            state.user.compliance = clamp(state.user.compliance - drop, 0, 100);
+            state.user.emission = clamp(state.user.emission - 10, 0, 100);
+            state.nonRectifyStreak += 1;
+            state.turn += 1;
+            note = `继续不整改，合规进一步下降（连续 ${state.nonRectifyStreak} 次）。`;
+            pushLog(`回合2：${label} -> ${note}`);
+            if (
+              state.nonRectifyStreak >= 2 &&
+              state.user.compliance < state.thresholds.seized
+            ) {
+              finish(
+                "seized",
+                "你在合规风险回合持续拒绝整改，且法律合规度过低，最终被处罚。",
+                "该结局来自行为路径而非随机事件：重复违规放大了执法风险。"
+              );
+              return;
+            }
+            if (evaluateEarlyEnding()) return;
+            setStage(
+              "回合2：合规压力应对",
+              "你仍处于执法风险回合。继续不整改将明显提高被处罚概率。",
+              [
+                { id: "1", label: "夜间继续违规取暖" },
+                { id: "2", label: "申请整改" }
+              ]
+            );
+          } else {
+            state.user.surplus -= 800;
+            state.user.compliance = clamp(state.user.compliance + 18, 0, 100);
+            state.nonRectifyStreak = 0;
+            state.turn += 1;
+            note = "申请整改后进入技术选择。";
+            pushLog(`回合2：${label} -> ${note}`);
+            setStage(
+              "回合3：技术路线选择",
+              "请选择技术路线（会产生一次性投入并改变后续成本）。",
+              [
+                { id: "A", label: "天然气（3000元/100㎡）" },
+                { id: "B", label: "地源热泵（10000元/100㎡）" },
+                { id: "C", label: "空气源热泵（7000元/100㎡）" }
+              ]
+            );
+          }
+        } else if (state.stage.startsWith("回合3")) {
+          const areaFactor = state.user.area / 100;
+          const investMap = { A: 3000, B: 10000, C: 7000 };
+          const heatingMap = { A: 8000, B: 2000, C: 4300 };
+          const invest = Math.round(investMap[id] * areaFactor);
+          if (state.user.income <= invest) {
+            alert(`年收入不足以覆盖一次性投入 ${invest} 元，请换一个技术路线。`);
+            return;
+          }
+          state.user.surplus -= invest + (id === "B" ? 1200 : 900);
+          state.user.heatingCost = Math.round(heatingMap[id] * areaFactor);
+          state.user.compliance = clamp(state.user.compliance + (id === "A" ? 22 : 26), 0, 100);
+          state.user.emission = clamp(state.user.emission + (id === "A" ? 24 : 28), 0, 100);
+          state.turn += 1;
+          note = `完成技术改造，投入 ${invest} 元。`;
+          pushLog(`回合3：${label} -> ${note}`);
+          if (evaluateEarlyEnding()) return;
+          setStage(
+            "回合4：增收/降耗策略",
+            "请选择家庭策略：提高收入，或直接降低取暖消耗。",
+            [
+              { id: "A", label: "农业直播/副业（提高收入）" },
+              { id: "B", label: "强力节能（降温、分区取暖）" }
+            ]
+          );
+        } else if (state.stage.startsWith("回合4")) {
+          if (id === "A") {
+            state.user.income += 8000;
+            state.user.surplus += 3500;
+            state.user.emission = clamp(state.user.emission + 2, 0, 100);
+            note = "副业提升收入，但对减排帮助有限。";
+          } else {
+            state.user.heatingCost = Math.max(500, state.user.heatingCost - 1600);
+            state.user.surplus += 1800;
+            state.user.emission = clamp(state.user.emission + 10, 0, 100);
+            note = "节能降耗显著降低取暖费。";
+          }
+          state.turn += 1;
+          pushLog(`回合4：${label} -> ${note}`);
+          if (evaluateEarlyEnding()) return;
+          setStage(
+            "回合5：补贴减少冲击",
+            "固定事件触发：补贴减少。点击按钮结算最终结果。",
+            [{ id: "SETTLE", label: "结算回合5（补贴减少）" }]
+          );
+        } else if (state.stage.startsWith("回合5")) {
+          const rise = Math.round(Math.max(600, state.user.heatingCost * 0.15));
+          state.user.heatingCost += rise;
+          state.user.surplus -= 1800;
+          state.user.emission = clamp(state.user.emission + 1, 0, 100);
+          eventBoxEl.innerHTML = `
+            <p class="pill bad">事件：补贴减少</p>
+            <p class="small">取暖成本增加 ${rise} 元，家庭现金流承压。</p>
+          `;
+          pushLog(`回合5：补贴减少 -> 取暖成本 +${rise} 元。`);
+          renderStats();
+          finalRoundSettle();
+        }
+      }
+
+      profileForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const data = new FormData(profileForm);
+        state.user = {
+          role: "农民家庭",
+          region: "保定",
+          heatingMethod: String(data.get("heating_method")),
+          income: Number(data.get("annual_income")),
+          surplus: Number(data.get("annual_surplus")),
+          area: Number(data.get("housing_area")),
+          heatingCost: Number(data.get("winter_cost")),
+          compliance: 0,
+          emission: 0
+        };
+        state.thresholds = {
+          bankrupt: Number(data.get("bankrupt_energy_burden_threshold")),
+          seized: Number(data.get("seized_compliance_threshold")),
+          successEmission: Number(data.get("success_emission_threshold")),
+          successCompliance: Number(data.get("success_compliance_exact")),
+          successBurden: Number(data.get("success_energy_burden_max"))
+        };
+        state.stage = "turn1";
+        state.turn = 1;
+        state.nonRectifyStreak = 0;
+        state.active = true;
+
+        playArea.style.display = "block";
+        endingBoxEl.innerHTML = "";
+        logBoxEl.innerHTML = "";
+        pushLog(
+          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，冬季取暖费=${state.user.heatingCost}。`
+        );
+
+        setStage(
+          "回合1：现状抉择（开局）",
+          "请选择开局策略：继续现状会进入执法风险，准备转型会先承受短期财务压力。",
+          [
+            { id: "A", label: "继续当前取暖方式" },
+            { id: "B", label: "准备转型" }
+          ]
+        );
+      });
+
+      resetBtn.addEventListener("click", () => {
+        state.active = false;
+        state.stage = "turn1";
+        state.turn = 1;
+        state.nonRectifyStreak = 0;
+        playArea.style.display = "none";
+        logBoxEl.innerHTML = "";
+        endingBoxEl.innerHTML = "";
+      });
+    </script>
+  </body>
+</html>

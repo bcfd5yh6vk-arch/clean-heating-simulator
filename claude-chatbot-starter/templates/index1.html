@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>农村清洁取暖转型模拟器（MVP）</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>农村清洁取暖转型模拟器（MVP）</h1>
+      <p class="hint">
+        聚焦农民家庭单视角：先填写家庭与目标参数，然后逐回合决策。AI 将实时返回“选择 -> 数值变化 -> 特殊事件 -> 下一步选项”。
+      </p>
+      <section class="mvp-note">
+        <h2>MVP 范围（导师建议版）</h2>
+        <ul>
+          <li>角色固定为：农民家庭（先不做村民/政府多分支）。</li>
+          <li>核心目标：收支平衡、收入稳定、排放达标、政策合规。</li>
+          <li>核心机制：每回合由 AI 计算数值变化，不在前端硬编码涨跌。</li>
+        </ul>
+      </section>
+
+      <form id="profileForm" class="profile-form">
+        <input type="hidden" name="player_role" value="farmer" />
+        <div class="grid">
+          <label>游戏角色（MVP）
+            <input type="text" value="农民家庭（固定）" disabled />
+          </label>
+          <label>地区
+            <select name="region" required>
+              <option value="保定">保定</option>
+              <option value="张家口">张家口</option>
+              <option value="石家庄">石家庄</option>
+            </select>
+          </label>
+          <label>年收入（元）
+            <input type="number" name="annual_income" min="1000" value="60000" required />
+          </label>
+          <label>家庭人数
+            <input type="number" name="household_size" min="1" value="4" required />
+          </label>
+          <label>住房面积（平方米）
+            <input type="number" name="housing_area" min="20" value="100" required />
+          </label>
+          <label>当前取暖方式
+            <select name="heating_method" required>
+              <option value="散煤炉">散煤炉</option>
+              <option value="天然气">天然气</option>
+              <option value="地源热泵">地源热泵</option>
+              <option value="电暖气">电暖气</option>
+            </select>
+          </label>
+          <label>取暖量水平
+            <select name="heating_amount" required>
+              <option value="低">低</option>
+              <option value="中等" selected>中等</option>
+              <option value="高">高</option>
+            </select>
+          </label>
+          <label>一个冬天取暖花费（元）
+            <input type="number" name="winter_cost" min="500" value="12000" required />
+          </label>
+        </div>
+
+        <h3>成功绿色转型判定阈值（可用于论文量化）</h3>
+        <div class="grid">
+          <label>目标家庭结余（>=）
+            <input type="number" name="target_cash_balance" min="0" value="0" required />
+          </label>
+          <label>目标收入稳定度（0-100）
+            <input type="number" name="target_income_stability" min="0" max="100" value="60" required />
+          </label>
+          <label>目标合规度（0-100）
+            <input type="number" name="target_compliance" min="0" max="100" value="70" required />
+          </label>
+          <label>目标排放达标度（0-100）
+            <input type="number" name="target_emission_score" min="0" max="100" value="80" required />
+          </label>
+          <label>回合上限
+            <input type="number" name="max_turns" min="3" max="24" value="8" required />
+          </label>
+        </div>
+
+        <p class="hint">
+          建议后端将以上阈值一并传给 AI，要求其返回结构化 JSON（叙事、四项指标 delta、是否触发事件、下一步 choices），用于实时更新面板。
+        </p>
+        <button id="startBtn" type="submit">开始模拟</button>
+      </form>
+
+      <section id="dashboard" class="dashboard hidden">
+        <h2>当前状态</h2>
+        <div class="stats">
+          <div class="stat"><span>家庭结余</span><strong id="cash_balance">0</strong></div>
+          <div class="stat"><span>收入稳定度</span><strong id="income_stability">0</strong></div>
+          <div class="stat"><span>合规度</span><strong id="compliance">0</strong></div>
+          <div class="stat"><span>排放达标度</span><strong id="emission_score">0</strong></div>
+        </div>
+      </section>
+
+      <section id="logBox" class="log-box hidden"></section>
+      <section id="choiceBox" class="choice-box hidden"></section>
+    </main>
+
+    <script src="/static/main.js"></script>
+  </body>
+</html>

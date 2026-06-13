@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清洁取暖政策模拟器 — 项目说明</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+
+    :root {
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --border: #e8e8e8;
+      --accent: #2d5a3d;
+      --bg: #fafafa;
+    }
+
+    html {
+      font-size: 17px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      margin: 0;
+      padding: 3rem 1.5rem 5rem;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    main {
+      max-width: 38rem;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 3.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0 0 0.75rem;
+      font-size: 1.65rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.35;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    section {
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      margin: 0 0 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+
+    p {
+      margin: 0 0 1rem;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    ul {
+      margin: 0 0 1rem;
+      padding-left: 1.25rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+
+    .label {
+      display: inline-block;
+      margin-bottom: 0.35rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .flow {
+      margin: 1.25rem 0 0;
+      padding: 1.25rem 1.5rem;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .flow strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>清洁取暖政策模拟器</h1>
+      <p class="subtitle">
+        一款由 AI 辅助的交互式网站，呈现河北农村「煤改气」等政策背后的人本代价——面向村民、同学与关心政策的人。
+      </p>
+    </header>
+
+    <section>
+      <h2>社会问题</h2>
+      <p>
+        在保定、张家口、石家庄，许多农村家庭在清洁取暖规制下面临艰难抉择：承担昂贵的燃料转型、承受难以负担的冬季取暖开支，或继续使用被禁止的取暖方式并面临执法风险。「煤改气」等政策往往缺乏与收入挂钩的阶梯式精准补贴，使低收入家庭陷入「挨冻」与「违规」之间的两难。
+      </p>
+      <p>
+        本项目将这一结构性困境转化为可逐步体验的过程，让人们不再只从抽象文字中了解政策，而是亲身「走一遍」。
+      </p>
+    </section>
+
+    <section>
+      <h2>面向谁</h2>
+      <ul>
+        <li>
+          <strong>河北农村居民</strong>——正在应对真实取暖成本、补贴与合规压力的家庭。
+        </li>
+        <li>
+          <strong>同学与同龄人</strong>——未必去过农村，但需要理解政策在地面上的真实感受的学生。
+        </li>
+        <li>
+          <strong>关心政策的用户</strong>——希望试探一项规则调整将如何影响不同收入层次家庭的人。
+        </li>
+      </ul>
+      <p>
+        我们已在上述三地完成实地访谈，证实问题存在；本工具让其他人也能以交互方式重走这一困境。
+      </p>
+    </section>
+
+    <section>
+      <h2>产品形态</h2>
+      <p>
+        <strong>不是小游戏，而是交互式政策模拟网站。</strong>
+      </p>
+      <p>
+        用户在结构化的网页流程中与 AI 聊天机器人互动：选择身份、城市与家庭信息，系统按分支推进决策与结局。它借鉴了选项式叙事的清晰感，但目标是教育与研究，而非娱乐或计分。
+      </p>
+
+      <p class="label">两种身份</p>
+      <ul>
+        <li>
+          <strong>农村民众</strong>——选择城市；输入年收入、家庭人数、住房面积、取暖方式、取暖量与冬季取暖花费。系统对照当地法规（基于爬取的政策与条例）判断合规情况，呈现家庭困境，并提供路径：如继续违规取暖或进行绿色转型（天然气、地源热泵），以及应对策略（屋顶光伏、直播带货、减少用量等）。
+        </li>
+        <li>
+          <strong>政策制定者</strong>——选择地区，输入或粘贴与民用取暖相关的政策条文，系统结合当地现行法规，分析其对不同收入层次民众的影响。
+        </li>
+      </ul>
+
+      <div class="flow">
+        <strong>民众路径（简化）：</strong><br>
+        身份与城市 → 家庭数据 → 问题分析 → 二选一（如违规取暖 / 绿色转型）→
+        转型方案与成本预测 → 增收与应对选择 →
+        结局（查封 / 破产 / 成功转型）→
+        <strong>大模型诊断总结</strong>
+      </div>
+    </section>
+
+    <section>
+      <h2>如何收集用户反馈</h2>
+      <p>
+        每次使用都会留下可用于研究、且保护参与者匿名性的记录。
+      </p>
+      <ul>
+        <li>
+          <strong>模拟前后问卷</strong>——关于政策公平性、补贴认知与农村取暖负担的简短量表题（农村用户以中文填写）。
+        </li>
+        <li>
+          <strong>行为日志</strong>——记录身份、城市、各分支关键选择、最终结局与用时，不收集姓名或联系方式。
+        </li>
+        <li>
+          <strong>开放题</strong>——模拟结束后：最难的决策是哪一步、看法是否改变、若你是政策制定者会改哪一条。
+        </li>
+        <li>
+          <strong>知情同意</strong>——参与者同意数据保密，仅用于 AIGeneration 研究论文。
+        </li>
+      </ul>
+      <p>
+        目标样本：<strong>20 人以上</strong>，包括同学与通过村干部协助招募的农村参与者。
+      </p>
+    </section>
+
+    <section>
+      <h2>反馈如何支撑研究论文</h2>
+      <p>
+        论文（英文 4000–5000 词）由两层证据构成：
+      </p>
+      <ul>
+        <li>
+          <strong>实地调研</strong>——此前在保定、张家口、石家庄的访谈，记录政策与生计之间的落差，并为模拟器校准参数（成本、补贴、合规规则等）。
+        </li>
+        <li>
+          <strong>使用后研究</strong>——20 人以上完成模拟后的定量与定性数据，检验交互体验是否改变对「一刀切」清洁取暖政策的理解。
+        </li>
+      </ul>
+      <p>
+        问卷分数反映政策认知变化；选择日志显示用户最常遭遇的困境（如违规取暖与无力转型）；开放题与 AI 诊断总结为讨论部分提供可引用主题。共同回答的问题是：
+        <em>AI 辅助的政策模拟，能否让当前取暖政策的结构性不公更加可见——并带来哪些设计启示？</em>
+      </p>
+    </section>
+
+    <footer>
+      AIGeneration 项目 · 北大附中斯坦福中学 · 2025–26
+    </footer>
+  </main>
+</body>
+</html>

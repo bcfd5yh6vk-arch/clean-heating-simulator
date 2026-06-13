@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "project": "保定农户清洁取暖转型模拟器",
+    "scenario_year": 2025,
+    "region": "保定市（平原农村，100㎡ 基准户）",
+    "last_updated": "2026-06-07",
+    "note": "MVP 建议默认值；当前 HTML 中 60000/12000 偏高，建议逐步迁移至本文件参数"
+  },
+  "household": {
+    "annual_income_default": 60000,
+    "annual_income_recommended": { "min": 45000, "default": 60000, "max": 75000, "source": "户级≈3×保定农村人均23006" },
+    "annual_surplus_default": 8000,
+    "annual_surplus_recommended": { "min": 2000, "default": 8000, "max": 15000 },
+    "housing_area_m2": { "default": 100, "min": 70, "max": 120 },
+    "rural_per_capita_income_2024": 23006,
+    "rural_consumption_2024": 16927
+  },
+  "heating_costs_yuan_per_season": {
+    "散煤": { "min": 1500, "default": 2500, "max": 3000 },
+    "天然气_补贴期": { "min": 1200, "default": 2500, "max": 4000, "case": "望都2020" },
+    "天然气_退坡期": { "min": 3000, "default": 4500, "max": 7000, "case": "曲阳2025-26" },
+    "空气源热泵": { "min": 2000, "default": 3500, "max": 5000 },
+    "地源热泵": { "min": 1500, "default": 2000, "max": 3000 }
+  },
+  "energy_burden": {
+    "hebei_hhb_threshold_pct": 5.4,
+    "burdened_pct": { "min": 4, "max": 6 },
+    "stressed_pct": { "min": 6, "max": 10 },
+    "poverty_pct": 10,
+    "simulator_bankrupt_threshold_pct": 10,
+    "behavioral_trigger_gas_pct_of_income": 5
+  },
+  "gas": {
+    "price_yuan_per_m3": {
+      "pre_2026": 3.18,
+      "post_2026_cut": 2.98,
+      "range": [2.5, 3.4]
+    },
+    "usage_m3_per_season": { "low": 800, "mid": 1000, "high": 1200, "cap_subsidy": 1200 },
+    "lifeline_m3": 700,
+    "operating_subsidy_yuan_per_m3_by_cohort_year": [
+      { "years": "1-3", "rate": 0.8, "max_m3": 1200, "max_subsidy_yuan": 960 },
+      { "years": "4-6", "rate": 0.4, "max_m3": 1200, "max_subsidy_yuan": 480 },
+      { "years": "7-12", "rate": 0.2, "max_m3": 1200, "max_subsidy_yuan": 240 }
+    ],
+    "overlay_2025_26": {
+      "user_subsidy": 0.4,
+      "enterprise_price_cut": 0.2,
+      "total_relief": 0.6,
+      "verified": false
+    }
+  },
+  "electricity": {
+    "peak_yuan_per_kwh": 0.55,
+    "valley_yuan_per_kwh": 0.3,
+    "effective_heat_pump": 0.35,
+    "operating_subsidy_yuan_per_kwh_by_cohort_year": [
+      { "years": "1-3", "rate": 0.12, "max_kwh": 10000 },
+      { "years": "4-6", "rate": 0.06, "max_kwh": 10000 },
+      { "years": "7-12", "rate": 0.03, "max_kwh": 10000 }
+    ]
+  },
+  "capex_yuan_per_100m2": {
+    "天然气": { "simulator": 3000, "range": [0, 5000], "note": "多已设备补贴覆盖" },
+    "地源热泵": { "simulator": 10000, "range": [8000, 25000] },
+    "空气源热泵": { "simulator": 7000, "range": [5000, 15000] },
+    "外墙保温": { "default": 10000, "range": [8000, 12000], "subsidy_pilot": 4000 }
+  },
+  "device_subsidy_caps_yuan": {
+    "gas_2017": 2700,
+    "gas_2018_plus": 1350,
+    "electric_2017": 7400,
+    "electric_2018_plus": 3700,
+    "trade_in_2024_max": 2000
+  },
+  "compliance_rebound": {
+    "baoding_reburn_rate_2019_pct": 36.1,
+    "intent_stop_if_subsidy_removed_pct": 59,
+    "intent_return_to_coal_pct": 43,
+    "modeled_reburn_hengshui_pct": [47.4, 63.8]
+  },
+  "environment": {
+    "pm25_urban_2024_ug_m3": 44,
+    "pm25_township_2024_ug_m3": 39,
+    "pm25_2016_ug_m3": 93,
+    "hdd18": { "default": 2600, "range": [2500, 2700] },
+    "heating_days": { "default": 120, "range": [110, 130] }
+  },
+  "scale_baoding": {
+    "clean_heating_households_2020": 1148000,
+    "coal_to_gas_households": 1020000,
+    "gov_investment_2016_2020_billion_yuan": 60
+  },
+  "affordability_survey": {
+    "pct_households_wanting_under_2500_yuan": 86,
+    "pct_cannot_afford_gas_without_subsidy": 11
+  }
+}

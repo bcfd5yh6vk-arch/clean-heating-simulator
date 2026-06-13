@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>保定农户清洁取暖转型模拟器（MVP）</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>保定农户清洁取暖转型模拟器（MVP）</h1>
+      <p class="hint">
+        两个月可交付版本：聚焦单角色（农民家庭）与单地区（保定），采用“选择 -> AI实时计算数值变化 -> 触发事件 -> 结局判定”闭环。
+      </p>
+
+      <section class="mvp-note profile-form">
+        <h2>MVP边界（先做最小可行）</h2>
+        <ul>
+          <li>只保留一个玩家角色：农民家庭（暂不做政府/多主体博弈）。</li>
+          <li>六项核心指标（游戏中实时变化、显示）固定为：当前取暖年花费、年收入、年盈余、法律合规度、排放达标度、能耗负担率（取暖年花费/年收入*100%）。</li>
+          <li>前三项展示具体金额；后两项分值区间为 0-100，开局初始值为 0，由玩家输入值决定。</li>
+          <li>数值变化不由前端硬编码，统一由 AI 基于玩家选择和情景实时计算。</li>
+          <li>结局触发采用可量化阈值：回合2若持续拒绝整改可能被处罚；回合5最终仅输出经济破产 / 成功转型。</li>
+        </ul>
+      </section>
+
+      <form id="profileForm" class="profile-form">
+        <input type="hidden" name="player_role" value="farmer" />
+        <input type="hidden" name="region" value="保定" />
+        <div class="grid">
+          <label>游戏角色（MVP固定）
+            <input type="text" value="农民家庭（固定）" disabled />
+          </label>
+          <label>地区（固定）
+            <input type="text" value="保定（固定）" disabled />
+          </label>
+          <label>年总收入（元）
+            <input type="number" name="annual_income" min="1000" value="60000" required />
+          </label>
+          <label>年盈余（元）
+            <input type="number" name="annual_surplus" min="-100000" value="8000" required />
+          </label>
+          <label>住房面积（平方米）
+            <input type="number" name="housing_area" min="20" value="100" required />
+          </label>
+          <label>当前取暖方式
+            <select name="heating_method" required>
+              <option value="散煤炉">散煤炉</option>
+              <option value="天然气">天然气</option>
+              <option value="地源热泵">地源热泵</option>
+              <option value="空气源热泵">空气源热泵</option>
+            </select>
+          </label>
+          <label>一个冬天取暖花费（元）
+            <input type="number" name="winter_cost" min="500" value="12000" required />
+          </label>
+        </div>
+
+        <h3>结局判定阈值（固定规则）</h3>
+        <div class="grid">
+          <label>经济破产阈值：能耗负担率（%）
+            <input type="number" name="bankrupt_energy_burden_threshold" min="1" max="100" value="10" required />
+          </label>
+          <label>被处罚阈值：法律合规度（<）
+            <input type="number" name="seized_compliance_threshold" min="0" max="100" value="30" required />
+          </label>
+          <label>成功阈值：排放达标度（>=）
+            <input type="number" name="success_emission_threshold" min="0" max="100" value="80" required />
+          </label>
+          <label>成功阈值：法律合规度（=）
+            <input type="number" name="success_compliance_exact" min="0" max="100" value="100" required />
+          </label>
+          <label>成功阈值：能耗负担率（<=，%）
+            <input type="number" name="success_energy_burden_max" min="1" max="100" value="10" required />
+          </label>
+          <label>回合上限
+            <input type="number" name="max_turns" min="3" max="24" value="8" required />
+          </label>
+        </div>
+
+        <p class="hint">
+          说明：玩家填写后，系统自动初始化指标：法律合规度=0、排放达标度=0；当前取暖年花费与年收入取玩家输入。能耗负担率=取暖年花费/年收入×100%。
+        </p>
+        <button id="startBtn" type="submit">开始模拟</button>
+      </form>
+
+      <section class="profile-form">
+        <h2>回合流程（按你设定的固定剧本）</h2>
+        <p><strong>回合1：现状抉择（开局）</strong></p>
+        <ul>
+          <li>A 继续当前取暖方式（例如散煤）：年盈余小幅不变，法律合规度下降，排放达标度下降，取暖费不变 -> 进入回合2（执法风险版）。</li>
+          <li>B 准备转型：年盈余小幅下降，法律合规度上升，排放达标度不变，取暖费不变 -> 进入回合3。</li>
+        </ul>
+
+        <p><strong>回合2：合规压力应对（执法风险版）</strong></p>
+        <ul>
+          <li>1 夜间继续违规取暖：年盈余不变，法律合规度明显下降（上次降幅乘二），排放达标度大幅下降，取暖费不变 -> 重复回合2，直至被抓。</li>
+          <li>2 申请整改：年盈余小幅下降，法律合规度恢复，其余不变 -> 进入回合3。</li>
+        </ul>
+
+        <p><strong>回合3：技术路线选择</strong></p>
+        <ul>
+          <li>A 天然气：一次性耗资 3000 元/100平米（前提：年收入高于一次性耗资），合规与减排大幅上升，年盈余下降，取暖费变为 8000 元/年·100平米 -> 回合4。</li>
+          <li>B 地源热泵：一次性耗资 10000 元/100平米（前提：年收入高于一次性耗资），年盈余大幅下降，合规与减排大幅上升，取暖费变为 2000 元/年·100平米 -> 回合4。</li>
+          <li>C 空气源热泵：一次性耗资 7000 元/100平米（前提：年收入高于一次性耗资），年盈余下降，合规与减排大幅上升，取暖费按设备效率由 AI 计算 -> 回合4。</li>
+        </ul>
+
+        <p><strong>回合4：增收/降耗策略</strong></p>
+        <ul>
+          <li>A 农业直播/副业：年收入上升 -> 进入回合5（补贴减少冲击）。</li>
+          <li>B 强力节能（降温、分区取暖）：取暖费下降，排放达标度上升，可能触发舒适度事件 -> 进入回合5（补贴减少冲击）。</li>
+        </ul>
+
+        <p><strong>回合5：冲击事件 + 结局判定</strong></p>
+        <ul>
+          <li>固定触发一个事件：补贴减少。</li>
+          <li>按玩家历史选择和当前指标推演，输出终局：成功转型 / 经济破产。</li>
+          <li>结束时必须生成“AI 政策诊断总结”，解释为何出现该结局。</li>
+        </ul>
+      </section>
+
+      <section class="profile-form">
+        <h2>AI输出结构（建议）</h2>
+        <pre>{
+  "turn": 1,
+  "narrative": "本回合发生了什么，以及为什么出现这些变化",
+  "delta": {
+    "heating_annual_cost": 0,
+    "annual_income": 0,
+    "compliance": 6,
+    "emission_score": 8
+  },
+  "event": {
+    "triggered": true,
+    "title": "设备故障",
+    "description": "热泵临时停机，维修成本上升"
+  },
+  "choices": [
+    { "id": "A", "label": "立刻维修，申请补贴" },
+    { "id": "B", "label": "暂缓维修，改用散煤过渡" }
+  ],
+  "ending": {
+    "is_final": true,
+    "type": "success | bankrupt",
+    "summary": "终局解释",
+    "policy_diagnosis": "基于本局全过程的政策诊断总结"
+  }
+}</pre>
+        <p class="hint">
+          判定规则：1) 回合2若持续选择“不整改”且法律合规度过低 -> 被处罚；2) 回合5补贴减少后，若未满足成功条件则判定经济破产；3) 排放达标度 >= 80 且法律合规度 = 100 且能耗负担率 &lt;= 成功阈值（默认10%） -> 成功转型。
+        </p>
+      </section>
+
+      <section id="dashboard" class="dashboard hidden">
+        <h2>当前状态</h2>
+        <div class="stats">
+          <div class="stat"><span>当前取暖年花费（元）</span><strong id="heating_annual_cost">0</strong></div>
+          <div class="stat"><span>年收入（元）</span><strong id="annual_income">0</strong></div>
+          <div class="stat"><span>法律合规度（0-100）</span><strong id="compliance">0</strong></div>
+          <div class="stat"><span>排放达标度（0-100）</span><strong id="emission_score">0</strong></div>
+        </div>
+      </section>
+
+      <section id="logBox" class="log-box hidden"></section>
+      <section id="choiceBox" class="choice-box hidden"></section>
+    </main>
+
+    <script src="/static/main.js"></script>
+  </body>
+</html>
