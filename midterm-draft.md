@@ -41,7 +41,7 @@ In the current MVP, a user enters household information, such as income, housing
 
 For the next version, I want to move from one household to one village. I will collect or simulate data from many households in one Baoding coal-to-X village. The data will include income, house size, heating cost, heating method, gas or electricity price, subsidy level, and whether the household feels the cost is affordable.
 
-The main users will be Baoding coal-to-X rural households, local stakeholders, and people who care about the coal-to-gas issue. If possible, I also want feedback from village-level decision makers.
+The main users will be Baoding coal-to-X rural households, local stakeholders, and people who care about the coal-to-X issue. If possible, I also want feedback from village-level decision makers.
 
 I will collect feedback in three ways. First, I will ask users to run the sandbox and choose a pathway. Second, I will ask short questions before and after use about affordability and data-based decision making. Third, I will ask users what feels unrealistic or missing.
 
