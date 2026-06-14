@@ -24,3 +24,8 @@
 - 让 3-5 位同学各跑一局，记录他们的最终结局和“为什么这么选”。
 - 演示后问 3 个问题：哪里不真实、哪里看不懂、哪个决策最难。
 - 根据反馈调整默认参数和事件文案，保留版本说明用于论文附录。
+
+## Research Question & Hypothesis
+Research Question: How does my Baoding coal-to-X village transition simulation sandbox affect support for household-data-based village heating decisions among Baoding rural households and local stakeholders?
+
+Hypothesis: I hypothesize that after using the sandbox, Baoding rural households and local stakeholders will increase their support for using household data to choose village-level coal-to-X heating pathways.
