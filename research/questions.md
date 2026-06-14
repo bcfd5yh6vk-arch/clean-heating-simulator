@@ -61,7 +61,7 @@
 | 开放问题 | 对应代码/设计 |
 |----------|----------------|
 | Q1–Q2 补贴规则 | `app.py` 补贴 cohort 逻辑；`policysandbox.py` 政策抓取 |
-| Q3 默认参数 | `templates/indexChinese edited.html` 表单默认值 |
+| Q3 默认参数 | `templates/indexChinese.html` 表单默认值 |
 | Q4 阈值 | 结局判定 `bankrupt_energy_burden_threshold` |
 | Q5–Q9 事件 | 回合 5 冲击事件库（待 JSON 化） |
 | Q10–Q11 校准 | `research/data/calibration_defaults.json` 迭代 |
