@@ -100,6 +100,21 @@
         gap: 8px;
         margin-top: 8px;
       }
+      .research-toggle {
+        margin-top: 10px;
+      }
+      .research-panel {
+        display: none;
+        margin-top: 12px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+      .research-panel.open {
+        display: block;
+      }
+      .research-panel h3 {
+        color: #24364a;
+      }
       .pill {
         display: inline-block;
         padding: 2px 8px;
@@ -190,6 +205,43 @@
           形式：网页工具/轻量小游戏。<br />
           用户：保定煤改X区域农户和对“煤改气”问题感兴趣的其他各界社会人士。
         </p>
+      </section>
+
+      <section class="card">
+        <h2>研究 / The research</h2>
+        <p class="hint">
+          点开这里，可以快速了解这个作品背后的研究问题、假设和目前发现。
+        </p>
+        <button type="button" id="researchToggle" class="btn-primary research-toggle" aria-expanded="false">
+          研究 / The research
+        </button>
+        <div id="researchPanel" class="research-panel">
+          <h3>研究问题</h3>
+          <p>
+            这个沙盘想回答：能不能用一个保定煤改X村庄里每户的收入、住房、取暖成本和能源价格数据，为整个村庄推荐更适合的清洁取暖路径？
+          </p>
+
+          <h3>假设</h3>
+          <p>
+            我假设，使用农户层面的数据后，村级路径建议会更准确，因为它能更好地匹配多数农户的收入、房屋条件、取暖成本和可负担性限制。
+          </p>
+
+          <h3>为什么重要</h3>
+          <p>
+            保定很多农村家庭已经从散煤转向天然气或其他清洁取暖方式。环境收益很明显，但农户真正担心的是：冬天到底用不用得起。
+          </p>
+          <p>
+            一个村庄往往会采用相对统一的煤改X路径。如果这条路径和多数家庭的收入、房屋保温、气价或电价不匹配，就可能出现少开暖气、室温不足，甚至返煤的问题。
+          </p>
+
+          <h3>我做了什么 / 初步发现</h3>
+          <ul>
+            <li>我把年收入、住房面积、取暖花费、合规度、排放达标度和能耗负担率放进同一个模拟流程。</li>
+            <li>模拟器让用户看到不同选择会怎样影响家庭现金流和转型结果。</li>
+            <li>目前的研究说明：清洁取暖不是简单的“改不改”，而是要看补贴、气价、电价、房屋条件和农户可承受能力。</li>
+            <li>下一步，我想把单户模拟扩展成村庄数据表，用多户数据比较煤改气、煤改电、热泵和保温组合哪种更适合一个村。</li>
+          </ul>
+        </div>
       </section>
 
       <section class="card">
@@ -314,6 +366,8 @@
       const choicesEl = document.getElementById("choices");
       const endingBoxEl = document.getElementById("endingBox");
       const logBoxEl = document.getElementById("logBox");
+      const researchToggle = document.getElementById("researchToggle");
+      const researchPanel = document.getElementById("researchPanel");
 
       function clamp(v, min, max) {
         return Math.max(min, Math.min(max, v));
@@ -607,6 +661,12 @@
         playArea.style.display = "none";
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
+      });
+
+      researchToggle.addEventListener("click", () => {
+        const isOpen = researchPanel.classList.toggle("open");
+        researchToggle.setAttribute("aria-expanded", String(isOpen));
+        researchToggle.textContent = isOpen ? "收起研究 / Hide the research" : "研究 / The research";
       });
     </script>
   </body>
