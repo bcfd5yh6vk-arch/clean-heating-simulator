@@ -26,6 +26,6 @@
 - 根据反馈调整默认参数和事件文案，保留版本说明用于论文附录。
 
 ## Research Question & Hypothesis
-Research Question: How does my Baoding coal-to-X village transition simulation sandbox affect support for household-data-based village heating decisions among Baoding rural households and local stakeholders?
+Research Question: How can my clean heating transition simulation sandbox use household data from one village in Baoding coal-to-X areas to recommend the most suitable clean heating transition pathway for the whole village?
 
-Hypothesis: I hypothesize that after using the sandbox, Baoding rural households and local stakeholders will increase their support for using household data to choose village-level coal-to-X heating pathways.
+Hypothesis: I hypothesize that using household-level data in the simulation sandbox will make village-level clean heating pathway recommendations more accurate, because it can better match the income, housing conditions, heating costs, and affordability constraints of most local households.
