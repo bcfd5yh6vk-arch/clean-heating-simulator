@@ -4,3 +4,4 @@ __pycache__/
 .env
 .tools/
 .vercel
+node_modules/
