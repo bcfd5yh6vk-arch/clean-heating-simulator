@@ -4,95 +4,138 @@ Guo Hang
 Research Advisor: Lawted Wu
 
 ## Research Question & Hypothesis
+Related Topic: Coal-to-X problems in Northern rural areas in China; the gap in public policies between environmental protection and people's well-being.
+
+Related disciplines: Environmental Studies; Public Policy; Economics; Applied Math; AI; Computer Science.
+
 Research Question: How can my clean heating transition simulation sandbox use household data from one village in Baoding coal-to-X areas to recommend the most suitable clean heating transition pathway for the whole village?
 
-Hypothesis: I hypothesize that using household-level data in the simulation sandbox will make village-level clean heating pathway recommendations more accurate, because it can better match the income, housing conditions, heating costs, and affordability constraints of most local households.
+Hypothesis: Village-level governments will choose the option that can better match the income, housing conditions, heating costs, and affordability constraints of most local households.
 
 ## Background
-My project is about rural clean heating in Baoding, Hebei.
+Related research fields: rural energy transition, clean heating policy, energy affordability, environmental governance, and village-level public decision-making.
 
-Since 2016, Baoding has been an important coal-control area in the Beijing-Tianjin-Hebei region. Many rural families changed from coal to cleaner heating, especially coal-to-gas.
+Situation: Since 2016, many rural households in Baoding have changed from coal to cleaner heating. This change helps reduce air pollution, but it also creates a new problem: some families can install clean heating equipment, but may not be able to afford using it every winter.
 
-This policy has clear environmental value. It can reduce scattered coal burning and improve air quality. But for many rural families, the harder question is not only "Is clean heating good?" The harder question is "Can people afford to use it every winter?"
+Importance: Clean heating is not only an environmental issue. It is also a household budget issue and a village governance issue. In many villages, the heating pathway is chosen at the village level, but different families have different situations. If the chosen pathway does not fit most households, the transition may be unstable.
 
-This matters to farmers because heating is a basic need. It matters to village governments because one village often follows one main heating pathway. It also matters to the public because a policy can look successful at the city level, but still create pressure at the household level.
+For me, this project is a way to connect policy research and AI with real-world decisions. For local communities, it may help villages compare coal-to-gas, coal-to-electricity, heat pumps, and insulation options before making one common decision. For society, it can help public policies be implemented more appropriately and improve people's well-being.
 
-If the chosen pathway is too expensive, families may heat less, feel cold, or even return to coal. So my project focuses on affordability, household differences, and village-level decision making.
+Why ordinary readers should care: This project gives readers a simple way to understand the trade-off between cleaner air, household cost, and practical village-level choices. Also, there is a trend in China to spread coal-to-X policies, and heating is a basic need for every family, so everyone should care about it.
 
 ## Literature Review
-Zhao et al. (2024) found that clean heating costs in rural Northern China are highly sensitive to subsidies. Their study shows that subsidy removal can raise heating spending and increase the share of households that cannot afford heating. This helps my project define affordability as a key variable. But it does not give a simple village-facing tool for local decision makers.
+What we know:
 
-Yu and Xin (2021) studied clean heating and heating poverty. Their work gives useful burden levels, such as pressure when heating costs take a high share of income. This helps my simulator use energy burden as a warning sign. But the study is still not a hands-on tool for one specific Baoding village.
+Environmental benefit is clear. Liu et al. show that Baoding's coal-to-gas transition reduced rural PM2.5-bound PAHs and lowered health risks, but pollution rebounded when biomass burning increased.
 
-Li, Song, and Zhu (2021) found that gas costs can strongly affect household choices. They also discuss the risk that families may go back to coal when clean heating becomes too expensive. This supports my focus on behavior and compliance. But the paper does not combine income, housing, cost, and local pathway choice in one interactive sandbox.
+Clean heating also supports carbon reduction. Yuan et al. build a carbon-reduction method for rural clean heating in Hebei and show that clean heating projects can create measurable emission reductions.
 
-He et al. (2021) reported that some clean-heating households in Baoding returned to coal. This shows that transition is not finished after equipment is installed. The missing part is a way to test which pathway may stay affordable for most families in one village.
+The main problem is sustainability. Zhai and Li point out that rural clean heating still faces high operating costs, weak infrastructure, local fiscal pressure, and the risk of returning to scattered coal.
 
-Zhang et al. (2024) studied the uneven distribution of health benefits and economic costs in the clean heating campaign. Their finding is important because Baoding-type cities may carry high costs while getting fewer benefits. This supports my concern about fairness. But the study is regional, not household-level.
+Coal-to-gas is not always the best long-term path. Qin argues that coal-to-gas depends heavily on unstable gas prices and long-term subsidies, so future heating pathways may need more electricity-based and heat-pump options.
 
-Liu and Mauzerall (2020) compared costs of clean heating technologies in China. Their work helps show why different technologies matter. Gas, electricity, heat pumps, and insulation may not fit every village in the same way. My project adds a local, household-data-based decision layer.
+Policy simulation can connect micro behavior and macro results. Wang's ABM research shows that agent-based modeling can link individual household actions with village-level or policy-level outcomes.
 
-My new angle is this: I am not only asking whether clean heating is good. I am asking which coal-to-X pathway fits one village best, based on the real conditions of its households.
+Limitations in existing research:
+
+1. Many studies prove that clean heating can reduce pollution and carbon emissions, but they do not show how one village should choose a pathway.
+2. Some studies discuss affordability, subsidies, and scattered coal rebound, but they often stay at the policy or regional level.
+3. Current research does not give village governments a simple tool to compare coal-to-gas, coal-to-electricity, heat pumps, and insulation based on household data.
+4. ABM and AGI+MAS studies show that simulation is useful for public policy, but they are still rarely applied to specific decision-making issues.
+
+My contribution:
+
+1. My project turns this policy problem into a village-level interactive simulation sandbox, which means it is more engaging and tangible compared to academic essays.
+2. It uses real household data that can be input by people, such as income, house size, heating cost, energy price, and affordability pressure. This means I can collect more data by spreading my sandbox.
+3. Instead of asking only "Is clean heating good?", my project asks: "Which coal-to-X pathway fits this village best?" This makes the question and the function more specific.
+4. This helps narrow my research question: Can household-level data improve clean heating pathway recommendations for one Baoding village?
+5. In the future, I want to enlarge this sandbox's functions to simulate the situation in different locations and give players different identities, such as entrepreneurs and government workers.
 
 ## Research Design / Method
-My artifact is a clean heating transition simulation sandbox.
+Data collection:
 
-In the current MVP, a user enters household information, such as income, housing area, current heating method, and winter heating cost. Then the user goes through five rounds of decisions. The page shows changes in heating cost, annual surplus, legal compliance, emission score, and energy burden.
+1. Collect general average data from literature, policy documents, news reports, and public statistics.
+2. Collect specific household data through user testing.
 
-For the next version, I want to move from one household to one village. I will collect or simulate data from many households in one Baoding coal-to-X village. The data will include income, house size, heating cost, heating method, gas or electricity price, subsidy level, and whether the household feels the cost is affordable.
+Research method:
 
-The main users will be Baoding coal-to-X rural households, local stakeholders, and people who care about the coal-to-X issue. If possible, I also want feedback from village-level decision makers.
+1. The existing part is literature review and case analysis.
+2. The new part is a simulation-based user study.
 
-I will collect feedback in three ways. First, I will ask users to run the sandbox and choose a pathway. Second, I will ask short questions before and after use about affordability and data-based decision making. Third, I will ask users what feels unrealistic or missing.
+Data analysis:
 
-For analysis, I will compare pathway outcomes across households. I will look at energy burden, affordability risk, and how many households can stay under a safe burden level. I will also summarize user feedback to improve the model.
+1. Compare different pathways by using simple indicators: energy burden rate, heating cost, annual surplus, compliance risk, and emission score.
+2. Compare results across households in the same village.
+3. Analyze user feedback to improve the model and explain why some pathways feel realistic or unrealistic.
 
 ## Research Plan & Challenges
-By June 20, I will use this draft for the midterm presentation. I will explain the research question, the hypothesis, the current MVP, and the evidence I have collected.
+Research plan:
 
-In late June, I will improve the simulator logic. I will make the household inputs more realistic. I will also make the pathway recommendation clearer, especially for gas, electricity, heat pumps, and insulation.
+May 30: Chose the topic: clean heating transition in Baoding coal-to-X villages.
 
-In early July, I plan to design a simple village data table. Each row will represent one household. The sandbox will use this table to compare possible village-level pathways.
+June 6: Finished the first project draft, first index.html, and literature collection.
 
-After that, I will run a small user test. I will ask users to try the sandbox, answer short questions, and give comments. I will not claim strong results until the user study is complete.
+June 13: Improved index.html and built the first working website script.
 
-The main challenge is data quality. Real household heating data can be private and hard to collect. I may need to start with anonymous survey data or carefully calibrated sample data.
+June 20: Complete the midterm presentation.
 
-Another challenge is model accuracy. A simple sandbox cannot fully represent gas supply, local subsidies, house insulation, and family behavior. I will be clear about what is estimated and what still needs verification.
+June 21 - July 5: Improve website functions and visual design.
 
-A third challenge is communication. The tool must be easy enough for non-experts, but still serious enough for policy discussion.
+July 5 - July 20: Write the paper and prepare for the final presentation.
 
-## Expected Results — user study not yet run
-I expect users to see that there is no single best pathway for every village.
+Current progress:
 
-I expect the sandbox to make affordability more visible. Users may notice that the same policy can create different pressure for families with different income, house size, and heating cost.
+The topic, literature collection, website draft, and first simulation script have been completed.
 
-I also expect users to become more supportive of household-data-based village decisions. Instead of choosing a pathway only by policy slogan, they may want to compare data first.
+Challenges:
 
-I do not have user study results yet. I will not report any user numbers, percentages, or final conclusions until I run the study.
+The number of test users may be small, so household-level data may be limited.
+
+It is hard to quantify "legal compliance" and "emission reduction."
+
+It is also a challenge to integrate generative AI into a website so that it can generate summaries based on operation logs after each simulation round.
+
+Possible solutions:
+
+Make these indicators transparent and explain which values are based on literature and which values are simplified estimates.
+
+Try to find more people to test my sandbox.
+
+Buy an API key and deploy the website on Cloudflare if needed.
+
+## Preliminary Results
+Preliminary findings from literature and news reports:
+
+1. 8 case studies related to this topic.
+2. 10+ average data points given by governments and news reports.
+3. 9 policies.
+4. 10+ questions mentioned by media.
+5. The current prototype already turns these factors into simple indicators: heating cost, annual surplus, energy burden rate, legal compliance, and emission score.
+
+Interpretation:
+
+1. These early findings support my research direction: village-level decisions should not only follow one policy target.
+2. A better recommendation should compare different coal-to-X pathways with household-level data.
+3. The next step is to collect user input data and test whether the sandbox can make pathway recommendations more realistic.
+4. These findings are also supported by the literature review.
 
 ## References
-Dialogue Earth. (2023). Rural clean heating progress. Dialogue Earth.
+Li, X., Yang, F., & Zhou, X. (2025). Research on the current situation and strategies of scattered coal governance in China. China Coal, 51(02), 149-157. https://doi.org/10.19880/j.cnki.ccm.2025.02.017.
 
-He, G., Lin, J., Sifuentes, F., Liu, X., Abhyankar, N., & Phadke, A. (2021). De-Coalizing Rural China. Frontiers in Energy Research. https://www.frontiersin.org/journals/energy-research/articles/10.3389/fenrg.2021.707492/full
+Liu, J., Li, Z., Zhu, Y., Ma, X., Wang, G., Ning, Z., ... & Han, B. (2025). Temporal variations and sources of PM2.5-bound PAHs in rural Baoding during coal-to-gas conversion. Research of Environmental Sciences, 38(09), 1929-1938. https://doi.org/10.13198/j.issn.1001-6929.2025.07.13.
 
-Li, J., Song, S., & Zhu, X. (2021). Subsidies, Clean Heating Choices, and Policy Design in Rural China. Sustainability. https://www.mdpi.com/2071-1050/13/1/169
+Ma, X., Wang, Z., & Wang, J. Artificial intelligence plus public policy research: A multi-agent simulation method driven by artificial general intelligence (AGI+MAS). E-Government, 1-12.
 
-Liu, J., & Mauzerall, D. L. (2020). Costs of clean heating in China. Energy Economics.
+Qin, Q., & Qiu, C. (2026). Future heating pathway choices from the coal-to-gas controversy. Energy, (03), 34-36.
 
-Meng, W., et al. (2023). Significant but Inequitable Cost-Effective Benefits of Clean Heating in Northern China. Environmental Science & Technology.
+Wang, G., & Gao, D. (2023). Research progress and methodological implications of agent-based modeling in public policy simulation. Journal of Public Management, 20(02), 116-127+173. https://doi.org/10.16149/j.cnki.23-1523.20230314.003.
 
-National Development and Reform Commission et al. (2017). Clean heating plan for Northern China in winter (2017-2021). https://www.ndrc.gov.cn/xxgk/zcfb/tz/201712/t20171220_962623.html
+Yuan, X., Liu, W., Li, R., & Li, P. (2025). Research on carbon emission reduction methodology for clean heating in rural areas of Hebei Province. Energy Conservation, 44(04), 111-114.
 
-Xie, Y., et al. (2022). Who suffers from energy poverty after clean heating transitions? Energy Economics.
-
-Yu, S., & Xin, L. (2021). Clean heating and heating poverty. Journal of Cleaner Production.
-
-Zhang, et al. (2024). Uneven distribution of health benefits and economic costs in clean heating. Science Bulletin.
-
-Zhao, et al. (2024). Exploring economically sustainable solutions for clean heating in rural Northern China. Fundamental Research. https://pmc.ncbi.nlm.nih.gov/articles/PMC12869784/
+Zhai, Y., & Li, S. (2023). Review and prospect of clean heating renovation in northern rural areas of China. China Energy and Environmental Protection, 45(10), 194-200. https://doi.org/10.19389/j.cnki.1003-0506.2023.10.029.
 
 ## Acknowledgements
-I would like to thank Research Advisor Lawted Wu for his criticism and guidance.
+Thank you for your constructive feedback.
 
-His feedback helped me turn this project from a simple web game into a clearer research tool.
+Student Name: Guo Hang  
+Research Advisor: Lawted Wu
