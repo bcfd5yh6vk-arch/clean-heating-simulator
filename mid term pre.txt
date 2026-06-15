@@ -1,0 +1,123 @@
+Midterm Presentation Script (target: 7 minutes)
+Guo Hang — Baoding Coal-to-X Village Transition Simulation Sandbox
+
+Note: ~800 words total for P2–P8. At 110–120 words/min, this fits about 7 minutes.
+P1, P9, P10 need no oral script.
+
+================================================================================
+P1 — Title (skip)
+================================================================================
+
+================================================================================
+P2 — Research Question & Hypothesis
+================================================================================
+
+Good morning. My project focuses on coal-to-X problems in northern rural China, and the gap between environmental protection and people's well-being.
+
+My research question is: How can my clean heating simulation sandbox use household data from one Baoding village to recommend the best clean heating pathway for the whole village?
+
+My hypothesis is: Village governments will choose the option that best matches the income, housing, heating costs, and affordability of most local households.
+
+================================================================================
+P3 — Background (do not change — already written)
+================================================================================
+
+This research related to several research fields: like rural energy transition and others
+
+The situation is Baoding is an important coal-control area. Since 2016, many rural households have changed from coal to cleaner heating. This change helps reduce air pollution, but it also creates a new problem: like some families may not be able to afford using it every winter.
+
+This research is important because In many villages, the heating pathway is chosen at the village level, but different families have different income, house size, insulation, and heating needs. If the chosen pathway does not fit most households, the transition may become unstable.
+
+For me, this project is a way to connect policy research and AI with real-word decisions. For local communities, it may help villages compare different options before making one common decision. For society, it can enable more public policies to be implemented more appropriately and enhance people's well-being.
+
+Ordinary readers should care because this project helps people see why some households support clean heating, while others hesitate or return to coal. It gives readers a simple way to understand the trade-off between cleaner air, household cost, and practical village-level choices.
+
+Also, there is a trend in China to spread Coal-to-X polices, and heating is a based need for every family, so everyone should care about it.
+
+================================================================================
+P4 — Literature Review: What We Know
+================================================================================
+
+Previous studies give us a mixed picture.
+
+Liu et al. show environmental benefits from Baoding's coal-to-gas transition, but pollution can rebound. Yuan et al. show clean heating can reduce carbon emissions. Zhai and Li warn about high costs, weak infrastructure, and returning to coal. Qin argues coal-to-gas is not always the best long-term path. Wang shows agent-based modeling can link household actions to village-level outcomes.
+
+So clean heating works, but sustainability is still hard.
+
+================================================================================
+P5 — Literature Review: Gaps and My Focus
+================================================================================
+
+However, most studies do not tell one village how to choose a pathway. They often stay at the policy or regional level, and they rarely offer a simple tool based on household data.
+
+My project fills this gap. I built a village-level interactive sandbox where users input income, house size, heating cost, and other data, then compare coal-to-X pathways.
+
+Instead of asking only "Is clean heating good?", I ask: "Which pathway fits this village best?"
+
+================================================================================
+P6 — Research Design / Method (do not change — already written)
+================================================================================
+
+Data collection
+
+I will use two types of data.
+
+First, I will collect general average data from literature
+
+This includes heating costs, gas prices, subsidy levels, household income, house size, and common coal-to-X pathways in Baoding.
+
+Second, I will collect specific household data through user testing.
+
+Users will enter their real or estimated household information into the simulation sandbox.
+
+Research method
+
+My method combines existing research methods with a new digital tool.
+
+The existing part is literature review and case analysis.
+
+It helps me set baseline parameters and understand real problems.
+
+The new part is a simulation-based user study.
+
+The sandbox lets users test different coal-to-X pathways and see possible outcomes for their household and village. Also AI will generate the conclusion and advice after each round.
+
+Data analysis
+
+I will compare different pathways by using simple indicators:
+
+I will also compare results across households in the same village.
+
+This can show which pathway works for most households, not just for one "average" family.
+
+Finally, I will analyze user feedback to improve the model and explain why some pathways feel realistic or unrealistic.
+
+================================================================================
+P7 — Research Plan and Challenges
+================================================================================
+
+My plan: topic on May 30, first draft and literature by June 6, working website by June 13, midterm today, then improve the site by July 5, and write the paper by July 20.
+
+Three challenges: limited test users, hard-to-quantify compliance and emissions, and integrating AI summaries after each round.
+
+My solutions are to explain which values come from literature, find more testers, and deploy the website with an API key if needed.
+
+================================================================================
+P8 — Preliminary Results
+================================================================================
+
+My results are still preliminary. I have not finished the user study yet.
+
+So far, I collected 8 case studies, 10+ average data points, 9 policies, and 10+ media questions. My prototype already uses indicators like heating cost, energy burden, compliance, and emissions.
+
+These findings support my direction: village decisions should compare pathways with household data, not follow one policy target alone. The next step is user testing.
+
+================================================================================
+P9 — References (skip)
+================================================================================
+
+================================================================================
+P10 — Thank You (skip)
+================================================================================
+
+Thank you for your constructive feedback!
