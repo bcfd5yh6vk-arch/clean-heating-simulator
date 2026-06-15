@@ -4,7 +4,7 @@
 
 ## 上线地址
 
-**https://clean-heating-simulator.vercel.app/**
+**https://clean-heating-simulator.vercel.app**
 
 线上部署的是根目录 `index.html`，也就是一个纯 HTML/CSS/JavaScript 的单文件作品页。
 
@@ -30,7 +30,7 @@ export ANTHROPIC_API_KEY="你的 Anthropic API Key"
 python3 app.py
 ```
 
-然后浏览器打开 [http://127.0.0.1:5000](http://127.0.0.1:5000)。
+然后浏览器打开 [https://clean-heating-simulator.vercel.app](https://clean-heating-simulator.vercel.app)。
 
 ## 说明
 
