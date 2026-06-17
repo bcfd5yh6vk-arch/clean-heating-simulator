@@ -275,13 +275,9 @@
             <label>住房面积（平方米）
               <input type="number" name="housing_area" min="0" value="0" required />
             </label>
-            <label>当前取暖方式
-              <select name="heating_method">
-                <option value="散煤炉">散煤炉</option>
-                <option value="天然气">天然气</option>
-                <option value="地源热泵">地源热泵</option>
-                <option value="空气源热泵">空气源热泵</option>
-              </select>
+            <label>当前取暖方式（固定）
+              <input type="text" value="散煤炉（固定）" disabled />
+              <input type="hidden" name="heating_method" value="散煤炉" />
             </label>
             <label>一个冬天取暖花费（元）
               <input type="number" name="winter_cost" min="0" value="0" required />
@@ -615,7 +611,7 @@
         state.user = {
           role: "农民家庭",
           region: "保定",
-          heatingMethod: String(data.get("heating_method")),
+          heatingMethod: String(data.get("heating_method") || "散煤炉"),
           income: Number(data.get("annual_income")),
           surplus: Number(data.get("annual_surplus")),
           area: Number(data.get("housing_area")),
