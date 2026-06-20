@@ -626,10 +626,14 @@
             state.user.emission = clamp(state.user.emission + 5, 0, 100);
             note = `副业增收：年收入提高 20%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元。`;
           } else {
-            state.user.heatingCost = Math.max(500, state.user.heatingCost - 1600);
-            state.user.surplus += 1800;
+            const oldHeatingCost = state.user.heatingCost;
+            const newHeatingCost = Math.round(oldHeatingCost * 0.6);
+            const heatingDelta = newHeatingCost - oldHeatingCost;
+            const surplusBoost = Math.abs(heatingDelta);
+            state.user.heatingCost = newHeatingCost;
+            state.user.surplus += surplusBoost;
             state.user.emission = clamp(state.user.emission + 15, 0, 100);
-            note = "节能降耗显著降低取暖费，合法身份保持不变。";
+            note = `强力节能：年取暖费 ${oldHeatingCost} × 60% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元。`;
           }
           state.turn += 1;
           pushLog(`回合4：${label} -> ${note}`);
