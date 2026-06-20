@@ -294,8 +294,8 @@
               <input type="hidden" name="seized_compliance_threshold" value="30" />
             </label>
             <label>成功阈值：排放达标度（>=）
-              <input type="text" value="80（固定）" disabled />
-              <input type="hidden" name="success_emission_threshold" value="80" />
+              <input type="text" value="75（固定）" disabled />
+              <input type="hidden" name="success_emission_threshold" value="75" />
             </label>
             <label>成功阈值：法律合规度（=）
               <input type="text" value="100（固定）" disabled />
@@ -680,7 +680,7 @@
         state.thresholds = {
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
           seized: Number(data.get("seized_compliance_threshold")) || 30,
-          successEmission: Number(data.get("success_emission_threshold")) || 80,
+          successEmission: Number(data.get("success_emission_threshold")) || 75,
           successComplianceMin: Number(data.get("success_compliance_min")) || 100,
           successBurden: Number(data.get("success_energy_burden_max")) || 10,
           successSurplusMin: Number(data.get("success_surplus_min")) || 0
