@@ -4,11 +4,11 @@
     "scenario_year": 2025,
     "region": "保定市（平原农村，100㎡ 基准户）",
     "last_updated": "2026-06-07",
-    "note": "MVP 建议默认值；当前 HTML 中 60000/12000 偏高，建议逐步迁移至本文件参数"
+    "note": "MVP 建议默认值；annual_income_default=60000 为整户年收入（非人均 23006）"
   },
   "household": {
     "annual_income_default": 60000,
-    "annual_income_recommended": { "min": 45000, "default": 60000, "max": 75000, "source": "户级≈3×保定农村人均23006" },
+    "annual_income_recommended": { "min": 45000, "default": 60000, "max": 75000, "source": "整户口径：约3人×保定农村人均23006，默认取60000偏保守" },
     "annual_surplus_default": 8000,
     "annual_surplus_recommended": { "min": 2000, "default": 8000, "max": 15000 },
     "housing_area_m2": { "default": 100, "min": 70, "max": 120 },

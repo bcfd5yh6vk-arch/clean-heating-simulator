@@ -15,6 +15,7 @@
 - `policysandbox.py`：政策沙盘与辅助逻辑。
 - `spec.md`：MVP 规格与研究问题。
 - `research/`：文献、政策、案例、参数和开放问题。
+- `midterm/`：中期答辩材料（PPT、演讲稿、draft、生成脚本）。
 - `templates/indexChinese.html`：Flask 版本实际使用的页面模板。
 - `static/`：Flask 版本的前端脚本和样式。
 
@@ -30,7 +31,18 @@ export ANTHROPIC_API_KEY="你的 Anthropic API Key"
 python3 app.py
 ```
 
-然后浏览器打开 [https://clean-heating-simulator.vercel.app](https://clean-heating-simulator.vercel.app)。
+然后浏览器打开 [http://127.0.0.1:5000](http://127.0.0.1:5000)（本地 Flask 服务，不是 Vercel 线上地址）。
+
+## 模拟参数口径（收入）
+
+`research/data/calibration_defaults.json` 里有两个容易混淆的数字：
+
+- **23006 元**：保定农村**人均可支配收入**（2024，人均口径）。
+- **60000 元**：模拟器用的**整户年总收入**默认值（约 100㎡ 基准户），不是人均。
+
+整户收入约为「人均 × 户内常住人数」的粗算结果（文件中按约 3 人 × 23006 ≈ 69000 取 **60000 作为偏保守的整户基准**）。用户在 `index.html` 里应输入自家**整户**年收入，不要直接填 23006。
+
+更完整的参数说明见 `spec.md` 与 `research/data/stats_baseline.md`。
 
 ## 说明
 

@@ -1,31 +1,58 @@
-# 保定农户清洁取暖转型模拟器 — MVP Spec
+# 保定煤改X村级转型模拟沙盘 — MVP Spec
 
 ## 它做什么
-让一个保定农户在 5 个回合里做取暖决策，并看到收入、取暖成本、合规与排放变化，最后得到转型结果和政策诊断。
+
+让一个保定煤改X村庄里的农户家庭，在 5 个回合里做取暖与转型决策，并看到**整户**年收入、年盈余、年取暖费用、法律合规度、排放达标度和能耗负担率的变化，最后得到**成功转型 / 经济破产 / 被处罚**之一的结果。
+
+长期目标：收集多户农户输入，汇总为村庄层面的煤改X路径建议（气/电/热泵/保温等），供村级决策参考。
 
 ## 给谁用
-一个要做论文和课堂展示的本科生，用它向老师和同学解释“为什么清洁取暖在现实里会卡在可负担性”。
+
+- **主要用户**：保定煤改X区域农户，以及关心煤改气/煤改电问题的本地Stakeholder。
+- **次要用户**：对农村清洁取暖政策感兴趣的其他公众、课程评审老师与同学。
+- **展示入口**：根目录 `index.html`（Vercel 静态页，零门槛点开即用）。
 
 ## 核心流程
-1. 用户填写家庭收入、面积、当前取暖方式和冬季取暖花费。
-2. 用户在 5 个回合里选择继续烧煤、申请整改、改用燃气/电/热泵、保温或增收。
-3. 系统实时更新可支配收入、取暖负担率、合规度和排放达标度。
-4. 最后一回合触发“补贴减少”，系统输出成功转型、经济破产或违规风险结局。
-5. 用户读到一段简短政策诊断，理解是哪一项压力导致结果变化。
+
+1. **建档**：用户输入整户年收入、年盈余、住房面积、年取暖费用（初始默认为散煤，1000 元/吨口径）；角色、地区、取暖方式与结局阈值为固定值。
+2. **回合 1 · 现状抉择**：继续散煤（进入合规压力循环）或准备转型（跳过压力回合）。
+3. **回合 2 · 合规压力**（可选）：基于住房面积与连续违规次数的执法概率模型，可能提前触发「被处罚」。
+4. **回合 3 · 技术路线**：天然气 / 地源热泵 / 空气源热泵；改造费与改造后年取暖费均按 **100㎡ 基准 × 面积 ÷ 100** 缩放。
+5. **回合 4 · 增收或节能**：副业增收（年收入 +20%）或强力节能（年取暖费 ×60%，盈余增加节省额）。
+6. **回合 5 · 补贴退坡**：由初始散煤费用换算等价天然气用量，按 0.6 元/m³ 增加当前年取暖花费，再判定终局。
+7. **终局判定**：排放 ≥80、合规 =100、负担率 ≤10%、年盈余 ≥0 → 成功；否则经济破产（或中途被处罚）。
+
+政策诊断**暂不**在前端硬编码；计划后续用 AI API + 操作日志生成。
 
 ## 不在 MVP 里
-- 多角色博弈：政府、燃气企业、村干部。
-- 多地区地图和县域对比。
-- 真实账单或户级面板数据自动接入。
-- 长周期设备寿命与维修模型。
-- 大型随机事件库和账号系统。
+
+- 多角色博弈（政府、燃气企业、村干部分视角操作）。
+- 多村庄 / 多地区地图与县域对比仪表盘。
+- 真实账单、电网气表或户级面板数据自动接入。
+- 设备全生命周期维修与寿命折旧模型。
+- 大型随机事件库、账号系统与数据持久化后端。
+- 已承诺但未接入的 **AI 回合总结 / 政策诊断**（当前仅保留操作日志）。
 
 ## 怎么收集反馈
-- 让 3-5 位同学各跑一局，记录他们的最终结局和“为什么这么选”。
-- 演示后问 3 个问题：哪里不真实、哪里看不懂、哪个决策最难。
-- 根据反馈调整默认参数和事件文案，保留版本说明用于论文附录。
+
+- **文献与新闻**：汇总平均参数写入 `research/data/calibration_defaults.json` 与 `stats_baseline.md`。
+- **用户试玩**：请农户或同学各跑一局，记录初始输入、每回合选择与终局；开放题收集「哪里不真实 / 哪里难懂」。
+- **前后对比**（计划中）：试玩前后简短问卷，看可负担性与路径偏好是否变化。
+- **村庄汇总**（计划中）：多户数据表比较哪条煤改X路径对多数家庭更可行。
+
+## 模拟参数口径（收入）
+
+| 字段 | 数值 | 口径 |
+|------|------|------|
+| `rural_per_capita_income_2024` | 23006 元 | 保定农村**人均**可支配收入 |
+| `annual_income_default` | 60000 元 | **整户**年总收入默认值（非人均） |
+
+**60000 不是把 23006 直接当家庭收入。** 整户基准按约 3 口常住户 × 人均 23006 ≈ 69000，模拟器取 **60000 为略保守的整户默认**，避免基准偏乐观。用户输入时应填**全家**一年总收入。
+
+散煤初始取暖费、改造后气/热泵年取暖费、补贴退坡换算等详见 `research/data/calibration_defaults.json`。
 
 ## Research Question & Hypothesis
+
 Research Question: How can my clean heating transition simulation sandbox use household data from one village in Baoding coal-to-X areas to recommend the most suitable clean heating transition pathway for the whole village?
 
-Hypothesis: I hypothesize that using household-level data in the simulation sandbox will make village-level clean heating pathway recommendations more accurate, because it can better match the income, housing conditions, heating costs, and affordability constraints of most local households.
+Hypothesis: Village-level governments will choose the option that can better match the income, housing conditions, heating costs, and affordability constraints of most local households.
