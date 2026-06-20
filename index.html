@@ -614,10 +614,11 @@
         } else if (state.stage.startsWith("回合4")) {
           state.user.compliance = 100;
           if (id === "A") {
-            state.user.income += 8000;
-            state.user.surplus += 3500;
+            const incomeBoost = Math.round(state.user.income * 0.2);
+            state.user.income += incomeBoost;
+            state.user.surplus += incomeBoost;
             state.user.emission = clamp(state.user.emission + 5, 0, 100);
-            note = "副业提升收入，合规身份不变，但对减排帮助有限。";
+            note = `副业增收：年收入提高 20%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元。`;
           } else {
             state.user.heatingCost = Math.max(500, state.user.heatingCost - 1600);
             state.user.surplus += 1800;
