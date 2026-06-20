@@ -358,8 +358,9 @@
         thresholds: null
       };
 
-      const BAODING_GAS_PRICE_PER_M3 = 3.25;
-      const SUBSIDY_REDUCTION_PER_M3 = 0.5;
+      const SCATTERED_COAL_PRICE_PER_TON = 1000;
+      const GAS_M3_PER_COAL_TON = 250;
+      const SUBSIDY_REDUCTION_PER_M3 = 0.6;
       const BASE_RENOVATION_COST_PER_100SQM = { A: 3000, B: 10000, C: 7000 };
       const BASE_ANNUAL_HEATING_COST_PER_100SQM = { A: 8000, B: 2000, C: 4300 };
 
@@ -429,8 +430,10 @@
         return false;
       }
 
-      function estimatedGasVolume() {
-        return state.user.initialHeatingCost / BAODING_GAS_PRICE_PER_M3;
+      /** 由初始散煤年取暖费推算等价天然气用量（吨→立方米） */
+      function estimatedGasVolumeFromCoalBaseline(initialHeatingCost) {
+        const coalTons = initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
+        return coalTons * GAS_M3_PER_COAL_TON;
       }
 
       function pushLog(text) {
@@ -644,16 +647,16 @@
             [{ id: "SETTLE", label: "结算回合5（补贴减少）" }]
           );
         } else if (state.stage.startsWith("回合5")) {
-          const gasVolume = estimatedGasVolume();
+          const coalTons = state.user.initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
+          const gasVolume = estimatedGasVolumeFromCoalBaseline(state.user.initialHeatingCost);
           const rise = Math.round(gasVolume * SUBSIDY_REDUCTION_PER_M3);
           state.user.heatingCost += rise;
-          state.user.surplus -= rise;
           state.user.emission = clamp(state.user.emission + 1, 0, 100);
           eventBoxEl.innerHTML = `
             <p class="pill bad">事件：补贴减少</p>
-            <p class="small">按保定天然气取暖单价 ${BAODING_GAS_PRICE_PER_M3} 元/立方米估算：用气量 = 初始年取暖花费 ${state.user.initialHeatingCost} ÷ ${BAODING_GAS_PRICE_PER_M3} ≈ ${gasVolume.toFixed(1)} 立方米；补贴减少按固定单价差 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米计算，所以取暖成本增加 ${rise} 元。</p>
+            <p class="small">初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。</p>
           `;
-          pushLog(`回合5：补贴减少 -> 估算用气量 ${gasVolume.toFixed(1)} 立方米，取暖成本 +${rise} 元。`);
+          pushLog(`回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`);
           renderStats();
           finalRoundSettle();
         }
