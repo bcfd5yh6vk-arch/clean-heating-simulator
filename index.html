@@ -420,7 +420,7 @@
         renderStats();
       }
 
-      function finish(type, summary, diagnosis) {
+      function finish(type, summary) {
         state.active = false;
         choicesEl.innerHTML = "";
         const cls = type === "success" ? "success" : "bankrupt";
@@ -428,7 +428,6 @@
           <div class="ending ${cls}">
             <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "被处罚" : "经济破产"}</h3>
             <p>${summary}</p>
-            <p><strong>政策诊断：</strong>${diagnosis}</p>
           </div>
         `;
         pushLog(`【终局】${summary}`);
@@ -439,8 +438,7 @@
         if (burden > state.thresholds.bankrupt && state.user.surplus <= 0) {
           finish(
             "bankrupt",
-            "能耗负担率过高且可支配资金不足，家庭进入经济破产状态。",
-            "你的取暖成本与收入结构失衡，现金流无法覆盖冬季支出。后续应优先降低运行费用或提升稳定收入。"
+            "能耗负担率过高且可支配资金不足，家庭进入经济破产状态。"
           );
           return true;
         }
@@ -457,20 +455,17 @@
         if (success) {
           finish(
             "success",
-            "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。",
-            "你在技术路线、合规行为与家庭财务之间建立了稳定平衡，补贴退坡冲击后仍能维持可持续状态。"
+            "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。"
           );
         } else if (state.user.surplus < state.thresholds.successSurplusMin) {
           finish(
             "bankrupt",
-            "回合5结束后年盈余为负，家庭现金流已无法维持，判定为经济破产。",
-            "关键问题在于运行阶段抗风险能力不足。下一步应优先控制取暖支出、提升收入或争取补贴，避免长期赤字。"
+            "回合5结束后年盈余为负，家庭现金流已无法维持，判定为经济破产。"
           );
         } else {
           finish(
             "bankrupt",
-            "回合5发生补贴减少后，家庭未达到成功条件，判定为经济破产。",
-            "关键问题在于运行阶段抗风险能力不足。下一步应优先做保温/降耗，避免单纯依赖补贴。"
+            "回合5发生补贴减少后，家庭未达到成功条件，判定为经济破产。"
           );
         }
       }
@@ -527,8 +522,7 @@
             ) {
               finish(
                 "seized",
-                "你在合规风险回合持续拒绝整改，且法律合规度过低，最终被处罚。",
-                "该结局来自行为路径而非随机事件：重复违规放大了执法风险。"
+                "你在合规风险回合持续拒绝整改，且法律合规度过低，最终被处罚。"
               );
               return;
             }
