@@ -360,6 +360,13 @@
 
       const BAODING_GAS_PRICE_PER_M3 = 3.25;
       const SUBSIDY_REDUCTION_PER_M3 = 0.5;
+      const BASE_RENOVATION_COST_PER_100SQM = { A: 3000, B: 10000, C: 7000 };
+      const BASE_ANNUAL_HEATING_COST_PER_100SQM = { A: 8000, B: 2000, C: 4300 };
+
+      /** 100㎡ 基准值 × 农户面积 ÷ 100 */
+      function scaleByHousingArea(basePer100Sqm, area) {
+        return Math.round(basePer100Sqm * area / 100);
+      }
 
       const profileForm = document.getElementById("profileForm");
       const resetBtn = document.getElementById("resetBtn");
@@ -542,9 +549,9 @@
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
               [
-                { id: "A", label: "天然气（3000元/100㎡）" },
-                { id: "B", label: "地源热泵（10000元/100㎡）" },
-                { id: "C", label: "空气源热泵（7000元/100㎡）" }
+                { id: "A", label: "天然气（改造3000元/100㎡，年取暖8000元/100㎡）" },
+                { id: "B", label: "地源热泵（改造10000元/100㎡，年取暖2000元/100㎡）" },
+                { id: "C", label: "空气源热泵（改造7000元/100㎡，年取暖4300元/100㎡）" }
               ]
             );
           }
@@ -577,18 +584,17 @@
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
               [
-                { id: "A", label: "天然气（3000元/100㎡）" },
-                { id: "B", label: "地源热泵（10000元/100㎡）" },
-                { id: "C", label: "空气源热泵（7000元/100㎡）" }
+                { id: "A", label: "天然气（改造3000元/100㎡，年取暖8000元/100㎡）" },
+                { id: "B", label: "地源热泵（改造10000元/100㎡，年取暖2000元/100㎡）" },
+                { id: "C", label: "空气源热泵（改造7000元/100㎡，年取暖4300元/100㎡）" }
               ]
             );
           }
         } else if (state.stage.startsWith("回合3")) {
-          const areaFactor = state.user.area / 100;
-          const investMap = { A: 3000, B: 10000, C: 7000 };
-          const heatingMap = { A: 8000, B: 2000, C: 4300 };
-          const invest = Math.round(investMap[id] * areaFactor);
-          const newHeatingCost = Math.round(heatingMap[id] * areaFactor);
+          const area = state.user.area;
+          const baseHeating = BASE_ANNUAL_HEATING_COST_PER_100SQM[id];
+          const invest = scaleByHousingArea(BASE_RENOVATION_COST_PER_100SQM[id], area);
+          const newHeatingCost = scaleByHousingArea(baseHeating, area);
           const originalHeatingCost = state.user.initialHeatingCost;
           const surplusDelta = newHeatingCost + invest - originalHeatingCost;
           if (state.user.income <= invest) {
@@ -600,7 +606,7 @@
           state.user.compliance = 100;
           state.user.emission = clamp(state.user.emission + (id === "A" ? 60 : 75), 0, 100);
           state.turn += 1;
-          note = `完成清洁取暖改造，合规度回满 100 分；年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元（改造后年取暖费 ${newHeatingCost} + 改造费 ${invest} - 原年取暖费 ${originalHeatingCost}）。`;
+          note = `完成清洁取暖改造，合规度回满 100 分；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
           if (evaluateEarlyEnding()) return;
           setStage(
