@@ -285,8 +285,9 @@
           </div>
           <h3>结局判定阈值</h3>
           <div class="grid">
-            <label>经济破产阈值：能耗负担率（%）
-              <input type="number" name="bankrupt_energy_burden_threshold" min="1" max="100" value="10" required />
+            <label>经济破产阈值：能耗负担率（<=，%）
+              <input type="text" value="10（固定）" disabled />
+              <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
             </label>
             <label>被处罚阈值：法律合规度（<）
               <input type="number" name="seized_compliance_threshold" min="0" max="100" value="30" required />
@@ -430,7 +431,7 @@
 
       function evaluateEarlyEnding() {
         const burden = burdenPercent();
-        if (burden >= state.thresholds.bankrupt && state.user.surplus <= 0) {
+        if (burden > state.thresholds.bankrupt && state.user.surplus <= 0) {
           finish(
             "bankrupt",
             "能耗负担率过高且可支配资金不足，家庭进入经济破产状态。",
@@ -631,7 +632,7 @@
           emission: 0
         };
         state.thresholds = {
-          bankrupt: Number(data.get("bankrupt_energy_burden_threshold")),
+          bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
           seized: Number(data.get("seized_compliance_threshold")),
           successEmission: Number(data.get("success_emission_threshold")),
           successComplianceMin: Number(data.get("success_compliance_min")),
