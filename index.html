@@ -279,7 +279,7 @@
               <input type="text" value="散煤炉（固定）" disabled />
               <input type="hidden" name="heating_method" value="散煤炉" />
             </label>
-            <label>一个冬天取暖花费（元）
+            <label>年取暖费用（元）
               <input type="number" name="winter_cost" min="0" value="0" required />
             </label>
           </div>
@@ -532,12 +532,11 @@
               ]
             );
           } else {
-            state.user.surplus -= 900;
             state.user.compliance = 60;
             state.nonRectifyStreak = 0;
             state.user.emission = clamp(state.user.emission + 10, 0, 100);
             state.turn += 1;
-            note = "表达整改意愿，合规度升至 60 分政策宽限及格线，短期现金流下降。";
+            note = "表达整改意愿，合规度升至 60 分政策宽限及格线。";
             pushLog(`回合1：${label} -> ${note}`);
             setStage(
               "回合3：技术路线选择",
@@ -589,16 +588,19 @@
           const investMap = { A: 3000, B: 10000, C: 7000 };
           const heatingMap = { A: 8000, B: 2000, C: 4300 };
           const invest = Math.round(investMap[id] * areaFactor);
+          const newHeatingCost = Math.round(heatingMap[id] * areaFactor);
+          const originalHeatingCost = state.user.initialHeatingCost;
+          const surplusDelta = newHeatingCost + invest - originalHeatingCost;
           if (state.user.income <= invest) {
             alert(`年收入不足以覆盖一次性投入 ${invest} 元，请换一个技术路线。`);
             return;
           }
-          state.user.surplus -= invest + (id === "B" ? 1200 : 900);
-          state.user.heatingCost = Math.round(heatingMap[id] * areaFactor);
+          state.user.surplus -= surplusDelta;
+          state.user.heatingCost = newHeatingCost;
           state.user.compliance = 100;
           state.user.emission = clamp(state.user.emission + (id === "A" ? 60 : 75), 0, 100);
           state.turn += 1;
-          note = `完成清洁取暖改造，合规度回满 100 分，投入 ${invest} 元。`;
+          note = `完成清洁取暖改造，合规度回满 100 分；年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元（改造后年取暖费 ${newHeatingCost} + 改造费 ${invest} - 原年取暖费 ${originalHeatingCost}）。`;
           pushLog(`回合3：${label} -> ${note}`);
           if (evaluateEarlyEnding()) return;
           setStage(
@@ -678,7 +680,7 @@
         endingBoxEl.innerHTML = "";
         logBoxEl.innerHTML = "";
         pushLog(
-          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，冬季取暖费=${state.user.heatingCost}。`
+          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}。`
         );
 
         setStage(
