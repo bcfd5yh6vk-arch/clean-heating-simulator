@@ -297,9 +297,9 @@
               <input type="text" value="80（固定）" disabled />
               <input type="hidden" name="success_emission_threshold" value="80" />
             </label>
-            <label>成功阈值：法律合规度（>=）
-              <input type="text" value="80（固定）" disabled />
-              <input type="hidden" name="success_compliance_min" value="80" />
+            <label>成功阈值：法律合规度（=）
+              <input type="text" value="100（固定）" disabled />
+              <input type="hidden" name="success_compliance_min" value="100" />
             </label>
             <label>成功阈值：能耗负担率（<=，%）
               <input type="text" value="10（固定）" disabled />
@@ -380,6 +380,46 @@
 
       function burdenPercent() {
         return (state.user.heatingCost / Math.max(1, state.user.income)) * 100;
+      }
+
+      /** 法律合规度数模：保定网格化执法 + 无人机巡检 + 住房暴露面 */
+      function calculateBasePenalty(area) {
+        return 40 + (area / 100) * 15;
+      }
+
+      function calculateEscapeProbability(area) {
+        const bp = calculateBasePenalty(area);
+        return 1 - bp / 100;
+      }
+
+      function calculateSeizedProbability(nonRectifyStreak, area) {
+        const p = calculateEscapeProbability(area);
+        return 1 - Math.pow(p, nonRectifyStreak);
+      }
+
+      function tryProbabilisticSeizedEnforcement() {
+        if (state.nonRectifyStreak < 2) return false;
+        if (state.user.compliance >= state.thresholds.seized) return false;
+
+        const bp = calculateBasePenalty(state.user.area);
+        const p = calculateEscapeProbability(state.user.area);
+        const pSeized = calculateSeizedProbability(state.nonRectifyStreak, state.user.area);
+        const roll = Math.random();
+
+        pushLog(
+          `【执法模型】BP=${bp.toFixed(1)}，单次逃脱率 p=${p.toFixed(2)}，连续 ${state.nonRectifyStreak} 次违规后累计处罚概率 P_seized=${(pSeized * 100).toFixed(1)}%，掷骰=${roll.toFixed(2)}。`
+        );
+
+        if (roll < pSeized) {
+          finish(
+            "seized",
+            "网格化执法与无人机巡检累计命中：你在合规压力回合持续拒绝整改，最终被处罚。"
+          );
+          return true;
+        }
+
+        pushLog("本次巡查暂未命中，但重点监控仍未解除。");
+        return false;
       }
 
       function estimatedGasVolume() {
@@ -476,10 +516,11 @@
 
         if (state.stage === "turn1" || state.stage.startsWith("回合1")) {
           if (id === "A") {
-            state.user.compliance = clamp(state.user.compliance - 6, 0, 100);
+            state.user.compliance = 0;
+            state.nonRectifyStreak = 1;
             state.user.emission = clamp(state.user.emission - 8, 0, 100);
             state.turn += 1;
-            note = "继续现状，合规和排放表现下降。";
+            note = "继续散煤取暖，合规度维持底线 0 分，已进入重点监控名单。";
             pushLog(`回合1：${label} -> ${note}`);
             if (evaluateEarlyEnding()) return;
             setStage(
@@ -492,10 +533,11 @@
             );
           } else {
             state.user.surplus -= 900;
-            state.user.compliance = clamp(state.user.compliance + 20, 0, 100);
+            state.user.compliance = 60;
+            state.nonRectifyStreak = 0;
             state.user.emission = clamp(state.user.emission + 10, 0, 100);
             state.turn += 1;
-            note = "提前准备转型，短期现金流下降。";
+            note = "表达整改意愿，合规度升至 60 分政策宽限及格线，短期现金流下降。";
             pushLog(`回合1：${label} -> ${note}`);
             setStage(
               "回合3：技术路线选择",
@@ -509,27 +551,16 @@
           }
         } else if (state.stage.startsWith("回合2")) {
           if (id === "1") {
-            const drop = Math.max(8, 6 + state.nonRectifyStreak * 4);
-            state.user.compliance = clamp(state.user.compliance - drop, 0, 100);
-            state.user.emission = clamp(state.user.emission - 10, 0, 100);
+            state.user.compliance = 0;
             state.nonRectifyStreak += 1;
-            state.turn += 1;
-            note = `继续不整改，合规进一步下降（连续 ${state.nonRectifyStreak} 次）。`;
+            state.user.emission = clamp(state.user.emission - 10, 0, 100);
+            note = `继续违规取暖，合规度锁死 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
             pushLog(`回合2：${label} -> ${note}`);
-            if (
-              state.nonRectifyStreak >= 2 &&
-              state.user.compliance < state.thresholds.seized
-            ) {
-              finish(
-                "seized",
-                "你在合规风险回合持续拒绝整改，且法律合规度过低，最终被处罚。"
-              );
-              return;
-            }
+            if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
             setStage(
               "回合2：合规压力应对",
-              "你仍处于执法风险回合。继续不整改将明显提高被处罚概率。",
+              "你仍处于执法风险回合。继续不整改将按住房面积与连续违规次数提高累计处罚概率。",
               [
                 { id: "1", label: "夜间继续违规取暖" },
                 { id: "2", label: "申请整改" }
@@ -537,11 +568,11 @@
             );
           } else {
             state.user.surplus -= 800;
-            state.user.compliance = clamp(state.user.compliance + 30, 0, 100);
-            state.user.emission = clamp(state.user.emission + 8, 0, 100);
+            state.user.compliance = 50;
             state.nonRectifyStreak = 0;
+            state.user.emission = clamp(state.user.emission + 8, 0, 100);
             state.turn += 1;
-            note = "申请整改后进入技术选择。";
+            note = "申请整改，合规度回升至 50 分合格线边缘。";
             pushLog(`回合2：${label} -> ${note}`);
             setStage(
               "回合3：技术路线选择",
@@ -564,10 +595,10 @@
           }
           state.user.surplus -= invest + (id === "B" ? 1200 : 900);
           state.user.heatingCost = Math.round(heatingMap[id] * areaFactor);
-          state.user.compliance = clamp(state.user.compliance + (id === "A" ? 55 : 65), 0, 100);
+          state.user.compliance = 100;
           state.user.emission = clamp(state.user.emission + (id === "A" ? 60 : 75), 0, 100);
           state.turn += 1;
-          note = `完成技术改造，投入 ${invest} 元。`;
+          note = `完成清洁取暖改造，合规度回满 100 分，投入 ${invest} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
           if (evaluateEarlyEnding()) return;
           setStage(
@@ -579,17 +610,17 @@
             ]
           );
         } else if (state.stage.startsWith("回合4")) {
+          state.user.compliance = 100;
           if (id === "A") {
             state.user.income += 8000;
             state.user.surplus += 3500;
             state.user.emission = clamp(state.user.emission + 5, 0, 100);
-            note = "副业提升收入，但对减排帮助有限。";
+            note = "副业提升收入，合规身份不变，但对减排帮助有限。";
           } else {
             state.user.heatingCost = Math.max(500, state.user.heatingCost - 1600);
             state.user.surplus += 1800;
-            state.user.compliance = clamp(state.user.compliance + 5, 0, 100);
             state.user.emission = clamp(state.user.emission + 15, 0, 100);
-            note = "节能降耗显著降低取暖费。";
+            note = "节能降耗显著降低取暖费，合法身份保持不变。";
           }
           state.turn += 1;
           pushLog(`回合4：${label} -> ${note}`);
@@ -634,7 +665,7 @@
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
           seized: Number(data.get("seized_compliance_threshold")) || 30,
           successEmission: Number(data.get("success_emission_threshold")) || 80,
-          successComplianceMin: Number(data.get("success_compliance_min")) || 80,
+          successComplianceMin: Number(data.get("success_compliance_min")) || 100,
           successBurden: Number(data.get("success_energy_burden_max")) || 10,
           successSurplusMin: Number(data.get("success_surplus_min")) || 0
         };
