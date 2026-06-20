@@ -300,6 +300,9 @@
             <label>成功阈值：能耗负担率（<=，%）
               <input type="number" name="success_energy_burden_max" min="1" max="100" value="10" required />
             </label>
+            <label>成功阈值：年盈余（>=，元）
+              <input type="text" value="0（固定）" disabled />
+            </label>
           </div>
           <p class="hint">点击开始后，系统将按回合给出按钮决策，不需要命令行或后端服务。</p>
           <div class="btn-row">
@@ -443,12 +446,19 @@
         const success =
           state.user.emission >= state.thresholds.successEmission &&
           state.user.compliance >= state.thresholds.successComplianceMin &&
-          burden <= state.thresholds.successBurden;
+          burden <= state.thresholds.successBurden &&
+          state.user.surplus >= 0;
         if (success) {
           finish(
             "success",
-            "排放、合规、能耗负担率三项同时达标，成功实现绿色转型。",
+            "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。",
             "你在技术路线、合规行为与家庭财务之间建立了稳定平衡，补贴退坡冲击后仍能维持可持续状态。"
+          );
+        } else if (state.user.surplus < 0) {
+          finish(
+            "bankrupt",
+            "回合5结束后年盈余为负，家庭现金流已无法维持，判定为经济破产。",
+            "关键问题在于运行阶段抗风险能力不足。下一步应优先控制取暖支出、提升收入或争取补贴，避免长期赤字。"
           );
         } else {
           finish(
