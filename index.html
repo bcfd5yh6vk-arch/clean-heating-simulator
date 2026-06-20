@@ -290,19 +290,24 @@
               <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
             </label>
             <label>被处罚阈值：法律合规度（<）
-              <input type="number" name="seized_compliance_threshold" min="0" max="100" value="30" required />
+              <input type="text" value="30（固定）" disabled />
+              <input type="hidden" name="seized_compliance_threshold" value="30" />
             </label>
             <label>成功阈值：排放达标度（>=）
-              <input type="number" name="success_emission_threshold" min="0" max="100" value="80" required />
+              <input type="text" value="80（固定）" disabled />
+              <input type="hidden" name="success_emission_threshold" value="80" />
             </label>
             <label>成功阈值：法律合规度（>=）
-              <input type="number" name="success_compliance_min" min="0" max="100" value="80" required />
+              <input type="text" value="80（固定）" disabled />
+              <input type="hidden" name="success_compliance_min" value="80" />
             </label>
             <label>成功阈值：能耗负担率（<=，%）
-              <input type="number" name="success_energy_burden_max" min="1" max="100" value="10" required />
+              <input type="text" value="10（固定）" disabled />
+              <input type="hidden" name="success_energy_burden_max" value="10" />
             </label>
             <label>成功阈值：年盈余（>=，元）
               <input type="text" value="0（固定）" disabled />
+              <input type="hidden" name="success_surplus_min" value="0" />
             </label>
           </div>
           <p class="hint">点击开始后，系统将按回合给出按钮决策，不需要命令行或后端服务。</p>
@@ -448,14 +453,14 @@
           state.user.emission >= state.thresholds.successEmission &&
           state.user.compliance >= state.thresholds.successComplianceMin &&
           burden <= state.thresholds.successBurden &&
-          state.user.surplus >= 0;
+          state.user.surplus >= state.thresholds.successSurplusMin;
         if (success) {
           finish(
             "success",
             "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。",
             "你在技术路线、合规行为与家庭财务之间建立了稳定平衡，补贴退坡冲击后仍能维持可持续状态。"
           );
-        } else if (state.user.surplus < 0) {
+        } else if (state.user.surplus < state.thresholds.successSurplusMin) {
           finish(
             "bankrupt",
             "回合5结束后年盈余为负，家庭现金流已无法维持，判定为经济破产。",
@@ -633,10 +638,11 @@
         };
         state.thresholds = {
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
-          seized: Number(data.get("seized_compliance_threshold")),
-          successEmission: Number(data.get("success_emission_threshold")),
-          successComplianceMin: Number(data.get("success_compliance_min")),
-          successBurden: Number(data.get("success_energy_burden_max"))
+          seized: Number(data.get("seized_compliance_threshold")) || 30,
+          successEmission: Number(data.get("success_emission_threshold")) || 80,
+          successComplianceMin: Number(data.get("success_compliance_min")) || 80,
+          successBurden: Number(data.get("success_energy_burden_max")) || 10,
+          successSurplusMin: Number(data.get("success_surplus_min")) || 0
         };
         state.stage = "turn1";
         state.turn = 1;
