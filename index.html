@@ -191,6 +191,27 @@
         padding: 1px 5px;
         font-size: 0.8rem;
       }
+      .ai-chat textarea {
+        width: 100%;
+        min-height: 72px;
+        resize: vertical;
+      }
+      .ai-reply {
+        margin-top: 10px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px;
+        background: #fafcff;
+        white-space: pre-wrap;
+      }
+      .ai-reply.loading {
+        color: var(--muted);
+      }
+      .ai-reply.error {
+        color: var(--bad);
+        background: #fff1f2;
+        border-color: #f1aeb5;
+      }
     </style>
   </head>
   <body>
@@ -343,6 +364,22 @@
         </p>
       </section>
 
+      <section class="card ai-chat">
+        <h2>AI 政策顾问</h2>
+        <p class="hint">
+          一句话功能：根据你的模拟数据和提问，解读清洁取暖转型决策并给出可负担性建议。
+          需先运行本地服务 <span class="kbd">python deepseek_server.py</span>，再通过
+          <span class="kbd">http://127.0.0.1:8765</span> 打开本页。
+        </p>
+        <label>向 AI 提问
+          <textarea id="aiQuestion" placeholder="例如：我家年收入 5 万、取暖费 1.2 万，选天然气还是热泵更划算？"></textarea>
+        </label>
+        <div class="btn-row">
+          <button type="button" id="aiAskBtn" class="btn-primary">发送给 AI</button>
+        </div>
+        <div id="aiReply" class="ai-reply" hidden aria-live="polite"></div>
+      </section>
+
       <section class="card">
         <h2>操作日志</h2>
         <div class="log" id="logBox"></div>
@@ -372,7 +409,6 @@
 
       const researchSession = {
         id: null,
-        choices: [],
         eventLog: []
       };
 
@@ -489,7 +525,6 @@
 
       function resetResearchSession() {
         researchSession.id = null;
-        researchSession.choices = [];
         researchSession.eventLog = [];
         if (syncTimer) {
           clearTimeout(syncTimer);
@@ -507,21 +542,10 @@
         const sessionId = crypto.randomUUID();
         const payload = {
           id: sessionId,
-          role: "农民家庭",
-          region: "保定",
-          initial_heating_method: String(formData.get("heating_method") || "散煤炉"),
           annual_income: Number(formData.get("annual_income")),
           annual_surplus: Number(formData.get("annual_surplus")),
           housing_area: Number(formData.get("housing_area")),
           initial_winter_cost: Number(formData.get("winter_cost")),
-          bankrupt_energy_burden_threshold:
-            Number(formData.get("bankrupt_energy_burden_threshold")) || 10,
-          seized_compliance_threshold: Number(formData.get("seized_compliance_threshold")) || 30,
-          success_emission_threshold: Number(formData.get("success_emission_threshold")) || 75,
-          success_compliance_min: Number(formData.get("success_compliance_min")) || 100,
-          success_energy_burden_max: Number(formData.get("success_energy_burden_max")) || 10,
-          success_surplus_min: Number(formData.get("success_surplus_min")) || 0,
-          choices: [],
           event_log: []
         };
 
@@ -543,10 +567,7 @@
         const { error } = await supabaseClient
           .from("simulation_sessions")
           .update({
-            choices: researchSession.choices,
-            event_log: researchSession.eventLog,
-            turns_completed: state.turn,
-            is_energy_saving: state.isEnergySaving
+            event_log: researchSession.eventLog
           })
           .eq("id", researchSession.id);
 
@@ -567,23 +588,12 @@
       async function finalizeResearchSession(type, summary) {
         if (!supabaseClient || !researchSession.id) return;
 
-        const burden = burdenPercent();
         const { error } = await supabaseClient
           .from("simulation_sessions")
           .update({
             ended_at: new Date().toISOString(),
             ending_type: type,
             ending_summary: summary,
-            final_heating_method: state.user.heatingMethod,
-            final_heating_cost: Math.round(state.user.heatingCost),
-            final_income: Math.round(state.user.income),
-            final_surplus: Math.round(state.user.surplus),
-            final_compliance: Math.round(state.user.compliance),
-            final_emission: Math.round(state.user.emission),
-            final_energy_burden_pct: Number(burden.toFixed(1)),
-            is_energy_saving: state.isEnergySaving,
-            turns_completed: state.turn,
-            choices: researchSession.choices,
             event_log: researchSession.eventLog
           })
           .eq("id", researchSession.id);
@@ -651,18 +661,8 @@
         return coalTons * GAS_M3_PER_COAL_TON;
       }
 
-      function pushLog(text, choiceRecord = null) {
+      function pushLog(text) {
         researchSession.eventLog.push(text);
-        if (choiceRecord) {
-          researchSession.choices.push({
-            turn: state.turn,
-            stage: state.stage,
-            choice_id: choiceRecord.id,
-            choice_label: choiceRecord.label,
-            note: choiceRecord.note,
-            at: new Date().toISOString()
-          });
-        }
         scheduleResearchSync();
 
         const p = document.createElement("p");
@@ -769,7 +769,7 @@
             updateEmissionFromModel();
             state.turn += 1;
             note = "继续散煤取暖，合规度维持底线 0 分，排放达标度 0 分，已进入重点监控名单。";
-            pushLog(`回合1：${label} -> ${note}`, { id, label, note });
+            pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (evaluateEarlyEnding()) return;
             setStage(
@@ -786,7 +786,7 @@
             updateEmissionFromModel();
             state.turn += 1;
             note = "表达整改意愿，合规度升至 60 分；仍用散煤，排放达标度 0 分。";
-            pushLog(`回合1：${label} -> ${note}`, { id, label, note });
+            pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
               "回合3：技术路线选择",
@@ -804,7 +804,7 @@
             state.nonRectifyStreak += 1;
             updateEmissionFromModel();
             note = `继续违规取暖，合规度锁死 0 分，排放达标度 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
-            pushLog(`回合2：${label} -> ${note}`, { id, label, note });
+            pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
@@ -823,7 +823,7 @@
             updateEmissionFromModel();
             state.turn += 1;
             note = "申请整改，合规度回升至 50 分；尚未完成技术替代，排放达标度仍为 0 分。";
-            pushLog(`回合2：${label} -> ${note}`, { id, label, note });
+            pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
               "回合3：技术路线选择",
@@ -854,7 +854,7 @@
           updateEmissionFromModel();
           state.turn += 1;
           note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 100 分，排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
-          pushLog(`回合3：${label} -> ${note}`, { id, label, note });
+          pushLog(`回合3：${label} -> ${note}`);
           logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
           setStage(
@@ -884,7 +884,7 @@
             note = `强力节能：年取暖费 ${oldHeatingCost} × 60% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元；排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨。`;
           }
           state.turn += 1;
-          pushLog(`回合4：${label} -> ${note}`, { id, label, note });
+          pushLog(`回合4：${label} -> ${note}`);
           logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
           setStage(
@@ -902,8 +902,7 @@
             <p class="small">初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。</p>
           `;
           pushLog(
-            `回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`,
-            { id, label, note: `补贴退坡后取暖年花费 +${rise} 元` }
+            `回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`
           );
           logCurrentHeatingCo2();
           renderStats();
@@ -980,6 +979,73 @@
         const isOpen = researchPanel.classList.toggle("open");
         researchToggle.setAttribute("aria-expanded", String(isOpen));
         researchToggle.textContent = isOpen ? "收起研究 / Hide the research" : "研究 / The research";
+      });
+
+      const aiQuestionEl = document.getElementById("aiQuestion");
+      const aiAskBtn = document.getElementById("aiAskBtn");
+      const aiReplyEl = document.getElementById("aiReply");
+
+      function buildAiContext() {
+        if (!state.user) return "";
+        const burden = burdenPercent();
+        return [
+          `地区：保定`,
+          `取暖方式：${state.user.heatingMethod}`,
+          `年收入：${Math.round(state.user.income)} 元`,
+          `年盈余：${Math.round(state.user.surplus)} 元`,
+          `住房面积：${state.user.area} ㎡`,
+          `当前取暖年花费：${Math.round(state.user.heatingCost)} 元`,
+          `法律合规度：${Math.round(state.user.compliance)}`,
+          `排放达标度：${Math.round(state.user.emission)}`,
+          `能耗负担率：${burden.toFixed(1)}%`,
+          `当前回合：第 ${state.turn} 回合`
+        ].join("\n");
+      }
+
+      async function askAiAdvisor() {
+        const message = aiQuestionEl.value.trim();
+        if (!message) {
+          aiReplyEl.hidden = false;
+          aiReplyEl.className = "ai-reply error";
+          aiReplyEl.textContent = "请先输入问题。";
+          return;
+        }
+
+        aiAskBtn.disabled = true;
+        aiReplyEl.hidden = false;
+        aiReplyEl.className = "ai-reply loading";
+        aiReplyEl.textContent = "AI 正在思考…";
+
+        try {
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              message,
+              context: buildAiContext() || null
+            })
+          });
+          const data = await res.json();
+          if (!res.ok) {
+            throw new Error(data.error || data.detail || `请求失败 (${res.status})`);
+          }
+          aiReplyEl.className = "ai-reply";
+          aiReplyEl.textContent = data.reply || "（AI 未返回内容）";
+        } catch (err) {
+          aiReplyEl.className = "ai-reply error";
+          aiReplyEl.textContent =
+            `${err.message}\n\n提示：请确认已运行 python deepseek_server.py，并通过 http://127.0.0.1:8765 打开页面（不要直接用 file:// 打开）。`;
+        } finally {
+          aiAskBtn.disabled = false;
+        }
+      }
+
+      aiAskBtn.addEventListener("click", askAiAdvisor);
+      aiQuestionEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault();
+          askAiAdvisor();
+        }
       });
     </script>
   </body>
