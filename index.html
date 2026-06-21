@@ -191,10 +191,9 @@
         padding: 1px 5px;
         font-size: 0.8rem;
       }
-      .ai-chat textarea {
-        width: 100%;
-        min-height: 72px;
-        resize: vertical;
+      .ai-analysis .ai-reply h3,
+      .ai-analysis .ai-reply strong {
+        color: #24364a;
       }
       .ai-reply {
         margin-top: 10px;
@@ -203,6 +202,7 @@
         padding: 10px;
         background: #fafcff;
         white-space: pre-wrap;
+        line-height: 1.7;
       }
       .ai-reply.loading {
         color: var(--muted);
@@ -364,20 +364,18 @@
         </p>
       </section>
 
-      <section class="card ai-chat">
-        <h2>AI 政策顾问</h2>
+      <section class="card ai-analysis">
+        <h2>AI分析</h2>
         <p class="hint">
-          一句话功能：根据你的模拟数据和提问，解读清洁取暖转型决策并给出可负担性建议。
-          需先运行本地服务 <span class="kbd">python deepseek_server.py</span>，再通过
+          根据你输入的农户信息（收入、盈余、住房面积等）与下方操作日志，AI 将生成三部分报告：
+          农户形象解析、转型建议、政策与民生矛盾解读。模拟结束后会自动生成；也可手动点击按钮刷新。
+          需先运行 <span class="kbd">python deepseek_server.py</span>，通过
           <span class="kbd">http://127.0.0.1:8765</span> 打开本页。
         </p>
-        <label>向 AI 提问
-          <textarea id="aiQuestion" placeholder="例如：我家年收入 5 万、取暖费 1.2 万，选天然气还是热泵更划算？"></textarea>
-        </label>
         <div class="btn-row">
-          <button type="button" id="aiAskBtn" class="btn-primary">发送给 AI</button>
+          <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成 AI 分析</button>
         </div>
-        <div id="aiReply" class="ai-reply" hidden aria-live="polite"></div>
+        <div id="aiAnalysisResult" class="ai-reply" hidden aria-live="polite"></div>
       </section>
 
       <section class="card">
@@ -404,7 +402,9 @@
         isEnergySaving: false,
         user: null,
         thresholds: null,
-        emissionBaseline: null
+        emissionBaseline: null,
+        initialProfile: null,
+        ending: null
       };
 
       const researchSession = {
@@ -718,7 +718,9 @@
           </div>
         `;
         pushLog(`【终局】${summary}`);
+        state.ending = { type, summary };
         finalizeResearchSession(type, summary);
+        requestAiAnalysis();
       }
 
       function evaluateEarlyEnding() {
@@ -941,10 +943,21 @@
         state.turn = 1;
         state.nonRectifyStreak = 0;
         state.active = true;
+        state.ending = null;
+        state.initialProfile = {
+          role: "农民家庭",
+          region: "保定",
+          heating_method: String(data.get("heating_method") || "散煤炉"),
+          annual_income: Number(data.get("annual_income")),
+          annual_surplus: Number(data.get("annual_surplus")),
+          housing_area: Number(data.get("housing_area")),
+          winter_cost: Number(data.get("winter_cost"))
+        };
 
         playArea.style.display = "block";
         endingBoxEl.innerHTML = "";
         logBoxEl.innerHTML = "";
+        clearAiAnalysis();
 
         researchSession.id = await createResearchSession(data);
 
@@ -969,10 +982,13 @@
         state.nonRectifyStreak = 0;
         state.isEnergySaving = false;
         state.emissionBaseline = null;
+        state.initialProfile = null;
+        state.ending = null;
         resetResearchSession();
         playArea.style.display = "none";
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
+        clearAiAnalysis();
       });
 
       researchToggle.addEventListener("click", () => {
@@ -981,72 +997,79 @@
         researchToggle.textContent = isOpen ? "收起研究 / Hide the research" : "研究 / The research";
       });
 
-      const aiQuestionEl = document.getElementById("aiQuestion");
-      const aiAskBtn = document.getElementById("aiAskBtn");
-      const aiReplyEl = document.getElementById("aiReply");
+      const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
+      const aiAnalysisResultEl = document.getElementById("aiAnalysisResult");
 
-      function buildAiContext() {
-        if (!state.user) return "";
-        const burden = burdenPercent();
-        return [
-          `地区：保定`,
-          `取暖方式：${state.user.heatingMethod}`,
-          `年收入：${Math.round(state.user.income)} 元`,
-          `年盈余：${Math.round(state.user.surplus)} 元`,
-          `住房面积：${state.user.area} ㎡`,
-          `当前取暖年花费：${Math.round(state.user.heatingCost)} 元`,
-          `法律合规度：${Math.round(state.user.compliance)}`,
-          `排放达标度：${Math.round(state.user.emission)}`,
-          `能耗负担率：${burden.toFixed(1)}%`,
-          `当前回合：第 ${state.turn} 回合`
-        ].join("\n");
+      function clearAiAnalysis() {
+        aiAnalysisResultEl.hidden = true;
+        aiAnalysisResultEl.className = "ai-reply";
+        aiAnalysisResultEl.textContent = "";
       }
 
-      async function askAiAdvisor() {
-        const message = aiQuestionEl.value.trim();
-        if (!message) {
-          aiReplyEl.hidden = false;
-          aiReplyEl.className = "ai-reply error";
-          aiReplyEl.textContent = "请先输入问题。";
+      function buildFinalStateSnapshot() {
+        if (!state.user) return null;
+        const burden = burdenPercent();
+        return {
+          heating_method: state.user.heatingMethod,
+          annual_income: Math.round(state.user.income),
+          annual_surplus: Math.round(state.user.surplus),
+          housing_area: state.user.area,
+          heating_annual_cost: Math.round(state.user.heatingCost),
+          compliance: Math.round(state.user.compliance),
+          emission_score: Math.round(state.user.emission),
+          co2_tons: Number((state.user.co2Tons ?? 0).toFixed(3)),
+          energy_burden_pct: Number(burden.toFixed(1)),
+          turn: state.turn,
+          is_energy_saving: state.isEnergySaving
+        };
+      }
+
+      async function requestAiAnalysis() {
+        if (!state.initialProfile) {
+          aiAnalysisResultEl.hidden = false;
+          aiAnalysisResultEl.className = "ai-reply error";
+          aiAnalysisResultEl.textContent = "请先填写农户信息并开始模拟。";
+          return;
+        }
+        if (!researchSession.eventLog.length) {
+          aiAnalysisResultEl.hidden = false;
+          aiAnalysisResultEl.className = "ai-reply error";
+          aiAnalysisResultEl.textContent = "操作日志为空，请先完成至少一步模拟。";
           return;
         }
 
-        aiAskBtn.disabled = true;
-        aiReplyEl.hidden = false;
-        aiReplyEl.className = "ai-reply loading";
-        aiReplyEl.textContent = "AI 正在思考…";
+        aiAnalyzeBtn.disabled = true;
+        aiAnalysisResultEl.hidden = false;
+        aiAnalysisResultEl.className = "ai-reply loading";
+        aiAnalysisResultEl.textContent = "AI 正在分析农户画像与转型路径…";
 
         try {
-          const res = await fetch("/api/chat", {
+          const res = await fetch("/api/analyze", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              message,
-              context: buildAiContext() || null
+              profile: state.initialProfile,
+              event_log: researchSession.eventLog.slice(),
+              final_state: buildFinalStateSnapshot(),
+              ending: state.ending
             })
           });
           const data = await res.json();
           if (!res.ok) {
             throw new Error(data.error || data.detail || `请求失败 (${res.status})`);
           }
-          aiReplyEl.className = "ai-reply";
-          aiReplyEl.textContent = data.reply || "（AI 未返回内容）";
+          aiAnalysisResultEl.className = "ai-reply";
+          aiAnalysisResultEl.textContent = data.analysis || "（AI 未返回内容）";
         } catch (err) {
-          aiReplyEl.className = "ai-reply error";
-          aiReplyEl.textContent =
-            `${err.message}\n\n提示：请确认已运行 python deepseek_server.py，并通过 http://127.0.0.1:8765 打开页面（不要直接用 file:// 打开）。`;
+          aiAnalysisResultEl.className = "ai-reply error";
+          aiAnalysisResultEl.textContent =
+            `${err.message}\n\n提示：请确认已运行 python deepseek_server.py，并通过 http://127.0.0.1:8765 打开页面。`;
         } finally {
-          aiAskBtn.disabled = false;
+          aiAnalyzeBtn.disabled = false;
         }
       }
 
-      aiAskBtn.addEventListener("click", askAiAdvisor);
-      aiQuestionEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault();
-          askAiAdvisor();
-        }
-      });
+      aiAnalyzeBtn.addEventListener("click", requestAiAnalysis);
     </script>
   </body>
 </html>
