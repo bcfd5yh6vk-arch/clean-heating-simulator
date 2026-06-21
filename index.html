@@ -354,7 +354,6 @@
         stage: "turn1",
         turn: 1,
         nonRectifyStreak: 0,
-        isEnergySaving: false,
         user: null,
         thresholds: null
       };
@@ -364,11 +363,88 @@
       const SUBSIDY_REDUCTION_PER_M3 = 0.6;
       const BASE_RENOVATION_COST_PER_100SQM = { A: 3000, B: 10000, C: 7000 };
       const BASE_ANNUAL_HEATING_COST_PER_100SQM = { A: 8000, B: 2000, C: 4300 };
-      const ROUTE_TO_HEATING_METHOD = { A: "天然气", B: "地源热泵", C: "空气源热泵" };
 
       /** 100㎡ 基准值 × 农户面积 ÷ 100 */
       function scaleByHousingArea(basePer100Sqm, area) {
         return Math.round(basePer100Sqm * area / 100);
+      }
+
+      const TECH_ROUTE_BY_CHOICE = {
+        A: "天然气",
+        B: "地源热泵",
+        C: "空气源热泵"
+      };
+
+      /** 排放数模物理常数（能量统一用 GJ；1 TJ = 1000 GJ） */
+      const COAL_ENERGY_GJ_PER_TON = 23.2;
+      const COAL_USEFUL_HEAT_GJ_PER_TON = 9;
+      const COAL_C_INTENSITY_TC_PER_TJ = 26.7;
+      const GAS_ENERGY_GJ_PER_M3 = 0.036;
+      const GAS_C_INTENSITY_TC_PER_TJ = 15.3;
+      const GSHP_HEAT_GJ_PER_KWH = 0.0144;
+      const ASHP_HEAT_GJ_PER_KWH = 0.0106;
+      const GRID_EMISSION_KGCO2_PER_KWH = 0.6361;
+      const C_TO_CO2 = 44 / 12;
+
+      function buildEmissionBaseline(initialHeatingCost) {
+        const initialCoalTons = initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
+        const initialCoalInputEnergyGJ = initialCoalTons * COAL_ENERGY_GJ_PER_TON;
+        const requiredUsefulEnergyGJ = initialCoalTons * COAL_USEFUL_HEAT_GJ_PER_TON;
+        const E_initial =
+          (initialCoalInputEnergyGJ / 1000) * COAL_C_INTENSITY_TC_PER_TJ * C_TO_CO2;
+        return {
+          initialCoalTons,
+          initialCoalInputEnergyGJ,
+          requiredUsefulEnergyGJ,
+          E_initial
+        };
+      }
+
+      function calculateCurrentEmission(baseline, method, isEnergySaving = false) {
+        const { initialCoalTons, requiredUsefulEnergyGJ, E_initial } = baseline;
+        const energyMultiplier = isEnergySaving ? 0.6 : 1.0;
+
+        switch (method) {
+          case "散煤炉":
+            return E_initial * energyMultiplier;
+          case "天然气": {
+            const gasVolume = initialCoalTons * GAS_M3_PER_COAL_TON * energyMultiplier;
+            const gasEnergyGJ = gasVolume * GAS_ENERGY_GJ_PER_M3;
+            return (gasEnergyGJ / 1000) * GAS_C_INTENSITY_TC_PER_TJ * C_TO_CO2;
+          }
+          case "地源热泵": {
+            const gshpElectricityKwh =
+              (requiredUsefulEnergyGJ * energyMultiplier) / GSHP_HEAT_GJ_PER_KWH;
+            return gshpElectricityKwh * GRID_EMISSION_KGCO2_PER_KWH * 0.001;
+          }
+          case "空气源热泵": {
+            const ashpElectricityKwh =
+              (requiredUsefulEnergyGJ * energyMultiplier) / ASHP_HEAT_GJ_PER_KWH;
+            return ashpElectricityKwh * GRID_EMISSION_KGCO2_PER_KWH * 0.001;
+          }
+          default:
+            return E_initial * energyMultiplier;
+        }
+      }
+
+      function updateEmissionFromModel() {
+        const method = state.user.heatingMethod;
+        const E_current = calculateCurrentEmission(
+          state.emissionBaseline,
+          method,
+          state.isEnergySaving
+        );
+        state.user.co2Tons = E_current;
+
+        if (method === "散煤炉") {
+          state.user.emission = 0;
+          return;
+        }
+
+        const { E_initial } = state.emissionBaseline;
+        const score =
+          E_initial > 0 ? Math.round((1 - E_current / E_initial) * 100) : 0;
+        state.user.emission = clamp(score, 0, 100);
       }
 
       const profileForm = document.getElementById("profileForm");
@@ -438,61 +514,6 @@
         return coalTons * GAS_M3_PER_COAL_TON;
       }
 
-      /** 排放达标度数模：能量守恒 + 碳排放因子 */
-      function getEmissionBaseline(initialHeatingCost) {
-        const initialCoalTons = initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
-        const initialCoalInputEnergyTJ = (initialCoalTons * 23.2) / 1000;
-        const requiredUsefulEnergyGJ = initialCoalTons * 9;
-        const E_initial = initialCoalInputEnergyTJ * 26.7 * (44 / 12);
-        return { initialCoalTons, initialCoalInputEnergyTJ, requiredUsefulEnergyGJ, E_initial };
-      }
-
-      function calculateCurrentEmission(method, baseline, isEnergySaving = false) {
-        const { initialCoalTons, requiredUsefulEnergyGJ, E_initial } = baseline;
-        const energyMultiplier = isEnergySaving ? 0.6 : 1.0;
-
-        switch (method) {
-          case "散煤炉":
-            return E_initial * energyMultiplier;
-          case "天然气": {
-            const gasVolume = initialCoalTons * GAS_M3_PER_COAL_TON * energyMultiplier;
-            const gasEnergyTJ = (gasVolume * 0.036) / 1000;
-            return gasEnergyTJ * 15.3 * (44 / 12);
-          }
-          case "地源热泵": {
-            const gshpElectricity = (requiredUsefulEnergyGJ * energyMultiplier) / 0.0144;
-            return gshpElectricity * 0.6361 * 0.001;
-          }
-          case "空气源热泵": {
-            const ashpElectricity = (requiredUsefulEnergyGJ * energyMultiplier) / 0.0106;
-            return ashpElectricity * 0.6361 * 0.001;
-          }
-          default:
-            return E_initial * energyMultiplier;
-        }
-      }
-
-      function updateEmissionScore(logResult = true) {
-        const baseline = getEmissionBaseline(state.user.initialHeatingCost);
-        const method = state.user.heatingMethod || "散煤炉";
-        const E_current = calculateCurrentEmission(method, baseline, state.isEnergySaving);
-
-        state.user.currentCo2Tons = E_current;
-
-        if (method === "散煤炉" || baseline.E_initial <= 0) {
-          state.user.emission = 0;
-        } else {
-          const score = Math.round((1 - E_current / baseline.E_initial) * 100);
-          state.user.emission = clamp(score, 0, 100);
-        }
-
-        if (logResult) {
-          pushLog(
-            `【碳排放模型】路线=${method}，冬季 CO₂ 排放量=${E_current.toFixed(3)} 吨（基准 E_initial=${baseline.E_initial.toFixed(3)} 吨），排放达标度=${state.user.emission} 分。`
-          );
-        }
-      }
-
       function pushLog(text) {
         const p = document.createElement("p");
         p.textContent = text;
@@ -507,6 +528,7 @@
           <div class="stat"><span>年盈余（元）</span><strong>${Math.round(state.user.surplus)}</strong></div>
           <div class="stat"><span>法律合规度（0-100）</span><strong>${Math.round(state.user.compliance)}</strong></div>
           <div class="stat"><span>排放达标度（0-100）</span><strong>${Math.round(state.user.emission)}</strong></div>
+          <div class="stat"><span>冬季 CO₂ 排放量（吨）</span><strong>${(state.user.co2Tons ?? 0).toFixed(3)}</strong></div>
           <div class="stat"><span>能耗负担率（%）</span><strong>${burden.toFixed(1)}</strong></div>
         `;
       }
@@ -585,11 +607,9 @@
           if (id === "A") {
             state.user.compliance = 0;
             state.nonRectifyStreak = 1;
-            state.user.heatingMethod = "散煤炉";
-            state.isEnergySaving = false;
-            updateEmissionScore();
+            updateEmissionFromModel();
             state.turn += 1;
-            note = "继续散煤取暖，合规度维持底线 0 分，已进入重点监控名单。";
+            note = "继续散煤取暖，合规度维持底线 0 分，排放达标度 0 分，已进入重点监控名单。";
             pushLog(`回合1：${label} -> ${note}`);
             if (evaluateEarlyEnding()) return;
             setStage(
@@ -603,11 +623,9 @@
           } else {
             state.user.compliance = 60;
             state.nonRectifyStreak = 0;
-            state.user.heatingMethod = "散煤炉";
-            state.isEnergySaving = false;
-            updateEmissionScore();
+            updateEmissionFromModel();
             state.turn += 1;
-            note = "表达整改意愿，合规度升至 60 分政策宽限及格线。";
+            note = "表达整改意愿，合规度升至 60 分；仍用散煤，排放达标度 0 分。";
             pushLog(`回合1：${label} -> ${note}`);
             setStage(
               "回合3：技术路线选择",
@@ -623,10 +641,8 @@
           if (id === "1") {
             state.user.compliance = 0;
             state.nonRectifyStreak += 1;
-            state.user.heatingMethod = "散煤炉";
-            state.isEnergySaving = false;
-            updateEmissionScore();
-            note = `继续违规取暖，合规度锁死 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
+            updateEmissionFromModel();
+            note = `继续违规取暖，合规度锁死 0 分，排放达标度 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
             pushLog(`回合2：${label} -> ${note}`);
             if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
@@ -642,11 +658,9 @@
             state.user.surplus -= 800;
             state.user.compliance = 50;
             state.nonRectifyStreak = 0;
-            state.user.heatingMethod = "散煤炉";
-            state.isEnergySaving = false;
-            updateEmissionScore();
+            updateEmissionFromModel();
             state.turn += 1;
-            note = "申请整改，合规度回升至 50 分合格线边缘。";
+            note = "申请整改，合规度回升至 50 分；尚未完成技术替代，排放达标度仍为 0 分。";
             pushLog(`回合2：${label} -> ${note}`);
             setStage(
               "回合3：技术路线选择",
@@ -672,11 +686,11 @@
           state.user.surplus -= surplusDelta;
           state.user.heatingCost = newHeatingCost;
           state.user.compliance = 100;
-          state.user.heatingMethod = ROUTE_TO_HEATING_METHOD[id];
+          state.user.heatingMethod = TECH_ROUTE_BY_CHOICE[id];
           state.isEnergySaving = false;
-          updateEmissionScore();
+          updateEmissionFromModel();
           state.turn += 1;
-          note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 100 分；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
+          note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 100 分，排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
           if (evaluateEarlyEnding()) return;
           setStage(
@@ -693,10 +707,7 @@
             const incomeBoost = Math.round(state.user.income * 0.2);
             state.user.income += incomeBoost;
             state.user.surplus += incomeBoost;
-            note = `副业增收：年收入提高 20%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元；排放达标度保持 ${state.user.emission} 分。`;
-            pushLog(
-              `【碳排放模型】路线=${state.user.heatingMethod}，冬季 CO₂ 排放量=${state.user.currentCo2Tons.toFixed(3)} 吨，排放达标度=${state.user.emission} 分。`
-            );
+            note = `副业增收：年收入提高 20%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元；排放分数不变（${state.user.emission} 分）。`;
           } else {
             const oldHeatingCost = state.user.heatingCost;
             const newHeatingCost = Math.round(oldHeatingCost * 0.6);
@@ -705,8 +716,8 @@
             state.user.heatingCost = newHeatingCost;
             state.user.surplus += surplusBoost;
             state.isEnergySaving = true;
-            updateEmissionScore();
-            note = `强力节能：年取暖费 ${oldHeatingCost} × 60% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元。`;
+            updateEmissionFromModel();
+            note = `强力节能：年取暖费 ${oldHeatingCost} × 60% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元；排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨。`;
           }
           state.turn += 1;
           pushLog(`回合4：${label} -> ${note}`);
@@ -725,7 +736,7 @@
             <p class="pill bad">事件：补贴减少</p>
             <p class="small">初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。</p>
           `;
-          pushLog(`回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元；排放达标度冻结为 ${state.user.emission} 分（CO₂ ${state.user.currentCo2Tons.toFixed(3)} 吨）。`);
+          pushLog(`回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`);
           renderStats();
           finalRoundSettle();
         }
@@ -734,6 +745,8 @@
       profileForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const data = new FormData(profileForm);
+        state.isEnergySaving = false;
+        state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
         state.user = {
           role: "农民家庭",
           region: "保定",
@@ -745,9 +758,8 @@
           initialHeatingCost: Number(data.get("winter_cost")),
           compliance: 0,
           emission: 0,
-          currentCo2Tons: 0
+          co2Tons: state.emissionBaseline.E_initial
         };
-        state.isEnergySaving = false;
         state.thresholds = {
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
           seized: Number(data.get("seized_compliance_threshold")) || 30,
@@ -759,15 +771,13 @@
         state.stage = "turn1";
         state.turn = 1;
         state.nonRectifyStreak = 0;
-        state.isEnergySaving = false;
         state.active = true;
 
         playArea.style.display = "block";
         endingBoxEl.innerHTML = "";
         logBoxEl.innerHTML = "";
-        updateEmissionScore();
         pushLog(
-          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}。`
+          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
         );
 
         setStage(
@@ -786,6 +796,7 @@
         state.turn = 1;
         state.nonRectifyStreak = 0;
         state.isEnergySaving = false;
+        state.emissionBaseline = null;
         playArea.style.display = "none";
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
