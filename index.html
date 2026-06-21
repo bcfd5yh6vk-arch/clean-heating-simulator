@@ -520,6 +520,14 @@
         logBoxEl.prepend(p);
       }
 
+      function logCurrentHeatingCo2() {
+        if (!state.user) return;
+        const co2Tons = state.user.co2Tons ?? 0;
+        pushLog(
+          `【当前年取暖碳排放】${co2Tons.toFixed(3)} 吨 CO₂（排放达标度 ${Math.round(state.user.emission)} 分）`
+        );
+      }
+
       function renderStats() {
         const burden = burdenPercent();
         statsEl.innerHTML = `
@@ -611,6 +619,7 @@
             state.turn += 1;
             note = "继续散煤取暖，合规度维持底线 0 分，排放达标度 0 分，已进入重点监控名单。";
             pushLog(`回合1：${label} -> ${note}`);
+            logCurrentHeatingCo2();
             if (evaluateEarlyEnding()) return;
             setStage(
               "回合2：合规压力应对",
@@ -627,6 +636,7 @@
             state.turn += 1;
             note = "表达整改意愿，合规度升至 60 分；仍用散煤，排放达标度 0 分。";
             pushLog(`回合1：${label} -> ${note}`);
+            logCurrentHeatingCo2();
             setStage(
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
@@ -644,6 +654,7 @@
             updateEmissionFromModel();
             note = `继续违规取暖，合规度锁死 0 分，排放达标度 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
             pushLog(`回合2：${label} -> ${note}`);
+            logCurrentHeatingCo2();
             if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
             setStage(
@@ -662,6 +673,7 @@
             state.turn += 1;
             note = "申请整改，合规度回升至 50 分；尚未完成技术替代，排放达标度仍为 0 分。";
             pushLog(`回合2：${label} -> ${note}`);
+            logCurrentHeatingCo2();
             setStage(
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
@@ -692,6 +704,7 @@
           state.turn += 1;
           note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 100 分，排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
+          logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
           setStage(
             "回合4：增收/降耗策略",
@@ -721,6 +734,7 @@
           }
           state.turn += 1;
           pushLog(`回合4：${label} -> ${note}`);
+          logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
           setStage(
             "回合5：补贴减少冲击",
@@ -737,6 +751,7 @@
             <p class="small">初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。</p>
           `;
           pushLog(`回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`);
+          logCurrentHeatingCo2();
           renderStats();
           finalRoundSettle();
         }
