@@ -369,8 +369,6 @@
         <p class="hint">
           根据你输入的农户信息（收入、盈余、住房面积等）与下方操作日志，AI 将生成三部分报告：
           农户形象解析、转型建议、政策与民生矛盾解读。模拟结束后会自动生成；也可手动点击按钮刷新。
-          需先运行 <span class="kbd">python deepseek_server.py</span>，通过
-          <span class="kbd">http://127.0.0.1:8765</span> 打开本页。
         </p>
         <div class="btn-row">
           <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成 AI 分析</button>
@@ -1044,7 +1042,7 @@
         aiAnalysisResultEl.textContent = "AI 正在分析农户画像与转型路径…";
 
         try {
-          const res = await fetch("/api/analyze", {
+          const res = await fetch("/api/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -1063,7 +1061,7 @@
         } catch (err) {
           aiAnalysisResultEl.className = "ai-reply error";
           aiAnalysisResultEl.textContent =
-            `${err.message}\n\n提示：请确认已运行 python deepseek_server.py，并通过 http://127.0.0.1:8765 打开页面。`;
+            `${err.message}\n\n若 AI 无法使用，请确认 Vercel 项目已配置 DEEPSEEK_API_KEY 环境变量并重新部署。`;
         } finally {
           aiAnalyzeBtn.disabled = false;
         }

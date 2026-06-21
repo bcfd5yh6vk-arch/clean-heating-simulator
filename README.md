@@ -6,7 +6,21 @@
 
 **https://clean-heating-simulator.vercel.app**
 
-线上部署的是根目录 `index.html`，也就是一个纯 HTML/CSS/JavaScript 的单文件作品页。
+线上部署的是根目录 `index.html`（静态页）+ `api/chat.js`（Vercel Serverless，供 AI 分析调用）。**API Key 只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
+
+### 在 Vercel 配置 DeepSeek API Key（必做，否则 AI 不可用）
+
+1. 打开 [vercel.com](https://vercel.com) 并登录。
+2. 进入项目 **clean-heating-simulator**（或你的项目名）。
+3. 顶部点 **Settings** → 左侧点 **Environment Variables**。
+4. 填写：
+   - **Key（名称）**：`DEEPSEEK_API_KEY`
+   - **Value（值）**：粘贴你的 DeepSeek API Key（在 [platform.deepseek.com](https://platform.deepseek.com) 获取）
+   - **Environments（环境）**：勾选 **Production**、**Preview**、**Development**（三个都勾上最省事）
+5. 点 **Save** 保存。
+6. 回到 **Deployments** 标签 → 最新一次部署右侧 **⋯** → **Redeploy** → 勾选 **Use existing Build Cache** → **Redeploy**。
+
+完成后，线上 `https://你的域名/api/chat` 会用服务器端的 Key 调用 DeepSeek，浏览器里看不到 Key。
 
 ## 项目结构
 
