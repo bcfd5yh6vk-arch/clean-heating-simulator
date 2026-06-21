@@ -4,7 +4,9 @@
 
 ## 上线地址
 
-**https://clean-heating-simulator.vercel.app**
+**https://www.clean-heating-simulator.com**
+
+域名在 Cloudflare 注册并解析；站点托管在 Vercel（原 `clean-heating-simulator.vercel.app` 仍可访问，但以自定义域名为准）。
 
 线上部署的是根目录 `index.html`（静态页）+ `api/chat.js`（Vercel Serverless，供 AI 分析调用）。**API Key 只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
 
@@ -20,7 +22,7 @@
 5. 点 **Save** 保存。
 6. 回到 **Deployments** 标签 → 最新一次部署右侧 **⋯** → **Redeploy** → 勾选 **Use existing Build Cache** → **Redeploy**。
 
-完成后，线上 `https://你的域名/api/chat` 会用服务器端的 Key 调用 DeepSeek，浏览器里看不到 Key。
+完成后，线上 `https://www.clean-heating-simulator.com/api/chat` 会用服务器端的 Key 调用 DeepSeek，浏览器里看不到 Key。
 
 ## 项目结构
 
