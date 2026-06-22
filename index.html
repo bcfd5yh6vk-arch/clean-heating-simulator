@@ -630,6 +630,29 @@
         setSyncStatus("本次模拟已保存到研究数据库。");
       }
 
+      async function saveAiAnalysisToSupabase(analysisText) {
+        if (!supabaseClient || !researchSession.id || !analysisText?.trim()) return false;
+
+        const { data, error } = await supabaseClient
+          .from("simulation_sessions")
+          .update({
+            ai_analysis: analysisText.trim(),
+            ai_analysis_at: new Date().toISOString()
+          })
+          .eq("id", researchSession.id)
+          .select("id");
+
+        if (error) {
+          console.error("保存 AI 分析失败", error);
+          return false;
+        }
+        if (!data || data.length === 0) {
+          console.error("保存 AI 分析失败：未更新任何记录", researchSession.id);
+          return false;
+        }
+        return true;
+      }
+
       function clamp(v, min, max) {
         return Math.max(min, Math.min(max, v));
       }
@@ -1082,7 +1105,11 @@
             throw new Error(data.error || data.detail || `请求失败 (${res.status})`);
           }
           aiAnalysisResultEl.className = "ai-reply";
-          aiAnalysisResultEl.textContent = data.analysis || "（AI 未返回内容）";
+          const analysisText = data.analysis || "（AI 未返回内容）";
+          aiAnalysisResultEl.textContent = analysisText;
+          if (data.analysis && (await saveAiAnalysisToSupabase(data.analysis))) {
+            setSyncStatus("本次模拟与 AI 分析已保存到研究数据库。");
+          }
         } catch (err) {
           aiAnalysisResultEl.className = "ai-reply error";
           aiAnalysisResultEl.textContent =
