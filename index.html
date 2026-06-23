@@ -212,6 +212,15 @@
         background: #fff1f2;
         border-color: #f1aeb5;
       }
+      .identity-detail {
+        display: none;
+        grid-column: 1 / -1;
+      }
+      .identity-detail.visible {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
     </style>
   </head>
   <body>
@@ -281,6 +290,29 @@
         <h2>开始模拟（可直接操作）</h2>
         <form id="profileForm">
           <div class="grid">
+            <label>你的身份
+              <select name="user_identity" id="userIdentitySelect" required>
+                <option value="">请选择</option>
+                <option value="学生">学生</option>
+                <option value="农民">农民</option>
+                <option value="其他">其他</option>
+              </select>
+            </label>
+            <div id="identityStudentField" class="identity-detail">
+              <label>年级
+                <input type="text" name="student_grade" placeholder="请填写年级，例如：高一、高三" />
+              </label>
+            </div>
+            <div id="identityFarmerField" class="identity-detail">
+              <label>所在村
+                <input type="text" name="village_name" placeholder="请填写村名" />
+              </label>
+            </div>
+            <div id="identityOtherField" class="identity-detail">
+              <label>你的身份
+                <input type="text" name="identity_other" placeholder="请输入你的身份" />
+              </label>
+            </div>
             <label>游戏角色（固定）
               <input type="text" value="农民家庭（固定）" disabled />
             </label>
@@ -514,6 +546,51 @@
       const researchToggle = document.getElementById("researchToggle");
       const researchPanel = document.getElementById("researchPanel");
       const syncStatusEl = document.getElementById("syncStatus");
+      const userIdentitySelect = document.getElementById("userIdentitySelect");
+      const identityStudentField = document.getElementById("identityStudentField");
+      const identityFarmerField = document.getElementById("identityFarmerField");
+      const identityOtherField = document.getElementById("identityOtherField");
+
+      function updateIdentityDetailFields() {
+        const identity = userIdentitySelect?.value || "";
+        identityStudentField?.classList.toggle("visible", identity === "学生");
+        identityFarmerField?.classList.toggle("visible", identity === "农民");
+        identityOtherField?.classList.toggle("visible", identity === "其他");
+
+        const studentInput = profileForm.querySelector('[name="student_grade"]');
+        const villageInput = profileForm.querySelector('[name="village_name"]');
+        const otherInput = profileForm.querySelector('[name="identity_other"]');
+        if (studentInput) studentInput.required = identity === "学生";
+        if (villageInput) villageInput.required = identity === "农民";
+        if (otherInput) otherInput.required = identity === "其他";
+      }
+
+      function readIdentityDetail(formData) {
+        const identity = String(formData.get("user_identity") || "");
+        if (identity === "学生") return String(formData.get("student_grade") || "").trim();
+        if (identity === "农民") return String(formData.get("village_name") || "").trim();
+        if (identity === "其他") return String(formData.get("identity_other") || "").trim();
+        return "";
+      }
+
+      function validateIdentityFields(formData) {
+        const identity = String(formData.get("user_identity") || "");
+        if (!identity) {
+          alert("请选择你的身份。");
+          return false;
+        }
+        const detail = readIdentityDetail(formData);
+        if (!detail) {
+          if (identity === "学生") alert("请填写年级。");
+          else if (identity === "农民") alert("请填写所在村的名字。");
+          else alert("请输入你的身份。");
+          return false;
+        }
+        return true;
+      }
+
+      userIdentitySelect?.addEventListener("change", updateIdentityDetailFields);
+      updateIdentityDetailFields();
 
       function setSyncStatus(message, isError = false) {
         if (!syncStatusEl) return;
@@ -540,6 +617,8 @@
         const sessionId = crypto.randomUUID();
         const payload = {
           id: sessionId,
+          user_identity: String(formData.get("user_identity") || ""),
+          identity_detail: readIdentityDetail(formData),
           annual_income: Number(formData.get("annual_income")),
           annual_surplus: Number(formData.get("annual_surplus")),
           housing_area: Number(formData.get("housing_area")),
@@ -961,6 +1040,7 @@
       profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const data = new FormData(profileForm);
+        if (!validateIdentityFields(data)) return;
         resetResearchSession();
         state.isEnergySaving = false;
         state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
@@ -991,6 +1071,8 @@
         state.active = true;
         state.ending = null;
         state.initialProfile = {
+          user_identity: String(data.get("user_identity") || ""),
+          identity_detail: readIdentityDetail(data),
           role: "农民家庭",
           region: "保定",
           heating_method: String(data.get("heating_method") || "散煤炉"),
@@ -1008,7 +1090,7 @@
         researchSession.id = await createResearchSession(data);
 
         pushLog(
-          `初始化：方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
+          `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
         );
 
         setStage(
@@ -1031,6 +1113,7 @@
         state.initialProfile = null;
         state.ending = null;
         resetResearchSession();
+        updateIdentityDetailFields();
         playArea.style.display = "none";
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
