@@ -1280,9 +1280,8 @@
 
         const student = `
           <p class="survey-section-title">学生专属题</p>
-          ${likertField("s1_understanding_before", "S1. 在玩之前，你对北方农村清洁取暖问题的了解程度？", ["完全没感觉", "略有了解", "一般", "比较了解", "非常了解"])}
-          ${likertField("s2_simulator_help", "S2. 这个模拟器相比看文章/听讲解，帮助程度如何？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
-          ${checkboxField("s3_hardest_burden", "S3. 玩完后，你认为农户最难承受的是？（多选，最多 3 项）", [
+          ${likertField("s1_simulator_help", "S1. 这个模拟器相比看文章/听讲解，帮助程度如何？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
+          ${checkboxField("s2_hardest_burden", "S2. 玩完后，你认为农户最难承受的是？（多选，最多 3 项）", [
             ["device_cost", "改造设备一次性费用"],
             ["annual_heating", "每年取暖运行费"],
             ["subsidy_cut", "补贴减少后的气价/电价"],
@@ -1290,7 +1289,7 @@
             ["cold_home", "不敢开暖气、室温不够"],
             ["reburn_risk", "返煤或违规取暖的风险"]
           ], 3)}
-          ${textField("s4_reflection", "S4. 这局模拟里，你最深的思考是什么？", "可选填写")}
+          ${textField("s3_reflection", "S3. 这局模拟里，你最深的思考是什么？", "可选填写")}
         `;
 
         const converted = `
@@ -1495,10 +1494,9 @@
 
         if (identity === "学生") {
           responses.student = {
-            s1_understanding_before: collectLikertAnswer("s1_understanding_before"),
-            s2_simulator_help: collectLikertAnswer("s2_simulator_help"),
-            s3_hardest_burden: collectCheckboxAnswers("s3_hardest_burden"),
-            s4_reflection: collectTextAnswer("s4_reflection")
+            s1_simulator_help: collectLikertAnswer("s1_simulator_help"),
+            s2_hardest_burden: collectCheckboxAnswers("s2_hardest_burden"),
+            s3_reflection: collectTextAnswer("s3_reflection")
           };
         } else if (identity === "已煤改农户") {
           const f1 = collectRadioAnswer("f1_heating_method");
@@ -1541,8 +1539,8 @@
           return false;
         }
         const id = responses.user_identity;
-        if (id === "学生" && responses.student.s3_hardest_burden.length === 0) {
-          alert("S3 请至少选择 1 项。");
+        if (id === "学生" && responses.student.s2_hardest_burden.length === 0) {
+          alert("S2 请至少选择 1 项。");
           return false;
         }
         if (id === "已煤改农户") {
