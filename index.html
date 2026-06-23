@@ -221,6 +221,84 @@
         flex-direction: column;
         gap: 6px;
       }
+      .survey-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        background: rgba(15, 23, 32, 0.55);
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 20px 12px;
+        overflow-y: auto;
+      }
+      .survey-overlay[hidden] {
+        display: none !important;
+      }
+      .survey-modal {
+        width: min(720px, 100%);
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px 18px 22px;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+      }
+      .survey-modal h2 {
+        margin-bottom: 4px;
+      }
+      .survey-section-title {
+        margin: 18px 0 8px;
+        font-size: 1rem;
+        color: #24364a;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 6px;
+      }
+      .survey-q {
+        border: none;
+        margin: 0 0 14px;
+        padding: 0;
+      }
+      .survey-q legend {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 8px;
+        padding: 0;
+      }
+      .likert-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 6px;
+      }
+      .likert-grid label,
+      .survey-options label {
+        display: flex;
+        align-items: flex-start;
+        gap: 6px;
+        font-size: 0.88rem;
+        color: var(--text);
+        line-height: 1.35;
+      }
+      .survey-options {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .survey-other-input {
+        margin-top: 6px;
+        width: 100%;
+      }
+      .survey-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      @media (max-width: 640px) {
+        .likert-grid {
+          grid-template-columns: 1fr;
+        }
+      }
     </style>
   </head>
   <body>
@@ -415,6 +493,15 @@
       </section>
     </div>
 
+    <div id="surveyOverlay" class="survey-overlay" hidden>
+      <div class="survey-modal" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
+        <h2 id="surveyTitle">2 分钟小调查</h2>
+        <p class="hint">感谢完成本局模拟与 AI 分析！请用约 2 分钟填写以下问题，帮助我们改进研究与模型。</p>
+        <form id="postGameSurveyForm"></form>
+        <p id="surveyStatus" class="small" aria-live="polite"></p>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       const SUPABASE_URL = "https://zottuuavggzsjqvblydl.supabase.co";
@@ -440,7 +527,8 @@
 
       const researchSession = {
         id: null,
-        eventLog: []
+        eventLog: [],
+        surveyShown: false
       };
 
       let syncTimer = null;
@@ -606,11 +694,13 @@
       function resetResearchSession() {
         researchSession.id = null;
         researchSession.eventLog = [];
+        researchSession.surveyShown = false;
         if (syncTimer) {
           clearTimeout(syncTimer);
           syncTimer = null;
         }
         setSyncStatus("");
+        hidePostGameSurvey();
       }
 
       async function createResearchSession(formData) {
@@ -1131,6 +1221,384 @@
         researchToggle.textContent = isOpen ? "收起研究 / Hide the research" : "研究 / The research";
       });
 
+      const surveyOverlay = document.getElementById("surveyOverlay");
+      const postGameSurveyForm = document.getElementById("postGameSurveyForm");
+      const surveyStatusEl = document.getElementById("surveyStatus");
+
+      function likertField(name, legend, labels) {
+        const options = labels
+          .map(
+            (label, index) =>
+              `<label><input type="radio" name="${name}" value="${index + 1}" required />${index + 1} ${label}</label>`
+          )
+          .join("");
+        return `<fieldset class="survey-q"><legend>${legend}</legend><div class="likert-grid">${options}</div></fieldset>`;
+      }
+
+      function radioField(name, legend, options, required = true) {
+        const req = required ? "required" : "";
+        const items = options
+          .map(([value, label]) => `<label><input type="radio" name="${name}" value="${value}" ${req} />${label}</label>`)
+          .join("");
+        return `<fieldset class="survey-q"><legend>${legend}</legend><div class="survey-options">${items}</div></fieldset>`;
+      }
+
+      function checkboxField(name, legend, options, max = 0) {
+        const maxAttr = max > 0 ? ` data-max="${max}"` : "";
+        const items = options
+          .map(([value, label]) => `<label><input type="checkbox" name="${name}" value="${value}"${maxAttr} />${label}</label>`)
+          .join("");
+        return `<fieldset class="survey-q"><legend>${legend}</legend><div class="survey-options">${items}</div></fieldset>`;
+      }
+
+      function textField(name, legend, placeholder = "", required = false) {
+        const req = required ? "required" : "";
+        const opt = required ? "" : "（选做）";
+        return `<fieldset class="survey-q"><legend>${legend}${opt}</legend><textarea name="${name}" rows="3" class="survey-other-input" placeholder="${placeholder}" ${req}></textarea></fieldset>`;
+      }
+
+      function buildPostGameSurveyForm(identity) {
+        const common = `
+          <p class="survey-section-title">共用题（所有人）</p>
+          ${likertField("q1_understanding_before", "Q1. 玩完这局模拟前，你对北方农村煤改气问题了解程度？", ["完全没感觉", "略有了解", "一般", "比较了解", "非常了解"])}
+          ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是其中的「改得起但用不起」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
+          ${radioField("q3_biggest_impact", "Q3. 模拟中哪一项对你冲击最大？", [
+            ["A", "A. 取暖费用突然上涨（如补贴退坡）"],
+            ["B", "B. 执法/合规压力"],
+            ["C", "C. 不同技术路线的一次性投入差异"],
+            ["D", "D. 年盈余变负、家庭现金流紧张"],
+            ["E", "E. 其他（开放补充）"]
+          ])}
+          <label id="q3ImpactOtherWrap" class="survey-q" hidden>请补充说明<input type="text" name="q3_impact_other" class="survey-other-input" placeholder="请简要说明" /></label>
+          ${radioField("q4_strategy_change", "Q4. 如果重来一局，你会改变策略吗？", [
+            ["A", "A. 会，开局就会选不同路线"],
+            ["B", "B. 会，但只在中间某回合改变选择"],
+            ["C", "C. 不会，仍会走类似路径"],
+            ["D", "D. 不确定"]
+          ])}
+        `;
+
+        const student = `
+          <p class="survey-section-title">学生专属题</p>
+          ${likertField("s1_understanding_before", "S1. 在玩之前，你对北方农村清洁取暖问题的了解程度？", ["完全没感觉", "略有了解", "一般", "比较了解", "非常了解"])}
+          ${likertField("s2_simulator_help", "S2. 这个模拟器相比看文章/听讲解，帮助程度如何？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
+          ${checkboxField("s3_hardest_burden", "S3. 玩完后，你认为农户最难承受的是？（多选，最多 3 项）", [
+            ["device_cost", "改造设备一次性费用"],
+            ["annual_heating", "每年取暖运行费"],
+            ["subsidy_cut", "补贴减少后的气价/电价"],
+            ["poor_insulation", "房屋保温差导致用能高"],
+            ["cold_home", "不敢开暖气、室温不够"],
+            ["reburn_risk", "返煤或违规取暖的风险"]
+          ], 3)}
+          ${textField("s4_reflection", "S4. 这局模拟里，你最深的思考是什么？", "可选填写")}
+        `;
+
+        const converted = `
+          <p class="survey-section-title">已煤改农户专属题</p>
+          ${radioField("f1_heating_method", "F1. 你家目前主要清洁取暖方式是？", [
+            ["A", "A. 天然气"],
+            ["B", "B. 电采暖/空气源热泵"],
+            ["C", "C. 地源热泵"],
+            ["D", "D. 其他"]
+          ])}
+          <label id="f1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="f1_method_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${radioField("f2_cost_realism", "F2. 模拟里的取暖费用变化，与你家真实感受相比？", [
+            ["A", "A. 非常接近"],
+            ["B", "B. 大体接近，但细节有差别"],
+            ["C", "C. 偏差较大"]
+          ])}
+          ${checkboxField("f3_subsidy_response", "F3. 补贴退坡后，你家的实际应对方式是？", [
+            ["normal_use", "正常用，费用可承受"],
+            ["less_heating", "少开暖气、降低室温"],
+            ["save_mode", "改用更省的方式（分区取暖等）"],
+            ["reburn", "仍有返煤或备用散煤"],
+            ["seek_subsidy", "申请/等待政策补贴或救济"],
+            ["income_boost", "寻找增收途径"],
+            ["other", "其他"]
+          ])}
+          <label id="f3OtherWrap" class="survey-q" hidden>F3 其他说明<input type="text" name="f3_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${textField("f4_realistic_part", "F4. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
+          ${textField("f5_unrealistic_part", "F5. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
+          ${textField("f6_policy_suggestion", "F6. 若给政策提一条建议，你会说什么？", "可选填写")}
+        `;
+
+        const unconverted = `
+          <p class="survey-section-title">未煤改农户专属题</p>
+          ${radioField("n1_heating_method", "N1. 你家目前主要取暖方式是？", [
+            ["A", "A. 散煤"],
+            ["B", "B. 电暖/小太阳等"],
+            ["C", "C. 液化气罐"],
+            ["D", "D. 其他"]
+          ])}
+          <label id="n1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="n1_method_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${checkboxField("n2_concerns", "N2. 若村里推进煤改气，你最担心的是？（多选，最多 3 项）", [
+            ["upfront_cost", "改造要掏太多钱"],
+            ["annual_cost", "以后每年取暖费太高"],
+            ["repair", "设备坏了没人修"],
+            ["gas_supply", "气源不稳定/断气"],
+            ["insulation", "房子保温差，改了也不暖和"],
+            ["subsidy_drop", "补贴以后越来越少"],
+            ["voluntary", "不想被强制，希望自愿"]
+          ], 3)}
+          ${radioField("n3_attitude", "N3. 看完这局模拟，你对「要不要改」的态度？", [
+            ["A", "A. 更愿意尽快改造"],
+            ["B", "B. 仍想改，但必须补贴到位"],
+            ["C", "C. 更犹豫，担心用不起"],
+            ["D", "D. 倾向维持现状"],
+            ["E", "E. 不确定"]
+          ])}
+          ${textField("n4_preferred_path", "N4. 如果由你家决定，你会优先选哪条路线（天然气/热泵/保温改造/先观望）？理由是什么？", "请填写", true)}
+        `;
+
+        const other = `
+          <p class="survey-section-title">社会各界其他人士专属题</p>
+          ${radioField("o1_perspective", "O1. 您关注此议题的主要角度是？", [
+            ["A", "A. 政策制定与执行"],
+            ["B", "B. 学术研究"],
+            ["C", "C. 新闻报道/公共传播"],
+            ["D", "D. 企业/技术服务"],
+            ["E", "E. 一般公众兴趣"]
+          ])}
+          ${likertField("o2_policy_variance_help", "O2. 模拟器对理解「同一政策在不同家庭走向不同结局」的帮助？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
+          ${checkboxField("o3_policy_gaps", "O3. 您认为当前政策最应优先补齐的短板？（多选，最多 2 项）", [
+            ["subsidy", "运行补贴可持续"],
+            ["tech_mix", "差异化技术路线（不一刀切煤改气）"],
+            ["low_income", "低收入户兜底"],
+            ["insulation", "房屋节能改造"],
+            ["price_mechanism", "气价/电价机制"],
+            ["enforcement_balance", "执法与民生平衡"]
+          ], 2)}
+          ${textField("o4_policy_conflict_detail", "O4. 这局结果中，您认为最能代表「政策与民生矛盾」的一个细节是什么？", "请填写", true)}
+          ${textField("o5_reflection", "O5. 这局模拟里，您最深的思考或者感受是什么？", "可选填写")}
+        `;
+
+        const ending = `
+          <p class="survey-section-title">结尾共用题（所有人）</p>
+          ${likertField("q_end1_recommend", "Q_end1. 你愿意把本模拟推荐给其他人体验吗？", ["完全不愿意", "较不愿意", "一般", "比较愿意", "非常愿意"])}
+          ${textField("q_end2_suggestions", "Q_end2. 对该模型后续的改进与迭代有何建议？", "对模拟器、对政策、对你自己处境均可")}
+          <div class="survey-actions">
+            <button type="submit" class="btn-primary">提交调查</button>
+          </div>
+        `;
+
+        let group = "";
+        if (identity === "学生") group = student;
+        else if (identity === "已煤改农户") group = converted;
+        else if (identity === "未煤改农户") group = unconverted;
+        else if (identity === "其他") group = other;
+
+        postGameSurveyForm.innerHTML = common + group + ending;
+        wireSurveyConditionalFields();
+        wireSurveyCheckboxLimits();
+      }
+
+      function wireSurveyConditionalFields() {
+        const q3Wrap = document.getElementById("q3ImpactOtherWrap");
+        const q3Other = postGameSurveyForm.querySelector('[name="q3_impact_other"]');
+        postGameSurveyForm.querySelectorAll('[name="q3_biggest_impact"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const show = [...postGameSurveyForm.querySelectorAll('[name="q3_biggest_impact"]')].find((x) => x.checked)?.value === "E";
+            if (q3Wrap) q3Wrap.hidden = !show;
+            if (q3Other) q3Other.required = show;
+          });
+        });
+
+        const f1Wrap = document.getElementById("f1MethodOtherWrap");
+        postGameSurveyForm.querySelectorAll('[name="f1_heating_method"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const show = [...postGameSurveyForm.querySelectorAll('[name="f1_heating_method"]')].find((x) => x.checked)?.value === "D";
+            if (f1Wrap) f1Wrap.hidden = !show;
+          });
+        });
+
+        const f3Wrap = document.getElementById("f3OtherWrap");
+        postGameSurveyForm.querySelectorAll('[name="f3_subsidy_response"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const checked = [...postGameSurveyForm.querySelectorAll('[name="f3_subsidy_response"]:checked')].map((x) => x.value);
+            if (f3Wrap) f3Wrap.hidden = !checked.includes("other");
+          });
+        });
+
+        const n1Wrap = document.getElementById("n1MethodOtherWrap");
+        postGameSurveyForm.querySelectorAll('[name="n1_heating_method"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const show = [...postGameSurveyForm.querySelectorAll('[name="n1_heating_method"]')].find((x) => x.checked)?.value === "D";
+            if (n1Wrap) n1Wrap.hidden = !show;
+          });
+        });
+      }
+
+      function wireSurveyCheckboxLimits() {
+        postGameSurveyForm.querySelectorAll('input[type="checkbox"][data-max]').forEach((box) => {
+          box.addEventListener("change", () => {
+            const name = box.name;
+            const max = Number(box.dataset.max);
+            const checked = postGameSurveyForm.querySelectorAll(`input[name="${name}"]:checked`);
+            if (checked.length > max) {
+              box.checked = false;
+              alert(`此题最多选择 ${max} 项。`);
+            }
+          });
+        });
+      }
+
+      function collectCheckboxValues(name) {
+        return [...postGameSurveyForm.querySelectorAll(`input[name="${name}"]:checked`)].map((el) => el.value);
+      }
+
+      function collectSurveyResponses() {
+        const identity = state.initialProfile?.user_identity || "";
+        const getRadio = (name) =>
+          postGameSurveyForm.querySelector(`input[name="${name}"]:checked`)?.value || "";
+        const getText = (name) => String(postGameSurveyForm.querySelector(`[name="${name}"]`)?.value || "").trim();
+        const getLikert = (name) => Number(getRadio(name)) || null;
+
+        const responses = {
+          user_identity: identity,
+          common: {
+            q1_understanding_before: getLikert("q1_understanding_before"),
+            q2_understanding_after: getLikert("q2_understanding_after"),
+            q3_biggest_impact: getRadio("q3_biggest_impact"),
+            q3_impact_other: getRadio("q3_biggest_impact") === "E" ? getText("q3_impact_other") : "",
+            q4_strategy_change: getRadio("q4_strategy_change")
+          },
+          end: {
+            q_end1_recommend: getLikert("q_end1_recommend"),
+            q_end2_suggestions: getText("q_end2_suggestions")
+          }
+        };
+
+        if (identity === "学生") {
+          responses.student = {
+            s1_understanding_before: getLikert("s1_understanding_before"),
+            s2_simulator_help: getLikert("s2_simulator_help"),
+            s3_hardest_burden: collectCheckboxValues("s3_hardest_burden"),
+            s4_reflection: getText("s4_reflection")
+          };
+        } else if (identity === "已煤改农户") {
+          responses.converted_farmer = {
+            f1_heating_method: getRadio("f1_heating_method"),
+            f1_method_other: getRadio("f1_heating_method") === "D" ? getText("f1_method_other") : "",
+            f2_cost_realism: getRadio("f2_cost_realism"),
+            f3_subsidy_response: collectCheckboxValues("f3_subsidy_response"),
+            f3_other: collectCheckboxValues("f3_subsidy_response").includes("other") ? getText("f3_other") : "",
+            f4_realistic_part: getText("f4_realistic_part"),
+            f5_unrealistic_part: getText("f5_unrealistic_part"),
+            f6_policy_suggestion: getText("f6_policy_suggestion")
+          };
+        } else if (identity === "未煤改农户") {
+          responses.unconverted_farmer = {
+            n1_heating_method: getRadio("n1_heating_method"),
+            n1_method_other: getRadio("n1_heating_method") === "D" ? getText("n1_method_other") : "",
+            n2_concerns: collectCheckboxValues("n2_concerns"),
+            n3_attitude: getRadio("n3_attitude"),
+            n4_preferred_path: getText("n4_preferred_path")
+          };
+        } else if (identity === "其他") {
+          responses.other_audience = {
+            o1_perspective: getRadio("o1_perspective"),
+            o2_policy_variance_help: getLikert("o2_policy_variance_help"),
+            o3_policy_gaps: collectCheckboxValues("o3_policy_gaps"),
+            o4_policy_conflict_detail: getText("o4_policy_conflict_detail"),
+            o5_reflection: getText("o5_reflection")
+          };
+        }
+
+        return responses;
+      }
+
+      function validateSurveyResponses(responses) {
+        if (responses.common.q3_biggest_impact === "E" && !responses.common.q3_impact_other) {
+          alert("请补充 Q3「其他」的说明。");
+          return false;
+        }
+        const id = responses.user_identity;
+        if (id === "学生" && responses.student.s3_hardest_burden.length === 0) {
+          alert("S3 请至少选择 1 项。");
+          return false;
+        }
+        if (id === "已煤改农户") {
+          const f = responses.converted_farmer;
+          if (f.f1_heating_method === "D" && !f.f1_method_other) {
+            alert("请填写 F1 的其他取暖方式。");
+            return false;
+          }
+          if (f.f3_subsidy_response.length === 0) {
+            alert("F3 请至少选择 1 项。");
+            return false;
+          }
+        }
+        if (id === "未煤改农户") {
+          const n = responses.unconverted_farmer;
+          if (n.n1_heating_method === "D" && !n.n1_method_other) {
+            alert("请填写 N1 的其他取暖方式。");
+            return false;
+          }
+          if (n.n2_concerns.length === 0) {
+            alert("N2 请至少选择 1 项。");
+            return false;
+          }
+        }
+        if (id === "其他" && responses.other_audience.o3_policy_gaps.length === 0) {
+          alert("O3 请至少选择 1 项。");
+          return false;
+        }
+        return true;
+      }
+
+      async function submitPostGameSurvey(responses) {
+        if (!supabaseClient || !researchSession.id) {
+          surveyStatusEl.textContent = "调查数据未能同步（未连接研究数据库），但感谢你的填写。";
+          return false;
+        }
+        const { error } = await supabaseClient
+          .from("simulation_sessions")
+          .update({
+            post_survey: responses,
+            post_survey_at: new Date().toISOString()
+          })
+          .eq("id", researchSession.id);
+        if (error) {
+          console.error("提交调查失败", error);
+          surveyStatusEl.textContent = "调查提交失败，请检查网络后重试。";
+          surveyStatusEl.style.color = "var(--bad)";
+          return false;
+        }
+        surveyStatusEl.textContent = "感谢！你的调查已保存。";
+        surveyStatusEl.style.color = "var(--good)";
+        setSyncStatus("本次模拟、AI 分析与小调查均已保存。");
+        return true;
+      }
+
+      function hidePostGameSurvey() {
+        if (surveyOverlay) surveyOverlay.hidden = true;
+        if (surveyStatusEl) surveyStatusEl.textContent = "";
+        if (postGameSurveyForm) postGameSurveyForm.innerHTML = "";
+      }
+
+      function showPostGameSurvey() {
+        if (!state.initialProfile || researchSession.surveyShown) return;
+        researchSession.surveyShown = true;
+        buildPostGameSurveyForm(state.initialProfile.user_identity || "");
+        surveyOverlay.hidden = false;
+        surveyOverlay.scrollTop = 0;
+        surveyStatusEl.textContent = "";
+        document.getElementById("surveyTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      postGameSurveyForm?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const responses = collectSurveyResponses();
+        if (!validateSurveyResponses(responses)) return;
+        const submitBtn = postGameSurveyForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        const ok = await submitPostGameSurvey(responses);
+        if (submitBtn) submitBtn.disabled = false;
+        if (ok) {
+          setTimeout(() => hidePostGameSurvey(), 1200);
+        }
+      });
+
       const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
       const aiAnalysisResultEl = document.getElementById("aiAnalysisResult");
 
@@ -1204,6 +1672,9 @@
             `${err.message}\n\n若 AI 无法使用，请确认 Vercel 项目已配置 DEEPSEEK_API_KEY 环境变量并重新部署。`;
         } finally {
           aiAnalyzeBtn.disabled = false;
+          if (state.ending) {
+            setTimeout(() => showPostGameSurvey(), 600);
+          }
         }
       }
 
