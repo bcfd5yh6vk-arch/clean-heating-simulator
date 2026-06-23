@@ -1533,6 +1533,90 @@
         return responses;
       }
 
+      function joinCheckboxValues(items) {
+        return items.map((item) => item.value).join(" | ") || null;
+      }
+
+      function joinCheckboxLabels(items) {
+        return items.map((item) => item.label).join(" | ") || null;
+      }
+
+      function flattenSurveyToColumns(responses) {
+        const cols = {
+          post_survey: responses,
+          post_survey_at: responses.submitted_at,
+          sq_q1_understanding_before: responses.common.q1_understanding_before.value,
+          sq_q1_understanding_before_label: responses.common.q1_understanding_before.label || null,
+          sq_q2_understanding_after: responses.common.q2_understanding_after.value,
+          sq_q2_understanding_after_label: responses.common.q2_understanding_after.label || null,
+          sq_q3_biggest_impact: responses.common.q3_biggest_impact.value || null,
+          sq_q3_biggest_impact_label: responses.common.q3_biggest_impact.label || null,
+          sq_q3_impact_other: responses.common.q3_impact_other || null,
+          sq_q4_strategy_change: responses.common.q4_strategy_change.value || null,
+          sq_q4_strategy_change_label: responses.common.q4_strategy_change.label || null,
+          sq_q_end1_recommend: responses.end.q_end1_recommend.value,
+          sq_q_end1_recommend_label: responses.end.q_end1_recommend.label || null,
+          sq_q_end2_suggestions: responses.end.q_end2_suggestions || null
+        };
+
+        if (responses.student) {
+          Object.assign(cols, {
+            sq_s1_simulator_help: responses.student.s1_simulator_help.value,
+            sq_s1_simulator_help_label: responses.student.s1_simulator_help.label || null,
+            sq_s2_hardest_burden: joinCheckboxValues(responses.student.s2_hardest_burden),
+            sq_s2_hardest_burden_labels: joinCheckboxLabels(responses.student.s2_hardest_burden),
+            sq_s3_reflection: responses.student.s3_reflection || null
+          });
+        }
+
+        if (responses.converted_farmer) {
+          const f = responses.converted_farmer;
+          Object.assign(cols, {
+            sq_f1_heating_method: f.f1_heating_method.value || null,
+            sq_f1_heating_method_label: f.f1_heating_method.label || null,
+            sq_f1_method_other: f.f1_method_other || null,
+            sq_f2_cost_realism: f.f2_cost_realism.value || null,
+            sq_f2_cost_realism_label: f.f2_cost_realism.label || null,
+            sq_f3_subsidy_response: joinCheckboxValues(f.f3_subsidy_response),
+            sq_f3_subsidy_response_labels: joinCheckboxLabels(f.f3_subsidy_response),
+            sq_f3_other: f.f3_other || null,
+            sq_f4_realistic_part: f.f4_realistic_part || null,
+            sq_f5_unrealistic_part: f.f5_unrealistic_part || null,
+            sq_f6_policy_suggestion: f.f6_policy_suggestion || null
+          });
+        }
+
+        if (responses.unconverted_farmer) {
+          const n = responses.unconverted_farmer;
+          Object.assign(cols, {
+            sq_n1_heating_method: n.n1_heating_method.value || null,
+            sq_n1_heating_method_label: n.n1_heating_method.label || null,
+            sq_n1_method_other: n.n1_method_other || null,
+            sq_n2_concerns: joinCheckboxValues(n.n2_concerns),
+            sq_n2_concerns_labels: joinCheckboxLabels(n.n2_concerns),
+            sq_n3_attitude: n.n3_attitude.value || null,
+            sq_n3_attitude_label: n.n3_attitude.label || null,
+            sq_n4_preferred_path: n.n4_preferred_path || null
+          });
+        }
+
+        if (responses.other_audience) {
+          const o = responses.other_audience;
+          Object.assign(cols, {
+            sq_o1_perspective: o.o1_perspective.value || null,
+            sq_o1_perspective_label: o.o1_perspective.label || null,
+            sq_o2_policy_variance_help: o.o2_policy_variance_help.value,
+            sq_o2_policy_variance_help_label: o.o2_policy_variance_help.label || null,
+            sq_o3_policy_gaps: joinCheckboxValues(o.o3_policy_gaps),
+            sq_o3_policy_gaps_labels: joinCheckboxLabels(o.o3_policy_gaps),
+            sq_o4_policy_conflict_detail: o.o4_policy_conflict_detail || null,
+            sq_o5_reflection: o.o5_reflection || null
+          });
+        }
+
+        return cols;
+      }
+
       function validateSurveyResponses(responses) {
         if (responses.common.q3_biggest_impact.value === "E" && !responses.common.q3_impact_other) {
           alert("请补充 Q3「其他」的说明。");
@@ -1583,10 +1667,7 @@
         }
         const { data, error } = await supabaseClient
           .from("simulation_sessions")
-          .update({
-            post_survey: responses,
-            post_survey_at: new Date().toISOString()
-          })
+          .update(flattenSurveyToColumns(responses))
           .eq("id", researchSession.id)
           .select("id");
         if (error) {
