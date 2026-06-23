@@ -294,7 +294,8 @@
               <select name="user_identity" id="userIdentitySelect" required>
                 <option value="">请选择</option>
                 <option value="学生">学生</option>
-                <option value="农民">农民</option>
+                <option value="已煤改农户">已煤改农户</option>
+                <option value="未煤改农户">未煤改农户</option>
                 <option value="其他">其他</option>
               </select>
             </label>
@@ -303,7 +304,7 @@
                 <input type="text" name="student_grade" placeholder="请填写年级，例如：高一、高三" />
               </label>
             </div>
-            <div id="identityFarmerField" class="identity-detail">
+            <div id="identityVillageField" class="identity-detail">
               <label>所在村
                 <input type="text" name="village_name" placeholder="请填写村名" />
               </label>
@@ -548,27 +549,31 @@
       const syncStatusEl = document.getElementById("syncStatus");
       const userIdentitySelect = document.getElementById("userIdentitySelect");
       const identityStudentField = document.getElementById("identityStudentField");
-      const identityFarmerField = document.getElementById("identityFarmerField");
+      const identityVillageField = document.getElementById("identityVillageField");
       const identityOtherField = document.getElementById("identityOtherField");
+
+      function isVillageIdentity(identity) {
+        return identity === "已煤改农户" || identity === "未煤改农户";
+      }
 
       function updateIdentityDetailFields() {
         const identity = userIdentitySelect?.value || "";
         identityStudentField?.classList.toggle("visible", identity === "学生");
-        identityFarmerField?.classList.toggle("visible", identity === "农民");
+        identityVillageField?.classList.toggle("visible", isVillageIdentity(identity));
         identityOtherField?.classList.toggle("visible", identity === "其他");
 
         const studentInput = profileForm.querySelector('[name="student_grade"]');
         const villageInput = profileForm.querySelector('[name="village_name"]');
         const otherInput = profileForm.querySelector('[name="identity_other"]');
         if (studentInput) studentInput.required = identity === "学生";
-        if (villageInput) villageInput.required = identity === "农民";
+        if (villageInput) villageInput.required = isVillageIdentity(identity);
         if (otherInput) otherInput.required = identity === "其他";
       }
 
       function readIdentityDetail(formData) {
         const identity = String(formData.get("user_identity") || "");
         if (identity === "学生") return String(formData.get("student_grade") || "").trim();
-        if (identity === "农民") return String(formData.get("village_name") || "").trim();
+        if (isVillageIdentity(identity)) return String(formData.get("village_name") || "").trim();
         if (identity === "其他") return String(formData.get("identity_other") || "").trim();
         return "";
       }
@@ -582,7 +587,7 @@
         const detail = readIdentityDetail(formData);
         if (!detail) {
           if (identity === "学生") alert("请填写年级。");
-          else if (identity === "农民") alert("请填写所在村的名字。");
+          else if (isVillageIdentity(identity)) alert("请填写所在村的名字。");
           else alert("请输入你的身份。");
           return false;
         }
