@@ -493,6 +493,9 @@
             <label>地区（固定）
               <input type="text" value="保定（固定）" disabled />
             </label>
+            <label>家中常住人口（人）
+              <input type="number" name="household_population" min="0" step="1" value="0" required />
+            </label>
             <label>年总收入（元）
               <input type="number" name="annual_income" min="0" value="0" required />
             </label>
@@ -501,9 +504,6 @@
             </label>
             <label>住房面积（平方米）
               <input type="number" name="housing_area" min="0" value="0" required />
-            </label>
-            <label>家中常住人口（人）
-              <input type="number" name="household_population" min="0" step="1" value="0" required />
             </label>
             <label>当前取暖方式（固定）
               <input type="text" value="散煤炉（固定）" disabled />
@@ -912,10 +912,10 @@
           id: sessionId,
           user_identity: String(formData.get("user_identity") || ""),
           identity_detail: readIdentityDetail(formData),
+          household_population: Number(formData.get("household_population")),
           annual_income: annualIncome,
           annual_surplus: Number(formData.get("annual_surplus")),
           housing_area: Number(formData.get("housing_area")),
-          household_population: Number(formData.get("household_population")),
           initial_winter_cost: winterCost,
           initial_energy_burden_pct: Number(
             ((winterCost / Math.max(1, annualIncome)) * 100).toFixed(1)
