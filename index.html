@@ -249,6 +249,29 @@
         white-space: pre-wrap;
         line-height: 1.7;
       }
+      .ai-reply.rendered {
+        white-space: normal;
+      }
+      .ai-reply.rendered h3 {
+        margin: 16px 0 8px;
+        font-size: 1.05rem;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 4px;
+        color: #24364a;
+      }
+      .ai-reply.rendered h3:first-child {
+        margin-top: 0;
+      }
+      .ai-reply.rendered p {
+        margin: 6px 0 10px;
+      }
+      .ai-reply.rendered ul {
+        margin: 4px 0 12px;
+        padding-left: 20px;
+      }
+      .ai-reply.rendered li {
+        margin-bottom: 6px;
+      }
       .ai-reply.loading {
         color: var(--muted);
       }
@@ -536,7 +559,7 @@
       <section class="card ai-analysis">
         <h2>AI分析</h2>
         <p class="hint">
-          根据你输入的农户信息（收入、盈余、住房面积等）与下方操作日志，AI 将生成三部分报告：
+          根据你输入的农户信息（收入、盈余、住房面积等）与下方操作日志，AI 将以<strong>分条要点、通俗易懂</strong>的方式生成三部分报告：
           农户形象解析、转型建议、政策与民生矛盾解读。模拟结束后会自动生成；也可手动点击按钮刷新。
         </p>
         <div class="btn-row">
@@ -1962,6 +1985,59 @@
         aiAnalysisResultEl.hidden = true;
         aiAnalysisResultEl.className = "ai-reply";
         aiAnalysisResultEl.textContent = "";
+        aiAnalysisResultEl.innerHTML = "";
+      }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function inlineMarkdown(text) {
+        return escapeHtml(text).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      }
+
+      function renderAiAnalysisMarkdown(text) {
+        const lines = String(text || "").split("\n");
+        const parts = [];
+        let inList = false;
+
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed) {
+            if (inList) {
+              parts.push("</ul>");
+              inList = false;
+            }
+            continue;
+          }
+          if (trimmed.startsWith("## ")) {
+            if (inList) {
+              parts.push("</ul>");
+              inList = false;
+            }
+            parts.push(`<h3>${escapeHtml(trimmed.slice(3))}</h3>`);
+            continue;
+          }
+          if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+            if (!inList) {
+              parts.push("<ul>");
+              inList = true;
+            }
+            parts.push(`<li>${inlineMarkdown(trimmed.slice(2))}</li>`);
+            continue;
+          }
+          if (inList) {
+            parts.push("</ul>");
+            inList = false;
+          }
+          parts.push(`<p>${inlineMarkdown(trimmed)}</p>`);
+        }
+        if (inList) parts.push("</ul>");
+        return parts.join("");
       }
 
       function buildFinalStateSnapshot() {
@@ -2016,9 +2092,9 @@
           if (!res.ok) {
             throw new Error(data.error || data.detail || `请求失败 (${res.status})`);
           }
-          aiAnalysisResultEl.className = "ai-reply";
+          aiAnalysisResultEl.className = "ai-reply rendered";
           const analysisText = data.analysis || "（AI 未返回内容）";
-          aiAnalysisResultEl.textContent = analysisText;
+          aiAnalysisResultEl.innerHTML = renderAiAnalysisMarkdown(analysisText);
           if (data.analysis && (await saveAiAnalysisToSupabase(data.analysis))) {
             setSyncStatus("本次模拟与 AI 分析已保存到研究数据库。");
           }
