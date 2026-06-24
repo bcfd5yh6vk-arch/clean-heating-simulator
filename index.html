@@ -502,6 +502,9 @@
             <label>住房面积（平方米）
               <input type="number" name="housing_area" min="0" value="0" required />
             </label>
+            <label>家中常住人口（人）
+              <input type="number" name="household_population" min="1" step="1" value="3" required />
+            </label>
             <label>当前取暖方式（固定）
               <input type="text" value="散煤炉（固定）" disabled />
               <input type="hidden" name="heating_method" value="散煤炉" />
@@ -912,6 +915,7 @@
           annual_income: annualIncome,
           annual_surplus: Number(formData.get("annual_surplus")),
           housing_area: Number(formData.get("housing_area")),
+          household_population: Number(formData.get("household_population")),
           initial_winter_cost: winterCost,
           initial_energy_burden_pct: Number(
             ((winterCost / Math.max(1, annualIncome)) * 100).toFixed(1)
@@ -1417,6 +1421,7 @@
           annual_income: Number(data.get("annual_income")),
           annual_surplus: Number(data.get("annual_surplus")),
           housing_area: Number(data.get("housing_area")),
+          household_population: Number(data.get("household_population")),
           winter_cost: Number(data.get("winter_cost"))
         };
 
@@ -1428,7 +1433,7 @@
         researchSession.id = await createResearchSession(data);
 
         pushLog(
-          `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
+          `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），常住人口=${state.initialProfile.household_population}人，方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
         );
 
         setStage(
