@@ -43,7 +43,7 @@
   "thresholds": {
     "bankruptEnergyBurdenPct": 10,
     "seizedCompliance": 30,
-    "successEmission": 75,
+    "successEmission": 80,
     "successComplianceMin": 100,
     "successEnergyBurdenMax": 10,
     "successSurplusMin": 0
@@ -338,7 +338,7 @@ E_current = ashpElectricityKwh × 0.6361 × 0.001   （吨 CO₂）
 |------|-----|------|
 | `bankrupt_energy_burden_threshold` | **10** % | 早期/负担判定参考 |
 | `seized_compliance_threshold` | **30** | 执法模型门槛 |
-| `success_emission_threshold` | **75** | 成功：排放达标度下限 |
+| `success_emission_threshold` | **80** | 成功：排放达标度下限 |
 | `success_compliance_min` | **100** | 成功：合规度须满分 |
 | `success_energy_burden_max` | **10** % | 成功：能耗负担率上限 |
 | `success_surplus_min` | **0** 元 | 成功：年盈余下限 |
@@ -363,7 +363,7 @@ E_current = ashpElectricityKwh × 0.6361 × 0.001   （吨 CO₂）
 **成功转型**（须同时满足）：
 
 ```
-emission >= 75
+emission >= 80
 compliance >= 100
 burden <= 10%
 surplus >= 0
