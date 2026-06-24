@@ -39,7 +39,10 @@
     "gasCo2IntensityTco2PerTj": 55.54,
     "gshpHeatGjPerKwh": 0.0144,
     "ashpHeatGjPerKwh": 0.0106,
-    "gridEmissionKgco2PerKwh": 0.6361
+    "gridEmissionKgco2PerKwh": 0.6361,
+    "perCapitaBaselineTons": 1.0,
+    "scoreSlope": 20,
+    "defaultPopulation": 4
   },
   "thresholds": {
     "bankruptEnergyBurdenPct": 10,
@@ -86,7 +89,7 @@
 | 年收入 | `income` | 元/年，回合 4 副业可 +20% |
 | 年盈余 | `surplus` | 元/年，现金流缓冲 |
 | 法律合规度 | `compliance` | 0–100 分 |
-| 排放达标度 | `emission` | 0–100 分（散煤路线恒为 0） |
+| 排放达标度 | `emission` | 0–100 分；由人均冬季采暖 CO₂ 线性标准化（见 §5.4） |
 | 能耗负担率 | — | 取暖年花费占年收入百分比 |
 
 ### 2.2 能耗负担率
@@ -314,7 +317,6 @@ E_initial (吨 CO₂) = (initialCoalInputEnergyGJ / 1000) × 89.0
 
 ```
 E_current = E_initial × energyMultiplier
-排放达标度 = 0
 ```
 
 **天然气**
@@ -341,16 +343,29 @@ E_current = ashpElectricityKwh × 0.6361 × 0.001   （吨 CO₂）
 
 界面展示 `co2Tons = E_current`（保留 3 位小数）。
 
-### 5.4 排放达标度评分（清洁路线）
+### 5.4 排放达标度评分（唯一指定公式）
+
+所有取暖方式（含散煤炉）均使用同一线性比例模型；**常住人口**来自用户填写的 `household_population`（若为 0 或未填，运行时回退为 `defaultPopulation = 4`）。
 
 ```
-若 heatingMethod === "散煤炉"：
-    emission = 0
-否则：
-    emission = clamp( round((1 - E_current / E_initial) × 100), 0, 100 )
+E_current = calculateCurrentEmission(heatingMethod, isEnergySaving)   （吨 CO₂，户级）
+
+population = household_population > 0 ? household_population : 4
+
+perCapitaCurrent = E_current / population    （吨 CO₂ / 人）
+
+emission = clamp( round(100 - 20 × (perCapitaCurrent / 1.0)), 0, 100 )
 ```
 
-含义：相对散煤基准的减排率映射为 0–100 分；100 分表示相对基准完全减排。
+参数（`simulation-config` → `emission`）：
+
+| 字段 | 值 | 含义 |
+|------|-----|------|
+| `perCapitaBaselineTons` | **1.0** | 人均基准排放量（吨 CO₂/人） |
+| `scoreSlope` | **20** | 线性斜率 |
+| `defaultPopulation` | **4** | 常住人口缺失时的回退值 |
+
+含义：当人均排放 = 1.0 吨/人时得 80 分；人均越低分数越高，人均 ≥ 5.0 吨/人时为 0 分。
 
 ---
 

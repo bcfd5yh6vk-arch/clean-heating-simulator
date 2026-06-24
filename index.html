@@ -454,7 +454,7 @@
           <li>
             六项核心指标固定为：当前取暖年花费、年收入、年盈余、法律合规度、排放达标度、能耗负担率（取暖年花费/年收入*100%）。
           </li>
-          <li>合规度与排放达标度由数模计算（执法概率模型 + 碳排放因子模型）；经济类指标按公式更新。</li>
+          <li>合规度由执法概率模型计算；排放达标度由户级 CO₂ 与常住人口的人均线性标准化公式计算；经济类指标按公式更新。</li>
           <li>回合2若持续拒绝整改可能被处罚；回合5最终仅输出经济破产 / 成功转型。</li>
         </ul>
       </section>
@@ -652,7 +652,10 @@
           gasCo2IntensityTco2PerTj: 55.54,
           gshpHeatGjPerKwh: 0.0144,
           ashpHeatGjPerKwh: 0.0106,
-          gridEmissionKgco2PerKwh: 0.6361
+          gridEmissionKgco2PerKwh: 0.6361,
+          perCapitaBaselineTons: 1.0,
+          scoreSlope: 20,
+          defaultPopulation: 4
         },
         thresholds: {
           bankruptEnergyBurdenPct: 10,
@@ -690,6 +693,9 @@
       let GSHP_HEAT_GJ_PER_KWH;
       let ASHP_HEAT_GJ_PER_KWH;
       let GRID_EMISSION_KGCO2_PER_KWH;
+      let PER_CAPITA_BASELINE_TONS;
+      let EMISSION_SCORE_SLOPE;
+      let DEFAULT_POPULATION;
       let TECH_ROUTE_BY_CHOICE;
 
       function mergeSimConfig(base, patch) {
@@ -757,6 +763,9 @@
         GSHP_HEAT_GJ_PER_KWH = em.gshpHeatGjPerKwh;
         ASHP_HEAT_GJ_PER_KWH = em.ashpHeatGjPerKwh;
         GRID_EMISSION_KGCO2_PER_KWH = em.gridEmissionKgco2PerKwh;
+        PER_CAPITA_BASELINE_TONS = em.perCapitaBaselineTons;
+        EMISSION_SCORE_SLOPE = em.scoreSlope;
+        DEFAULT_POPULATION = em.defaultPopulation;
 
         TECH_ROUTE_BY_CHOICE = { ...sim.techRoutes };
 
@@ -845,24 +854,28 @@
         }
       }
 
+      function getEffectivePopulation() {
+        const population = state.user?.population;
+        return population > 0 ? population : DEFAULT_POPULATION;
+      }
+
+      function computeEmissionScore(E_current) {
+        const population = getEffectivePopulation();
+        const perCapitaCurrent = E_current / population;
+        const score = Math.round(
+          100 - EMISSION_SCORE_SLOPE * (perCapitaCurrent / PER_CAPITA_BASELINE_TONS)
+        );
+        return Math.max(0, Math.min(100, score));
+      }
+
       function updateEmissionFromModel() {
-        const method = state.user.heatingMethod;
         const E_current = calculateCurrentEmission(
           state.emissionBaseline,
-          method,
+          state.user.heatingMethod,
           state.isEnergySaving
         );
         state.user.co2Tons = E_current;
-
-        if (method === "散煤炉") {
-          state.user.emission = 0;
-          return;
-        }
-
-        const { E_initial } = state.emissionBaseline;
-        const score =
-          E_initial > 0 ? Math.round((1 - E_current / E_initial) * 100) : 0;
-        state.user.emission = clamp(score, 0, 100);
+        state.user.emission = computeEmissionScore(E_current);
       }
 
       const profileForm = document.getElementById("profileForm");
@@ -1397,7 +1410,7 @@
             state.nonRectifyStreak = 1;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `继续散煤取暖，合规度维持底线 ${COMPLIANCE_TURN1_CONTINUE} 分，排放达标度 0 分，已进入重点监控名单。`;
+            note = `继续散煤取暖，合规度维持底线 ${COMPLIANCE_TURN1_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分，已进入重点监控名单。`;
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (evaluateEarlyEnding()) return;
@@ -1414,7 +1427,7 @@
             state.nonRectifyStreak = 0;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `表达整改意愿，合规度升至 ${COMPLIANCE_TURN1_PREPARE} 分；仍用散煤，排放达标度 0 分。`;
+            note = `表达整改意愿，合规度升至 ${COMPLIANCE_TURN1_PREPARE} 分；仍用散煤，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
@@ -1429,7 +1442,7 @@
             state.user.compliance = COMPLIANCE_TURN2_CONTINUE;
             state.nonRectifyStreak += 1;
             updateEmissionFromModel();
-            note = `继续违规取暖，合规度锁死 ${COMPLIANCE_TURN2_CONTINUE} 分，排放达标度 0 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
+            note = `继续违规取暖，合规度锁死 ${COMPLIANCE_TURN2_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
             pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (tryProbabilisticSeizedEnforcement()) return;
@@ -1448,7 +1461,7 @@
             state.nonRectifyStreak = 0;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `申请整改，合规度回升至 ${COMPLIANCE_TURN2_RECTIFY} 分；尚未完成技术替代，排放达标度仍为 0 分。`;
+            note = `申请整改，合规度回升至 ${COMPLIANCE_TURN2_RECTIFY} 分；尚未完成技术替代，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
@@ -1552,12 +1565,14 @@
           income: Number(data.get("annual_income")),
           surplus: Number(data.get("annual_surplus")),
           area: Number(data.get("housing_area")),
+          population: Number(data.get("household_population")),
           heatingCost: Number(data.get("winter_cost")),
           initialHeatingCost: Number(data.get("winter_cost")),
           compliance: 0,
           emission: 0,
-          co2Tons: state.emissionBaseline.E_initial
+          co2Tons: 0
         };
+        updateEmissionFromModel();
         state.thresholds = {
           bankrupt: Number(data.get("bankrupt_energy_burden_threshold")) || 10,
           seized: Number(data.get("seized_compliance_threshold")) || 30,
@@ -1592,7 +1607,7 @@
         researchSession.id = await createResearchSession(data);
 
         pushLog(
-          `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），常住人口=${state.initialProfile.household_population}人，方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，基准 CO₂=${state.user.co2Tons.toFixed(3)} 吨。`
+          `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），常住人口=${state.initialProfile.household_population || DEFAULT_POPULATION}人，方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，CO₂=${state.user.co2Tons.toFixed(3)} 吨，排放达标度=${Math.round(state.user.emission)} 分。`
         );
 
         setStage(
