@@ -100,20 +100,65 @@
         gap: 8px;
         margin-top: 8px;
       }
-      .research-toggle {
+      .intro-toggle-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
         margin-top: 10px;
       }
-      .research-panel {
+      .research-panel,
+      .guidance-panel {
         display: none;
         margin-top: 12px;
         border-top: 1px solid var(--border);
         padding-top: 12px;
       }
-      .research-panel.open {
+      .research-panel.open,
+      .guidance-panel.open {
         display: block;
       }
-      .research-panel h3 {
+      .research-panel h3,
+      .guidance-content h4 {
         color: #24364a;
+      }
+      .guidance-identity-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      .guidance-identity-btn {
+        background: #fff;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .guidance-identity-btn.active {
+        background: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+      .guidance-content {
+        background: #fafcff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px 16px;
+      }
+      .guidance-content h4 {
+        margin: 0 0 8px;
+        font-size: 0.98rem;
+      }
+      .guidance-content h4:not(:first-child) {
+        margin-top: 14px;
+      }
+      .guidance-content p {
+        margin: 6px 0;
+      }
+      .guidance-content ul {
+        margin: 4px 0 8px 18px;
+      }
+      .guidance-content li {
+        margin-bottom: 4px;
       }
       .pill {
         display: inline-block;
@@ -316,13 +361,18 @@
       </section>
 
       <section class="card">
-        <h2>研究 / The research</h2>
+        <h2>引入——用前必看</h2>
         <p class="hint">
-          点开这里，可以快速了解这个作品背后的研究问题、假设和目前发现。
+          开始模拟前，建议先了解作品背景，并按你的身份阅读使用说明——不同身份填写数据、做选择和理解结果的方式并不相同。
         </p>
-        <button type="button" id="researchToggle" class="btn-primary research-toggle" aria-expanded="false">
-          研究 / The research
-        </button>
+        <div class="intro-toggle-stack">
+          <button type="button" id="researchToggle" class="btn-primary" aria-expanded="false">
+            研究背景 / The research
+          </button>
+          <button type="button" id="guidanceToggle" class="btn-primary" aria-expanded="false">
+            使用说明 / The guidance
+          </button>
+        </div>
         <div id="researchPanel" class="research-panel">
           <h3>研究问题</h3>
           <p>
@@ -339,7 +389,7 @@
             保定很多农村家庭已经从散煤转向天然气或其他清洁取暖方式。环境收益很明显，但农户真正担心的是：冬天到底用不用得起。
           </p>
           <p>
-            一个村庄往往会采用相对统一的煤改X路径。如果这条路径和多数家庭的收入、房屋保温、气价或电价不匹配，就可能出现少开暖气、室温不足，甚至返煤的问题。
+            一个村庄往往会采用相对统一的煤改X路径。如果这条路径和多数家庭的收入、房屋保温、气价或电价不匹配，就可能出现少开暖气、室温不够，甚至返煤的问题。
           </p>
 
           <h3>我做了什么 / 初步发现</h3>
@@ -349,6 +399,16 @@
             <li>目前的研究说明：清洁取暖不是简单的“改不改”，而是要看补贴、气价、电价、房屋条件和农户可承受能力。</li>
             <li>下一步，我想把单户模拟扩展成村庄数据表，用多户数据比较煤改气、煤改电、热泵和保温组合哪种更适合一个村。</li>
           </ul>
+        </div>
+        <div id="guidancePanel" class="guidance-panel">
+          <p class="hint">请选择与你最接近的身份，查看对应的使用说明：</p>
+          <div class="guidance-identity-row" id="guidanceIdentityRow">
+            <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
+            <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
+            <button type="button" class="guidance-identity-btn" data-guidance-identity="未煤改农户">未煤改农户</button>
+            <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他</button>
+          </div>
+          <div id="guidanceContent" class="guidance-content" hidden></div>
         </div>
       </section>
 
@@ -635,6 +695,113 @@
       const logBoxEl = document.getElementById("logBox");
       const researchToggle = document.getElementById("researchToggle");
       const researchPanel = document.getElementById("researchPanel");
+      const guidanceToggle = document.getElementById("guidanceToggle");
+      const guidancePanel = document.getElementById("guidancePanel");
+      const guidanceContent = document.getElementById("guidanceContent");
+      const guidanceIdentityButtons = document.querySelectorAll("[data-guidance-identity]");
+
+      const IDENTITY_GUIDANCE = {
+        学生: `
+          <h4>1. 我希望你通过本模拟达到什么</h4>
+          <p>把「煤改气改得起但用不起」从新闻和论文里的抽象概念，变成你能亲手推演的家庭账本。玩完后，你应能解释：为什么同一项清洁取暖政策，在不同收入、房屋和选择路径下会走向不同结局。</p>
+          <h4>2. 如何填写初始数据</h4>
+          <ul>
+            <li>身份选「学生」，并填写年级。</li>
+            <li>你扮演的是<strong>一户保定农村家庭</strong>，不是你自己——请用你<strong>老家、你认识的北方农村家庭</strong>，或<strong>当地公开的平均/典型数据</strong>来填年收入、年盈余、住房面积、年取暖费用。</li>
+            <li>不要全部填 0。可参考：全家年收入约 3–6 万元；100㎡ 左右住房；散煤取暖年费用约 2000–4000 元；年盈余按「收入 − 日常开支 − 取暖费」粗算。</li>
+            <li>若你不确定，选一户你相对了解的家庭「代入」，并在心里记住这是谁的账——后面做选择时保持一致。</li>
+          </ul>
+          <h4>3. 五回合中如何做选择</h4>
+          <ul>
+            <li>每一回合先读叙事和指标变化，再点按钮——尽量按「如果我是这户人家，现实里会怎么选」来决策，而不是追求某一结局。</li>
+            <li>回合 1：是否准备转型；回合 2：面对执法/合规压力是否整改；回合 3：天然气、地源热泵、空气源热泵等路线的一次性投入差异；回合 4：增收或节能改造；回合 5：补贴退坡后的承受力。</li>
+            <li>可以故意试两条不同路径（换路线或换回合 4 选择）对比结果，这有助于课堂讨论。</li>
+          </ul>
+          <h4>4. 如何理性看待系统结局与 AI 分析</h4>
+          <ul>
+            <li>结局（成功转型 / 经济破产等）是<strong>简化模型</strong>的推演，不是对你填的那户家庭的真实判决。</li>
+            <li>AI 分析是对本局数据的解读与延伸思考，可能有偏差——请对照左侧事件日志和六项指标，判断哪些说法贴合、哪些需要保留疑问。</li>
+            <li>重点带走的是：<strong>机制</strong>（费用、补贴、合规、排放如何联动），而不是某一个数字是否完全准确。</li>
+          </ul>
+        `,
+        已煤改农户: `
+          <h4>1. 我希望你通过本模拟达到什么</h4>
+          <p>把你家已经历过的煤改X过程，放进一个可对比、可回放的框架里：看看在补贴变化、路线选择和房屋条件下，哪些压力和你家真实感受一致，哪些是为了教学而简化的设定。</p>
+          <h4>2. 如何填写初始数据</h4>
+          <ul>
+            <li>身份选「已煤改农户」，并填写<strong>所在村名</strong>（便于研究汇总，无需精确到门牌号）。</li>
+            <li>请尽量<strong>如实填写</strong>你家的年收入、年盈余、住房面积、改造前散煤时代的年取暖费用（若记不清，用改造前一到两个冬天的大致花费）。</li>
+            <li>当前取暖方式在模型里固定从「散煤炉」开局，这是为了统一推演路径——不代表否认你已经改气/改电，而是请你从「若当时面对这些回合会怎么选」来体验。</li>
+            <li>填数时宁可填真实区间的中位值，也不要为了「好看」而夸大或缩小。</li>
+          </ul>
+          <h4>3. 五回合中如何做选择</h4>
+          <ul>
+            <li>按你家的真实处境和记忆来选：当年是主动改还是被动改？更担心一次性设备钱还是以后每年气费/电费？</li>
+            <li>若某选项你现实中没走过，可以选「你会怎么做」或「你邻居怎么走」，并在事后调查里补充说明。</li>
+            <li>特别留意回合 3（技术路线投入）和回合 5（补贴退坡）——这两处往往最贴近「用不起」的感受。</li>
+          </ul>
+          <h4>4. 如何理性看待系统结局与 AI 分析</h4>
+          <ul>
+            <li>模型用的是保定地区的平均参数和固定阈值，不可能完全复刻你村的气价、补贴细则和房屋保温情况。</li>
+            <li>若结局与我家不像，请优先看<strong>哪一步的费用或合规逻辑</strong>出现了差异——这往往比争论「算对没有」更有用。</li>
+            <li>AI 分析是辅助理解，你的实地经验是 Ground Truth；玩后调查里的开放题欢迎你写「哪一步最像/最不像我家」。</li>
+          </ul>
+        `,
+        未煤改农户: `
+          <h4>1. 我希望你通过本模拟达到什么</h4>
+          <p>在村里尚未改或正在观望时，提前看见不同改造路线和补贴变化下家庭账本会怎样波动，帮助你想清楚：真正卡住你的是「改造要掏多少钱」还是「以后每年用不起」。</p>
+          <h4>2. 如何填写初始数据</h4>
+          <ul>
+            <li>身份选「未煤改农户」，并填写<strong>所在村名</strong>。</li>
+            <li>请<strong>如实填写</strong>你家的年收入、年盈余、住房面积，以及<strong>当前散煤（或其他）取暖的年花费</strong>——这是整个推演的起点。</li>
+            <li>年盈余可粗算：总收入减去日常开支和取暖费；若为负或很低，也照实填写，模型正是为了呈现这种压力。</li>
+            <li>住房面积请按实际采暖面积或建筑面积如实填写，它会影响改造成本和执法概率等设定。</li>
+          </ul>
+          <h4>3. 五回合中如何做选择</h4>
+          <ul>
+            <li>按你真实的顾虑来选：若最怕一次性改造费，在回合 3 比较不同路线的投入；若最怕以后气价，重点看回合 5 补贴退坡后的指标。</li>
+            <li>可以玩两局：一局选「尽快改」，一局选「尽量拖」，对比结局与事件日志。</li>
+            <li>不必迎合「成功转型」——选你真实会做的，才对你家决策有参考价值。</li>
+          </ul>
+          <h4>4. 如何理性看待系统结局与 AI 分析</h4>
+          <ul>
+            <li>模拟展示的是<strong>一种可能路径</strong>，不是村里即将发生的确定未来；具体补贴、气价以你县最新政策为准。</li>
+            <li>「经济破产」等标签是模型阈值下的结果，目的是提示现金流风险，不是对你家的评价。</li>
+            <li>AI 分析可当作多一个角度，但最终是否改造、选哪条路线，仍应结合你家的收入、房屋和政策咨询——模拟器不能替代村委或供电/供气部门的现场说明。</li>
+          </ul>
+        `,
+        其他: `
+          <h4>1. 我希望你通过本模拟达到什么</h4>
+          <p>无论你是研究者、记者、企业人员还是一般关注者，都通过代入<strong>一户普通保定农村家庭</strong>，理解「同一清洁取暖政策为何在不同家庭走向不同结局」，而不仅是停留在政策条文或个案报道。</p>
+          <h4>2. 如何填写初始数据</h4>
+          <ul>
+            <li>身份选「其他」，并简要说明你的角色（如：政策研究、媒体报道、技术服务等）。</li>
+            <li>若你没有一手农户数据，请用你<strong>调研过的农户、报道中的典型案例、或保定/河北农村公开的平均数据</strong>填入——关键是选定「一户具体情境」并前后一致，而不是随意填数。</li>
+            <li>建议至少明确：年收入档位、住房大约面积、散煤时代年取暖费、当前盈余是否紧张。可参考常见区间：年收入 3–6 万、100㎡ 左右、取暖费 2000–4000 元。</li>
+            <li>若你代表机构做批量测试，请每次固定一组参数，便于对比不同策略路径。</li>
+          </ul>
+          <h4>3. 五回合中如何做选择</h4>
+          <ul>
+            <li>先选定一个视角：例如「低收入保守户」「中等收入愿意改气户」「保温差、怕运行费户」，然后全程按该画像做选择。</li>
+            <li>可系统性地扫路径：固定同一组初始数据，只改回合 3 路线或回合 4 选择，观察能耗负担率与盈余变化。</li>
+            <li>关注合规与排放指标如何随选择变化——这有助于理解「环境达标」与「经济可承受」之间的张力。</li>
+          </ul>
+          <h4>4. 如何理性看待系统结局与 AI 分析</h4>
+          <ul>
+            <li>这是<strong>教学与研究用的简化模型</strong>，参数来自公开资料与校准，不能替代入户调研或政策评估报告。</li>
+            <li>AI 分析基于本局输入生成，可能有泛化或遗漏——请与事件日志、六项指标交叉验证，引用时注明「模拟推演」而非「实测结论」。</li>
+            <li>若你用于写作或传播，建议写清：初始数据假设、关键回合选择、模型判定与真实世界的差距。</li>
+          </ul>
+        `
+      };
+
+      function showIdentityGuidance(identity) {
+        guidanceIdentityButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.guidanceIdentity === identity);
+        });
+        guidanceContent.innerHTML = IDENTITY_GUIDANCE[identity] || "";
+        guidanceContent.hidden = !identity;
+      }
       const syncStatusEl = document.getElementById("syncStatus");
       const userIdentitySelect = document.getElementById("userIdentitySelect");
       const identityStudentField = document.getElementById("identityStudentField");
@@ -1271,7 +1438,19 @@
       researchToggle.addEventListener("click", () => {
         const isOpen = researchPanel.classList.toggle("open");
         researchToggle.setAttribute("aria-expanded", String(isOpen));
-        researchToggle.textContent = isOpen ? "收起研究 / Hide the research" : "研究 / The research";
+        researchToggle.textContent = isOpen ? "收起研究背景 / Hide the research" : "研究背景 / The research";
+      });
+
+      guidanceToggle.addEventListener("click", () => {
+        const isOpen = guidancePanel.classList.toggle("open");
+        guidanceToggle.setAttribute("aria-expanded", String(isOpen));
+        guidanceToggle.textContent = isOpen ? "收起说明 / Hide the guidance" : "使用说明 / The guidance";
+      });
+
+      guidanceIdentityButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          showIdentityGuidance(btn.dataset.guidanceIdentity);
+        });
       });
 
       const surveyOverlay = document.getElementById("surveyOverlay");
