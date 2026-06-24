@@ -626,13 +626,14 @@
         economy: {
           scatteredCoalPricePerTon: 1000,
           gasM3PerCoalTon: 250,
+          gasPricePerM3: 2.98,
+          electricityPricePerKwh: 0.5,
           subsidyReductionPerM3: 0.6,
           rectifyApplicationCost: 800,
           sideIncomeBoostRatio: 0.2,
           energySavingHeatingCostRatio: 0.6,
           energySavingEmissionMultiplier: 0.6,
-          baseRenovationCostPer100Sqm: { A: 3000, B: 10000, C: 7000 },
-          baseAnnualHeatingCostPer100Sqm: { A: 8000, B: 2000, C: 4300 }
+          baseRenovationCostPer100Sqm: { A: 3000, B: 10000, C: 7000 }
         },
         compliance: {
           turn1ContinueCoal: 0,
@@ -666,13 +667,14 @@
 
       let SCATTERED_COAL_PRICE_PER_TON;
       let GAS_M3_PER_COAL_TON;
+      let GAS_PRICE_PER_M3;
+      let ELECTRICITY_PRICE_PER_KWH;
       let SUBSIDY_REDUCTION_PER_M3;
       let RECTIFY_APPLICATION_COST;
       let SIDE_INCOME_BOOST_RATIO;
       let ENERGY_SAVING_HEATING_COST_RATIO;
       let ENERGY_SAVING_EMISSION_MULTIPLIER;
       let BASE_RENOVATION_COST_PER_100SQM;
-      let BASE_ANNUAL_HEATING_COST_PER_100SQM;
       let COMPLIANCE_TURN1_CONTINUE;
       let COMPLIANCE_TURN1_PREPARE;
       let COMPLIANCE_TURN2_CONTINUE;
@@ -728,13 +730,14 @@
         const e = sim.economy;
         SCATTERED_COAL_PRICE_PER_TON = e.scatteredCoalPricePerTon;
         GAS_M3_PER_COAL_TON = e.gasM3PerCoalTon;
+        GAS_PRICE_PER_M3 = e.gasPricePerM3;
+        ELECTRICITY_PRICE_PER_KWH = e.electricityPricePerKwh;
         SUBSIDY_REDUCTION_PER_M3 = e.subsidyReductionPerM3;
         RECTIFY_APPLICATION_COST = e.rectifyApplicationCost;
         SIDE_INCOME_BOOST_RATIO = e.sideIncomeBoostRatio;
         ENERGY_SAVING_HEATING_COST_RATIO = e.energySavingHeatingCostRatio;
         ENERGY_SAVING_EMISSION_MULTIPLIER = e.energySavingEmissionMultiplier;
         BASE_RENOVATION_COST_PER_100SQM = { ...e.baseRenovationCostPer100Sqm };
-        BASE_ANNUAL_HEATING_COST_PER_100SQM = { ...e.baseAnnualHeatingCostPer100Sqm };
 
         const c = sim.compliance;
         COMPLIANCE_TURN1_CONTINUE = c.turn1ContinueCoal;
@@ -769,8 +772,23 @@
       function techRouteChoiceLabel(id) {
         const route = TECH_ROUTE_BY_CHOICE[id];
         const invest = BASE_RENOVATION_COST_PER_100SQM[id];
-        const heat = BASE_ANNUAL_HEATING_COST_PER_100SQM[id];
-        return `${route}（改造${invest}元/100㎡，年取暖${heat}元/100㎡）`;
+        if (id === "A") {
+          return `${route}（改造${invest}元/100㎡，年取暖≈气量×${GAS_PRICE_PER_M3}元/m³）`;
+        }
+        return `${route}（改造${invest}元/100㎡，年取暖≈电量×${ELECTRICITY_PRICE_PER_KWH}元/kWh）`;
+      }
+
+      /** 由开局散煤年取暖费反推改造后年取暖费（气量/电量 × 价格） */
+      function computeAnnualHeatingCostAfterRenovation(routeId, originalHeatingCost) {
+        const coalTons = originalHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
+        const initialCoalInputEnergyGJ = coalTons * COAL_ENERGY_GJ_PER_TON;
+        if (routeId === "A") {
+          const gasVolume = coalTons * GAS_M3_PER_COAL_TON;
+          return Math.round(gasVolume * GAS_PRICE_PER_M3);
+        }
+        const heatGjPerKwh = routeId === "B" ? GSHP_HEAT_GJ_PER_KWH : ASHP_HEAT_GJ_PER_KWH;
+        const electricityKwh = initialCoalInputEnergyGJ / heatGjPerKwh;
+        return Math.round(electricityKwh * ELECTRICITY_PRICE_PER_KWH);
       }
 
       function techRouteChoices() {
@@ -1441,10 +1459,9 @@
           }
         } else if (state.stage.startsWith("回合3")) {
           const area = state.user.area;
-          const baseHeating = BASE_ANNUAL_HEATING_COST_PER_100SQM[id];
           const invest = scaleByHousingArea(BASE_RENOVATION_COST_PER_100SQM[id], area);
-          const newHeatingCost = scaleByHousingArea(baseHeating, area);
           const originalHeatingCost = state.user.initialHeatingCost;
+          const newHeatingCost = computeAnnualHeatingCostAfterRenovation(id, originalHeatingCost);
           const surplusDelta = newHeatingCost + invest - originalHeatingCost;
           if (state.user.income <= invest) {
             alert(`年收入不足以覆盖一次性投入 ${invest} 元，请换一个技术路线。`);
@@ -1458,7 +1475,11 @@
           state.isEnergySaving = false;
           updateEmissionFromModel();
           state.turn += 1;
-          note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 ${COMPLIANCE_AFTER_RENOVATION} 分，排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨；改造后年取暖费=${baseHeating}×${area}/100=${newHeatingCost} 元，年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
+          const costDetail =
+            id === "A"
+              ? `由初始散煤用量换算气量 × ${GAS_PRICE_PER_M3} 元/m³`
+              : `由初始散煤输入能量换算电量 × ${ELECTRICITY_PRICE_PER_KWH} 元/kWh`;
+          note = `完成清洁取暖改造（${state.user.heatingMethod}），合规度回满 ${COMPLIANCE_AFTER_RENOVATION} 分，排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨；改造后年取暖费=${newHeatingCost} 元（${costDetail}），年盈余变化=${surplusDelta >= 0 ? "-" : "+"}${Math.abs(surplusDelta)} 元。`;
           pushLog(`回合3：${label} -> ${note}`);
           logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;

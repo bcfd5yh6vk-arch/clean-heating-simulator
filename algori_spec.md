@@ -13,13 +13,14 @@
   "economy": {
     "scatteredCoalPricePerTon": 1000,
     "gasM3PerCoalTon": 250,
+    "gasPricePerM3": 2.98,
+    "electricityPricePerKwh": 0.5,
     "subsidyReductionPerM3": 0.6,
     "rectifyApplicationCost": 800,
     "sideIncomeBoostRatio": 0.2,
     "energySavingHeatingCostRatio": 0.6,
     "energySavingEmissionMultiplier": 0.6,
-    "baseRenovationCostPer100Sqm": { "A": 3000, "B": 10000, "C": 7000 },
-    "baseAnnualHeatingCostPer100Sqm": { "A": 8000, "B": 2000, "C": 4300 }
+    "baseRenovationCostPer100Sqm": { "A": 3000, "B": 10000, "C": 7000 }
   },
   "compliance": {
     "turn1ContinueCoal": 0,
@@ -67,7 +68,7 @@
 | 开局 | 建档 | 排放基准建立、指标初始化 |
 | 1 | 现状抉择 | 合规度赋值；分支进入回合 2 或跳过至回合 3 |
 | 2 | 合规压力（可选） | 执法概率模型；整改扣款 |
-| 3 | 技术路线 | 改造成本与年取暖费按面积缩放；盈余调整；排放重算 |
+| 3 | 技术路线 | 改造成本按面积缩放；改造后取暖费由初始散煤用量换算气量/电量 × 价格 |
 | 4 | 增收/降耗 | 收入 +20% 或取暖费 ×60%；排放重算（节能路径） |
 | 5 | 补贴退坡 | 气价补贴减少冲击；终局判定 |
 
@@ -132,18 +133,37 @@ invest = round(BASE_RENOVATION_COST_PER_100SQM[id] × area / 100)
 
 **准入条件（回合 3）**：`income > invest`，否则禁止选择该路线。
 
-### 3.3 技术路线改造后年取暖费（100㎡ 基准）
+### 3.3 技术路线改造后年取暖费
 
-| 选项 ID | 路线 | `BASE_ANNUAL_HEATING_COST_PER_100SQM` |
-|---------|------|---------------------------------------|
-| A | 天然气 | **8000** 元/年 |
-| B | 地源热泵 | **2000** 元/年 |
-| C | 空气源热泵 | **4300** 元/年 |
+均由**开局散煤年取暖费** `initialHeatingCost` 反推用量，再乘以能源价格（与排放模型用气/用电基准一致）。
 
-实际年取暖费：
+| 选项 ID | 路线 | 计算方式 |
+|---------|------|----------|
+| A | 天然气 | `round(gasVolume × gasPricePerM3)` |
+| B | 地源热泵 | `round(electricityKwh × electricityPricePerKwh)` |
+| C | 空气源热泵 | `round(electricityKwh × electricityPricePerKwh)` |
+
+共用中间量：
 
 ```
-newHeatingCost = round(BASE_ANNUAL_HEATING_COST_PER_100SQM[id] × area / 100)
+coalTons = initialHeatingCost / 1000
+initialCoalInputEnergyGJ = coalTons × 23.2
+gasVolume = coalTons × 250
+```
+
+天然气：
+
+```
+newHeatingCost = round(gasVolume × 2.98)    （补贴退坡前气价，元/m³）
+```
+
+热泵（地源 B / 空气源 C）：
+
+```
+electricityKwh = initialCoalInputEnergyGJ / heatGjPerKwh
+  B：heatGjPerKwh = 0.0144
+  C：heatGjPerKwh = 0.0106
+newHeatingCost = round(electricityKwh × 0.5)    （元/kWh）
 ```
 
 ### 3.4 回合 3 盈余变化
@@ -193,7 +213,9 @@ isEnergySaving ← true
 | 常数 | 值 | 说明 |
 |------|-----|------|
 | `GAS_M3_PER_COAL_TON` | **250** | 1 吨散煤等价天然气立方米数 |
-| `SUBSIDY_REDUCTION_PER_M3` | **0.6** | 元/m³，补贴退坡导致的用气成本上升 |
+| `gasPricePerM3` | **2.98** | 元/m³，补贴退坡前终端气价 |
+| `electricityPricePerKwh` | **0.5** | 元/kWh，热泵取暖电价 |
+| `SUBSIDY_REDUCTION_PER_M3` | **0.6** | 元/m³，补贴退坡导致的用气成本上升（不变） |
 
 ```
 coalTons = initialHeatingCost / 1000
@@ -201,6 +223,8 @@ gasVolume = coalTons × 250
 rise = round(gasVolume × 0.6)
 heatingCost ← heatingCost + rise
 ```
+
+退坡后有效气价增量：**+0.6 元/m³**（相对退坡前 2.98 元/m³ 的账单冲击）。
 
 **说明**：回合 5 仅增加取暖年花费，**不**再次调用 `updateEmissionFromModel()`，故排放达标度与 CO₂ 吨数保持回合 4 结束时的值（相当于「排放侧冻结」）。
 
