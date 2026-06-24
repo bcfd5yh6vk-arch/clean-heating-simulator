@@ -372,6 +372,9 @@
           <button type="button" id="guidanceToggle" class="btn-primary" aria-expanded="false">
             使用说明 / The guidance
           </button>
+          <button type="button" id="summaryToggle" class="btn-primary" aria-expanded="false">
+            研究摘要 / Summary
+          </button>
         </div>
         <div id="researchPanel" class="research-panel">
           <h3>研究问题</h3>
@@ -409,6 +412,15 @@
             <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他</button>
           </div>
           <div id="guidanceContent" class="guidance-content" hidden></div>
+        </div>
+        <div id="summaryPanel" class="research-panel">
+          <p>
+            该议题已知结论是：清洁取暖在空气质量和散煤替代方面成效明显，但农户运行成本受补贴退坡影响非常大，存在“改得起、用不起”的结构性问题。
+            争论焦点在于短期合规和长期可持续之间如何平衡，以及不同县域政策执行差异如何影响农户行为。
+          </p>
+          <p>
+            这是“户级、回合制、可交互”的模拟工具：把年收入、取暖费、合规和排放放进同一个流程里，帮助人们理解为什么同一政策在微观层面会走向不同结局，帮助农户模拟不同路径的结果从而优化村级选择。
+          </p>
         </div>
       </section>
 
@@ -519,17 +531,6 @@
         <div id="eventBox"></div>
         <div class="btn-row" id="choices"></div>
         <div id="endingBox"></div>
-      </section>
-
-      <section class="card">
-        <h2>研究摘要</h2>
-        <p>
-          该议题已知结论是：清洁取暖在空气质量和散煤替代方面成效明显，但农户运行成本受补贴退坡影响非常大，存在“改得起、用不起”的结构性问题。
-          争论焦点在于短期合规和长期可持续之间如何平衡，以及不同县域政策执行差异如何影响农户行为。
-        </p>
-        <p>
-          这是“户级、回合制、可交互”的模拟工具：把年收入、取暖费、合规和排放放进同一个流程里，帮助人们理解为什么同一政策在微观层面会走向不同结局，帮助农户模拟不同路径的结果从而优化村级选择。
-        </p>
       </section>
 
       <section class="card ai-analysis">
@@ -694,6 +695,8 @@
       const researchPanel = document.getElementById("researchPanel");
       const guidanceToggle = document.getElementById("guidanceToggle");
       const guidancePanel = document.getElementById("guidancePanel");
+      const summaryToggle = document.getElementById("summaryToggle");
+      const summaryPanel = document.getElementById("summaryPanel");
       const guidanceContent = document.getElementById("guidanceContent");
       const guidanceIdentityButtons = document.querySelectorAll("[data-guidance-identity]");
 
@@ -1442,6 +1445,12 @@
         const isOpen = guidancePanel.classList.toggle("open");
         guidanceToggle.setAttribute("aria-expanded", String(isOpen));
         guidanceToggle.textContent = isOpen ? "收起说明 / Hide the guidance" : "使用说明 / The guidance";
+      });
+
+      summaryToggle.addEventListener("click", () => {
+        const isOpen = summaryPanel.classList.toggle("open");
+        summaryToggle.setAttribute("aria-expanded", String(isOpen));
+        summaryToggle.textContent = isOpen ? "收起研究摘要 / Hide summary" : "研究摘要 / Summary";
       });
 
       guidanceIdentityButtons.forEach((btn) => {
