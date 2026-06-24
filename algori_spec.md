@@ -1,9 +1,63 @@
 # 算法与常数规格（Algorithm Specification）
 
-> 本文档描述 `index.html` 单页模拟器中**实际运行的算法与固定常数**。  
+> 本文档描述单页模拟器中**实际运行的算法与固定常数**。  
 > **不包含**用户开局自由输入项（年收入、年盈余、住房面积、常住人口、年取暖费用等）及其推荐默认值。
 
-实现源码位置：根目录 `index.html` 内联 `<script>`（常量约 L621–647，回合逻辑约 L1072–1379）。
+## 0. 运行时配置（网页自动同步）
+
+**修改下方 `simulation-config` 代码块中的数值，保存本文件后刷新网站即可同步到 `index.html` 模拟器**（页面启动时 `fetch('algori_spec.md')` 解析该块）。公式说明见下文各节；回合流程逻辑仍在 `index.html` 中实现。
+
+```simulation-config
+{
+  "version": 1,
+  "economy": {
+    "scatteredCoalPricePerTon": 1000,
+    "gasM3PerCoalTon": 250,
+    "subsidyReductionPerM3": 0.6,
+    "rectifyApplicationCost": 800,
+    "sideIncomeBoostRatio": 0.2,
+    "energySavingHeatingCostRatio": 0.6,
+    "energySavingEmissionMultiplier": 0.6,
+    "baseRenovationCostPer100Sqm": { "A": 3000, "B": 10000, "C": 7000 },
+    "baseAnnualHeatingCostPer100Sqm": { "A": 8000, "B": 2000, "C": 4300 }
+  },
+  "compliance": {
+    "turn1ContinueCoal": 0,
+    "turn1PrepareTransition": 60,
+    "turn2ContinueViolation": 0,
+    "turn2ApplyRectify": 50,
+    "afterCleanRenovation": 100,
+    "enforcementMinStreak": 2,
+    "bpBase": 40,
+    "bpPer100Sqm": 15
+  },
+  "emission": {
+    "coalEnergyGjPerTon": 23.2,
+    "coalUsefulHeatGjPerTon": 9,
+    "coalCo2IntensityTco2PerTj": 89.0,
+    "gasEnergyGjPerM3": 0.036,
+    "gasCo2IntensityTco2PerTj": 55.54,
+    "gshpHeatGjPerKwh": 0.0144,
+    "ashpHeatGjPerKwh": 0.0106,
+    "gridEmissionKgco2PerKwh": 0.6361
+  },
+  "thresholds": {
+    "bankruptEnergyBurdenPct": 10,
+    "seizedCompliance": 30,
+    "successEmission": 75,
+    "successComplianceMin": 100,
+    "successEnergyBurdenMax": 10,
+    "successSurplusMin": 0
+  },
+  "techRoutes": {
+    "A": "天然气",
+    "B": "地源热泵",
+    "C": "空气源热泵"
+  }
+}
+```
+
+实现源码：`index.html` 内联脚本在页面加载时读取上表；回合逻辑约 L1100+。
 
 ---
 
@@ -355,7 +409,8 @@ clamp(v, min, max) = max(min, max(v, min))
 
 | 项目 | 说明 |
 |------|------|
-| 对应代码 | `index.html` |
+| **运行时数值源** | 本文档 §0 的 `simulation-config` JSON 块（`index.html` 启动时自动读取） |
+| 回合流程代码 | `index.html` |
 | 校准参考 | `research/data/calibration_defaults.json`（研究用，非运行时绑定） |
 | 产品说明 | `spec.md` |
-| 更新时机 | 修改 `index.html` 内常量或回合公式时同步更新本文档 |
+| 更新时机 | 改常数/阈值 → 只改 §0 JSON 并刷新网页；改公式或回合逻辑 → 同步改 `index.html` 与本文件文字说明 |
