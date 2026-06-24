@@ -201,7 +201,7 @@ P_seized（连续 n 次违规后累计被处罚概率）= 1 - p^n
 
 ## 5. 排放与碳排放算法
 
-能量单位统一为 **GJ**；碳排放强度使用 **tC/TJ**；CO₂ 由碳乘分子量比换算。
+能量单位统一为 **GJ**；1 TJ = 1000 GJ。燃煤、天然气 CO₂ 排放因子采用**国标附表**「单位热值 CO₂ 排放因子」（tCO₂/TJ），已含碳氧化率。
 
 ### 5.1 物理常数
 
@@ -209,13 +209,18 @@ P_seized（连续 n 次违规后累计被处罚概率）= 1 - p^n
 |------|-----|------|------|
 | `COAL_ENERGY_GJ_PER_TON` | 23.2 | GJ/吨 | 散煤输入能量 |
 | `COAL_USEFUL_HEAT_GJ_PER_TON` | 9 | GJ/吨 | 散煤有效供热（热泵电需求基准） |
-| `COAL_C_INTENSITY_TC_PER_TJ` | 26.7 | tC/TJ | 散煤碳强度 |
+| `COAL_C_INTENSITY_TC_PER_TJ` | **26.1** | tC/TJ | 燃煤单位热值含碳量（国标附表） |
+| `COAL_C_OXIDATION_RATE` | **0.93** | — | 燃煤碳氧化率 93% |
+| `COAL_CO2_INTENSITY_TCO2_PER_TJ` | **89.0** | tCO₂/TJ | 燃煤单位热值 CO₂ 排放因子 |
 | `GAS_ENERGY_GJ_PER_M3` | 0.036 | GJ/m³ | 天然气能量密度 |
-| `GAS_C_INTENSITY_TC_PER_TJ` | 15.3 | tC/TJ | 天然气碳强度 |
+| `GAS_C_INTENSITY_TC_PER_TJ` | **15.3** | tC/TJ | 天然气单位热值含碳量（国标附表） |
+| `GAS_C_OXIDATION_RATE` | **0.99** | — | 天然气碳氧化率 99% |
+| `GAS_CO2_INTENSITY_TCO2_PER_TJ` | **55.54** | tCO₂/TJ | 天然气单位热值 CO₂ 排放因子 |
 | `GSHP_HEAT_GJ_PER_KWH` | 0.0144 | GJ/kWh | 地源热泵产热系数 |
 | `ASHP_HEAT_GJ_PER_KWH` | 0.0106 | GJ/kWh | 空气源热泵产热系数 |
 | `GRID_EMISSION_KGCO2_PER_KWH` | 0.6361 | kgCO₂/kWh | 华北电网排放因子 |
-| `C_TO_CO2` | 44/12 ≈ 3.667 | — | 碳转 CO₂ 分子量比 |
+
+国标关系：`tCO₂/TJ = tC/TJ × 碳氧化率 × (44/12)`（燃煤 26.1×0.93×44/12≈89.0；天然气 15.3×0.99×44/12≈55.54）。
 
 ### 5.2 排放基准（开局由散煤年取暖费建立）
 
@@ -226,7 +231,7 @@ initialCoalInputEnergyGJ = coalTons × 23.2
 
 requiredUsefulEnergyGJ = coalTons × 9
 
-E_initial (吨 CO₂) = (initialCoalInputEnergyGJ / 1000) × 26.7 × (44/12)
+E_initial (吨 CO₂) = (initialCoalInputEnergyGJ / 1000) × 89.0
 ```
 
 基准对象保存在 `emissionBaseline`，全程不变。
@@ -247,7 +252,7 @@ E_current = E_initial × energyMultiplier
 ```
 gasVolume = coalTons × 250 × energyMultiplier
 gasEnergyGJ = gasVolume × 0.036
-E_current = (gasEnergyGJ / 1000) × 15.3 × (44/12)
+E_current = (gasEnergyGJ / 1000) × 55.54
 ```
 
 **地源热泵**

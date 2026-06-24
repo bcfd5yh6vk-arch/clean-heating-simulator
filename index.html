@@ -635,23 +635,33 @@
         C: "空气源热泵"
       };
 
-      /** 排放数模物理常数（能量统一用 GJ；1 TJ = 1000 GJ） */
+      /** 排放数模物理常数（能量统一用 GJ；1 TJ = 1000 GJ）
+       *  燃煤、天然气因子：温室气体排放核算国标附表（单位热值含碳量、碳氧化率、单位热值 CO₂ 排放因子） */
       const COAL_ENERGY_GJ_PER_TON = 23.2;
       const COAL_USEFUL_HEAT_GJ_PER_TON = 9;
-      const COAL_C_INTENSITY_TC_PER_TJ = 26.7;
+      const COAL_C_INTENSITY_TC_PER_TJ = 26.1;
+      const COAL_C_OXIDATION_RATE = 0.93;
+      const COAL_CO2_INTENSITY_TCO2_PER_TJ = 89.0;
       const GAS_ENERGY_GJ_PER_M3 = 0.036;
       const GAS_C_INTENSITY_TC_PER_TJ = 15.3;
+      const GAS_C_OXIDATION_RATE = 0.99;
+      const GAS_CO2_INTENSITY_TCO2_PER_TJ = 55.54;
       const GSHP_HEAT_GJ_PER_KWH = 0.0144;
       const ASHP_HEAT_GJ_PER_KWH = 0.0106;
       const GRID_EMISSION_KGCO2_PER_KWH = 0.6361;
-      const C_TO_CO2 = 44 / 12;
+
+      function co2TonsFromFuelEnergyGJ(energyGJ, co2IntensityTco2PerTj) {
+        return (energyGJ / 1000) * co2IntensityTco2PerTj;
+      }
 
       function buildEmissionBaseline(initialHeatingCost) {
         const initialCoalTons = initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
         const initialCoalInputEnergyGJ = initialCoalTons * COAL_ENERGY_GJ_PER_TON;
         const requiredUsefulEnergyGJ = initialCoalTons * COAL_USEFUL_HEAT_GJ_PER_TON;
-        const E_initial =
-          (initialCoalInputEnergyGJ / 1000) * COAL_C_INTENSITY_TC_PER_TJ * C_TO_CO2;
+        const E_initial = co2TonsFromFuelEnergyGJ(
+          initialCoalInputEnergyGJ,
+          COAL_CO2_INTENSITY_TCO2_PER_TJ
+        );
         return {
           initialCoalTons,
           initialCoalInputEnergyGJ,
@@ -670,7 +680,7 @@
           case "天然气": {
             const gasVolume = initialCoalTons * GAS_M3_PER_COAL_TON * energyMultiplier;
             const gasEnergyGJ = gasVolume * GAS_ENERGY_GJ_PER_M3;
-            return (gasEnergyGJ / 1000) * GAS_C_INTENSITY_TC_PER_TJ * C_TO_CO2;
+            return co2TonsFromFuelEnergyGJ(gasEnergyGJ, GAS_CO2_INTENSITY_TCO2_PER_TJ);
           }
           case "地源热泵": {
             const gshpElectricityKwh =
