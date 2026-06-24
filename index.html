@@ -646,7 +646,6 @@
         },
         emission: {
           coalEnergyGjPerTon: 23.2,
-          coalUsefulHeatGjPerTon: 9,
           coalCo2IntensityTco2PerTj: 89.0,
           gasEnergyGjPerM3: 0.036,
           gasCo2IntensityTco2PerTj: 55.54,
@@ -683,7 +682,6 @@
       let BP_BASE;
       let BP_PER_100SQM;
       let COAL_ENERGY_GJ_PER_TON;
-      let COAL_USEFUL_HEAT_GJ_PER_TON;
       let COAL_CO2_INTENSITY_TCO2_PER_TJ;
       let GAS_ENERGY_GJ_PER_M3;
       let GAS_CO2_INTENSITY_TCO2_PER_TJ;
@@ -750,7 +748,6 @@
 
         const em = sim.emission;
         COAL_ENERGY_GJ_PER_TON = em.coalEnergyGjPerTon;
-        COAL_USEFUL_HEAT_GJ_PER_TON = em.coalUsefulHeatGjPerTon;
         COAL_CO2_INTENSITY_TCO2_PER_TJ = em.coalCo2IntensityTco2PerTj;
         GAS_ENERGY_GJ_PER_M3 = em.gasEnergyGjPerM3;
         GAS_CO2_INTENSITY_TCO2_PER_TJ = em.gasCo2IntensityTco2PerTj;
@@ -792,7 +789,6 @@
       function buildEmissionBaseline(initialHeatingCost) {
         const initialCoalTons = initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
         const initialCoalInputEnergyGJ = initialCoalTons * COAL_ENERGY_GJ_PER_TON;
-        const requiredUsefulEnergyGJ = initialCoalTons * COAL_USEFUL_HEAT_GJ_PER_TON;
         const E_initial = co2TonsFromFuelEnergyGJ(
           initialCoalInputEnergyGJ,
           COAL_CO2_INTENSITY_TCO2_PER_TJ
@@ -800,13 +796,12 @@
         return {
           initialCoalTons,
           initialCoalInputEnergyGJ,
-          requiredUsefulEnergyGJ,
           E_initial
         };
       }
 
       function calculateCurrentEmission(baseline, method, isEnergySaving = false) {
-        const { initialCoalTons, requiredUsefulEnergyGJ, E_initial } = baseline;
+        const { initialCoalTons, initialCoalInputEnergyGJ, E_initial } = baseline;
         const energyMultiplier = isEnergySaving ? ENERGY_SAVING_EMISSION_MULTIPLIER : 1.0;
 
         switch (method) {
@@ -819,12 +814,12 @@
           }
           case "地源热泵": {
             const gshpElectricityKwh =
-              (requiredUsefulEnergyGJ * energyMultiplier) / GSHP_HEAT_GJ_PER_KWH;
+              (initialCoalInputEnergyGJ * energyMultiplier) / GSHP_HEAT_GJ_PER_KWH;
             return gshpElectricityKwh * GRID_EMISSION_KGCO2_PER_KWH * 0.001;
           }
           case "空气源热泵": {
             const ashpElectricityKwh =
-              (requiredUsefulEnergyGJ * energyMultiplier) / ASHP_HEAT_GJ_PER_KWH;
+              (initialCoalInputEnergyGJ * energyMultiplier) / ASHP_HEAT_GJ_PER_KWH;
             return ashpElectricityKwh * GRID_EMISSION_KGCO2_PER_KWH * 0.001;
           }
           default:

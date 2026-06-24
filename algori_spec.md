@@ -33,7 +33,6 @@
   },
   "emission": {
     "coalEnergyGjPerTon": 23.2,
-    "coalUsefulHeatGjPerTon": 9,
     "coalCo2IntensityTco2PerTj": 89.0,
     "gasEnergyGjPerM3": 0.036,
     "gasCo2IntensityTco2PerTj": 55.54,
@@ -261,20 +260,15 @@ P_seized（连续 n 次违规后累计被处罚概率）= 1 - p^n
 
 | 常数 | 值 | 单位 | 含义 |
 |------|-----|------|------|
-| `COAL_ENERGY_GJ_PER_TON` | 23.2 | GJ/吨 | 散煤输入能量 |
-| `COAL_USEFUL_HEAT_GJ_PER_TON` | 9 | GJ/吨 | 散煤有效供热（热泵电需求基准） |
-| `COAL_C_INTENSITY_TC_PER_TJ` | **26.1** | tC/TJ | 燃煤单位热值含碳量（国标附表） |
-| `COAL_C_OXIDATION_RATE` | **0.93** | — | 燃煤碳氧化率 93% |
-| `COAL_CO2_INTENSITY_TCO2_PER_TJ` | **89.0** | tCO₂/TJ | 燃煤单位热值 CO₂ 排放因子 |
-| `GAS_ENERGY_GJ_PER_M3` | 0.036 | GJ/m³ | 天然气能量密度 |
-| `GAS_C_INTENSITY_TC_PER_TJ` | **15.3** | tC/TJ | 天然气单位热值含碳量（国标附表） |
-| `GAS_C_OXIDATION_RATE` | **0.99** | — | 天然气碳氧化率 99% |
-| `GAS_CO2_INTENSITY_TCO2_PER_TJ` | **55.54** | tCO₂/TJ | 天然气单位热值 CO₂ 排放因子 |
-| `GSHP_HEAT_GJ_PER_KWH` | 0.0144 | GJ/kWh | 地源热泵产热系数 |
-| `ASHP_HEAT_GJ_PER_KWH` | 0.0106 | GJ/kWh | 空气源热泵产热系数 |
-| `GRID_EMISSION_KGCO2_PER_KWH` | 0.6361 | kgCO₂/kWh | 华北电网排放因子 |
+| `coalEnergyGjPerTon` | 23.2 | GJ/吨 | 散煤输入能量（热泵电需求基准） |
+| `coalCo2IntensityTco2PerTj` | **89.0** | tCO₂/TJ | 燃煤单位热值 CO₂ 排放因子（国标附表，已含碳氧化率） |
+| `gasEnergyGjPerM3` | 0.036 | GJ/m³ | 天然气能量密度 |
+| `gasCo2IntensityTco2PerTj` | **55.54** | tCO₂/TJ | 天然气单位热值 CO₂ 排放因子（国标附表，已含碳氧化率） |
+| `gshpHeatGjPerKwh` | 0.0144 | GJ/kWh | 地源热泵产热系数 |
+| `ashpHeatGjPerKwh` | 0.0106 | GJ/kWh | 空气源热泵产热系数 |
+| `gridEmissionKgco2PerKwh` | 0.6361 | kgCO₂/kWh | 华北电网排放因子 |
 
-国标关系：`tCO₂/TJ = tC/TJ × 碳氧化率 × (44/12)`（燃煤 26.1×0.93×44/12≈89.0；天然气 15.3×0.99×44/12≈55.54）。
+国标附表参考：燃煤 tC/TJ=26.1、碳氧化率 0.93 → tCO₂/TJ≈89.0；天然气 tC/TJ=15.3、碳氧化率 0.99 → tCO₂/TJ≈55.54。
 
 ### 5.2 排放基准（开局由散煤年取暖费建立）
 
@@ -282,8 +276,6 @@ P_seized（连续 n 次违规后累计被处罚概率）= 1 - p^n
 coalTons = initialHeatingCost / 1000
 
 initialCoalInputEnergyGJ = coalTons × 23.2
-
-requiredUsefulEnergyGJ = coalTons × 9
 
 E_initial (吨 CO₂) = (initialCoalInputEnergyGJ / 1000) × 89.0
 ```
@@ -312,14 +304,14 @@ E_current = (gasEnergyGJ / 1000) × 55.54
 **地源热泵**
 
 ```
-gshpElectricityKwh = (requiredUsefulEnergyGJ × energyMultiplier) / 0.0144
+gshpElectricityKwh = (initialCoalInputEnergyGJ × energyMultiplier) / 0.0144
 E_current = gshpElectricityKwh × 0.6361 × 0.001   （吨 CO₂）
 ```
 
 **空气源热泵**
 
 ```
-ashpElectricityKwh = (requiredUsefulEnergyGJ × energyMultiplier) / 0.0106
+ashpElectricityKwh = (initialCoalInputEnergyGJ × energyMultiplier) / 0.0106
 E_current = ashpElectricityKwh × 0.6361 × 0.001   （吨 CO₂）
 ```
 
