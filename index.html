@@ -528,7 +528,8 @@
       const researchSession = {
         id: null,
         eventLog: [],
-        surveyShown: false
+        surveyShown: false,
+        turnChoices: { 1: null, 2: [], 3: null, 4: null, 5: null }
       };
 
       let syncTimer = null;
@@ -695,6 +696,7 @@
         researchSession.id = null;
         researchSession.eventLog = [];
         researchSession.surveyShown = false;
+        researchSession.turnChoices = { 1: null, 2: [], 3: null, 4: null, 5: null };
         if (syncTimer) {
           clearTimeout(syncTimer);
           syncTimer = null;
@@ -710,14 +712,21 @@
         }
 
         const sessionId = crypto.randomUUID();
+        const annualIncome = Number(formData.get("annual_income"));
+        const winterCost = Number(formData.get("winter_cost"));
+        const initialBaseline = buildEmissionBaseline(winterCost);
         const payload = {
           id: sessionId,
           user_identity: String(formData.get("user_identity") || ""),
           identity_detail: readIdentityDetail(formData),
-          annual_income: Number(formData.get("annual_income")),
+          annual_income: annualIncome,
           annual_surplus: Number(formData.get("annual_surplus")),
           housing_area: Number(formData.get("housing_area")),
-          initial_winter_cost: Number(formData.get("winter_cost")),
+          initial_winter_cost: winterCost,
+          initial_energy_burden_pct: Number(
+            ((winterCost / Math.max(1, annualIncome)) * 100).toFixed(1)
+          ),
+          initial_co2_tons: Number(initialBaseline.E_initial.toFixed(3)),
           event_log: []
         };
 
@@ -774,6 +783,43 @@
         }, 600);
       }
 
+      function recordTurnChoice(turnNum, id, label) {
+        const entry = { id, label };
+        if (turnNum === 2) {
+          researchSession.turnChoices[2].push(entry);
+        } else {
+          researchSession.turnChoices[turnNum] = entry;
+        }
+      }
+
+      function buildTurnChoicePayload() {
+        const t2 = researchSession.turnChoices[2];
+        const lastTurn2 = t2[t2.length - 1];
+        return {
+          choice_turn1_id: researchSession.turnChoices[1]?.id ?? null,
+          choice_turn1_label: researchSession.turnChoices[1]?.label ?? null,
+          choice_turn2_id: lastTurn2?.id ?? null,
+          choice_turn2_label: lastTurn2?.label ?? null,
+          choice_turn2_all_labels: t2.length ? t2.map((c) => c.label).join(" | ") : null,
+          choice_turn3_id: researchSession.turnChoices[3]?.id ?? null,
+          choice_turn3_label: researchSession.turnChoices[3]?.label ?? null,
+          choice_turn4_id: researchSession.turnChoices[4]?.id ?? null,
+          choice_turn4_label: researchSession.turnChoices[4]?.label ?? null,
+          choice_turn5_id: researchSession.turnChoices[5]?.id ?? null,
+          choice_turn5_label: researchSession.turnChoices[5]?.label ?? null
+        };
+      }
+
+      function buildFinalMetricsPayload() {
+        return {
+          final_energy_burden_pct: Number(burdenPercent().toFixed(1)),
+          final_heating_cost: Math.round(state.user.heatingCost),
+          final_compliance: Math.round(state.user.compliance),
+          final_emission_score: Math.round(state.user.emission),
+          final_co2_tons: Number((state.user.co2Tons ?? 0).toFixed(3))
+        };
+      }
+
       async function finalizeResearchSession(type, summary) {
         if (!supabaseClient || !researchSession.id) return;
 
@@ -785,7 +831,9 @@
             ended_at: new Date().toISOString(),
             ending_type: type,
             ending_summary: summary,
-            event_log: researchSession.eventLog
+            event_log: researchSession.eventLog,
+            ...buildTurnChoicePayload(),
+            ...buildFinalMetricsPayload()
           })
           .eq("id", researchSession.id)
           .select("id");
@@ -985,6 +1033,7 @@
         let note = "";
 
         if (state.stage === "turn1" || state.stage.startsWith("回合1")) {
+          recordTurnChoice(1, id, label);
           if (id === "A") {
             state.user.compliance = 0;
             state.nonRectifyStreak = 1;
@@ -1021,6 +1070,7 @@
             );
           }
         } else if (state.stage.startsWith("回合2")) {
+          recordTurnChoice(2, id, label);
           if (id === "1") {
             state.user.compliance = 0;
             state.nonRectifyStreak += 1;
@@ -1068,6 +1118,7 @@
             alert(`年收入不足以覆盖一次性投入 ${invest} 元，请换一个技术路线。`);
             return;
           }
+          recordTurnChoice(3, id, label);
           state.user.surplus -= surplusDelta;
           state.user.heatingCost = newHeatingCost;
           state.user.compliance = 100;
@@ -1088,6 +1139,7 @@
             ]
           );
         } else if (state.stage.startsWith("回合4")) {
+          recordTurnChoice(4, id, label);
           state.user.compliance = 100;
           if (id === "A") {
             const incomeBoost = Math.round(state.user.income * 0.2);
@@ -1115,6 +1167,7 @@
             [{ id: "SETTLE", label: "结算回合5（补贴减少）" }]
           );
         } else if (state.stage.startsWith("回合5")) {
+          recordTurnChoice(5, id, label);
           const coalTons = state.user.initialHeatingCost / SCATTERED_COAL_PRICE_PER_TON;
           const gasVolume = estimatedGasVolumeFromCoalBaseline(state.user.initialHeatingCost);
           const rise = Math.round(gasVolume * SUBSIDY_REDUCTION_PER_M3);
