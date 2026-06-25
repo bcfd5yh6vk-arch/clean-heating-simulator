@@ -2431,6 +2431,15 @@
         const ending = `
           <p class="survey-section-title">结尾共用题（所有人）</p>
           ${likertField("q_end1_recommend", "Q_end1. 你愿意把本模拟推荐给其他人体验吗？", ["完全不愿意", "较不愿意", "一般", "比较愿意", "非常愿意"])}
+          ${radioField("q_end_ai_helpfulness", "你认为AI给出的分析建议是否有帮助？", [
+            ["A", "完全没帮助"],
+            ["B", "帮助较小"],
+            ["C", "帮助较大"]
+          ])}
+          <fieldset id="qEndAiFeedbackWrap" class="survey-q" hidden>
+            <legend>你觉得AI分析有什么不足，对此有什么建议？</legend>
+            <textarea name="q_end_ai_feedback" rows="3" class="survey-other-input" placeholder="请填写"></textarea>
+          </fieldset>
           ${textField("q_end2_suggestions", "Q_end2. 对该模型后续的改进与迭代有何建议？", "对模拟器、对政策、对你自己处境均可")}
           <div class="survey-actions">
             <button type="submit" class="btn-primary">提交调查</button>
@@ -2480,6 +2489,20 @@
           el.addEventListener("change", () => {
             const show = [...postGameSurveyForm.querySelectorAll('[name="n1_heating_method"]')].find((x) => x.checked)?.value === "D";
             if (n1Wrap) n1Wrap.hidden = !show;
+          });
+        });
+
+        const qEndAiWrap = document.getElementById("qEndAiFeedbackWrap");
+        const qEndAiFeedback = postGameSurveyForm.querySelector('[name="q_end_ai_feedback"]');
+        postGameSurveyForm.querySelectorAll('[name="q_end_ai_helpfulness"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const val = [...postGameSurveyForm.querySelectorAll('[name="q_end_ai_helpfulness"]')].find((x) => x.checked)?.value;
+            const show = val === "A" || val === "B";
+            if (qEndAiWrap) qEndAiWrap.hidden = !show;
+            if (qEndAiFeedback) {
+              qEndAiFeedback.required = show;
+              if (!show) qEndAiFeedback.value = "";
+            }
           });
         });
       }
@@ -2545,6 +2568,11 @@
           },
           end: {
             q_end1_recommend: collectLikertAnswer("q_end1_recommend"),
+            q_end_ai_helpfulness: collectRadioAnswer("q_end_ai_helpfulness"),
+            q_end_ai_feedback:
+              ["A", "B"].includes(collectRadioAnswer("q_end_ai_helpfulness").value)
+                ? collectTextAnswer("q_end_ai_feedback")
+                : "",
             q_end2_suggestions: collectTextAnswer("q_end2_suggestions")
           }
         };
@@ -2613,6 +2641,9 @@
           sq_q4_strategy_change_label: responses.common.q4_strategy_change.label || null,
           sq_q_end1_recommend: responses.end.q_end1_recommend.value,
           sq_q_end1_recommend_label: responses.end.q_end1_recommend.label || null,
+          sq_q_end_ai_helpfulness: responses.end.q_end_ai_helpfulness.value || null,
+          sq_q_end_ai_helpfulness_label: responses.end.q_end_ai_helpfulness.label || null,
+          sq_q_end_ai_feedback: responses.end.q_end_ai_feedback || null,
           sq_q_end2_suggestions: responses.end.q_end2_suggestions || null
         };
 
@@ -2712,6 +2743,11 @@
         }
         if (id === "其他" && responses.other_audience.o3_policy_gaps.length === 0) {
           alert("O3 请至少选择 1 项。");
+          return false;
+        }
+        const aiHelp = responses.end.q_end_ai_helpfulness.value;
+        if ((aiHelp === "A" || aiHelp === "B") && !responses.end.q_end_ai_feedback) {
+          alert("请填写 AI 分析不足与建议。");
           return false;
         }
         return true;
