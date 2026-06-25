@@ -60,8 +60,9 @@ def get_stage_choices(stage: str) -> list[dict[str, str]]:
             {"id": "C", "label": "空气源热泵"},
         ],
         "turn4": [
-            {"id": "A", "label": "农业直播/副业"},
-            {"id": "B", "label": "强力节能（降温、分区取暖）"},
+            {"id": "A", "label": "提高收入"},
+            {"id": "B", "label": "节约取暖"},
+            {"id": "C", "label": "保暖修缮"},
         ],
         "turn6": [
             {"id": "SETTLE", "label": "进入冲击事件结算"},
@@ -422,7 +423,7 @@ def step_game():
                 "annual_surplus": [2000, 8000],
             }
             delta = pick_ai_delta(session, stage, {"id": choice_id, "label": choice_label}, bounds)
-        else:
+        elif choice_id == "B":
             reduction_cap = max(1000, int(state["heating_annual_cost"] * 0.4))
             bounds = {
                 "heating_annual_cost": [-reduction_cap, -1000],
@@ -436,9 +437,20 @@ def step_game():
                 event = {
                     "triggered": True,
                     "title": "舒适度争议",
-                    "description": "强力节能导致室内舒适度下降，引发家庭短期适应成本。",
+                    "description": "节约取暖导致室内舒适度下降，引发家庭短期适应成本。",
                 }
                 delta["annual_surplus"] -= 500
+        else:
+            area_factor = session["housing_area"] / 100
+            insulation_cost = int(1000 * area_factor)
+            heating_reduction = max(500, int(state["heating_annual_cost"] * 0.375))
+            delta = {
+                "heating_annual_cost": -heating_reduction,
+                "annual_income": 0,
+                "compliance": 0,
+                "emission_score": random.randint(5, 12),
+                "annual_surplus": -insulation_cost,
+            }
         next_stage = "turn6"
 
     elif stage == "turn6":

@@ -100,6 +100,23 @@
         gap: 8px;
         margin-top: 8px;
       }
+      .choice-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        gap: 4px;
+        max-width: 100%;
+      }
+      .choice-label {
+        font-weight: 600;
+      }
+      .choice-hint {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-weight: normal;
+        line-height: 1.4;
+      }
       .intro-toggle-stack {
         display: flex;
         flex-direction: column;
@@ -603,6 +620,7 @@
         turn: 1,
         nonRectifyStreak: 0,
         isEnergySaving: false,
+        operatingFactor: 1.0,
         user: null,
         thresholds: null,
         emissionBaseline: null,
@@ -633,6 +651,8 @@
           sideIncomeBoostRatio: 0.2,
           energySavingHeatingCostRatio: 0.6,
           energySavingEmissionMultiplier: 0.6,
+          insulationCostPer100Sqm: 1000,
+          insulationDemandFactor: 0.625,
           baseRenovationCostPer100Sqm: { A: 3000, B: 10000, C: 7000 }
         },
         compliance: {
@@ -677,6 +697,8 @@
       let SIDE_INCOME_BOOST_RATIO;
       let ENERGY_SAVING_HEATING_COST_RATIO;
       let ENERGY_SAVING_EMISSION_MULTIPLIER;
+      let INSULATION_COST_PER_100SQM;
+      let INSULATION_DEMAND_FACTOR;
       let BASE_RENOVATION_COST_PER_100SQM;
       let COMPLIANCE_TURN1_CONTINUE;
       let COMPLIANCE_TURN1_PREPARE;
@@ -743,6 +765,8 @@
         SIDE_INCOME_BOOST_RATIO = e.sideIncomeBoostRatio;
         ENERGY_SAVING_HEATING_COST_RATIO = e.energySavingHeatingCostRatio;
         ENERGY_SAVING_EMISSION_MULTIPLIER = e.energySavingEmissionMultiplier;
+        INSULATION_COST_PER_100SQM = e.insulationCostPer100Sqm;
+        INSULATION_DEMAND_FACTOR = e.insulationDemandFactor;
         BASE_RENOVATION_COST_PER_100SQM = { ...e.baseRenovationCostPer100Sqm };
 
         const c = sim.compliance;
@@ -800,6 +824,26 @@
         return Math.round(electricityKwh * ELECTRICITY_PRICE_PER_KWH);
       }
 
+      function turn4Choices() {
+        return [
+          {
+            id: "A",
+            label: "提高收入",
+            hint: "通过干副业，做直播等方式增收"
+          },
+          {
+            id: "B",
+            label: "节约取暖",
+            hint: "只开部分房间的取暖装置，降低一定室内温度"
+          },
+          {
+            id: "C",
+            label: "保暖修缮",
+            hint: "通过工程手段对外墙进行保温改造"
+          }
+        ];
+      }
+
       function techRouteChoices() {
         return ["A", "B", "C"].map((id) => ({ id, label: techRouteChoiceLabel(id) }));
       }
@@ -829,7 +873,9 @@
 
       function calculateCurrentEmission(baseline, method, isEnergySaving = false) {
         const { initialCoalTons, initialCoalInputEnergyGJ, E_initial } = baseline;
-        const energyMultiplier = isEnergySaving ? ENERGY_SAVING_EMISSION_MULTIPLIER : 1.0;
+        const energyMultiplier =
+          (isEnergySaving ? ENERGY_SAVING_EMISSION_MULTIPLIER : 1.0) *
+          (state.operatingFactor ?? 1.0);
 
         switch (method) {
           case "散煤炉":
@@ -1339,7 +1385,12 @@
         options.forEach((opt) => {
           const btn = document.createElement("button");
           btn.type = "button";
-          btn.textContent = opt.label;
+          if (opt.hint) {
+            btn.className = "choice-btn";
+            btn.innerHTML = `<span class="choice-label">${opt.label}</span><span class="choice-hint">${opt.hint}</span>`;
+          } else {
+            btn.textContent = opt.label;
+          }
           btn.addEventListener("click", () => runChoice(opt.id, opt.label));
           choicesEl.appendChild(btn);
         });
@@ -1486,6 +1537,7 @@
           state.user.compliance = COMPLIANCE_AFTER_RENOVATION;
           state.user.heatingMethod = TECH_ROUTE_BY_CHOICE[id];
           state.isEnergySaving = false;
+          state.operatingFactor = 1.0;
           updateEmissionFromModel();
           state.turn += 1;
           const costDetail =
@@ -1498,11 +1550,8 @@
           if (evaluateEarlyEnding()) return;
           setStage(
             "回合4：增收/降耗策略",
-            "请选择家庭策略：提高收入，或直接降低取暖消耗。",
-            [
-              { id: "A", label: "农业直播/副业（提高收入）" },
-              { id: "B", label: "强力节能（降温、分区取暖）" }
-            ]
+            "请选择一项家庭策略：提高收入、节约取暖，或对外墙做保暖修缮。",
+            turn4Choices()
           );
         } else if (state.stage.startsWith("回合4")) {
           recordTurnChoice(4, id, label);
@@ -1511,8 +1560,8 @@
             const incomeBoost = Math.round(state.user.income * SIDE_INCOME_BOOST_RATIO);
             state.user.income += incomeBoost;
             state.user.surplus += incomeBoost;
-            note = `副业增收：年收入提高 ${SIDE_INCOME_BOOST_RATIO * 100}%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元；排放分数不变（${state.user.emission} 分）。`;
-          } else {
+            note = `提高收入：年收入提高 ${SIDE_INCOME_BOOST_RATIO * 100}%（+${incomeBoost} 元），年盈余同步增加 ${incomeBoost} 元；排放分数不变（${state.user.emission} 分）。`;
+          } else if (id === "B") {
             const oldHeatingCost = state.user.heatingCost;
             const newHeatingCost = Math.round(oldHeatingCost * ENERGY_SAVING_HEATING_COST_RATIO);
             const heatingDelta = newHeatingCost - oldHeatingCost;
@@ -1521,7 +1570,16 @@
             state.user.surplus += surplusBoost;
             state.isEnergySaving = true;
             updateEmissionFromModel();
-            note = `强力节能：年取暖费 ${oldHeatingCost} × ${ENERGY_SAVING_HEATING_COST_RATIO * 100}% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元；排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨。`;
+            note = `节约取暖：年取暖费 ${oldHeatingCost} × ${ENERGY_SAVING_HEATING_COST_RATIO * 100}% = ${newHeatingCost} 元，年盈余增加 ${surplusBoost} 元；排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨。`;
+          } else {
+            const insulationCost = scaleByHousingArea(INSULATION_COST_PER_100SQM, state.user.area);
+            const oldHeatingCost = state.user.heatingCost;
+            const newHeatingCost = Math.round(oldHeatingCost * INSULATION_DEMAND_FACTOR);
+            state.user.surplus -= insulationCost;
+            state.user.heatingCost = newHeatingCost;
+            state.operatingFactor = INSULATION_DEMAND_FACTOR;
+            updateEmissionFromModel();
+            note = `保暖修缮：一次性投入 ${insulationCost} 元（${INSULATION_COST_PER_100SQM}×${state.user.area}/100），年取暖费 ${oldHeatingCost} × ${INSULATION_DEMAND_FACTOR * 100}% = ${newHeatingCost} 元；排放达标度 ${state.user.emission} 分，CO₂ ${state.user.co2Tons.toFixed(3)} 吨。`;
           }
           state.turn += 1;
           pushLog(`回合4：${label} -> ${note}`);
@@ -1557,6 +1615,7 @@
         if (!validateIdentityFields(data)) return;
         resetResearchSession();
         state.isEnergySaving = false;
+        state.operatingFactor = 1.0;
         state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
         state.user = {
           role: "农民家庭",
@@ -1626,6 +1685,7 @@
         state.turn = 1;
         state.nonRectifyStreak = 0;
         state.isEnergySaving = false;
+        state.operatingFactor = 1.0;
         state.emissionBaseline = null;
         state.initialProfile = null;
         state.ending = null;

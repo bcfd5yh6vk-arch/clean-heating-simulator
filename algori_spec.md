@@ -20,6 +20,8 @@
     "sideIncomeBoostRatio": 0.2,
     "energySavingHeatingCostRatio": 0.6,
     "energySavingEmissionMultiplier": 0.6,
+    "insulationCostPer100Sqm": 1000,
+    "insulationDemandFactor": 0.625,
     "baseRenovationCostPer100Sqm": { "A": 3000, "B": 10000, "C": 7000 }
   },
   "compliance": {
@@ -72,7 +74,7 @@
 | 1 | 现状抉择 | 合规度赋值；分支进入回合 2 或跳过至回合 3 |
 | 2 | 合规压力（可选） | 执法概率模型；整改扣款 |
 | 3 | 技术路线 | 改造成本按面积缩放；改造后取暖费由初始散煤用量换算气量/电量 × 价格 |
-| 4 | 增收/降耗 | 收入 +20% 或取暖费 ×60%；排放重算（节能路径） |
+| 4 | 增收/降耗 | 提高收入、节约取暖或保暖修缮（三选一） |
 | 5 | 补贴退坡 | 气价补贴减少冲击；终局判定 |
 
 固定设定（非用户输入）：游戏角色 = 农民家庭；地区 = 保定；初始取暖方式 = 散煤炉。
@@ -190,7 +192,7 @@ compliance ← 50
 
 ### 3.6 回合 4 策略
 
-**A · 副业增收**
+**A · 提高收入**
 
 ```
 incomeBoost = round(income × 0.2)
@@ -200,7 +202,7 @@ surplus ← surplus + incomeBoost
 
 排放达标度与 CO₂ **不变**（不调用排放重算）。
 
-**B · 强力节能**
+**B · 节约取暖**
 
 ```
 newHeatingCost = round(heatingCost × 0.6)
@@ -209,7 +211,18 @@ heatingCost ← newHeatingCost
 isEnergySaving ← true
 ```
 
-随后调用排放模型重算（见 §5.4 节能系数）。
+随后调用排放模型重算（节能系数 0.6）。
+
+**C · 保暖修缮**
+
+```
+insulationCost = round(1000 × area / 100)
+surplus ← surplus - insulationCost
+heatingCost ← round(heatingCost × 0.625)
+operatingFactor ← 0.625
+```
+
+随后调用排放模型重算（`E_current` 按 `operatingFactor` 缩放，再算排放达标度）。
 
 ### 3.7 回合 5 补贴退坡
 
