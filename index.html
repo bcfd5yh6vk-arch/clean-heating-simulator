@@ -154,6 +154,32 @@
         gap: 10px;
         margin-bottom: 12px;
       }
+      .card-header-split {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .card-header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+      .btn-reset-play {
+        min-height: 40px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        color: var(--muted);
+        flex-shrink: 0;
+      }
+      .btn-reset-play:hover {
+        border-color: var(--bad);
+        color: var(--bad);
+        background: #fff5f5;
+      }
       .card-icon {
         width: 36px;
         height: 36px;
@@ -938,9 +964,12 @@
           </section>
 
           <section class="card" id="playArea" style="display:none;">
-            <div class="card-header">
-              <div class="card-icon">🎮</div>
-              <h2>第二步：做选择</h2>
+            <div class="card-header card-header-split">
+              <div class="card-header-title">
+                <div class="card-icon">🎮</div>
+                <h2>第二步：做选择</h2>
+              </div>
+              <button type="button" id="resetPlayBtn" class="btn-reset-play">重新填写 / 重置</button>
             </div>
             <div class="play-layout">
               <div class="play-main">
@@ -1368,6 +1397,7 @@
 
       const profileForm = document.getElementById("profileForm");
       const resetBtn = document.getElementById("resetBtn");
+      const resetPlayBtn = document.getElementById("resetPlayBtn");
       const playArea = document.getElementById("playArea");
       const statsEl = document.getElementById("stats");
       const stageTitleEl = document.getElementById("stageTitle");
@@ -2198,7 +2228,11 @@
         );
       });
 
-      resetBtn.addEventListener("click", () => {
+      function resetSimulation(confirmIfActive = false) {
+        if (confirmIfActive && state.active) {
+          const ok = window.confirm("确定要重置吗？当前模拟进度将清空，需重新填写数据。");
+          if (!ok) return;
+        }
         state.active = false;
         state.stage = "turn1";
         state.turn = 1;
@@ -2215,7 +2249,11 @@
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
         clearAiAnalysis();
-      });
+        document.getElementById("setupSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      resetBtn.addEventListener("click", () => resetSimulation(false));
+      resetPlayBtn?.addEventListener("click", () => resetSimulation(true));
 
       guidanceIdentityButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
