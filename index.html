@@ -998,12 +998,15 @@
               <h2>第三步：AI 分析</h2>
             </div>
             <p class="hint">
-              模拟结束后会自动生成三部分报告（农户画像、转型建议、政策矛盾解读）；也可手动刷新。
+              模拟结束后会自动生成三部分报告（农户画像、转型建议、政策矛盾解读）；阅读完成后点击下方按钮进入小调查。
             </p>
             <div class="btn-row">
               <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成 AI 分析</button>
             </div>
             <div id="aiAnalysisResult" class="ai-reply" hidden aria-live="polite"></div>
+            <div class="btn-row" id="aiAnalysisNextWrap" hidden>
+              <button type="button" id="aiAnalysisNextBtn" class="btn-primary">我看完了，进入下一步</button>
+            </div>
           </section>
         </div>
 
@@ -2813,12 +2816,24 @@
       const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
       const aiAnalysisResultEl = document.getElementById("aiAnalysisResult");
       const aiAnalysisSection = document.getElementById("aiAnalysisSection");
+      const aiAnalysisNextWrap = document.getElementById("aiAnalysisNextWrap");
+      const aiAnalysisNextBtn = document.getElementById("aiAnalysisNextBtn");
+
+      function hideAiAnalysisNextBtn() {
+        if (aiAnalysisNextWrap) aiAnalysisNextWrap.hidden = true;
+        if (aiAnalysisNextBtn) aiAnalysisNextBtn.disabled = false;
+      }
+
+      function showAiAnalysisNextBtn() {
+        if (aiAnalysisNextWrap) aiAnalysisNextWrap.hidden = false;
+      }
 
       function clearAiAnalysis() {
         aiAnalysisResultEl.hidden = true;
         aiAnalysisResultEl.className = "ai-reply";
         aiAnalysisResultEl.textContent = "";
         aiAnalysisResultEl.innerHTML = "";
+        hideAiAnalysisNextBtn();
       }
 
       function showAiAnalysisSection() {
@@ -2917,6 +2932,7 @@
         }
 
         aiAnalyzeBtn.disabled = true;
+        hideAiAnalysisNextBtn();
         aiAnalysisResultEl.hidden = false;
         aiAnalysisResultEl.className = "ai-reply loading";
         aiAnalysisResultEl.textContent = "AI 正在分析农户画像与转型路径…";
@@ -2949,12 +2965,16 @@
         } finally {
           aiAnalyzeBtn.disabled = false;
           if (state.ending) {
-            setTimeout(() => showPostGameSurvey(), 600);
+            showAiAnalysisNextBtn();
           }
         }
       }
 
       aiAnalyzeBtn.addEventListener("click", requestAiAnalysis);
+      aiAnalysisNextBtn?.addEventListener("click", () => {
+        if (aiAnalysisNextBtn) aiAnalysisNextBtn.disabled = true;
+        showPostGameSurvey();
+      });
       })();
     </script>
   </body>
