@@ -992,7 +992,7 @@
             </div>
           </section>
 
-          <section class="card ai-analysis compact-hint">
+          <section class="card ai-analysis compact-hint" id="aiAnalysisSection" style="display:none;">
             <div class="card-header">
               <div class="card-icon">🤖</div>
               <h2>第三步：AI 分析</h2>
@@ -1957,6 +1957,7 @@
         pushLog(`【终局】${summary}`);
         state.ending = { type, summary };
         finalizeResearchSession(type, summary);
+        showAiAnalysisSection();
         requestAiAnalysis();
       }
 
@@ -2210,7 +2211,7 @@
         playArea.scrollIntoView({ behavior: "smooth", block: "start" });
         endingBoxEl.innerHTML = "";
         logBoxEl.innerHTML = "";
-        clearAiAnalysis();
+        hideAiAnalysisSection();
 
         researchSession.id = await createResearchSession(data);
 
@@ -2248,7 +2249,7 @@
         document.body.classList.remove("is-playing");
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
-        clearAiAnalysis();
+        hideAiAnalysisSection();
         document.getElementById("setupSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
@@ -2775,12 +2776,24 @@
 
       const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
       const aiAnalysisResultEl = document.getElementById("aiAnalysisResult");
+      const aiAnalysisSection = document.getElementById("aiAnalysisSection");
 
       function clearAiAnalysis() {
         aiAnalysisResultEl.hidden = true;
         aiAnalysisResultEl.className = "ai-reply";
         aiAnalysisResultEl.textContent = "";
         aiAnalysisResultEl.innerHTML = "";
+      }
+
+      function showAiAnalysisSection() {
+        if (!aiAnalysisSection) return;
+        aiAnalysisSection.style.display = "block";
+        aiAnalysisSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function hideAiAnalysisSection() {
+        if (aiAnalysisSection) aiAnalysisSection.style.display = "none";
+        clearAiAnalysis();
       }
 
       function escapeHtml(text) {
