@@ -36,16 +36,16 @@
         font-size: 16px;
       }
       .wrap {
-        max-width: 960px;
+        max-width: 1140px;
         margin: 0 auto;
-        padding: 0 16px 48px;
+        padding: 0 16px 40px;
       }
       /* Hero — inspired by 21st.dev Heroes */
       .hero {
         background: var(--bg-hero);
         border-radius: 0 0 var(--radius) var(--radius);
-        padding: 36px 20px 32px;
-        margin: 0 -16px 20px;
+        padding: 28px 20px 24px;
+        margin: 0 -16px 16px;
         text-align: center;
         border-bottom: 1px solid var(--border);
       }
@@ -87,17 +87,66 @@
         border: 1px solid var(--border);
         color: var(--muted);
       }
+      /* 操作步骤条 */
+      .steps-bar {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 720px;
+        margin: 18px auto 0;
+        padding: 0;
+        list-style: none;
+        text-align: left;
+      }
+      .steps-bar li {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .steps-bar li strong {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.78rem;
+        margin-right: 6px;
+        vertical-align: middle;
+      }
+      /* 双栏主布局 */
+      .layout-main {
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 16px;
+        align-items: start;
+      }
+      .main-col {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        min-width: 0;
+      }
+      .side-col {
+        position: sticky;
+        top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
       .card {
         background: var(--card);
         border: 1px solid var(--border);
         border-radius: var(--radius);
-        padding: 20px;
-        margin-bottom: 16px;
+        padding: 18px;
+        margin-bottom: 0;
         box-shadow: var(--shadow);
-        transition: box-shadow 0.2s ease;
-      }
-      .card:hover {
-        box-shadow: var(--shadow-lg);
       }
       .card-header {
         display: flex;
@@ -140,7 +189,89 @@
       }
       .hint {
         color: var(--muted);
-        font-size: 0.95rem;
+        font-size: 0.92rem;
+      }
+      .form-section-title {
+        font-size: 0.92rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 16px 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--border);
+      }
+      .form-section-title:first-of-type {
+        margin-top: 0;
+      }
+      .fixed-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 4px;
+      }
+      .fixed-badge {
+        font-size: 0.85rem;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: #f0f4f1;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .fixed-badge span {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .play-layout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        align-items: start;
+      }
+      .play-main {
+        min-width: 0;
+      }
+      .play-side-panel {
+        min-width: 0;
+      }
+      .play-side-panel .stats {
+        grid-template-columns: 1fr 1fr;
+      }
+      .play-side-panel .log {
+        max-height: 220px;
+        margin-top: 10px;
+      }
+      .log-title {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--muted);
+        margin: 10px 0 6px;
+      }
+      body.is-playing #setupSection {
+        display: none;
+      }
+      body.is-playing .help-panel {
+        display: none;
+      }
+      body.is-playing .layout-main {
+        grid-template-columns: 1fr;
+      }
+      body.is-playing .side-col {
+        display: none;
+      }
+      .setup-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+      .setup-actions .btn-primary {
+        flex: 1;
+        min-width: 140px;
+      }
+      .ai-analysis.compact-hint .hint {
+        margin-bottom: 10px;
       }
       .grid {
         display: grid;
@@ -648,14 +779,34 @@
         gap: 8px;
         margin-top: 16px;
       }
+      @media (max-width: 900px) {
+        .layout-main {
+          grid-template-columns: 1fr;
+        }
+        .side-col {
+          position: static;
+        }
+        .play-layout {
+          grid-template-columns: 1fr;
+        }
+        body.is-playing .help-panel {
+          display: none;
+        }
+      }
       @media (max-width: 640px) {
         .likert-grid {
           grid-template-columns: 1fr;
         }
         .hero {
-          padding: 28px 16px 24px;
+          padding: 24px 14px 20px;
+        }
+        .steps-bar {
+          grid-template-columns: 1fr;
         }
         .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .play-side-panel .stats {
           grid-template-columns: repeat(2, 1fr);
         }
         .stat-card .stat-value {
@@ -677,222 +828,212 @@
           <span class="hero-tag">📊 6 项核心指标</span>
           <span class="hero-tag">⏱ 约 5 分钟</span>
         </div>
+        <ol class="steps-bar" aria-label="操作步骤">
+          <li><strong>1</strong>选身份，填写你家收入、面积、取暖费</li>
+          <li><strong>2</strong>点「开始模拟」，每回合读说明后做选择</li>
+          <li><strong>3</strong>查看结局、AI 分析与操作日志</li>
+        </ol>
       </header>
 
-      <section class="card">
-        <div class="card-header">
-          <div class="card-icon">📖</div>
-          <h2>引入——用前必看</h2>
-        </div>
-        <p class="hint">
-          开始模拟前，建议先了解作品背景，并按你的身份阅读使用说明。
-        </p>
-        <div class="accordion">
-          <details class="accordion-item" id="researchAccordion">
-            <summary>研究背景 / The research</summary>
-            <div class="accordion-body" id="researchPanel">
-              <h3>研究问题</h3>
-              <p>
-                这个沙盘想回答：能不能用一个保定煤改X村庄里每户的收入、住房、取暖成本和能源价格数据，为整个村庄推荐更适合的清洁取暖路径？
-              </p>
-
-              <h3>假设</h3>
-              <p>
-                我假设，使用农户层面的数据后，村级路径建议会更准确，因为它能更好地匹配多数农户的收入、房屋条件、取暖成本和可负担性限制。
-              </p>
-
-              <h3>为什么重要</h3>
-              <p>
-                保定很多农村家庭已经从散煤转向天然气或其他清洁取暖方式。环境收益很明显，但农户真正担心的是：冬天到底用不用得起。
-              </p>
-              <p>
-                一个村庄往往会采用相对统一的煤改X路径。如果这条路径和多数家庭的收入、房屋保温、气价或电价不匹配，就可能出现少开暖气、室温不够，甚至返煤的问题。
-              </p>
-
-              <h3>我做了什么 / 初步发现</h3>
-              <ul>
-                <li>我把年收入、住房面积、取暖花费、合规度、排放达标度和能耗负担率放进同一个模拟流程。</li>
-                <li>模拟器让用户看到不同选择会怎样影响家庭现金流和转型结果。</li>
-                <li>目前的研究说明：清洁取暖不是简单的「改不改」，而是要看补贴、气价、电价、房屋条件和农户可承受能力。</li>
-                <li>下一步，我想把单户模拟扩展成村庄数据表，用多户数据比较煤改气、煤改电、热泵和保温组合哪种更适合一个村。</li>
-              </ul>
+      <div class="layout-main">
+        <div class="main-col">
+          <section class="card" id="setupSection">
+            <div class="card-header">
+              <div class="card-icon">🏠</div>
+              <h2>第一步：填写家庭数据</h2>
             </div>
-          </details>
-          <details class="accordion-item" id="guidanceAccordion">
-            <summary>使用说明 / The guidance</summary>
-            <div class="accordion-body" id="guidancePanel">
-              <p class="hint">请选择与你最接近的身份，查看对应的使用说明：</p>
-              <div class="guidance-identity-row" id="guidanceIdentityRow">
-                <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
-                <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
-                <button type="button" class="guidance-identity-btn" data-guidance-identity="未煤改农户">未煤改农户</button>
-                <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他</button>
+            <form id="profileForm">
+              <p class="form-section-title">你的身份与基本信息</p>
+              <div class="grid">
+                <label>你的身份
+                  <select name="user_identity" id="userIdentitySelect" required>
+                    <option value="">请选择</option>
+                    <option value="学生">学生</option>
+                    <option value="已煤改农户">已煤改农户</option>
+                    <option value="未煤改农户">未煤改农户</option>
+                    <option value="其他">其他</option>
+                  </select>
+                </label>
+                <div id="identityStudentField" class="identity-detail">
+                  <label>年级
+                    <input type="text" name="student_grade" placeholder="例如：高一、高三" />
+                  </label>
+                </div>
+                <div id="identityVillageField" class="identity-detail">
+                  <label>所在村
+                    <input type="text" name="village_name" placeholder="请填写村名" />
+                  </label>
+                </div>
+                <div id="identityOtherField" class="identity-detail">
+                  <label>你的身份
+                    <input type="text" name="identity_other" placeholder="请输入你的身份" />
+                  </label>
+                </div>
               </div>
-              <div id="guidanceContent" class="guidance-content" hidden></div>
-            </div>
-          </details>
-          <details class="accordion-item" id="summaryAccordion">
-            <summary>研究摘要 / Summary</summary>
-            <div class="accordion-body" id="summaryPanel">
-              <p>
-                该议题已知结论是：清洁取暖在空气质量和散煤替代方面成效明显，但农户运行成本受补贴退坡影响非常大，存在「改得起、用不起」的结构性问题。
-                争论焦点在于短期合规和长期可持续之间如何平衡，以及不同县域政策执行差异如何影响农户行为。
-              </p>
-              <p>
-                这是「户级、回合制、可交互」的模拟工具：把年收入、取暖费、合规和排放放进同一个流程里，帮助人们理解为什么同一政策在微观层面会走向不同结局，帮助农户模拟不同路径的结果从而优化村级选择。
-              </p>
-            </div>
-          </details>
-        </div>
-      </section>
-
-      <section class="card">
-        <div class="card-header">
-          <div class="card-icon">ℹ️</div>
-          <h2>介绍 / Introduction</h2>
-        </div>
-        <ul>
-          <li>只保留一个玩家角色：农民家庭（暂不做政府/多主体博弈）。</li>
-          <li>
-            六项核心指标固定为：当前取暖年花费、年收入、年盈余、法律合规度、排放达标度、能耗负担率（取暖年花费/年收入*100%）。
-          </li>
-          <li>合规度由执法概率模型计算；排放达标度由户级 CO₂ 与常住人口的人均线性标准化公式计算；经济类指标按公式更新。</li>
-          <li>回合2若持续拒绝整改可能被处罚；回合5最终仅输出经济破产 / 成功转型。</li>
-        </ul>
-      </section>
-
-      <section class="card">
-        <div class="card-header">
-          <div class="card-icon">🏠</div>
-          <h2>开始模拟（可直接操作）</h2>
-        </div>
-        <form id="profileForm">
-          <div class="grid">
-            <label>你的身份
-              <select name="user_identity" id="userIdentitySelect" required>
-                <option value="">请选择</option>
-                <option value="学生">学生</option>
-                <option value="已煤改农户">已煤改农户</option>
-                <option value="未煤改农户">未煤改农户</option>
-                <option value="其他">其他</option>
-              </select>
-            </label>
-            <div id="identityStudentField" class="identity-detail">
-              <label>年级
-                <input type="text" name="student_grade" placeholder="请填写年级，例如：高一、高三" />
-              </label>
-            </div>
-            <div id="identityVillageField" class="identity-detail">
-              <label>所在村
-                <input type="text" name="village_name" placeholder="请填写村名" />
-              </label>
-            </div>
-            <div id="identityOtherField" class="identity-detail">
-              <label>你的身份
-                <input type="text" name="identity_other" placeholder="请输入你的身份" />
-              </label>
-            </div>
-            <label>游戏角色（固定）
-              <input type="text" value="农民家庭（固定）" disabled />
-            </label>
-            <label>地区（固定）
-              <input type="text" value="保定（固定）" disabled />
-            </label>
-            <label>家中常住人口（人）
-              <input type="number" name="household_population" min="0" step="1" value="0" required />
-            </label>
-            <label>年总收入（元）
-              <input type="number" name="annual_income" min="0" value="0" required />
-            </label>
-            <label>年盈余（元）
-              <input type="number" name="annual_surplus" min="-100000" value="0" required />
-            </label>
-            <label>住房面积（平方米）
-              <input type="number" name="housing_area" min="0" value="0" required />
-            </label>
-            <label>当前取暖方式（固定）
-              <input type="text" value="散煤炉（固定）" disabled />
+              <div class="fixed-badges" aria-label="固定设定">
+                <span class="fixed-badge">角色：<span>农民家庭</span></span>
+                <span class="fixed-badge">地区：<span>保定</span></span>
+                <span class="fixed-badge">取暖：<span>散煤炉</span></span>
+              </div>
               <input type="hidden" name="heating_method" value="散煤炉" />
-            </label>
-            <label>年取暖费用（元）
-              <input type="number" name="winter_cost" min="0" value="0" required />
-            </label>
-          </div>
-          <h3>结局判定阈值</h3>
-          <div class="grid">
-            <label>经济破产阈值：能耗负担率（<=，%）
-              <input type="text" value="10（固定）" disabled />
-              <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
-            </label>
-            <label>被处罚阈值：法律合规度（<）
-              <input type="text" value="30（固定）" disabled />
-              <input type="hidden" name="seized_compliance_threshold" value="30" />
-            </label>
-            <label>成功阈值：排放达标度（>=）
-              <input type="text" value="80（固定）" disabled />
-              <input type="hidden" name="success_emission_threshold" value="80" />
-            </label>
-            <label>成功阈值：法律合规度（=）
-              <input type="text" value="100（固定）" disabled />
-              <input type="hidden" name="success_compliance_min" value="100" />
-            </label>
-            <label>成功阈值：能耗负担率（<=，%）
-              <input type="text" value="10（固定）" disabled />
-              <input type="hidden" name="success_energy_burden_max" value="10" />
-            </label>
-            <label>成功阈值：年盈余（>=，元）
-              <input type="text" value="0（固定）" disabled />
-              <input type="hidden" name="success_surplus_min" value="0" />
-            </label>
-          </div>
-          <p class="hint">点击开始后，系统将按回合给出按钮决策。你的输入与选择会匿名提交到研究数据库，便于汇总分析（不含个人身份信息）。</p>
-          <p id="syncStatus" class="small" aria-live="polite"></p>
-          <div class="btn-row">
-            <button type="submit" class="btn-primary">开始模拟</button>
-            <button type="button" id="resetBtn">重置</button>
-          </div>
-        </form>
-      </section>
 
-      <section class="card" id="playArea" style="display:none;">
-        <div class="card-header">
-          <div class="card-icon">🎮</div>
-          <h2>当前状态</h2>
-        </div>
-        <div class="stepper" id="turnStepper">
-          <div class="stepper-segments" id="stepperSegments"></div>
-          <p class="stepper-label" id="stepperLabel">第 1 回合 / 共 5 回合</p>
-        </div>
-        <div class="stats" id="stats" style="margin-top:14px;"></div>
-        <p id="stageTitle" class="pill" style="margin-top:14px;"></p>
-        <div id="narrative" class="narrative-box"></div>
-        <div id="eventBox"></div>
-        <div class="choices-grid" id="choices"></div>
-        <div id="endingBox"></div>
-      </section>
+              <p class="form-section-title">家庭经济与住房（请填整户数据）</p>
+              <div class="grid">
+                <label>家中常住人口（人）
+                  <input type="number" name="household_population" min="0" step="1" value="0" required />
+                </label>
+                <label>年总收入（元）
+                  <input type="number" name="annual_income" min="0" value="0" required />
+                </label>
+                <label>年盈余（元）
+                  <input type="number" name="annual_surplus" min="-100000" value="0" required />
+                </label>
+                <label>住房面积（平方米）
+                  <input type="number" name="housing_area" min="0" value="0" required />
+                </label>
+                <label>年取暖费用（元）
+                  <input type="number" name="winter_cost" min="0" value="0" required />
+                </label>
+              </div>
 
-      <section class="card ai-analysis">
-        <div class="card-header">
-          <div class="card-icon">🤖</div>
-          <h2>AI分析</h2>
-        </div>
-        <p class="hint">
-          根据你输入的农户信息（收入、盈余、住房面积等）与下方操作日志，AI 将以<strong>分条要点、通俗易懂</strong>的方式生成三部分报告：
-          农户形象解析、转型建议、政策与民生矛盾解读。模拟结束后会自动生成；也可手动点击按钮刷新。
-        </p>
-        <div class="btn-row">
-          <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成 AI 分析</button>
-        </div>
-        <div id="aiAnalysisResult" class="ai-reply" hidden aria-live="polite"></div>
-      </section>
+              <details class="accordion-item" style="margin-top:12px;">
+                <summary>结局判定阈值（固定，一般无需修改）</summary>
+                <div class="accordion-body">
+                  <div class="grid">
+                    <label>经济破产：能耗负担率（≤ %）
+                      <input type="text" value="10（固定）" disabled />
+                      <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
+                    </label>
+                    <label>被处罚：法律合规度（&lt;）
+                      <input type="text" value="30（固定）" disabled />
+                      <input type="hidden" name="seized_compliance_threshold" value="30" />
+                    </label>
+                    <label>成功：排放达标度（≥）
+                      <input type="text" value="80（固定）" disabled />
+                      <input type="hidden" name="success_emission_threshold" value="80" />
+                    </label>
+                    <label>成功：法律合规度（=）
+                      <input type="text" value="100（固定）" disabled />
+                      <input type="hidden" name="success_compliance_min" value="100" />
+                    </label>
+                    <label>成功：能耗负担率（≤ %）
+                      <input type="text" value="10（固定）" disabled />
+                      <input type="hidden" name="success_energy_burden_max" value="10" />
+                    </label>
+                    <label>成功：年盈余（≥ 元）
+                      <input type="text" value="0（固定）" disabled />
+                      <input type="hidden" name="success_surplus_min" value="0" />
+                    </label>
+                  </div>
+                </div>
+              </details>
 
-      <section class="card">
-        <div class="card-header">
-          <div class="card-icon">📋</div>
-          <h2>操作日志</h2>
+              <p class="hint" style="margin-top:10px;">填写后点「开始模拟」，系统会按 5 个回合给出选择；数据匿名提交用于研究汇总。</p>
+              <p id="syncStatus" class="small" aria-live="polite"></p>
+              <div class="setup-actions">
+                <button type="submit" class="btn-primary">开始模拟 →</button>
+                <button type="button" id="resetBtn">重置</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="card" id="playArea" style="display:none;">
+            <div class="card-header">
+              <div class="card-icon">🎮</div>
+              <h2>第二步：做选择</h2>
+            </div>
+            <div class="play-layout">
+              <div class="play-main">
+                <div class="stepper" id="turnStepper">
+                  <div class="stepper-segments" id="stepperSegments"></div>
+                  <p class="stepper-label" id="stepperLabel">第 1 回合 / 共 5 回合</p>
+                </div>
+                <p id="stageTitle" class="pill"></p>
+                <div id="narrative" class="narrative-box"></div>
+                <div id="eventBox"></div>
+                <div class="choices-grid" id="choices"></div>
+                <div id="endingBox"></div>
+              </div>
+              <aside class="play-side-panel">
+                <p class="form-section-title" style="margin-top:0;">当前指标</p>
+                <div class="stats" id="stats"></div>
+                <p class="log-title">操作日志</p>
+                <div class="log" id="logBox"></div>
+              </aside>
+            </div>
+          </section>
+
+          <section class="card ai-analysis compact-hint">
+            <div class="card-header">
+              <div class="card-icon">🤖</div>
+              <h2>第三步：AI 分析</h2>
+            </div>
+            <p class="hint">
+              模拟结束后会自动生成三部分报告（农户画像、转型建议、政策矛盾解读）；也可手动刷新。
+            </p>
+            <div class="btn-row">
+              <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成 AI 分析</button>
+            </div>
+            <div id="aiAnalysisResult" class="ai-reply" hidden aria-live="polite"></div>
+          </section>
         </div>
-        <div class="log" id="logBox"></div>
-      </section>
+
+        <aside class="side-col">
+          <section class="card help-panel">
+            <div class="card-header">
+              <div class="card-icon">📖</div>
+              <h2>帮助说明</h2>
+            </div>
+            <p class="hint">开始前可展开查看；不确定怎么填时先看「使用说明」。</p>
+            <div class="accordion">
+              <details class="accordion-item" id="guidanceAccordion">
+                <summary>使用说明（推荐先看）</summary>
+                <div class="accordion-body" id="guidancePanel">
+                  <p class="hint">选择与你最接近的身份：</p>
+                  <div class="guidance-identity-row" id="guidanceIdentityRow">
+                    <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
+                    <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
+                    <button type="button" class="guidance-identity-btn" data-guidance-identity="未煤改农户">未煤改农户</button>
+                    <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他</button>
+                  </div>
+                  <div id="guidanceContent" class="guidance-content" hidden></div>
+                </div>
+              </details>
+              <details class="accordion-item">
+                <summary>游戏规则速览</summary>
+                <div class="accordion-body">
+                  <ul style="margin:0 0 0 18px;padding:0;">
+                    <li>玩家角色固定为保定农村<strong>农民家庭</strong>。</li>
+                    <li>六项指标：取暖费、年收入、年盈余、合规度、排放达标度、能耗负担率。</li>
+                    <li>共 5 回合做选择；回合 2 持续违规可能被处罚。</li>
+                    <li>终局：成功转型 / 经济破产 / 被处罚。</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="accordion-item" id="researchAccordion">
+                <summary>研究背景</summary>
+                <div class="accordion-body" id="researchPanel">
+                  <h3>研究问题</h3>
+                  <p>能不能用村庄里每户的收入、住房、取暖成本数据，为整个村庄推荐更适合的清洁取暖路径？</p>
+                  <h3>为什么重要</h3>
+                  <p>环境收益明显，但农户真正担心的是：冬天到底用不用得起。路径与多数家庭不匹配时，可能出现少开暖气甚至返煤。</p>
+                  <h3>初步发现</h3>
+                  <ul>
+                    <li>清洁取暖要看补贴、气价、电价、房屋条件和可承受能力。</li>
+                    <li>下一步拟扩展为村庄多户数据对比。</li>
+                  </ul>
+                </div>
+              </details>
+              <details class="accordion-item" id="summaryAccordion">
+                <summary>研究摘要</summary>
+                <div class="accordion-body" id="summaryPanel">
+                  <p>清洁取暖成效明显，但运行成本受补贴退坡影响大，存在「改得起、用不起」问题。本工具帮助理解同一政策在不同家庭走向不同结局的原因。</p>
+                </div>
+              </details>
+            </div>
+          </section>
+        </aside>
+      </div>
     </div>
 
     <div id="surveyOverlay" class="survey-overlay" hidden>
@@ -2035,6 +2176,7 @@
         };
 
         playArea.style.display = "block";
+        document.body.classList.add("is-playing");
         playArea.scrollIntoView({ behavior: "smooth", block: "start" });
         endingBoxEl.innerHTML = "";
         logBoxEl.innerHTML = "";
@@ -2069,6 +2211,7 @@
         resetResearchSession();
         updateIdentityDetailFields();
         playArea.style.display = "none";
+        document.body.classList.remove("is-playing");
         logBoxEl.innerHTML = "";
         endingBoxEl.innerHTML = "";
         clearAiAnalysis();
@@ -2081,22 +2224,19 @@
       });
 
       document.getElementById("guidanceAccordion")?.addEventListener("toggle", (e) => {
-        if (e.target.open) {
-          document.getElementById("researchAccordion")?.removeAttribute("open");
-          document.getElementById("summaryAccordion")?.removeAttribute("open");
-        }
+        if (e.target !== e.currentTarget || !e.target.open) return;
+        document.getElementById("researchAccordion")?.removeAttribute("open");
+        document.getElementById("summaryAccordion")?.removeAttribute("open");
       });
       document.getElementById("researchAccordion")?.addEventListener("toggle", (e) => {
-        if (e.target.open) {
-          document.getElementById("guidanceAccordion")?.removeAttribute("open");
-          document.getElementById("summaryAccordion")?.removeAttribute("open");
-        }
+        if (e.target !== e.currentTarget || !e.target.open) return;
+        document.getElementById("guidanceAccordion")?.removeAttribute("open");
+        document.getElementById("summaryAccordion")?.removeAttribute("open");
       });
       document.getElementById("summaryAccordion")?.addEventListener("toggle", (e) => {
-        if (e.target.open) {
-          document.getElementById("researchAccordion")?.removeAttribute("open");
-          document.getElementById("guidanceAccordion")?.removeAttribute("open");
-        }
+        if (e.target !== e.currentTarget || !e.target.open) return;
+        document.getElementById("researchAccordion")?.removeAttribute("open");
+        document.getElementById("guidanceAccordion")?.removeAttribute("open");
       });
 
       const surveyOverlay = document.getElementById("surveyOverlay");
