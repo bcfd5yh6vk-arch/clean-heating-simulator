@@ -47,6 +47,7 @@
         padding: 28px 20px 24px;
         margin: 0 -16px 16px;
         border-bottom: 1px solid var(--border);
+        text-align: center;
       }
       .hero-inner {
         display: grid;
@@ -204,8 +205,13 @@
         display: block;
         width: 28px;
         height: 28px;
-        margin-bottom: 6px;
+        margin: 0 auto 6px;
         color: var(--primary);
+      }
+      .steps-bar .step-icon svg {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
       /* 首屏下方：三步流程小图标条 */
       .visual-flow {
@@ -366,6 +372,9 @@
         font-size: 0.92rem;
       }
       .form-section-title {
+        display: flex;
+        align-items: center;
+        gap: 6px;
         font-size: 0.92rem;
         font-weight: 700;
         color: var(--primary);
@@ -383,6 +392,9 @@
         margin-bottom: 4px;
       }
       .fixed-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
         font-size: 0.85rem;
         padding: 6px 12px;
         border-radius: 999px;
@@ -1051,15 +1063,15 @@
         </div>
         <ol class="steps-bar" aria-label="操作步骤">
           <li>
-            <span class="step-icon" aria-hidden="true"><svg><use href="#icon-form"/></svg></span>
+            <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-form"/></svg></span>
             <strong>1</strong>选身份，填收入、面积、取暖费
           </li>
           <li>
-            <span class="step-icon" aria-hidden="true"><svg><use href="#icon-choice"/></svg></span>
+            <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-choice"/></svg></span>
             <strong>2</strong>点「开始模拟」，每回合读说明后选一个按钮
           </li>
           <li>
-            <span class="step-icon" aria-hidden="true"><svg><use href="#icon-chart"/></svg></span>
+            <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-chart"/></svg></span>
             <strong>3</strong>看结局与 AI 分析，再填 2 分钟小调查
           </li>
         </ol>
@@ -1068,17 +1080,17 @@
       <!-- 【三步流程图标条】图标见页面顶部内联 SVG 图标库 -->
       <section class="visual-flow" aria-label="这个网页做什么">
         <article class="visual-flow-card">
-          <span class="ui-icon" aria-hidden="true"><svg><use href="#icon-family"/></svg></span>
+          <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>
           <h3>代入一户农家</h3>
           <p>填收入、住房、取暖费——就像替这家人管账本</p>
         </article>
         <article class="visual-flow-card">
-          <span class="ui-icon" aria-hidden="true"><svg><use href="#icon-choice"/></svg></span>
+          <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-choice"/></svg></span>
           <h3>5 回合做选择</h3>
           <p>改不改、选天然气还是热泵、补贴少了怎么办</p>
         </article>
         <article class="visual-flow-card">
-          <span class="ui-icon" aria-hidden="true"><svg><use href="#icon-money"/></svg></span>
+          <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>
           <h3>看钱和排放怎么变</h3>
           <p>取暖费、存款、合规度一目了然，还有 AI 解读</p>
         </article>
@@ -1088,7 +1100,7 @@
         <div class="main-col">
           <section class="card" id="setupSection">
             <div class="card-header">
-              <div class="card-icon" aria-hidden="true"><svg><use href="#icon-home"/></svg></div>
+              <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></div>
               <h2>第一步：填写家庭数据</h2>
             </div>
             <div class="setup-quick-tip">
@@ -1100,7 +1112,7 @@
               </ol>
             </div>
             <form id="profileForm">
-              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg><use href="#icon-family"/></svg></span>你的身份与基本信息</p>
+              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>你的身份与基本信息</p>
               <div class="grid">
                 <label>你的身份
                   <select name="user_identity" id="userIdentitySelect" required>
@@ -1128,13 +1140,13 @@
                 </div>
               </div>
               <div class="fixed-badges" aria-label="固定设定">
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg><use href="#icon-home"/></svg></span>地区：<span>保定</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg><use href="#icon-heating"/></svg></span>取暖：<span>散煤炉</span></span>
+                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
+                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>保定</span></span>
+                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>取暖：<span>散煤炉</span></span>
               </div>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
-              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg><use href="#icon-money"/></svg></span>家庭经济与住房（请填整户数据）</p>
+              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>家庭经济与住房（请填整户数据）</p>
               <div class="grid">
                 <label>家中常住人口（人）
                   <span class="field-hint">用于算人均排放；不确定可填 4</span>
@@ -1202,7 +1214,7 @@
           <section class="card" id="playArea" style="display:none;">
             <div class="card-header card-header-split">
               <div class="card-header-title">
-                <div class="card-icon" aria-hidden="true"><svg><use href="#icon-game"/></svg></div>
+                <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-game"/></svg></div>
                 <h2>第二步：做选择</h2>
               </div>
               <button type="button" id="resetPlayBtn" class="btn-reset-play">重新填写 / 重置</button>
@@ -1230,7 +1242,7 @@
 
           <section class="card ai-analysis compact-hint" id="aiAnalysisSection" style="display:none;">
             <div class="card-header">
-              <div class="card-icon" aria-hidden="true"><svg><use href="#icon-ai"/></svg></div>
+              <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-ai"/></svg></div>
               <h2>第三步：AI 分析</h2>
             </div>
             <p class="hint">
@@ -1249,7 +1261,7 @@
         <aside class="side-col">
           <section class="card help-panel">
             <div class="card-header">
-              <div class="card-icon" aria-hidden="true"><svg><use href="#icon-book"/></svg></div>
+              <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-book"/></svg></div>
               <h2>帮助说明</h2>
             </div>
             <p class="hint">下方可展开「使用说明」查看填数参考与玩法；不确定怎么填时先看这里。</p>
