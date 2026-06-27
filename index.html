@@ -381,6 +381,16 @@
         color: var(--text);
         font-weight: 600;
       }
+      .fixed-setting-hint {
+        margin: 8px 0 12px;
+        padding: 10px 12px;
+        background: #f8fdf9;
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--primary);
+        border-radius: var(--radius-sm);
+        line-height: 1.55;
+        text-align: left;
+      }
       .play-layout {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -1100,6 +1110,9 @@
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>保定</span></span>
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>取暖：<span>散煤炉</span></span>
               </div>
+              <p id="coalStartHint" class="hint fixed-setting-hint" hidden>
+                <strong>说明：</strong>模拟统一从「散煤时代」开局，方便对比不同改造路线；不代表你现在的取暖方式。已改气/改电的农户，请填改造前那 1～2 个冬天的取暖费。
+              </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
               <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>家庭经济与住房（请填整户数据）</p>
@@ -1725,6 +1738,7 @@
       const identityStudentField = document.getElementById("identityStudentField");
       const identityVillageField = document.getElementById("identityVillageField");
       const identityOtherField = document.getElementById("identityOtherField");
+      const coalStartHint = document.getElementById("coalStartHint");
 
       function isVillageIdentity(identity) {
         return identity === "已煤改农户" || identity === "未煤改农户";
@@ -1742,6 +1756,7 @@
         if (studentInput) studentInput.required = identity === "学生";
         if (villageInput) villageInput.required = isVillageIdentity(identity);
         if (otherInput) otherInput.required = identity === "其他";
+        coalStartHint?.toggleAttribute("hidden", !isVillageIdentity(identity));
       }
 
       function readIdentityDetail(formData) {
