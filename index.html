@@ -387,6 +387,11 @@
         border-color: var(--primary-light);
         box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.15);
       }
+      input::placeholder,
+      textarea::placeholder {
+        color: #9aa89f;
+        opacity: 1;
+      }
       button {
         cursor: pointer;
         min-height: 44px;
@@ -935,7 +940,7 @@
               <strong>30 秒上手：</strong>
               <ol>
                 <li>先选<strong>你的身份</strong>（学生请选「学生」并填年级；不是农户也可以，代入你熟悉的一户北方农村家庭即可）</li>
-                <li>下面数字填<strong>整户</strong>情况——已填好常见示例，可按真实情况改，<strong>不要全留 0</strong></li>
+                <li>下面数字填<strong>整户</strong>情况——点击各栏填写，可参考灰色小字里的常见区间</li>
                 <li>填完点最下方绿色按钮 <strong>「开始模拟 →」</strong></li>
               </ol>
             </div>
@@ -978,23 +983,23 @@
               <div class="grid">
                 <label>家中常住人口（人）
                   <span class="field-hint">用于算人均排放；不确定可填 4</span>
-                  <input type="number" name="household_population" min="1" step="1" value="4" required />
+                  <input type="text" name="household_population" inputmode="numeric" placeholder="请选择" autocomplete="off" required />
                 </label>
                 <label>年总收入（元）
                   <span class="field-hint">全家一年进账，不是人均；常见约 3–6 万</span>
-                  <input type="number" name="annual_income" min="1" value="50000" required />
+                  <input type="text" name="annual_income" inputmode="numeric" placeholder="请选择" autocomplete="off" required />
                 </label>
                 <label>年盈余（元）
                   <span class="field-hint">一年忙完还剩多少钱（收入减日常开销和取暖费）</span>
-                  <input type="number" name="annual_surplus" min="-100000" value="8000" required />
+                  <input type="text" name="annual_surplus" inputmode="numeric" placeholder="请选择" autocomplete="off" required />
                 </label>
                 <label>住房面积（平方米）
                   <span class="field-hint">按实际采暖或建筑面积；常见约 80–120</span>
-                  <input type="number" name="housing_area" min="1" value="120" required />
+                  <input type="text" name="housing_area" inputmode="numeric" placeholder="请选择" autocomplete="off" required />
                 </label>
                 <label>年取暖费用（元）
                   <span class="field-hint">一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
-                  <input type="number" name="winter_cost" min="1" value="3000" required />
+                  <input type="text" name="winter_cost" inputmode="numeric" placeholder="请选择" autocomplete="off" required />
                 </label>
               </div>
 
@@ -1030,7 +1035,7 @@
                 </div>
               </details>
 
-              <p class="hint" style="margin-top:10px;">不确定具体数字？保留示例先玩一局也行。点「开始模拟」后每回合只需点一个选项。</p>
+              <p class="hint" style="margin-top:10px;">不确定具体数字？可先按小字提示估一个数试玩。点「开始模拟」后每回合只需点一个选项。</p>
               <p id="syncStatus" class="small" aria-live="polite"></p>
               <div class="setup-actions">
                 <button type="submit" class="btn-primary">开始模拟 →</button>
@@ -1640,6 +1645,33 @@
         return true;
       }
 
+      function validateHouseholdFields(formData) {
+        const rules = [
+          { name: "household_population", label: "家中常住人口", min: 1, integer: true },
+          { name: "annual_income", label: "年总收入", min: 1, integer: true },
+          { name: "annual_surplus", label: "年盈余", min: -100000, integer: true },
+          { name: "housing_area", label: "住房面积", min: 1, integer: true },
+          { name: "winter_cost", label: "年取暖费用", min: 1, integer: true }
+        ];
+        for (const rule of rules) {
+          const raw = String(formData.get(rule.name) ?? "").trim();
+          if (!raw) {
+            alert(`请填写${rule.label}。`);
+            return false;
+          }
+          const num = Number(raw);
+          if (!Number.isFinite(num) || (rule.integer && !Number.isInteger(num))) {
+            alert(`${rule.label}请填写有效数字。`);
+            return false;
+          }
+          if (num < rule.min) {
+            alert(`${rule.label}不能小于 ${rule.min}。`);
+            return false;
+          }
+        }
+        return true;
+      }
+
       userIdentitySelect?.addEventListener("change", updateIdentityDetailFields);
       updateIdentityDetailFields();
 
@@ -2236,6 +2268,7 @@
         e.preventDefault();
         const data = new FormData(profileForm);
         if (!validateIdentityFields(data)) return;
+        if (!validateHouseholdFields(data)) return;
         resetResearchSession();
         state.isEnergySaving = false;
         state.operatingFactor = 1.0;
