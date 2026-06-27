@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>保定农户清洁取暖转型模拟器（单文件作品页）</title>
+    <title>保定农村清洁取暖模拟器 · 5分钟体验</title>
     <style>
       :root {
         --bg: #f0f4ef;
@@ -71,6 +71,62 @@
         margin: 0 auto;
         color: var(--muted);
         font-size: 1rem;
+      }
+      .hero-what {
+        max-width: 680px;
+        margin: 14px auto 0;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        text-align: left;
+        font-size: 0.94rem;
+        line-height: 1.55;
+        color: var(--text);
+      }
+      .hero-what strong {
+        color: var(--primary);
+      }
+      .hero-cta {
+        margin: 14px 0 0;
+      }
+      .hero-scroll-link {
+        display: inline-block;
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid var(--border);
+      }
+      .hero-scroll-link:hover {
+        border-color: var(--primary-light);
+        background: var(--primary-bg);
+      }
+      .setup-quick-tip {
+        background: #f8fdf9;
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--primary);
+        border-radius: var(--radius-sm);
+        padding: 12px 14px;
+        margin-bottom: 14px;
+        font-size: 0.92rem;
+        line-height: 1.55;
+      }
+      .setup-quick-tip ol {
+        margin: 8px 0 0;
+        padding-left: 20px;
+      }
+      .setup-quick-tip li {
+        margin-bottom: 4px;
+      }
+      .field-hint {
+        font-size: 0.82rem;
+        color: var(--muted);
+        font-weight: 400;
+        line-height: 1.4;
       }
       .hero-tags {
         display: flex;
@@ -832,6 +888,9 @@
         .stats {
           grid-template-columns: repeat(2, 1fr);
         }
+        .play-layout {
+          grid-template-columns: 1fr;
+        }
         .play-side-panel .stats {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -844,20 +903,24 @@
   <body>
     <div class="wrap">
       <header class="hero">
-        <span class="hero-badge">保定 · 清洁取暖转型模拟</span>
-        <h1>保定农户清洁取暖转型模拟器</h1>
+        <span class="hero-badge">5 分钟体验 · 无需注册</span>
+        <h1>农村换暖气，家里到底扛不扛得住？</h1>
         <p class="hero-lead">
-          5 个回合，体验「改得起」和「用不起」之间的真实张力——帮你看清不同取暖路径对家庭账本的影响。
+          这是一个<strong>网页小模拟</strong>：代入河北保定一户农村家庭，在「煤改气 / 煤改电」政策下走 5 个回合，看<strong>冬天取暖费</strong>和<strong>家里存款</strong>会怎么变。
         </p>
-        <div class="hero-tags">
-          <span class="hero-tag">🌾 面向农户</span>
-          <span class="hero-tag">📊 6 项核心指标</span>
-          <span class="hero-tag">⏱ 约 5 分钟</span>
+        <div class="hero-what">
+          <strong>你会做什么：</strong>填家庭基本情况 → 每回合读情景、点一个选项（改不改、选哪条路线、补贴少了怎么办）→ 看结局，并可让 AI 帮你解读本局结果。
         </div>
+        <div class="hero-tags">
+          <span class="hero-tag">⏱ 约 5 分钟</span>
+          <span class="hero-tag">📱 手机可玩</span>
+          <span class="hero-tag">🔒 数据匿名</span>
+        </div>
+        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 直接开始：往下填表，点「开始模拟」</a></p>
         <ol class="steps-bar" aria-label="操作步骤">
-          <li><strong>1</strong>选身份，填写你家收入、面积、取暖费</li>
-          <li><strong>2</strong>点「开始模拟」，每回合读说明后做选择</li>
-          <li><strong>3</strong>查看结局、AI 分析与操作日志</li>
+          <li><strong>1</strong>选身份，填收入、面积、取暖费（有示例可参考）</li>
+          <li><strong>2</strong>点「开始模拟」，每回合读说明后选一个按钮</li>
+          <li><strong>3</strong>看结局与 AI 分析，再填 2 分钟小调查</li>
         </ol>
       </header>
 
@@ -867,6 +930,14 @@
             <div class="card-header">
               <div class="card-icon">🏠</div>
               <h2>第一步：填写家庭数据</h2>
+            </div>
+            <div class="setup-quick-tip">
+              <strong>30 秒上手：</strong>
+              <ol>
+                <li>先选<strong>你的身份</strong>（学生请选「学生」并填年级；不是农户也可以，代入你熟悉的一户北方农村家庭即可）</li>
+                <li>下面数字填<strong>整户</strong>情况——已填好常见示例，可按真实情况改，<strong>不要全留 0</strong></li>
+                <li>填完点最下方绿色按钮 <strong>「开始模拟 →」</strong></li>
+              </ol>
             </div>
             <form id="profileForm">
               <p class="form-section-title">你的身份与基本信息</p>
@@ -906,24 +977,29 @@
               <p class="form-section-title">家庭经济与住房（请填整户数据）</p>
               <div class="grid">
                 <label>家中常住人口（人）
-                  <input type="number" name="household_population" min="0" step="1" value="0" required />
+                  <span class="field-hint">用于算人均排放；不确定可填 4</span>
+                  <input type="number" name="household_population" min="1" step="1" value="4" required />
                 </label>
                 <label>年总收入（元）
-                  <input type="number" name="annual_income" min="0" value="0" required />
+                  <span class="field-hint">全家一年进账，不是人均；常见约 3–6 万</span>
+                  <input type="number" name="annual_income" min="1" value="50000" required />
                 </label>
                 <label>年盈余（元）
-                  <input type="number" name="annual_surplus" min="-100000" value="0" required />
+                  <span class="field-hint">一年忙完还剩多少钱（收入减日常开销和取暖费）</span>
+                  <input type="number" name="annual_surplus" min="-100000" value="8000" required />
                 </label>
                 <label>住房面积（平方米）
-                  <input type="number" name="housing_area" min="0" value="0" required />
+                  <span class="field-hint">按实际采暖或建筑面积；常见约 80–120</span>
+                  <input type="number" name="housing_area" min="1" value="120" required />
                 </label>
                 <label>年取暖费用（元）
-                  <input type="number" name="winter_cost" min="0" value="0" required />
+                  <span class="field-hint">一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
+                  <input type="number" name="winter_cost" min="1" value="3000" required />
                 </label>
               </div>
 
               <details class="accordion-item" style="margin-top:12px;">
-                <summary>结局判定阈值（固定，一般无需修改）</summary>
+                <summary>高级设置：结局判定阈值（一般不用改）</summary>
                 <div class="accordion-body">
                   <div class="grid">
                     <label>经济破产：能耗负担率（≤ %）
@@ -954,7 +1030,7 @@
                 </div>
               </details>
 
-              <p class="hint" style="margin-top:10px;">填写后点「开始模拟」，系统会按 5 个回合给出选择；数据匿名提交用于研究汇总。</p>
+              <p class="hint" style="margin-top:10px;">不确定具体数字？保留示例先玩一局也行。点「开始模拟」后每回合只需点一个选项。</p>
               <p id="syncStatus" class="small" aria-live="polite"></p>
               <div class="setup-actions">
                 <button type="submit" class="btn-primary">开始模拟 →</button>
@@ -1016,7 +1092,7 @@
               <div class="card-icon">📖</div>
               <h2>帮助说明</h2>
             </div>
-            <p class="hint">开始前可展开查看；不确定怎么填时先看「使用说明」。</p>
+            <p class="hint">下方可展开「使用说明」查看填数参考与玩法；不确定怎么填时先看这里。</p>
             <div class="accordion">
               <details class="accordion-item" id="guidanceAccordion">
                 <summary>使用说明（推荐先看）</summary>
@@ -1517,10 +1593,6 @@
       const syncStatusEl = document.getElementById("syncStatus");
       const simConfig = await loadSimulationConfigFromSpec();
       applySimulationConfig(simConfig);
-      if (syncStatusEl) {
-        syncStatusEl.textContent = "算法常数已从 algori_spec.md 加载。";
-        syncStatusEl.style.color = "var(--muted)";
-      }
       const userIdentitySelect = document.getElementById("userIdentitySelect");
       const identityStudentField = document.getElementById("identityStudentField");
       const identityVillageField = document.getElementById("identityVillageField");
