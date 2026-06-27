@@ -46,33 +46,8 @@
         border-radius: 0 0 var(--radius) var(--radius);
         padding: 28px 20px 24px;
         margin: 0 -16px 16px;
+        text-align: center;
         border-bottom: 1px solid var(--border);
-        text-align: center;
-      }
-      .hero-inner {
-        display: grid;
-        grid-template-columns: minmax(200px, 300px) 1fr;
-        gap: 22px;
-        align-items: center;
-        max-width: 960px;
-        margin: 0 auto;
-      }
-      .hero-visual {
-        margin: 0;
-      }
-      /* 封面图：把 assets/hero-cover.svg 换成你自己的图即可（建议同名或改 src） */
-      .hero-cover-img {
-        width: 100%;
-        height: auto;
-        display: block;
-        border-radius: var(--radius);
-        border: 1px solid var(--border);
-        box-shadow: var(--shadow-lg);
-        background: #fff;
-      }
-      .hero-content {
-        min-width: 0;
-        text-align: center;
       }
       .hero-badge {
         display: inline-block;
@@ -991,10 +966,6 @@
         .hero {
           padding: 24px 14px 20px;
         }
-        .hero-inner {
-          grid-template-columns: 1fr;
-          gap: 16px;
-        }
         .visual-flow {
           grid-template-columns: 1fr;
         }
@@ -1032,35 +1003,20 @@
     </svg>
     <div class="wrap">
       <header class="hero">
-        <div class="hero-inner">
-          <!-- 【封面图位置】文件：assets/hero-cover.svg — 换成照片时改 src 即可，见文末说明 -->
-          <figure class="hero-visual">
-            <img
-              src="assets/hero-cover.svg"
-              alt="北方农村房屋从散煤取暖转向清洁取暖，并关注家庭取暖费用"
-              class="hero-cover-img"
-              width="480"
-              height="280"
-              loading="eager"
-            />
-          </figure>
-          <div class="hero-content">
-            <span class="hero-badge">5 分钟体验 · 无需注册</span>
-            <h1>农村换暖气，家里到底扛不扛得住？</h1>
-            <p class="hero-lead">
-              这是一个<strong>网页小模拟</strong>：代入河北保定一户农村家庭，在「煤改气 / 煤改电」政策下走 5 个回合，看<strong>冬天取暖费</strong>和<strong>家里存款</strong>会怎么变。
-            </p>
-            <div class="hero-what">
-              <strong>你会做什么：</strong>填家庭基本情况 → 每回合读情景、点一个选项（改不改、选哪条路线、补贴少了怎么办）→ 看结局，并可让 AI 帮你解读本局结果。
-            </div>
-            <div class="hero-tags">
-              <span class="hero-tag">⏱ 约 5 分钟</span>
-              <span class="hero-tag">📱 手机可玩</span>
-              <span class="hero-tag">🔒 数据匿名</span>
-            </div>
-            <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 直接开始：往下填表，点「开始模拟」</a></p>
-          </div>
+        <span class="hero-badge">5 分钟体验 · 无需注册</span>
+        <h1>农村换暖气，家里到底扛不扛得住？</h1>
+        <p class="hero-lead">
+          这是一个<strong>网页小模拟</strong>：代入河北保定一户农村家庭，在「煤改气 / 煤改电」政策下走 5 个回合，看<strong>冬天取暖费</strong>和<strong>家里存款</strong>会怎么变。
+        </p>
+        <div class="hero-what">
+          <strong>你会做什么：</strong>填家庭基本情况 → 每回合读情景、点一个选项（改不改、选哪条路线、补贴少了怎么办）→ 看结局，并可让 AI 帮你解读本局结果。
         </div>
+        <div class="hero-tags">
+          <span class="hero-tag">⏱ 约 5 分钟</span>
+          <span class="hero-tag">📱 手机可玩</span>
+          <span class="hero-tag">🔒 数据匿名</span>
+        </div>
+        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 直接开始：往下填表，点「开始模拟」</a></p>
         <ol class="steps-bar" aria-label="操作步骤">
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-form"/></svg></span>
