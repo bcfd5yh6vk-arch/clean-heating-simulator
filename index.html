@@ -1045,6 +1045,27 @@
         margin-top: 16px;
       }
       @media (max-width: 900px) {
+        html {
+          -webkit-text-size-adjust: 100%;
+          text-size-adjust: 100%;
+        }
+        body {
+          font-size: 18px;
+          line-height: 1.7;
+        }
+        input,
+        select,
+        button,
+        textarea {
+          font-size: 1.05rem;
+          padding: 12px 14px;
+        }
+        button {
+          min-height: 48px;
+        }
+        h2 {
+          font-size: 1.28rem;
+        }
         .layout-main {
           grid-template-columns: 1fr;
         }
@@ -1059,6 +1080,80 @@
         }
       }
       @media (max-width: 640px) {
+        body {
+          font-size: 20px;
+          line-height: 1.75;
+        }
+        .wrap {
+          padding: 0 14px 36px;
+        }
+        .card {
+          padding: 20px 18px;
+        }
+        .hero h1 {
+          font-size: clamp(1.75rem, 6.5vw, 2.25rem);
+        }
+        .consent-panel h1 {
+          font-size: 1.65rem;
+        }
+        h2 {
+          font-size: 1.35rem;
+        }
+        h3 {
+          font-size: 1.12rem;
+        }
+        .hint,
+        .field-hint,
+        .small,
+        .visual-flow-card p,
+        .hero-badge,
+        .hero-tag,
+        .hero-lead,
+        .hero-what,
+        .steps-bar li,
+        .setup-quick-tip,
+        .fixed-badge,
+        .choice-hint,
+        .stat-card .stat-label,
+        .log-title,
+        .stepper-label,
+        .pill,
+        .guidance-content,
+        .guidance-identity-btn,
+        .accordion-body,
+        .consent-lead,
+        .consent-list li,
+        .consent-footer,
+        label,
+        .likert-grid label,
+        .survey-options label {
+          font-size: 1rem;
+        }
+        .visual-flow-card h3,
+        .choice-label,
+        .accordion-item summary,
+        .survey-q legend,
+        .guidance-content h4,
+        .form-section-title,
+        .survey-section-title {
+          font-size: 1.1rem;
+        }
+        .survey-modal {
+          padding: 22px 18px 26px;
+        }
+        .narrative-box,
+        .ai-reply {
+          font-size: 1.05rem;
+        }
+        .stat-card .stat-value {
+          font-size: 1.55rem;
+        }
+        .choice-btn {
+          padding: 16px 18px;
+        }
+        .accordion-item summary {
+          padding: 16px 18px;
+        }
         .likert-grid {
           grid-template-columns: 1fr;
         }
@@ -1079,9 +1174,6 @@
         }
         .play-side-panel .stats {
           grid-template-columns: repeat(2, 1fr);
-        }
-        .stat-card .stat-value {
-          font-size: 1.15rem;
         }
       }
     </style>
