@@ -1350,12 +1350,12 @@
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-book"/></svg></div>
               <h2>帮助说明</h2>
             </div>
-            <p class="hint">下方可展开「使用说明」查看填数参考与玩法；不确定怎么填时先看这里。</p>
+            <p class="hint">在左侧选好身份后，此处会自动展开对应使用说明；也可在下方面板手动切换身份查看。</p>
             <div class="accordion">
               <details class="accordion-item" id="guidanceAccordion">
                 <summary>使用说明（推荐先看）</summary>
                 <div class="accordion-body" id="guidancePanel">
-                  <p class="hint">选择与你最接近的身份：</p>
+                  <p class="hint">与左侧身份同步；也可点击下方按钮切换查看其他身份说明：</p>
                   <div class="guidance-identity-row" id="guidanceIdentityRow">
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
@@ -1871,12 +1871,26 @@
         `
       };
 
-      function showIdentityGuidance(identity) {
+      function showIdentityGuidance(identity, options = {}) {
+        const { openAccordion = true, scrollIntoView = false } = options;
         guidanceIdentityButtons.forEach((btn) => {
           btn.classList.toggle("active", btn.dataset.guidanceIdentity === identity);
         });
         guidanceContent.innerHTML = IDENTITY_GUIDANCE[identity] || "";
         guidanceContent.hidden = !identity;
+
+        const guidanceAccordion = document.getElementById("guidanceAccordion");
+        if (identity && openAccordion && guidanceAccordion) {
+          guidanceAccordion.setAttribute("open", "");
+          document.getElementById("researchAccordion")?.removeAttribute("open");
+          document.getElementById("summaryAccordion")?.removeAttribute("open");
+        } else if (!identity && guidanceAccordion) {
+          guidanceAccordion.removeAttribute("open");
+        }
+
+        if (identity && scrollIntoView) {
+          document.querySelector(".help-panel")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
       }
       const syncStatusEl = document.getElementById("syncStatus");
       const simConfig = await loadSimulationConfigFromSpec();
@@ -1905,6 +1919,9 @@
         if (otherInput) otherInput.required = identity === "其他";
         coalStartHint?.toggleAttribute("hidden", !isVillageIdentity(identity));
         profileForm?.classList.toggle("show-field-hints", identity === "学生" || identity === "其他");
+
+        const scrollHelp = Boolean(identity) && window.matchMedia("(max-width: 900px)").matches;
+        showIdentityGuidance(identity, { scrollIntoView: scrollHelp });
       }
 
       function readIdentityDetail(formData) {
