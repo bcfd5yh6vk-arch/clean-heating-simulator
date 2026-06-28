@@ -4,6 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>保定农村清洁取暖模拟器 · 5分钟体验</title>
+    <script>
+      (function () {
+        if (localStorage.getItem("ch_sim_informed_consent_v1") === "yes") {
+          document.documentElement.classList.add("consent-accepted");
+        }
+      })();
+    </script>
     <style>
       :root {
         --bg: #f0f4ef;
@@ -882,6 +889,84 @@
         flex-direction: column;
         gap: 6px;
       }
+      /* 知情同意首屏 */
+      #consentOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        background: var(--bg-hero);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+        overflow-y: auto;
+      }
+      html.consent-accepted #consentOverlay {
+        display: none !important;
+      }
+      html:not(.consent-accepted) body {
+        overflow: hidden;
+      }
+      .consent-panel {
+        width: min(520px, 100%);
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 24px 22px 22px;
+        box-shadow: var(--shadow-lg);
+        text-align: left;
+      }
+      .consent-panel h1 {
+        margin: 0 0 8px;
+        font-size: 1.35rem;
+        color: var(--text);
+        text-align: center;
+      }
+      .consent-lead {
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 0.94rem;
+        text-align: center;
+        line-height: 1.55;
+      }
+      .consent-list {
+        margin: 0 0 20px;
+        padding: 0;
+        list-style: none;
+      }
+      .consent-list li {
+        margin-bottom: 12px;
+        padding: 12px 14px;
+        background: #f8fdf9;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.94rem;
+        line-height: 1.55;
+        color: var(--text);
+      }
+      .consent-list li:last-child {
+        margin-bottom: 0;
+      }
+      .consent-list strong {
+        display: block;
+        color: var(--primary);
+        margin-bottom: 4px;
+        font-size: 0.98rem;
+      }
+      .consent-actions {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .consent-actions .btn-primary {
+        width: 100%;
+        max-width: 280px;
+        font-size: 1.05rem;
+      }
+      .consent-footer {
+        margin: 14px 0 0;
+        text-align: center;
+        font-size: 0.85rem;
+      }
       .survey-overlay {
         position: fixed;
         inset: 0;
@@ -1011,7 +1096,35 @@
       <symbol id="icon-money" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm.5 2v1.07A2.5 2.5 0 0 0 10 10.5a2.5 2.5 0 0 0 2.5 2.5c.69 0 1.25.56 1.25 1.25S13.19 15.5 12.5 15.5 10 14.94 10 14H8.5c0 1.93 1.57 3.5 3.5 3.5s3.5-1.57 3.5-3.5a3.5 3.5 0 0 0-2.5-3.36V7h-1Z"/></symbol>
       <symbol id="icon-heating" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.55 0 1 .45 1 1v2.07A6 6 0 0 1 18 11v7a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-7a6 6 0 0 1 5-5.93V3c0-.55.45-1 1-1Zm0 6a4 4 0 0 0-4 4v7h8v-7a4 4 0 0 0-4-4Z"/></symbol>
     </svg>
-    <div class="wrap">
+    <div id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
+      <div class="consent-panel">
+        <h1 id="consentTitle">参与前请了解</h1>
+        <p class="consent-lead">在使用本模拟器和小调查之前，请花约 30 秒阅读以下内容。</p>
+        <ul class="consent-list">
+          <li>
+            <strong>匿名</strong>
+            我们不会收集你的姓名、手机号等能直接认出你是谁的信息；填写的数字与选择以匿名方式汇总用于研究。
+          </li>
+          <li>
+            <strong>自愿</strong>
+            参不参加完全由你决定；不点「同意」也可以直接关闭本页，不会有任何后果。
+          </li>
+          <li>
+            <strong>随时可退出</strong>
+            模拟或问卷做到一半不想继续了，随时关掉网页离开即可，不必填完。
+          </li>
+          <li>
+            <strong>数据用途</strong>
+            你的回答只用于本课堂/研究项目，用来改进模拟器与理解煤改气议题，不会作广告或其他商业用途。
+          </li>
+        </ul>
+        <div class="consent-actions">
+          <button type="button" id="consentAgreeBtn" class="btn-primary">同意，进入模拟器</button>
+        </div>
+        <p class="consent-footer hint">若暂不同意，直接关闭本页即可。</p>
+      </div>
+    </div>
+    <div class="wrap" id="mainApp">
       <header class="hero">
         <span class="hero-badge">5 分钟体验 · 无需注册</span>
         <h1>农村换暖气，家里到底扛不扛得住？</h1>
@@ -1294,6 +1407,12 @@
       </div>
     </div>
 
+    <script>
+      document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
+        localStorage.setItem("ch_sim_informed_consent_v1", "yes");
+        document.documentElement.classList.add("consent-accepted");
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (async function bootstrapSimulator() {
