@@ -1402,6 +1402,28 @@
       </div>
     </div>
 
+    <div id="preSurveyOverlay" class="survey-overlay" hidden>
+      <div class="survey-modal" role="dialog" aria-labelledby="preSurveyTitle" aria-modal="true">
+        <h2 id="preSurveyTitle">开始之前</h2>
+        <p class="hint">请用约 10 秒回答下面一题，然后进入模拟。</p>
+        <form id="preSurveyForm">
+          <fieldset class="survey-q">
+            <legend>Q1. 在开始本局模拟前，你对北方农村煤改气问题了解程度？</legend>
+            <div class="likert-grid">
+              <label><input type="radio" name="q1_understanding_before" value="1" required />1 完全没感觉</label>
+              <label><input type="radio" name="q1_understanding_before" value="2" required />2 略有了解</label>
+              <label><input type="radio" name="q1_understanding_before" value="3" required />3 一般</label>
+              <label><input type="radio" name="q1_understanding_before" value="4" required />4 比较了解</label>
+              <label><input type="radio" name="q1_understanding_before" value="5" required />5 非常了解</label>
+            </div>
+          </fieldset>
+          <div class="survey-actions">
+            <button type="submit" class="btn-primary">开始模拟 →</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div id="surveyOverlay" class="survey-overlay" hidden>
       <div class="survey-modal" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
         <h2 id="surveyTitle">2 分钟小调查</h2>
@@ -1446,10 +1468,12 @@
         id: null,
         eventLog: [],
         surveyShown: false,
+        preSurveyQ1: null,
         turnChoices: { 1: null, 2: [], 3: null, 4: null, 5: null }
       };
 
       let syncTimer = null;
+      let pendingFormData = null;
 
       const SIM_CONFIG_BLOCK_RE = /```simulation-config\s*\n([\s\S]*?)\n```/;
 
@@ -1947,16 +1971,19 @@
         researchSession.id = null;
         researchSession.eventLog = [];
         researchSession.surveyShown = false;
+        researchSession.preSurveyQ1 = null;
         researchSession.turnChoices = { 1: null, 2: [], 3: null, 4: null, 5: null };
+        pendingFormData = null;
         if (syncTimer) {
           clearTimeout(syncTimer);
           syncTimer = null;
         }
         setSyncStatus("");
         hidePostGameSurvey();
+        hidePreSurveyQ1();
       }
 
-      async function createResearchSession(formData) {
+      async function createResearchSession(formData, preSurveyQ1) {
         if (!supabaseClient) {
           setSyncStatus("研究数据同步未启用（Supabase 客户端加载失败）。", true);
           return null;
@@ -1979,7 +2006,9 @@
             ((winterCost / Math.max(1, annualIncome)) * 100).toFixed(1)
           ),
           initial_co2_tons: Number(initialBaseline.E_initial.toFixed(3)),
-          event_log: []
+          event_log: [],
+          sq_q1_understanding_before: preSurveyQ1?.value ?? null,
+          sq_q1_understanding_before_label: preSurveyQ1?.label || null
         };
 
         const { error } = await supabaseClient.from("simulation_sessions").insert(payload);
@@ -2532,6 +2561,12 @@
         if (!validateIdentityFields(data)) return;
         if (!validateHouseholdFields(data)) return;
         resetResearchSession();
+        pendingFormData = data;
+        showPreSurveyQ1();
+      });
+
+      async function beginSimulation(data, preSurveyQ1) {
+        researchSession.preSurveyQ1 = preSurveyQ1;
         state.isEnergySaving = false;
         state.operatingFactor = 1.0;
         state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
@@ -2583,7 +2618,7 @@
         logBoxEl.innerHTML = "";
         hideAiAnalysisSection();
 
-        researchSession.id = await createResearchSession(data);
+        researchSession.id = await createResearchSession(data, preSurveyQ1);
 
         pushLog(
           `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），常住人口=${state.initialProfile.household_population || DEFAULT_POPULATION}人，方式=${state.user.heatingMethod}，收入=${state.user.income}，年取暖费用=${state.user.heatingCost}，CO₂=${state.user.co2Tons.toFixed(3)} 吨，排放达标度=${Math.round(state.user.emission)} 分。`
@@ -2597,7 +2632,7 @@
             { id: "B", label: "准备转型" }
           ]
         );
-      });
+      }
 
       function resetSimulation(confirmIfActive = false) {
         if (confirmIfActive && state.active) {
@@ -2648,6 +2683,8 @@
         document.getElementById("guidanceAccordion")?.removeAttribute("open");
       });
 
+      const preSurveyOverlay = document.getElementById("preSurveyOverlay");
+      const preSurveyForm = document.getElementById("preSurveyForm");
       const surveyOverlay = document.getElementById("surveyOverlay");
       const postGameSurveyForm = document.getElementById("postGameSurveyForm");
       const surveyStatusEl = document.getElementById("surveyStatus");
@@ -2687,7 +2724,6 @@
       function buildPostGameSurveyForm(identity) {
         const common = `
           <p class="survey-section-title">共用题（所有人）</p>
-          ${likertField("q1_understanding_before", "Q1. 玩完这局模拟前，你对北方农村煤改气问题了解程度？", ["完全没感觉", "略有了解", "一般", "比较了解", "非常了解"])}
           ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是其中的「改得起但用不起」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
           ${radioField("q3_biggest_impact", "Q3. 模拟中哪一项对你冲击最大？", [
             ["A", "A. 取暖费用突然上涨（如补贴退坡）"],
@@ -2901,8 +2937,8 @@
         return { value: el.value, label: labelFromInput(el) };
       }
 
-      function collectLikertAnswer(name) {
-        const el = postGameSurveyForm.querySelector(`input[name="${name}"]:checked`);
+      function collectLikertAnswer(name, form = postGameSurveyForm) {
+        const el = form.querySelector(`input[name="${name}"]:checked`);
         if (!el) return { value: null, label: "" };
         const value = Number(el.value);
         const label = labelFromInput(el).replace(/^\d+\s*/, "");
@@ -2927,7 +2963,7 @@
           submitted_at: new Date().toISOString(),
           user_identity: identity,
           common: {
-            q1_understanding_before: collectLikertAnswer("q1_understanding_before"),
+            q1_understanding_before: researchSession.preSurveyQ1 || { value: null, label: "" },
             q2_understanding_after: collectLikertAnswer("q2_understanding_after"),
             q3_biggest_impact: collectRadioAnswer("q3_biggest_impact"),
             q3_impact_other:
@@ -3000,8 +3036,8 @@
         const cols = {
           post_survey: responses,
           post_survey_at: responses.submitted_at,
-          sq_q1_understanding_before: responses.common.q1_understanding_before.value,
-          sq_q1_understanding_before_label: responses.common.q1_understanding_before.label || null,
+          sq_q1_understanding_before: responses.common.q1_understanding_before?.value ?? null,
+          sq_q1_understanding_before_label: responses.common.q1_understanding_before?.label || null,
           sq_q2_understanding_after: responses.common.q2_understanding_after.value,
           sq_q2_understanding_after_label: responses.common.q2_understanding_after.label || null,
           sq_q3_biggest_impact: responses.common.q3_biggest_impact.value || null,
@@ -3150,6 +3186,36 @@
         setSyncStatus("本次模拟、AI 分析与小调查均已保存。");
         return true;
       }
+
+      function hidePreSurveyQ1() {
+        if (preSurveyOverlay) preSurveyOverlay.hidden = true;
+        preSurveyForm?.reset();
+      }
+
+      function showPreSurveyQ1() {
+        if (!preSurveyOverlay || !preSurveyForm) {
+          beginSimulation(pendingFormData, null);
+          return;
+        }
+        preSurveyForm.reset();
+        preSurveyOverlay.hidden = false;
+        preSurveyOverlay.scrollTop = 0;
+        document.getElementById("preSurveyTitle")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      preSurveyForm?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (!pendingFormData) return;
+        const preSurveyQ1 = collectLikertAnswer("q1_understanding_before", preSurveyForm);
+        if (preSurveyQ1.value == null) {
+          alert("请先回答 Q1。");
+          return;
+        }
+        const data = pendingFormData;
+        pendingFormData = null;
+        hidePreSurveyQ1();
+        await beginSimulation(data, preSurveyQ1);
+      });
 
       function hidePostGameSurvey() {
         if (surveyOverlay) surveyOverlay.hidden = true;
