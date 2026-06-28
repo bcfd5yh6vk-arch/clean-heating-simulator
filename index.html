@@ -134,6 +134,10 @@
         color: var(--muted);
         font-weight: 400;
         line-height: 1.4;
+        display: none;
+      }
+      #profileForm.show-field-hints .field-hint {
+        display: block;
       }
       .hero-tags {
         display: flex;
@@ -1876,6 +1880,7 @@
         if (villageInput) villageInput.required = isVillageIdentity(identity);
         if (otherInput) otherInput.required = identity === "其他";
         coalStartHint?.toggleAttribute("hidden", !isVillageIdentity(identity));
+        profileForm?.classList.toggle("show-field-hints", identity === "学生" || identity === "其他");
       }
 
       function readIdentityDetail(formData) {
