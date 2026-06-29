@@ -1380,7 +1380,7 @@
                   <input type="text" name="annual_income" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
                 </label>
                 <label>年盈余（元）
-                  <span class="field-hint" data-field="annual_surplus">一年忙完还剩多少钱（收入减日常开销和取暖费）；农村一般为 7–9 千元</span>
+                  <span class="field-hint" data-field="annual_surplus">一年忙完还剩多少钱（收入减日常开销和取暖费）；不确定可填 7–9 千元</span>
                   <input type="text" name="annual_surplus" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
                 </label>
                 <label>住房面积（平方米）
@@ -2049,7 +2049,7 @@
       const FIELD_HINTS_DEFAULT = {
         household_population: "用于算人均排放",
         annual_income: "全家一年进账，不是人均；常见约 8–10 万",
-        annual_surplus: "一年忙完还剩多少钱（收入减日常开销和取暖费）；农村一般为 7–9 千元",
+        annual_surplus: "一年忙完还剩多少钱（收入减日常开销和取暖费）；不确定可填 7–9 千元",
         housing_area: "按实际采暖或建筑面积；常见约 80–120",
         winter_cost: "一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000"
       };
@@ -2057,7 +2057,7 @@
       const FIELD_HINTS_PROXY = {
         household_population: "代入家庭的人口，用于算人均排放",
         annual_income: "代入家庭的全年收入，不是你自己；常见约 8–10 万",
-        annual_surplus: "代入家庭一年忙完还剩多少钱（收入减日常开支和取暖费）",
+        annual_surplus: "代入家庭一年忙完还剩多少钱（收入减日常开支和取暖费）；农村一般为 7–9 千元",
         housing_area: "代入家庭的采暖或建筑面积；常见约 80–120",
         winter_cost: "代入家庭改造前散煤取暖一冬的花费；常见约 2000–4000"
       };
