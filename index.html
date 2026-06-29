@@ -1130,35 +1130,6 @@
         font-size: 1.35rem;
         line-height: 1;
       }
-      .more-info-overlay {
-        z-index: 2150;
-        align-items: center;
-      }
-      .more-info-modal h2 {
-        font-size: 1.6rem;
-        text-align: center;
-        margin: 0 0 20px;
-        color: var(--text);
-      }
-      .more-info-links {
-        display: flex;
-        flex-direction: column;
-        gap: 14px;
-        margin: 0 0 24px;
-      }
-      .more-info-links a {
-        color: var(--primary);
-        font-weight: 500;
-        line-height: 1.55;
-        word-break: break-all;
-      }
-      .more-info-links a:hover {
-        color: var(--primary-light);
-      }
-      .more-info-actions {
-        display: flex;
-        justify-content: center;
-      }
       @media (max-width: 900px) {
         html {
           -webkit-text-size-adjust: 100%;
@@ -1666,22 +1637,7 @@
           <span>您的反馈已经提交</span>
           <span class="survey-success-icon" aria-hidden="true">✅</span>
         </p>
-        <button type="button" id="surveySuccessContinueBtn" class="btn-primary">继续</button>
-      </div>
-    </div>
-
-    <div id="moreInfoOverlay" class="survey-overlay more-info-overlay" hidden>
-      <div class="survey-modal more-info-modal" role="dialog" aria-labelledby="moreInfoTitle" aria-modal="true">
-        <h2 id="moreInfoTitle">更多信息</h2>
-        <nav class="more-info-links" aria-label="延伸阅读">
-          <a href="https://baijiahao.baidu.com/s?id=1854821608183297066&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1854821608183297066&amp;wfr=spider&amp;for=pc</a>
-          <a href="https://baijiahao.baidu.com/s?id=1862731178025137168&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1862731178025137168&amp;wfr=spider&amp;for=pc</a>
-          <a href="https://baijiahao.baidu.com/s?id=1854274209686017482&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1854274209686017482&amp;wfr=spider&amp;for=pc</a>
-          <a href="https://baijiahao.baidu.com/s?id=1853795171197305602&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1853795171197305602&amp;wfr=spider&amp;for=pc</a>
-        </nav>
-        <div class="more-info-actions">
-          <button type="button" id="moreInfoHomeBtn" class="btn-primary">回到首页</button>
-        </div>
+        <button type="button" id="surveySuccessContinueBtn" class="btn-primary">回到首页</button>
       </div>
     </div>
 
@@ -2986,8 +2942,6 @@
       const surveyStatusEl = document.getElementById("surveyStatus");
       const surveySuccessOverlay = document.getElementById("surveySuccessOverlay");
       const surveySuccessContinueBtn = document.getElementById("surveySuccessContinueBtn");
-      const moreInfoOverlay = document.getElementById("moreInfoOverlay");
-      const moreInfoHomeBtn = document.getElementById("moreInfoHomeBtn");
 
       function likertField(name, legend, labels) {
         const options = labels
@@ -3566,20 +3520,9 @@
         if (surveySuccessOverlay) surveySuccessOverlay.hidden = true;
       }
 
-      function showMoreInfoScreen() {
-        hidePostGameSurvey();
-        hideSurveySuccessModal();
-        if (moreInfoOverlay) {
-          moreInfoOverlay.hidden = false;
-          moreInfoOverlay.scrollTop = 0;
-        }
-        window.scrollTo(0, 0);
-      }
-
       function returnToWelcomeHome() {
         hideSurveySuccessModal();
         hidePostGameSurvey();
-        if (moreInfoOverlay) moreInfoOverlay.hidden = true;
         resetSimulation(false);
         document.documentElement.classList.remove("welcome-dismissed", "consent-accepted");
         window.scrollTo(0, 0);
@@ -3609,10 +3552,6 @@
       });
 
       surveySuccessContinueBtn?.addEventListener("click", () => {
-        showMoreInfoScreen();
-      });
-
-      moreInfoHomeBtn?.addEventListener("click", () => {
         returnToWelcomeHome();
       });
 
