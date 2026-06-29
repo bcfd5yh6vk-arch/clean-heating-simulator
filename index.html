@@ -1076,8 +1076,21 @@
         gap: 8px;
         margin-top: 16px;
       }
-      .survey-success-panel {
-        width: min(400px, 100%);
+      .survey-success-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 1100;
+        background: rgba(15, 23, 32, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+      }
+      .survey-success-overlay[hidden] {
+        display: none !important;
+      }
+      .survey-success-modal {
+        width: min(420px, 100%);
         background: #fff;
         border: 1px solid var(--border);
         border-radius: var(--radius);
@@ -1091,18 +1104,42 @@
         justify-content: center;
         gap: 10px;
         margin: 0 0 22px;
-        font-size: 1.12rem;
+        font-size: 1.15rem;
         font-weight: 600;
         color: var(--text);
-        line-height: 1.4;
       }
       .survey-success-icon {
-        font-size: 1.4rem;
+        font-size: 1.35rem;
         line-height: 1;
-        flex-shrink: 0;
       }
-      #surveySuccessBackBtn {
-        min-width: 132px;
+      .more-info-overlay {
+        z-index: 2150;
+        align-items: center;
+      }
+      .more-info-modal h2 {
+        font-size: 1.6rem;
+        text-align: center;
+        margin: 0 0 20px;
+        color: var(--text);
+      }
+      .more-info-links {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        margin: 0 0 24px;
+      }
+      .more-info-links a {
+        color: var(--primary);
+        font-weight: 500;
+        line-height: 1.55;
+        word-break: break-all;
+      }
+      .more-info-links a:hover {
+        color: var(--primary-light);
+      }
+      .more-info-actions {
+        display: flex;
+        justify-content: center;
       }
       @media (max-width: 900px) {
         html {
@@ -1590,18 +1627,36 @@
     </div>
 
     <div id="surveyOverlay" class="survey-overlay" hidden>
-      <div class="survey-modal" id="surveyModalContent" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
+      <div class="survey-modal" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
         <h2 id="surveyTitle">2 分钟小调查</h2>
         <p class="hint">感谢完成本局模拟与 AI 分析！请用约 2 分钟填写以下问题，帮助我们改进研究与模型。</p>
         <form id="postGameSurveyForm"></form>
         <p id="surveyStatus" class="small" aria-live="polite"></p>
       </div>
-      <div id="surveySuccessPanel" class="survey-success-panel" hidden role="dialog" aria-modal="true" aria-labelledby="surveySuccessTitle">
+    </div>
+
+    <div id="surveySuccessOverlay" class="survey-success-overlay" hidden>
+      <div class="survey-success-modal" role="dialog" aria-labelledby="surveySuccessTitle" aria-modal="true">
         <p id="surveySuccessTitle" class="survey-success-message">
           <span>您的反馈已经提交</span>
           <span class="survey-success-icon" aria-hidden="true">✅</span>
         </p>
-        <button type="button" id="surveySuccessBackBtn" class="btn-primary">返回</button>
+        <button type="button" id="surveySuccessContinueBtn" class="btn-primary">继续</button>
+      </div>
+    </div>
+
+    <div id="moreInfoOverlay" class="survey-overlay more-info-overlay" hidden>
+      <div class="survey-modal more-info-modal" role="dialog" aria-labelledby="moreInfoTitle" aria-modal="true">
+        <h2 id="moreInfoTitle">更多信息</h2>
+        <nav class="more-info-links" aria-label="延伸阅读">
+          <a href="https://baijiahao.baidu.com/s?id=1854821608183297066&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1854821608183297066&amp;wfr=spider&amp;for=pc</a>
+          <a href="https://baijiahao.baidu.com/s?id=1862731178025137168&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1862731178025137168&amp;wfr=spider&amp;for=pc</a>
+          <a href="https://baijiahao.baidu.com/s?id=1854274209686017482&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1854274209686017482&amp;wfr=spider&amp;for=pc</a>
+          <a href="https://baijiahao.baidu.com/s?id=1853795171197305602&amp;wfr=spider&amp;for=pc" target="_blank" rel="noopener noreferrer">https://baijiahao.baidu.com/s?id=1853795171197305602&amp;wfr=spider&amp;for=pc</a>
+        </nav>
+        <div class="more-info-actions">
+          <button type="button" id="moreInfoHomeBtn" class="btn-primary">回到首页</button>
+        </div>
       </div>
     </div>
 
@@ -2905,11 +2960,12 @@
       const preSurveyOverlay = document.getElementById("preSurveyOverlay");
       const preSurveyForm = document.getElementById("preSurveyForm");
       const surveyOverlay = document.getElementById("surveyOverlay");
-      const surveyModalContent = document.getElementById("surveyModalContent");
-      const surveySuccessPanel = document.getElementById("surveySuccessPanel");
-      const surveySuccessBackBtn = document.getElementById("surveySuccessBackBtn");
       const postGameSurveyForm = document.getElementById("postGameSurveyForm");
       const surveyStatusEl = document.getElementById("surveyStatus");
+      const surveySuccessOverlay = document.getElementById("surveySuccessOverlay");
+      const surveySuccessContinueBtn = document.getElementById("surveySuccessContinueBtn");
+      const moreInfoOverlay = document.getElementById("moreInfoOverlay");
+      const moreInfoHomeBtn = document.getElementById("moreInfoHomeBtn");
 
       function likertField(name, legend, labels) {
         const options = labels
@@ -3409,16 +3465,6 @@
         return true;
       }
 
-      function showSurveySuccessPanel() {
-        if (surveyModalContent) surveyModalContent.hidden = true;
-        if (surveySuccessPanel) surveySuccessPanel.hidden = false;
-      }
-
-      function hideSurveySuccessPanel() {
-        if (surveyModalContent) surveyModalContent.hidden = false;
-        if (surveySuccessPanel) surveySuccessPanel.hidden = true;
-      }
-
       function hidePreSurveyQ1() {
         if (preSurveyOverlay) preSurveyOverlay.hidden = true;
         preSurveyForm?.reset();
@@ -3451,15 +3497,40 @@
 
       function hidePostGameSurvey() {
         if (surveyOverlay) surveyOverlay.hidden = true;
-        hideSurveySuccessPanel();
         if (surveyStatusEl) surveyStatusEl.textContent = "";
         if (postGameSurveyForm) postGameSurveyForm.innerHTML = "";
+      }
+
+      function showSurveySuccessModal() {
+        if (surveySuccessOverlay) surveySuccessOverlay.hidden = false;
+      }
+
+      function hideSurveySuccessModal() {
+        if (surveySuccessOverlay) surveySuccessOverlay.hidden = true;
+      }
+
+      function showMoreInfoScreen() {
+        hidePostGameSurvey();
+        hideSurveySuccessModal();
+        if (moreInfoOverlay) {
+          moreInfoOverlay.hidden = false;
+          moreInfoOverlay.scrollTop = 0;
+        }
+        window.scrollTo(0, 0);
+      }
+
+      function returnToWelcomeHome() {
+        hideSurveySuccessModal();
+        hidePostGameSurvey();
+        if (moreInfoOverlay) moreInfoOverlay.hidden = true;
+        resetSimulation(false);
+        document.documentElement.classList.remove("welcome-dismissed", "consent-accepted");
+        window.scrollTo(0, 0);
       }
 
       function showPostGameSurvey() {
         if (!state.initialProfile || researchSession.surveyShown) return;
         researchSession.surveyShown = true;
-        hideSurveySuccessPanel();
         buildPostGameSurveyForm(state.initialProfile.user_identity || "");
         surveyOverlay.hidden = false;
         surveyOverlay.scrollTop = 0;
@@ -3476,12 +3547,16 @@
         const ok = await submitPostGameSurvey(responses);
         if (submitBtn) submitBtn.disabled = false;
         if (ok) {
-          showSurveySuccessPanel();
+          showSurveySuccessModal();
         }
       });
 
-      surveySuccessBackBtn?.addEventListener("click", () => {
-        hidePostGameSurvey();
+      surveySuccessContinueBtn?.addEventListener("click", () => {
+        showMoreInfoScreen();
+      });
+
+      moreInfoHomeBtn?.addEventListener("click", () => {
+        returnToWelcomeHome();
       });
 
       const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
