@@ -8,9 +8,9 @@
 
 域名在 Cloudflare 注册并解析；站点托管在 Vercel（原 `clean-heating-simulator.vercel.app` 仍可访问，但以自定义域名为准）。
 
-线上部署的是根目录 `index.html`（静态页）+ `api/chat.js`（Vercel Serverless，供 AI 分析调用）。**API Key 只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
+线上部署的是根目录 `index.html`（静态页）+ `api/chat.js`（Vercel Serverless，供智能分析调用）。**API Key 只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
 
-### 在 Vercel 配置 DeepSeek API Key（必做，否则 AI 不可用）
+### 在 Vercel 配置 DeepSeek API Key（必做，否则智能分析不可用）
 
 1. 打开 [vercel.com](https://vercel.com) 并登录。
 2. 进入项目 **clean-heating-simulator**（或你的项目名）。
