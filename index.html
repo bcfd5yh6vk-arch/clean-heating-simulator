@@ -10,9 +10,6 @@
           history.scrollRestoration = "manual";
         }
         window.scrollTo(0, 0);
-        if (localStorage.getItem("ch_sim_informed_consent_v1") === "yes") {
-          document.documentElement.classList.add("consent-accepted");
-        }
       })();
     </script>
     <style>
@@ -1579,8 +1576,8 @@
         window.scrollTo(0, 0);
       });
       document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
-        localStorage.setItem("ch_sim_informed_consent_v1", "yes");
-        document.documentElement.classList.add("consent-accepted", "welcome-dismissed");
+        document.documentElement.classList.add("consent-accepted");
+        window.scrollTo(0, 0);
       });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
