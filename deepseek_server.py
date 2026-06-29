@@ -48,7 +48,7 @@ def chat():
         {
             "role": "system",
             "content": (
-                "你是保定农村清洁取暖转型模拟器的 AI 政策顾问。"
+                "你是河北农村清洁取暖转型模拟器的智能政策顾问。"
                 "用简洁、易懂的中文回答用户关于煤改气、煤改电、热泵、补贴退坡、"
                 "能耗负担率、法律合规和排放达标等问题。"
                 "若用户提供了当前模拟数据，请结合这些数据给出具体建议。"
@@ -70,7 +70,7 @@ def chat():
 def call_deepseek(messages: list[dict[str, str]]) -> str:
     api_key = os.getenv("DEEPSEEK_API_KEY", "").strip()
     if not api_key:
-        raise RuntimeError("未配置 DEEPSEEK_API_KEY，请在 .env 中设置。")
+        raise RuntimeError("未配置智能分析接口密钥，请联系管理员。")
 
     body = json.dumps(
         {
@@ -98,14 +98,14 @@ def call_deepseek(messages: list[dict[str, str]]) -> str:
             data = json.loads(resp.read().decode("utf-8"))
     except HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"DeepSeek API 错误 ({exc.code}): {detail}") from exc
+        raise RuntimeError(f"智能分析接口错误（{exc.code}）：{detail}") from exc
     except URLError as exc:
         raise RuntimeError(f"网络请求失败: {exc.reason}") from exc
 
     try:
         return data["choices"][0]["message"]["content"]
     except (KeyError, IndexError, TypeError) as exc:
-        raise RuntimeError(f"DeepSeek 返回格式异常: {data}") from exc
+        raise RuntimeError(f"智能分析返回格式异常：{data}") from exc
 
 
 @app.post("/api/analyze")
@@ -136,7 +136,7 @@ def analyze():
         {
             "role": "system",
             "content": (
-                "你是保定农村清洁取暖转型模拟器的分析助手。"
+                "你是河北农村清洁取暖转型模拟器的分析助手。"
                 "请根据农户初始输入和操作日志，用中文撰写分析报告。"
                 "主要读者是农村农户和普通关注者，不是学术论文读者。"
                 "必须严格按以下三个标题分段输出（保留 ## 标题）：\n\n"
@@ -145,7 +145,7 @@ def analyze():
                 "## 二、转型建议\n"
                 "结合操作日志中的关键决策与指标变化，先给出本户更可行的清洁取暖建议路径，再说明已走路径与可改进之处。\n\n"
                 "## 三、政策与民生矛盾解读\n"
-                "从「改得起 vs 用得起」、补贴退坡、执法合规、排放目标与家庭现金流等角度，"
+                "从「改得起与用不起」、补贴退坡、执法合规、排放目标与家庭现金流等角度，"
                 "解释政策目标与农户现实之间的张力。\n\n"
                 "输出格式要求（务必遵守）：\n"
                 "1. 每个部分禁止写成一大段连续文字。\n"
@@ -170,5 +170,5 @@ def analyze():
 
 if __name__ == "__main__":
     print("本地服务: http://127.0.0.1:8765")
-    print("在浏览器打开上述地址，使用「AI分析」生成报告。")
+    print("在浏览器打开上述地址，使用「智能分析」生成报告。")
     app.run(debug=True, host="127.0.0.1", port=8765)

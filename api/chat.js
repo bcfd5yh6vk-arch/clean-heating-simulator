@@ -12,7 +12,7 @@ const SYSTEM_PROMPT = [
   "结合操作日志中的关键决策与指标变化，先给出本户更可行的清洁取暖建议路径，再说明已走路径与可改进之处。",
   "",
   "## 三、政策与民生矛盾解读",
-  "从「改得起 vs 用得起」、补贴退坡、执法合规、排放目标与家庭现金流等角度，解释政策目标与农户现实之间的张力。",
+  "从「改得起与用不起」、补贴退坡、执法合规、排放目标与家庭现金流等角度，解释政策目标与农户现实之间的张力。",
   "",
   "输出格式要求（务必遵守）：",
   "1. 每个部分禁止写成一大段连续文字。",
@@ -27,13 +27,13 @@ const SYSTEM_PROMPT = [
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ error: "仅支持提交分析请求。" });
   }
 
   const apiKey = process.env.DEEPSEEK_API_KEY?.trim();
   if (!apiKey) {
     return res.status(500).json({
-      error: "服务端未配置 DEEPSEEK_API_KEY，请在 Vercel 环境变量中添加。",
+      error: "服务端未配置智能分析接口密钥，请联系管理员。",
     });
   }
 
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
   const ending = payload.ending || {};
 
   if (!Object.keys(profile).length) {
-    return res.status(400).json({ error: "缺少农户初始信息 profile" });
+    return res.status(400).json({ error: "缺少农户初始信息。" });
   }
   if (!eventLog.length) {
     return res.status(400).json({
@@ -84,20 +84,20 @@ export default async function handler(req, res) {
     const data = await upstream.json();
     if (!upstream.ok) {
       return res.status(502).json({
-        error: `DeepSeek API 错误 (${upstream.status})`,
+        error: `智能分析接口错误（状态码 ${upstream.status}）`,
         detail: data,
       });
     }
 
     const analysis = data?.choices?.[0]?.message?.content;
     if (!analysis) {
-      return res.status(502).json({ error: "DeepSeek 返回格式异常", detail: data });
+      return res.status(502).json({ error: "智能分析返回格式异常", detail: data });
     }
 
     return res.status(200).json({ analysis });
   } catch (err) {
     return res.status(502).json({
-      error: "调用 DeepSeek 失败",
+      error: "调用智能分析接口失败",
       detail: err instanceof Error ? err.message : String(err),
     });
   }
