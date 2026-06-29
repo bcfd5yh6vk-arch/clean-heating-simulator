@@ -1076,6 +1076,34 @@
         gap: 8px;
         margin-top: 16px;
       }
+      .survey-success-panel {
+        width: min(400px, 100%);
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px 24px 24px;
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+      }
+      .survey-success-message {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 0 0 22px;
+        font-size: 1.12rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.4;
+      }
+      .survey-success-icon {
+        font-size: 1.4rem;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      #surveySuccessBackBtn {
+        min-width: 132px;
+      }
       @media (max-width: 900px) {
         html {
           -webkit-text-size-adjust: 100%;
@@ -1562,11 +1590,18 @@
     </div>
 
     <div id="surveyOverlay" class="survey-overlay" hidden>
-      <div class="survey-modal" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
+      <div class="survey-modal" id="surveyModalContent" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
         <h2 id="surveyTitle">2 分钟小调查</h2>
         <p class="hint">感谢完成本局模拟与 AI 分析！请用约 2 分钟填写以下问题，帮助我们改进研究与模型。</p>
         <form id="postGameSurveyForm"></form>
         <p id="surveyStatus" class="small" aria-live="polite"></p>
+      </div>
+      <div id="surveySuccessPanel" class="survey-success-panel" hidden role="dialog" aria-modal="true" aria-labelledby="surveySuccessTitle">
+        <p id="surveySuccessTitle" class="survey-success-message">
+          <span>您的反馈已经提交</span>
+          <span class="survey-success-icon" aria-hidden="true">✅</span>
+        </p>
+        <button type="button" id="surveySuccessBackBtn" class="btn-primary">返回</button>
       </div>
     </div>
 
@@ -2870,6 +2905,9 @@
       const preSurveyOverlay = document.getElementById("preSurveyOverlay");
       const preSurveyForm = document.getElementById("preSurveyForm");
       const surveyOverlay = document.getElementById("surveyOverlay");
+      const surveyModalContent = document.getElementById("surveyModalContent");
+      const surveySuccessPanel = document.getElementById("surveySuccessPanel");
+      const surveySuccessBackBtn = document.getElementById("surveySuccessBackBtn");
       const postGameSurveyForm = document.getElementById("postGameSurveyForm");
       const surveyStatusEl = document.getElementById("surveyStatus");
 
@@ -3371,6 +3409,16 @@
         return true;
       }
 
+      function showSurveySuccessPanel() {
+        if (surveyModalContent) surveyModalContent.hidden = true;
+        if (surveySuccessPanel) surveySuccessPanel.hidden = false;
+      }
+
+      function hideSurveySuccessPanel() {
+        if (surveyModalContent) surveyModalContent.hidden = false;
+        if (surveySuccessPanel) surveySuccessPanel.hidden = true;
+      }
+
       function hidePreSurveyQ1() {
         if (preSurveyOverlay) preSurveyOverlay.hidden = true;
         preSurveyForm?.reset();
@@ -3403,6 +3451,7 @@
 
       function hidePostGameSurvey() {
         if (surveyOverlay) surveyOverlay.hidden = true;
+        hideSurveySuccessPanel();
         if (surveyStatusEl) surveyStatusEl.textContent = "";
         if (postGameSurveyForm) postGameSurveyForm.innerHTML = "";
       }
@@ -3410,6 +3459,7 @@
       function showPostGameSurvey() {
         if (!state.initialProfile || researchSession.surveyShown) return;
         researchSession.surveyShown = true;
+        hideSurveySuccessPanel();
         buildPostGameSurveyForm(state.initialProfile.user_identity || "");
         surveyOverlay.hidden = false;
         surveyOverlay.scrollTop = 0;
@@ -3426,8 +3476,12 @@
         const ok = await submitPostGameSurvey(responses);
         if (submitBtn) submitBtn.disabled = false;
         if (ok) {
-          setTimeout(() => hidePostGameSurvey(), 1200);
+          showSurveySuccessPanel();
         }
+      });
+
+      surveySuccessBackBtn?.addEventListener("click", () => {
+        hidePostGameSurvey();
       });
 
       const aiAnalyzeBtn = document.getElementById("aiAnalyzeBtn");
