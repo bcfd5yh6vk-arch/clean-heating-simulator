@@ -1316,7 +1316,7 @@
               </div>
               <div class="fixed-badges" aria-label="固定设定">
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>保定</span></span>
+                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>河北</span></span>
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
               </div>
               <p id="coalStartHint" class="hint fixed-setting-hint" hidden>
@@ -1461,7 +1461,7 @@
                 <summary>游戏规则速览</summary>
                 <div class="accordion-body">
                   <ul style="margin:0 0 0 18px;padding:0;">
-                    <li>玩家角色固定为保定农村<strong>农民家庭</strong>。</li>
+                    <li>玩家角色固定为河北农村<strong>农民家庭</strong>。</li>
                     <li>六项指标：取暖费、年收入、年盈余、合规度、排放达标度、能耗负担率。</li>
                     <li>共 5 回合做选择；回合 2 持续违规可能被处罚。</li>
                     <li>终局：成功转型 / 经济破产 / 被处罚。</li>
@@ -2681,7 +2681,7 @@
         state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
         state.user = {
           role: "农民家庭",
-          region: "保定",
+          region: "河北",
           heatingMethod: String(data.get("heating_method") || "散煤炉"),
           income: Number(data.get("annual_income")),
           surplus: Number(data.get("annual_surplus")),
@@ -2711,7 +2711,7 @@
           user_identity: String(data.get("user_identity") || ""),
           identity_detail: readIdentityDetail(data),
           role: "农民家庭",
-          region: "保定",
+          region: "河北",
           heating_method: String(data.get("heating_method") || "散煤炉"),
           annual_income: Number(data.get("annual_income")),
           annual_surplus: Number(data.get("annual_surplus")),

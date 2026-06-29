@@ -245,7 +245,7 @@ def start_game():
     session = {
         "session_id": session_id,
         "player_role": "farmer",
-        "region": "保定",
+        "region": "河北",
         "heating_method": payload.get("heating_method", "散煤炉"),
         "housing_area": max(20, housing_area),
         "annual_surplus": annual_surplus,
@@ -275,7 +275,7 @@ def start_game():
 
     burden = compute_energy_burden(session["state"])
     narrative = (
-        f"你是保定农户，当前取暖方式为 {session['heating_method']}。"
+        f"你是河北农户，当前取暖方式为 {session['heating_method']}。"
         f" 初始取暖年花费 {session['state']['heating_annual_cost']} 元，年收入 {session['state']['annual_income']} 元，"
         f" 法律合规度与排放达标度初始为 0。当前能耗负担率约 {burden:.1f}%。"
     )
