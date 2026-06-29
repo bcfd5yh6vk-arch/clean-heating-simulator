@@ -3042,12 +3042,18 @@
             ["D", "D. 其他"]
           ])}
           <label id="f1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="f1_method_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${radioField("f2_cost_realism", "F2. 模拟里的取暖费用变化，与你家真实感受相比？", [
+          ${textField("f2_annual_heating_cost", "F2. 你家煤改气/电后一年取暖费多少钱？", "请填写", true)}
+          ${radioField("f3_reduce_spending", "F3. 你有没有采取一些手段减少取暖支出？", [
+            ["yes", "有"],
+            ["no", "没有"]
+          ])}
+          <label id="f3ReduceMethodsWrap" class="survey-q" hidden>具体途径是什么<textarea name="f3_reduce_methods" rows="3" class="survey-other-input" placeholder="请填写"></textarea></label>
+          ${radioField("f4_cost_realism", "F4. 模拟里的取暖费用变化，与你家真实感受相比？", [
             ["A", "A. 非常接近"],
             ["B", "B. 大体接近，但细节有差别"],
             ["C", "C. 偏差较大"]
           ])}
-          ${checkboxField("f3_subsidy_response", "F3. 补贴退坡后，你家的实际应对方式是？", [
+          ${checkboxField("f5_subsidy_response", "F5. 补贴退坡后，你家的实际应对方式是？", [
             ["normal_use", "正常用，费用可承受"],
             ["less_heating", "少开暖气、降低室温"],
             ["save_mode", "改用更省的方式（分区取暖等）"],
@@ -3056,10 +3062,10 @@
             ["income_boost", "寻找增收途径"],
             ["other", "其他"]
           ])}
-          <label id="f3OtherWrap" class="survey-q" hidden>F3 其他说明<input type="text" name="f3_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${textField("f4_realistic_part", "F4. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
-          ${textField("f5_unrealistic_part", "F5. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
-          ${textField("f6_policy_suggestion", "F6. 若给政策提一条建议，你会说什么？", "可选填写")}
+          <label id="f5OtherWrap" class="survey-q" hidden>F5 其他说明<input type="text" name="f5_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${textField("f6_realistic_part", "F6. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
+          ${textField("f7_unrealistic_part", "F7. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
+          ${textField("f8_policy_suggestion", "F8. 若给政策提一条建议，你会说什么？", "可选填写")}
         `;
 
         const unconverted = `
@@ -3160,11 +3166,24 @@
           });
         });
 
-        const f3Wrap = document.getElementById("f3OtherWrap");
-        postGameSurveyForm.querySelectorAll('[name="f3_subsidy_response"]').forEach((el) => {
+        const f3ReduceWrap = document.getElementById("f3ReduceMethodsWrap");
+        const f3ReduceMethods = postGameSurveyForm.querySelector('[name="f3_reduce_methods"]');
+        postGameSurveyForm.querySelectorAll('[name="f3_reduce_spending"]').forEach((el) => {
           el.addEventListener("change", () => {
-            const checked = [...postGameSurveyForm.querySelectorAll('[name="f3_subsidy_response"]:checked')].map((x) => x.value);
-            if (f3Wrap) f3Wrap.hidden = !checked.includes("other");
+            const show = [...postGameSurveyForm.querySelectorAll('[name="f3_reduce_spending"]')].find((x) => x.checked)?.value === "yes";
+            if (f3ReduceWrap) f3ReduceWrap.hidden = !show;
+            if (f3ReduceMethods) {
+              f3ReduceMethods.required = show;
+              if (!show) f3ReduceMethods.value = "";
+            }
+          });
+        });
+
+        const f5Wrap = document.getElementById("f5OtherWrap");
+        postGameSurveyForm.querySelectorAll('[name="f5_subsidy_response"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const checked = [...postGameSurveyForm.querySelectorAll('[name="f5_subsidy_response"]:checked')].map((x) => x.value);
+            if (f5Wrap) f5Wrap.hidden = !checked.includes("other");
           });
         });
 
@@ -3269,16 +3288,20 @@
           };
         } else if (identity === "已煤改农户") {
           const f1 = collectRadioAnswer("f1_heating_method");
-          const f3 = collectCheckboxAnswers("f3_subsidy_response");
+          const f3Reduce = collectRadioAnswer("f3_reduce_spending");
+          const f5 = collectCheckboxAnswers("f5_subsidy_response");
           responses.converted_farmer = {
             f1_heating_method: f1,
             f1_method_other: f1.value === "D" ? collectTextAnswer("f1_method_other") : "",
-            f2_cost_realism: collectRadioAnswer("f2_cost_realism"),
-            f3_subsidy_response: f3,
-            f3_other: f3.some((item) => item.value === "other") ? collectTextAnswer("f3_other") : "",
-            f4_realistic_part: collectTextAnswer("f4_realistic_part"),
-            f5_unrealistic_part: collectTextAnswer("f5_unrealistic_part"),
-            f6_policy_suggestion: collectTextAnswer("f6_policy_suggestion")
+            f2_annual_heating_cost: collectTextAnswer("f2_annual_heating_cost"),
+            f3_reduce_spending: f3Reduce,
+            f3_reduce_methods: f3Reduce.value === "yes" ? collectTextAnswer("f3_reduce_methods") : "",
+            f4_cost_realism: collectRadioAnswer("f4_cost_realism"),
+            f5_subsidy_response: f5,
+            f5_other: f5.some((item) => item.value === "other") ? collectTextAnswer("f5_other") : "",
+            f6_realistic_part: collectTextAnswer("f6_realistic_part"),
+            f7_unrealistic_part: collectTextAnswer("f7_unrealistic_part"),
+            f8_policy_suggestion: collectTextAnswer("f8_policy_suggestion")
           };
         } else if (identity === "未煤改农户") {
           const n1 = collectRadioAnswer("n1_heating_method");
@@ -3347,14 +3370,18 @@
             sq_f1_heating_method: f.f1_heating_method.value || null,
             sq_f1_heating_method_label: f.f1_heating_method.label || null,
             sq_f1_method_other: f.f1_method_other || null,
-            sq_f2_cost_realism: f.f2_cost_realism.value || null,
-            sq_f2_cost_realism_label: f.f2_cost_realism.label || null,
-            sq_f3_subsidy_response: joinCheckboxValues(f.f3_subsidy_response),
-            sq_f3_subsidy_response_labels: joinCheckboxLabels(f.f3_subsidy_response),
-            sq_f3_other: f.f3_other || null,
-            sq_f4_realistic_part: f.f4_realistic_part || null,
-            sq_f5_unrealistic_part: f.f5_unrealistic_part || null,
-            sq_f6_policy_suggestion: f.f6_policy_suggestion || null
+            sq_f2_annual_heating_cost: f.f2_annual_heating_cost || null,
+            sq_f3_reduce_spending: f.f3_reduce_spending.value || null,
+            sq_f3_reduce_spending_label: f.f3_reduce_spending.label || null,
+            sq_f3_reduce_methods: f.f3_reduce_methods || null,
+            sq_f4_cost_realism: f.f4_cost_realism.value || null,
+            sq_f4_cost_realism_label: f.f4_cost_realism.label || null,
+            sq_f5_subsidy_response: joinCheckboxValues(f.f5_subsidy_response),
+            sq_f5_subsidy_response_labels: joinCheckboxLabels(f.f5_subsidy_response),
+            sq_f5_other: f.f5_other || null,
+            sq_f6_realistic_part: f.f6_realistic_part || null,
+            sq_f7_unrealistic_part: f.f7_unrealistic_part || null,
+            sq_f8_policy_suggestion: f.f8_policy_suggestion || null
           });
         }
 
@@ -3405,12 +3432,20 @@
             alert("请填写 F1 的其他取暖方式。");
             return false;
           }
-          if (f.f3_subsidy_response.length === 0) {
-            alert("F3 请至少选择 1 项。");
+          if (!f.f2_annual_heating_cost) {
+            alert("请填写 F2 煤改气/电后一年取暖费。");
             return false;
           }
-          if (f.f3_subsidy_response.some((item) => item.value === "other") && !f.f3_other) {
-            alert("请填写 F3 的其他说明。");
+          if (f.f3_reduce_spending.value === "yes" && !f.f3_reduce_methods) {
+            alert("请填写 F3 减少取暖支出的具体途径。");
+            return false;
+          }
+          if (f.f5_subsidy_response.length === 0) {
+            alert("F5 请至少选择 1 项。");
+            return false;
+          }
+          if (f.f5_subsidy_response.some((item) => item.value === "other") && !f.f5_other) {
+            alert("请填写 F5 的其他说明。");
             return false;
           }
         }
