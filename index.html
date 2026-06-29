@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>保定农村清洁取暖模拟器 · 5分钟体验</title>
+    <title>中国北方农村煤改气/电方案选择全过程模拟器</title>
     <script>
       (function () {
         if (localStorage.getItem("ch_sim_informed_consent_v1") === "yes") {
-          document.documentElement.classList.add("consent-accepted");
+          document.documentElement.classList.add("consent-accepted", "welcome-dismissed");
         }
       })();
     </script>
@@ -894,6 +894,23 @@
         gap: 6px;
       }
       /* 知情同意首屏 */
+      #welcomeOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2100;
+        background: var(--bg-hero);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+        overflow-y: auto;
+      }
+      html.welcome-dismissed #welcomeOverlay {
+        display: none !important;
+      }
+      html:not(.welcome-dismissed) #consentOverlay {
+        display: none !important;
+      }
       #consentOverlay {
         position: fixed;
         inset: 0;
@@ -925,6 +942,17 @@
         font-size: 1.35rem;
         color: var(--text);
         text-align: center;
+      }
+      .welcome-panel h1 {
+        font-size: 1.28rem;
+        line-height: 1.45;
+      }
+      .welcome-lead {
+        margin: 0 0 8px;
+        color: var(--text);
+        font-size: 0.98rem;
+        text-align: center;
+        line-height: 1.65;
       }
       .consent-lead {
         margin: 0 0 16px;
@@ -1093,7 +1121,8 @@
         .hero h1 {
           font-size: clamp(1.75rem, 6.5vw, 2.25rem);
         }
-        .consent-panel h1 {
+        .consent-panel h1,
+        .welcome-panel h1 {
           font-size: 1.65rem;
         }
         h2 {
@@ -1122,6 +1151,7 @@
         .guidance-identity-btn,
         .accordion-body,
         .consent-lead,
+        .welcome-lead,
         .consent-list li,
         .consent-footer,
         label,
@@ -1192,6 +1222,17 @@
       <symbol id="icon-money" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a7 7 0 1 0 0 14 7 7 0 0 0 0-14Zm0 2a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm.5 2v1.07A2.5 2.5 0 0 0 10 10.5a2.5 2.5 0 0 0 2.5 2.5c.69 0 1.25.56 1.25 1.25S13.19 15.5 12.5 15.5 10 14.94 10 14H8.5c0 1.93 1.57 3.5 3.5 3.5s3.5-1.57 3.5-3.5a3.5 3.5 0 0 0-2.5-3.36V7h-1Z"/></symbol>
       <symbol id="icon-heating" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c.55 0 1 .45 1 1v2.07A6 6 0 0 1 18 11v7a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-7a6 6 0 0 1 5-5.93V3c0-.55.45-1 1-1Zm0 6a4 4 0 0 0-4 4v7h8v-7a4 4 0 0 0-4-4Z"/></symbol>
     </svg>
+    <div id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <div class="welcome-panel consent-panel">
+        <h1 id="welcomeTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
+        <p class="welcome-lead">
+          代入一户北方农村家庭，在五回合里体验清洁取暖政策下的路线选择与费用变化，感受「改得起」与「用不起」的现实张力。
+        </p>
+        <div class="consent-actions">
+          <button type="button" id="welcomeStartBtn" class="btn-primary">开始模拟</button>
+        </div>
+      </div>
+    </div>
     <div id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
       <div class="consent-panel">
         <h1 id="consentTitle">参与前请了解</h1>
@@ -1526,9 +1567,12 @@
     </div>
 
     <script>
+      document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
+        document.documentElement.classList.add("welcome-dismissed");
+      });
       document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
         localStorage.setItem("ch_sim_informed_consent_v1", "yes");
-        document.documentElement.classList.add("consent-accepted");
+        document.documentElement.classList.add("consent-accepted", "welcome-dismissed");
       });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
