@@ -1452,8 +1452,8 @@
                   <span class="field-hint" data-field="housing_area">按实际采暖或建筑面积；常见约 80–120</span>
                   <input type="text" name="housing_area" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
                 </label>
-                <label>年取暖费用（元）
-                  <span class="field-hint" data-field="winter_cost">一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
+                <label>煤改气/电前年取暖费用（元）
+                  <span class="field-hint" data-field="winter_cost">煤改前一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
                   <input type="text" name="winter_cost" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
                 </label>
               </div>
@@ -2141,7 +2141,7 @@
         annual_income: "全家一年进账，不是人均；常见约 8–10 万",
         annual_surplus: "一年忙完还剩多少钱（收入减日常开销和取暖费）；不确定可填 7–9 千元",
         housing_area: "按实际采暖或建筑面积；常见约 80–120",
-        winter_cost: "一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000"
+        winter_cost: "煤改前一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000"
       };
 
       const FIELD_HINTS_PROXY = {
@@ -2149,7 +2149,7 @@
         annual_income: "代入家庭的全年收入，不是你自己；常见约 8–10 万",
         annual_surplus: "代入家庭一年忙完还剩多少钱（收入减日常开支和取暖费）；农村一般为 7–9 千元",
         housing_area: "代入家庭的采暖或建筑面积；常见约 80–120",
-        winter_cost: "代入家庭改造前散煤取暖一冬的花费；常见约 2000–4000"
+        winter_cost: "代入家庭煤改气/电前年取暖一冬的花费；常见约 2000–4000"
       };
 
       function updateHouseholdFieldHints(identity) {
@@ -2211,7 +2211,7 @@
           { name: "annual_income", label: "年总收入", min: 1, integer: true },
           { name: "annual_surplus", label: "年盈余", min: -100000, integer: true },
           { name: "housing_area", label: "住房面积", min: 1, integer: true },
-          { name: "winter_cost", label: "年取暖费用", min: 1, integer: true }
+          { name: "winter_cost", label: "煤改气/电前年取暖费用", min: 1, integer: true }
         ];
         for (const rule of rules) {
           const raw = String(formData.get(rule.name) ?? "").trim();
