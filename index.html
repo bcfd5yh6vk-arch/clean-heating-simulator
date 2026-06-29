@@ -6,8 +6,12 @@
     <title>中国北方农村煤改气/电方案选择全过程模拟器</title>
     <script>
       (function () {
+        if ("scrollRestoration" in history) {
+          history.scrollRestoration = "manual";
+        }
+        window.scrollTo(0, 0);
         if (localStorage.getItem("ch_sim_informed_consent_v1") === "yes") {
-          document.documentElement.classList.add("consent-accepted", "welcome-dismissed");
+          document.documentElement.classList.add("consent-accepted");
         }
       })();
     </script>
@@ -908,6 +912,9 @@
       html.welcome-dismissed #welcomeOverlay {
         display: none !important;
       }
+      html:not(.welcome-dismissed) body {
+        overflow: hidden;
+      }
       html:not(.welcome-dismissed) #consentOverlay {
         display: none !important;
       }
@@ -1569,6 +1576,7 @@
     <script>
       document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
         document.documentElement.classList.add("welcome-dismissed");
+        window.scrollTo(0, 0);
       });
       document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
         localStorage.setItem("ch_sim_informed_consent_v1", "yes");
