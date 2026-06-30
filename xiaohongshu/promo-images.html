@@ -7,14 +7,12 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
       :root {
-        --bg: #f0f4ef;
-        --text: #1a2e1f;
-        --muted: #5c6b62;
-        --primary: #2d6a4f;
-        --primary-light: #40916c;
-        --primary-bg: #d8f3dc;
-        --card: #ffffff;
-        --border: #c8d5cc;
+        --bg: #f3f1ea;
+        --text: #2a2a2a;
+        --muted: #666;
+        --primary: #3d6b52;
+        --card: #faf9f6;
+        --border: #d4cfc4;
       }
       * {
         box-sizing: border-box;
@@ -22,10 +20,35 @@
       body {
         margin: 0;
         padding: 24px 16px 48px;
-        background: #e8ece9;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
-          "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        background: #e5e3dc;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
         color: var(--text);
+      }
+      body.export-mode {
+        padding: 0;
+        background: transparent;
+      }
+      body.export-mode .page-header,
+      body.export-mode .poster-meta,
+      body.export-mode .poster-wrap:not(.export-active) {
+        display: none !important;
+      }
+      body.export-mode .gallery {
+        max-width: none;
+        gap: 0;
+      }
+      body.export-mode .poster-wrap.export-active {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        background: transparent;
+      }
+      body.export-mode .poster-preview {
+        padding: 0;
+      }
+      body.export-mode .poster {
+        transform: none !important;
+        margin: 0 !important;
       }
       .page-header {
         max-width: 960px;
@@ -52,9 +75,8 @@
       .poster-wrap {
         background: var(--card);
         border: 1px solid var(--border);
-        border-radius: 14px;
+        border-radius: 10px;
         padding: 16px;
-        box-shadow: 0 4px 20px rgba(45, 106, 79, 0.08);
       }
       .poster-meta {
         display: flex;
@@ -74,17 +96,17 @@
         color: var(--muted);
       }
       .btn-download {
-        border: none;
-        background: var(--primary);
-        color: #fff;
+        border: 1px solid var(--primary);
+        background: #fff;
+        color: var(--primary);
         font-size: 0.88rem;
         font-weight: 600;
         padding: 8px 16px;
-        border-radius: 999px;
+        border-radius: 6px;
         cursor: pointer;
       }
       .btn-download:hover {
-        background: var(--primary-light);
+        background: #f0f5f1;
       }
       .poster-preview {
         display: flex;
@@ -92,7 +114,6 @@
         overflow: auto;
         padding: 8px 0;
       }
-      /* 小红书推荐 3:4，导出 1080×1440 */
       .poster {
         width: 1080px;
         height: 1440px;
@@ -102,195 +123,149 @@
         overflow: hidden;
       }
       @media (max-width: 1120px) {
-        .poster {
+        body:not(.export-mode) .poster {
           transform: scale(calc(min(100vw - 64px, 900px) / 1080));
           margin-bottom: calc(1440px * (min(100vw - 64px, 900px) / 1080 - 1));
         }
       }
+      .poster-foot {
+        margin-top: auto;
+        padding-top: 28px;
+        text-align: center;
+        font-size: 28px;
+        color: var(--muted);
+      }
+      /* 图1：封面，纯文字 + 素色底 */
       .poster-1 {
-        background: linear-gradient(145deg, #e8f3ec 0%, #f5f0e8 45%, #eef4f8 100%);
+        background: #f0ede4;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
         justify-content: center;
-        padding: 80px 72px;
-        text-align: center;
-      }
-      .poster-1::before {
-        content: "";
-        position: absolute;
-        inset: 48px;
-        border: 3px solid rgba(45, 106, 79, 0.18);
-        border-radius: 28px;
-        pointer-events: none;
-      }
-      .poster-1 .badge {
-        display: inline-block;
-        background: var(--primary);
-        color: #fff;
-        font-size: 52px;
-        font-weight: 800;
-        letter-spacing: 0.12em;
-        padding: 18px 48px;
-        border-radius: 999px;
-        margin-bottom: 56px;
-        box-shadow: 0 8px 28px rgba(45, 106, 79, 0.25);
+        padding: 100px 88px;
       }
       .poster-1 .line {
-        font-size: 58px;
-        font-weight: 700;
-        line-height: 1.45;
+        font-size: 62px;
+        font-weight: 600;
+        line-height: 1.5;
         color: var(--text);
         margin: 0;
+        letter-spacing: 0.02em;
       }
-      .poster-1 .line-accent {
-        color: var(--primary);
-      }
-      .poster-1 .sub {
-        margin-top: 48px;
-        font-size: 32px;
-        color: var(--muted);
-        line-height: 1.5;
-      }
+      /* 图2：数据，浅底手写感 */
       .poster-2 {
-        background: linear-gradient(160deg, #1a3d2e 0%, #2d6a4f 55%, #40916c 100%);
-        color: #fff;
-        padding: 72px 64px;
+        background: #faf9f6;
+        padding: 80px 72px;
         display: flex;
         flex-direction: column;
       }
       .poster-2 h2 {
-        margin: 0 0 12px;
-        font-size: 48px;
-        font-weight: 800;
-        line-height: 1.35;
+        margin: 0 0 16px;
+        font-size: 46px;
+        font-weight: 600;
+        line-height: 1.4;
+        color: var(--text);
       }
       .poster-2 .lead {
-        margin: 0 0 40px;
+        margin: 0 0 48px;
         font-size: 28px;
-        opacity: 0.88;
+        color: var(--muted);
         line-height: 1.55;
       }
       .stat-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 24px;
+        gap: 28px;
         flex: 1;
       }
       .stat-box {
-        background: rgba(255, 255, 255, 0.12);
-        border: 2px solid rgba(255, 255, 255, 0.22);
-        border-radius: 20px;
-        padding: 32px 24px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 36px 20px;
         text-align: center;
       }
       .stat-box .val {
-        font-size: 52px;
-        font-weight: 800;
+        font-size: 48px;
+        font-weight: 600;
         line-height: 1.2;
-        margin-bottom: 12px;
+        margin-bottom: 14px;
+        color: var(--primary);
       }
       .stat-box .lbl {
         font-size: 24px;
-        opacity: 0.9;
-        line-height: 1.4;
+        color: var(--muted);
+        line-height: 1.45;
       }
-      .poster-2 .note {
-        margin-top: 32px;
-        font-size: 22px;
-        opacity: 0.65;
-        text-align: center;
-      }
+      /* 图3：怎么玩 */
       .poster-3 {
-        background: var(--card);
-        padding: 72px 64px;
+        background: #f5f3ee;
+        padding: 80px 72px;
         display: flex;
         flex-direction: column;
       }
-      .poster-3 .tag {
-        align-self: flex-start;
-        background: var(--primary-bg);
-        color: var(--primary);
-        font-size: 28px;
-        font-weight: 700;
-        padding: 10px 24px;
-        border-radius: 999px;
-        border: 2px solid #b7e4c7;
-        margin-bottom: 32px;
-      }
       .poster-3 h2 {
-        margin: 0 0 16px;
-        font-size: 52px;
-        font-weight: 800;
-        line-height: 1.35;
+        margin: 0 0 20px;
+        font-size: 46px;
+        font-weight: 600;
+        line-height: 1.4;
         color: var(--text);
       }
       .poster-3 .lead {
-        margin: 0 0 40px;
-        font-size: 30px;
+        margin: 0 0 48px;
+        font-size: 28px;
         color: var(--muted);
         line-height: 1.55;
       }
       .step-list {
         display: flex;
         flex-direction: column;
-        gap: 24px;
+        gap: 28px;
         flex: 1;
       }
       .step-item {
         display: flex;
         align-items: flex-start;
         gap: 24px;
-        background: #f8fdf9;
-        border: 2px solid var(--border);
-        border-radius: 20px;
-        padding: 28px 32px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 32px;
       }
       .step-num {
         flex-shrink: 0;
-        width: 56px;
-        height: 56px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         background: var(--primary);
         color: #fff;
-        font-size: 28px;
-        font-weight: 800;
+        font-size: 26px;
+        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: center;
       }
       .step-text {
-        font-size: 32px;
-        line-height: 1.45;
+        font-size: 30px;
+        line-height: 1.5;
         color: var(--text);
-        padding-top: 6px;
+        padding-top: 4px;
       }
-      .poster-3 .url {
-        margin-top: 36px;
-        text-align: center;
-        font-size: 34px;
-        font-weight: 700;
-        color: var(--primary);
-        word-break: break-all;
-      }
+      /* 图4：身份 */
       .poster-4 {
-        background: linear-gradient(135deg, #edf7f0 0%, #fff 50%, #f5faf7 100%);
-        padding: 72px 64px;
+        background: #faf9f6;
+        padding: 80px 72px;
         display: flex;
         flex-direction: column;
       }
       .poster-4 h2 {
-        margin: 0 0 12px;
-        font-size: 48px;
-        font-weight: 800;
-        color: var(--text);
-        line-height: 1.35;
+        margin: 0 0 16px;
+        font-size: 46px;
+        font-weight: 600;
+        line-height: 1.4;
       }
       .poster-4 .lead {
-        margin: 0 0 36px;
+        margin: 0 0 40px;
         font-size: 28px;
         color: var(--muted);
         line-height: 1.55;
@@ -298,86 +273,53 @@
       .identity-cards {
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 24px;
         flex: 1;
       }
       .id-card {
         background: #fff;
-        border: 2px solid var(--border);
-        border-left: 8px solid var(--primary);
-        border-radius: 16px;
+        border: 1px solid var(--border);
+        border-left: 5px solid var(--primary);
+        border-radius: 6px;
         padding: 28px 32px;
       }
       .id-card strong {
         display: block;
-        font-size: 34px;
+        font-size: 32px;
         color: var(--primary);
-        margin-bottom: 8px;
+        margin-bottom: 10px;
+        font-weight: 600;
       }
       .id-card span {
         font-size: 28px;
-        color: var(--text);
-        line-height: 1.45;
+        line-height: 1.5;
       }
-      .poster-5 {
-        background: linear-gradient(180deg, #2d6a4f 0%, #1a3d2e 100%);
-        color: #fff;
-        padding: 80px 64px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-      .poster-5 .emoji {
-        font-size: 72px;
-        margin-bottom: 32px;
-      }
-      .poster-5 h2 {
-        margin: 0 0 24px;
-        font-size: 52px;
-        font-weight: 800;
-        line-height: 1.4;
-      }
-      .poster-5 p {
-        margin: 0 0 20px;
-        font-size: 32px;
-        line-height: 1.55;
-        opacity: 0.92;
-        max-width: 880px;
-      }
-      .poster-5 .highlight {
-        margin-top: 40px;
-        background: rgba(255, 255, 255, 0.15);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-radius: 20px;
-        padding: 32px 40px;
-        font-size: 30px;
-        line-height: 1.55;
-      }
+      /* 图5：议题 */
       .poster-6 {
-        background: var(--card);
-        padding: 72px 64px;
+        background: #f0ede4;
+        padding: 80px 72px;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
       }
       .poster-6 h2 {
-        margin: 0 0 20px;
+        margin: 0 0 24px;
         font-size: 44px;
-        font-weight: 800;
+        font-weight: 600;
         line-height: 1.4;
-        color: var(--text);
+      }
+      .poster-6 .intro {
+        margin: 0 0 32px;
+        font-size: 28px;
+        color: var(--muted);
+        line-height: 1.55;
       }
       .poster-6 .quote {
-        background: #f8fdf9;
-        border-left: 8px solid var(--primary-light);
+        background: #fff;
+        border-left: 4px solid var(--primary);
         padding: 32px 36px;
-        border-radius: 0 16px 16px 0;
         font-size: 30px;
         line-height: 1.6;
-        color: var(--text);
-        margin: 24px 0;
+        margin: 0 0 40px;
       }
       .poster-6 .quote cite {
         display: block;
@@ -386,20 +328,35 @@
         font-size: 24px;
         color: var(--muted);
       }
-      .poster-6 .pill-row {
+      /* 图6：转发 */
+      .poster-5 {
+        background: #faf9f6;
+        padding: 100px 72px;
         display: flex;
-        flex-wrap: wrap;
-        gap: 16px;
-        margin-top: 32px;
+        flex-direction: column;
+        justify-content: center;
       }
-      .poster-6 .pill {
-        background: var(--primary-bg);
-        color: var(--primary);
-        font-size: 26px;
+      .poster-5 h2 {
+        margin: 0 0 32px;
+        font-size: 48px;
         font-weight: 600;
-        padding: 12px 24px;
-        border-radius: 999px;
-        border: 2px solid #b7e4c7;
+        line-height: 1.4;
+      }
+      .poster-5 p {
+        margin: 0 0 24px;
+        font-size: 30px;
+        line-height: 1.55;
+        color: var(--text);
+      }
+      .poster-5 .highlight {
+        margin-top: 32px;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 32px;
+        font-size: 28px;
+        line-height: 1.55;
+        color: var(--muted);
       }
     </style>
   </head>
@@ -407,34 +364,31 @@
     <header class="page-header">
       <h1>小红书宣传图生成</h1>
       <p>
-        每张图为 1080×1440（3:4），与模拟器网站配色一致。点击「下载 PNG」保存后发小红书；也可浏览器截图。
-        <br />网站：<strong>clean-heating-simulator.com</strong>
+        每张图 1080×1440（3:4）。点击「下载 PNG」保存；网址统一发在评论区。
       </p>
     </header>
 
     <main class="gallery">
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-1">
         <div class="poster-meta">
           <div>
-            <h2>图 1 · 封面 / 求助</h2>
+            <h2>图 1 · 封面</h2>
             <span>建议作笔记首图</span>
           </div>
-          <button type="button" class="btn-download" data-target="poster-1" data-filename="01-cover-qiuzhu.png">
+          <button type="button" class="btn-download" data-target="poster-1" data-filename="01-cover.png">
             下载 PNG
           </button>
         </div>
         <div class="poster-preview">
           <div id="poster-1" class="poster poster-1">
-            <span class="badge">求助</span>
             <p class="line">我做了一个网页</p>
-            <p class="line line-accent">想让你帮一户农家</p>
-            <p class="line line-accent">算算取暖账</p>
-            <p class="sub">北方农村煤改气/电 · 5 分钟体验</p>
+            <p class="line">想让你帮一户农家</p>
+            <p class="line">算算取暖账</p>
           </div>
         </div>
       </section>
 
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-2">
         <div class="poster-meta">
           <div>
             <h2>图 2 · 关键数据</h2>
@@ -447,7 +401,7 @@
         <div class="poster-preview">
           <div id="poster-2" class="poster poster-2">
             <h2>一件关乎千万家庭过冬的事</h2>
-            <p class="lead">整个中国北方地区推进煤改气、煤改电，以下以代表性地区公开数据为例</p>
+            <p class="lead">整个北方地区在推进煤改气、煤改电，以下以公开数据为例</p>
             <div class="stat-grid">
               <div class="stat-box">
                 <div class="val">114.8 万+</div>
@@ -466,12 +420,12 @@
                 <div class="lbl">补贴退坡后支出或上升</div>
               </div>
             </div>
-            <p class="note">数据来源：经济日报、环境公报、学术测算等公开资料</p>
+            <p class="poster-foot">网址见评论区</p>
           </div>
         </div>
       </section>
 
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-3">
         <div class="poster-meta">
           <div>
             <h2>图 3 · 怎么玩</h2>
@@ -483,9 +437,8 @@
         </div>
         <div class="poster-preview">
           <div id="poster-3" class="poster poster-3">
-            <span class="tag">约 5 分钟 · 无需注册 · 匿名</span>
             <h2>代入一户农家<br />走一遍煤改决策</h2>
-            <p class="lead">网页小模拟：看清取暖费与存款会怎么变</p>
+            <p class="lead">大约 5 分钟，不用注册，填完能看取暖费和存款怎么变</p>
             <div class="step-list">
               <div class="step-item">
                 <span class="step-num">1</span>
@@ -497,15 +450,15 @@
               </div>
               <div class="step-item">
                 <span class="step-num">3</span>
-                <span class="step-text">看结局与智能分析，填写小调查帮改进</span>
+                <span class="step-text">看结局和分析，填个小调查帮改进</span>
               </div>
             </div>
-            <p class="url">clean-heating-simulator.com</p>
+            <p class="poster-foot">网址见评论区</p>
           </div>
         </div>
       </section>
 
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-4">
         <div class="poster-meta">
           <div>
             <h2>图 4 · 不同身份怎么参与</h2>
@@ -518,30 +471,31 @@
         <div class="poster-preview">
           <div id="poster-4" class="poster poster-4">
             <h2>邀请你试玩一把</h2>
-            <p class="lead">你的体验很重要 · 帮我把政策数字翻译成账本上的真实感受</p>
+            <p class="lead">你的体验挺重要的，帮我把政策数字和真实生活对上号</p>
             <div class="identity-cards">
               <div class="id-card">
-                <strong>📚 学生</strong>
-                <span>代入北方农村家庭，体验政策与生活的距离</span>
+                <strong>学生</strong>
+                <span>代入北方农村家庭，感受政策与生活的距离</span>
               </div>
               <div class="id-card">
-                <strong>🏡 已煤改农户</strong>
-                <span>对照自家情况试玩，告诉我们哪里不像、哪里难懂</span>
+                <strong>已煤改农户</strong>
+                <span>对照自家情况试玩，说说哪里不像、哪里难懂</span>
               </div>
               <div class="id-card">
-                <strong>🌾 未煤改农户</strong>
-                <span>提前模拟不同路线，看看哪种更适合自家条件</span>
+                <strong>未煤改农户</strong>
+                <span>提前试试不同路线，看哪种更适合自家条件</span>
               </div>
               <div class="id-card">
-                <strong>👋 其他朋友</strong>
-                <span>任意填一组数字，看看不同收入、面积下结局有何不同</span>
+                <strong>其他朋友</strong>
+                <span>随便填一组数字，看不同收入、面积下结局差多少</span>
               </div>
             </div>
+            <p class="poster-foot">网址见评论区</p>
           </div>
         </div>
       </section>
 
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-6">
         <div class="poster-meta">
           <div>
             <h2>图 5 · 为什么值得关注</h2>
@@ -553,29 +507,18 @@
         </div>
         <div class="poster-preview">
           <div id="poster-6" class="poster poster-6">
-            <div>
-              <h2>改得起 · 用得起 · 过得暖</h2>
-              <p style="margin: 0; font-size: 28px; color: var(--muted); line-height: 1.55">
-                环境在变好，投入也很大；但取暖账单，农户感受最直接。
-              </p>
-              <blockquote class="quote">
-                「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
-                <cite>—— 澎湃新闻 · 保定/定州调查</cite>
-              </blockquote>
-              <div class="pill-row">
-                <span class="pill">整个北方农村</span>
-                <span class="pill">以保定为例</span>
-                <span class="pill">公开数据建模</span>
-              </div>
-            </div>
-            <p style="margin: 0; text-align: center; font-size: 30px; font-weight: 700; color: var(--primary)">
-              clean-heating-simulator.com
-            </p>
+            <h2>改得起、用得起、过得暖</h2>
+            <p class="intro">环境在变好，投入也不小；但取暖账单，农户感受最直接。</p>
+            <blockquote class="quote">
+              「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
+              <cite>—— 澎湃新闻 · 保定/定州调查</cite>
+            </blockquote>
+            <p class="poster-foot">网址见评论区</p>
           </div>
         </div>
       </section>
 
-      <section class="poster-wrap">
+      <section class="poster-wrap" data-poster="poster-5">
         <div class="poster-meta">
           <div>
             <h2>图 6 · 拜托转发</h2>
@@ -587,20 +530,28 @@
         </div>
         <div class="poster-preview">
           <div id="poster-5" class="poster poster-5">
-            <div class="emoji">🙏</div>
             <h2>拜托帮忙转发试试</h2>
-            <p>每一次试玩、每一条建议<br />都在帮我把这个小工具做得更贴近真实生活</p>
-            <p>有煤改经历、对取暖费用有感触的朋友<br />欢迎评论区分享，或私信我聊聊</p>
+            <p>每试玩一次、每提一条建议，都是在帮我把这个小工具做得更贴近真实生活。</p>
+            <p>有煤改经历、对取暖费有感触的朋友，欢迎评论区聊聊，或私信我。</p>
             <div class="highlight">
-              留言「煤改」+ 你的感受<br />
-              或转发给还在纠结取暖方案的家人朋友
+              留言「煤改」说说你的感受，<br />
+              或者转给还在纠结取暖方案的家人朋友。
             </div>
+            <p class="poster-foot">网址见评论区</p>
           </div>
         </div>
       </section>
     </main>
 
     <script>
+      (function initExportMode() {
+        const param = new URLSearchParams(location.search).get("export");
+        if (!param) return;
+        document.body.classList.add("export-mode");
+        const wrap = document.querySelector(`[data-poster="${param}"]`);
+        if (wrap) wrap.classList.add("export-active");
+      })();
+
       document.querySelectorAll(".btn-download").forEach((btn) => {
         btn.addEventListener("click", async () => {
           const id = btn.dataset.target;
