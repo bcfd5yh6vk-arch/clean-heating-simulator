@@ -3217,6 +3217,17 @@
       }
 
       function buildPostGameSurveyForm(identity) {
+        const farmerInterviewBlock = `
+          ${radioField("farmer_interview_willing", "你愿不愿意接受后续访谈？", [
+            ["yes", "愿意"],
+            ["no", "不愿意"]
+          ])}
+          <fieldset id="farmerInterviewContactWrap" class="survey-q" hidden>
+            <legend>你的联系方式（手机号）</legend>
+            <input type="tel" name="farmer_interview_contact" class="survey-other-input" inputmode="tel" autocomplete="tel" placeholder="请填写手机号" />
+          </fieldset>
+        `;
+
         const common = `
           <p class="survey-section-title">共用题（所有人）</p>
           ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是「改造投入与每年取暖花费」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
@@ -3283,6 +3294,7 @@
           ${textField("f6_realistic_part", "F6. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
           ${textField("f7_unrealistic_part", "F7. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
           ${textField("f8_policy_suggestion", "F8. 若给政策提一条建议，你会说什么？", "可选填写")}
+          ${farmerInterviewBlock}
         `;
 
         const unconverted = `
@@ -3311,6 +3323,7 @@
             ["E", "E. 不确定"]
           ])}
           ${textField("n4_preferred_path", "N4. 如果由你家决定，你会优先选哪条路线（天然气/热泵/保温改造/先观望）？理由是什么？", "请填写", true)}
+          ${farmerInterviewBlock}
         `;
 
         const other = `
@@ -3425,6 +3438,20 @@
             }
           });
         });
+
+        const farmerInterviewContactWrap = document.getElementById("farmerInterviewContactWrap");
+        const farmerInterviewContact = postGameSurveyForm.querySelector('[name="farmer_interview_contact"]');
+        postGameSurveyForm.querySelectorAll('[name="farmer_interview_willing"]').forEach((el) => {
+          el.addEventListener("change", () => {
+            const val = [...postGameSurveyForm.querySelectorAll('[name="farmer_interview_willing"]')].find((x) => x.checked)?.value;
+            const show = val === "yes";
+            if (farmerInterviewContactWrap) farmerInterviewContactWrap.hidden = !show;
+            if (farmerInterviewContact) {
+              farmerInterviewContact.required = show;
+              if (!show) farmerInterviewContact.value = "";
+            }
+          });
+        });
       }
 
       function wireSurveyCheckboxLimits() {
@@ -3507,6 +3534,7 @@
           const f1 = collectRadioAnswer("f1_heating_method");
           const f3Reduce = collectRadioAnswer("f3_reduce_spending");
           const f5 = collectCheckboxAnswers("f5_subsidy_response");
+          const farmerInterview = collectRadioAnswer("farmer_interview_willing");
           responses.converted_farmer = {
             f1_heating_method: f1,
             f1_method_other: f1.value === "D" ? collectTextAnswer("f1_method_other") : "",
@@ -3518,16 +3546,23 @@
             f5_other: f5.some((item) => item.value === "other") ? collectTextAnswer("f5_other") : "",
             f6_realistic_part: collectTextAnswer("f6_realistic_part"),
             f7_unrealistic_part: collectTextAnswer("f7_unrealistic_part"),
-            f8_policy_suggestion: collectTextAnswer("f8_policy_suggestion")
+            f8_policy_suggestion: collectTextAnswer("f8_policy_suggestion"),
+            farmer_interview_willing: farmerInterview,
+            farmer_interview_contact:
+              farmerInterview.value === "yes" ? collectTextAnswer("farmer_interview_contact") : ""
           };
         } else if (identity === "未煤改农户") {
           const n1 = collectRadioAnswer("n1_heating_method");
+          const farmerInterview = collectRadioAnswer("farmer_interview_willing");
           responses.unconverted_farmer = {
             n1_heating_method: n1,
             n1_method_other: n1.value === "D" ? collectTextAnswer("n1_method_other") : "",
             n2_concerns: collectCheckboxAnswers("n2_concerns"),
             n3_attitude: collectRadioAnswer("n3_attitude"),
-            n4_preferred_path: collectTextAnswer("n4_preferred_path")
+            n4_preferred_path: collectTextAnswer("n4_preferred_path"),
+            farmer_interview_willing: farmerInterview,
+            farmer_interview_contact:
+              farmerInterview.value === "yes" ? collectTextAnswer("farmer_interview_contact") : ""
           };
         } else if (identity === "其他") {
           responses.other_audience = {
@@ -3598,7 +3633,10 @@
             sq_f5_other: f.f5_other || null,
             sq_f6_realistic_part: f.f6_realistic_part || null,
             sq_f7_unrealistic_part: f.f7_unrealistic_part || null,
-            sq_f8_policy_suggestion: f.f8_policy_suggestion || null
+            sq_f8_policy_suggestion: f.f8_policy_suggestion || null,
+            sq_farmer_interview_willing: f.farmer_interview_willing.value || null,
+            sq_farmer_interview_willing_label: f.farmer_interview_willing.label || null,
+            sq_farmer_interview_contact: f.farmer_interview_contact || null
           });
         }
 
@@ -3612,7 +3650,10 @@
             sq_n2_concerns_labels: joinCheckboxLabels(n.n2_concerns),
             sq_n3_attitude: n.n3_attitude.value || null,
             sq_n3_attitude_label: n.n3_attitude.label || null,
-            sq_n4_preferred_path: n.n4_preferred_path || null
+            sq_n4_preferred_path: n.n4_preferred_path || null,
+            sq_farmer_interview_willing: n.farmer_interview_willing.value || null,
+            sq_farmer_interview_willing_label: n.farmer_interview_willing.label || null,
+            sq_farmer_interview_contact: n.farmer_interview_contact || null
           });
         }
 
@@ -3665,6 +3706,14 @@
             alert("请填写 F5 的其他说明。");
             return false;
           }
+          if (!f.farmer_interview_willing.value) {
+            alert("请选择是否愿意接受后续访谈。");
+            return false;
+          }
+          if (f.farmer_interview_willing.value === "yes" && !f.farmer_interview_contact) {
+            alert("请填写你的联系方式（手机号）。");
+            return false;
+          }
         }
         if (id === "未煤改农户") {
           const n = responses.unconverted_farmer;
@@ -3674,6 +3723,14 @@
           }
           if (n.n2_concerns.length === 0) {
             alert("N2 请至少选择 1 项。");
+            return false;
+          }
+          if (!n.farmer_interview_willing.value) {
+            alert("请选择是否愿意接受后续访谈。");
+            return false;
+          }
+          if (n.farmer_interview_willing.value === "yes" && !n.farmer_interview_contact) {
+            alert("请填写你的联系方式（手机号）。");
             return false;
           }
         }
