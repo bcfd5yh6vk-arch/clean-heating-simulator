@@ -239,15 +239,20 @@
         color: var(--muted);
         line-height: 1.45;
       }
-      /* 欢迎首屏：背景数据与议题说明 */
-      .welcome-panel.consent-panel {
+      /* 背景资讯第二屏 */
+      .context-panel {
         width: min(680px, 100%);
         max-height: calc(100vh - 40px);
         display: flex;
         flex-direction: column;
         padding: 20px 20px 18px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-lg);
+        text-align: left;
       }
-      .welcome-body {
+      .context-body {
         flex: 1;
         min-height: 0;
         overflow-y: auto;
@@ -1054,10 +1059,22 @@
       html.welcome-dismissed #welcomeOverlay {
         display: none !important;
       }
-      html:not(.welcome-dismissed) body {
-        overflow: hidden;
+      #contextOverlay {
+        position: fixed;
+        inset: 0;
+        z-index: 2050;
+        background: var(--bg-hero);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 16px;
+        overflow-y: auto;
       }
-      html:not(.welcome-dismissed) #consentOverlay {
+      html:not(.welcome-dismissed) #contextOverlay,
+      html.context-dismissed #contextOverlay {
+        display: none !important;
+      }
+      html:not(.context-dismissed) #consentOverlay {
         display: none !important;
       }
       #consentOverlay {
@@ -1092,7 +1109,8 @@
         color: var(--text);
         text-align: center;
       }
-      .welcome-panel h1 {
+      .welcome-panel h1,
+      .context-panel h1 {
         font-size: 1.28rem;
         line-height: 1.45;
         text-align: center;
@@ -1322,7 +1340,8 @@
           font-size: clamp(1.75rem, 6.5vw, 2.25rem);
         }
         .consent-panel h1,
-        .welcome-panel h1 {
+        .welcome-panel h1,
+        .context-panel h1 {
           font-size: 1.65rem;
         }
         h2 {
@@ -1432,9 +1451,20 @@
       <div class="welcome-panel consent-panel">
         <h1 id="welcomeTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
         <p class="welcome-lead">
+          代入一户北方农村家庭，在五回合里试不同清洁取暖路线，看清每年花费怎么变，帮你找到更划算、更舒服过冬的办法。
+        </p>
+        <div class="consent-actions">
+          <button type="button" id="welcomeStartBtn" class="btn-primary">下一步</button>
+        </div>
+      </div>
+    </div>
+    <div id="contextOverlay" role="dialog" aria-modal="true" aria-labelledby="contextTitle">
+      <div class="context-panel">
+        <h1 id="contextTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
+        <p class="welcome-lead">
           河北保定等地已有<strong>百余万户</strong>完成煤改气、煤改电——空气在变好，但不少家庭的<strong>取暖账单</strong>仍是每年冬天绕不开的话题。代入一户农家，在五回合里试不同清洁取暖路线，看清<strong>取暖费与存款</strong>会怎么变。
         </p>
-        <div class="welcome-body">
+        <div class="context-body">
           <section class="welcome-stats" aria-label="背景数据">
             <div class="welcome-stats-grid">
               <div class="welcome-stat">
@@ -1473,7 +1503,7 @@
               </div>
               <div class="context-block">
                 <h3>账单压力，农户感受最直接</h3>
-                <p>澎湃新闻在保定、定州等地调查指出，用户普遍提到「贵」的问题。学术研究显示：若运行补贴完全退坡，农村取暖支出可能增加约 36%。</p>
+                <p>北方农村普遍面临类似压力。澎湃新闻在保定、定州等地调查指出，用户普遍提到「贵」的问题。学术研究显示：若运行补贴完全退坡，农村取暖支出可能增加约 36%——这一情况不只限于某一个市。</p>
                 <blockquote class="media-quote">
                   「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
                   <cite>—— <a href="https://www.thepaper.cn/newsDetail_forward_4926300" target="_blank" rel="noopener noreferrer">澎湃新闻</a> · 保定/定州调查，2019</cite>
@@ -1493,7 +1523,7 @@
           </section>
         </div>
         <div class="consent-actions">
-          <button type="button" id="welcomeStartBtn" class="btn-primary">开始模拟</button>
+          <button type="button" id="contextContinueBtn" class="btn-primary">开始模拟</button>
         </div>
         <p class="welcome-footer hint">约 5 分钟 · 无需注册 · 数据匿名</p>
       </div>
@@ -1851,6 +1881,10 @@
     <script>
       document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
         document.documentElement.classList.add("welcome-dismissed");
+        window.scrollTo(0, 0);
+      });
+      document.getElementById("contextContinueBtn")?.addEventListener("click", () => {
+        document.documentElement.classList.add("context-dismissed");
         window.scrollTo(0, 0);
       });
       document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
@@ -3731,7 +3765,7 @@
         hideSurveySuccessModal();
         hidePostGameSurvey();
         resetSimulation(false);
-        document.documentElement.classList.remove("welcome-dismissed", "consent-accepted");
+        document.documentElement.classList.remove("welcome-dismissed", "context-dismissed", "consent-accepted");
         window.scrollTo(0, 0);
       }
 
