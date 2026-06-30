@@ -1895,13 +1895,20 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (async function bootstrapSimulator() {
-      const SUPABASE_URL = "https://zottuuavggzsjqvblydl.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvdHR1dWF2Z2d6c2pxdmJseWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MTA1MjksImV4cCI6MjA5NjM4NjUyOX0.zv7Ne_JIZWcOQaftIET8blOCEi0xOGda67jDdSXwp5M";
+      async function loadSupabaseClient() {
+        if (!window.supabase) return null;
+        try {
+          const res = await fetch("/api/supabase-config");
+          if (!res.ok) return null;
+          const data = await res.json();
+          if (!data?.url || !data?.anonKey) return null;
+          return window.supabase.createClient(data.url, data.anonKey);
+        } catch {
+          return null;
+        }
+      }
 
-      const supabaseClient = window.supabase
-        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-        : null;
+      const supabaseClient = await loadSupabaseClient();
 
       const state = {
         active: false,

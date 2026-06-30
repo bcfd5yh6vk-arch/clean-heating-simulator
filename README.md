@@ -8,21 +8,29 @@
 
 域名在 Cloudflare 注册并解析；站点托管在 Vercel（原 `clean-heating-simulator.vercel.app` 仍可访问，但以自定义域名为准）。
 
-线上部署的是根目录 `index.html`（静态页）+ `api/chat.js`（Vercel Serverless，供智能分析调用）。**API Key 只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
+线上部署的是根目录 `index.html`（静态页）+ `api/` 下的 Vercel Serverless 接口。**DeepSeek API Key 与 Supabase 连接信息只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
 
-### 在 Vercel 配置 DeepSeek API Key（必做，否则智能分析不可用）
+### 在 Vercel 配置环境变量（必做）
 
 1. 打开 [vercel.com](https://vercel.com) 并登录。
 2. 进入项目 **clean-heating-simulator**（或你的项目名）。
 3. 顶部点 **Settings** → 左侧点 **Environment Variables**。
-4. 填写：
-   - **Key（名称）**：`DEEPSEEK_API_KEY`
-   - **Value（值）**：粘贴你的 DeepSeek API Key（在 [platform.deepseek.com](https://platform.deepseek.com) 获取）
-   - **Environments（环境）**：勾选 **Production**、**Preview**、**Development**（三个都勾上最省事）
-5. 点 **Save** 保存。
-6. 回到 **Deployments** 标签 → 最新一次部署右侧 **⋯** → **Redeploy** → 勾选 **Use existing Build Cache** → **Redeploy**。
+4. 添加以下变量（**Environments** 建议 Production / Preview / Development 全勾）：
 
-完成后，线上 `https://www.clean-heating-simulator.com/api/chat` 会用服务器端的 Key 调用 DeepSeek，浏览器里看不到 Key。
+| Key | 说明 |
+|-----|------|
+| `DEEPSEEK_API_KEY` | [platform.deepseek.com](https://platform.deepseek.com) 获取；未配置则智能分析不可用 |
+| `SUPABASE_URL` | Supabase 项目 URL（如 `https://xxxx.supabase.co`） |
+| `SUPABASE_ANON_KEY` | Supabase 项目 **anon public** key；未配置则研究数据无法保存 |
+
+5. 点 **Save** 保存。
+6. 回到 **Deployments** → 最新部署 **⋯** → **Redeploy** → **Redeploy**。
+
+本地用 `vercel dev` 时，可在项目根目录建 `.env.local` 写入同名变量（勿提交 Git）。
+
+### 原 DeepSeek 配置说明
+
+`DEEPSEEK_API_KEY` 配置完成后，线上 `https://www.clean-heating-simulator.com/api/chat` 会用服务器端 Key 调用 DeepSeek，浏览器里看不到 Key。
 
 ## 项目结构
 
