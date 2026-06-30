@@ -1284,7 +1284,7 @@
       <div class="welcome-panel consent-panel">
         <h1 id="welcomeTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
         <p class="welcome-lead">
-          代入一户北方农村家庭，在五回合里体验清洁取暖政策下的路线选择与费用变化，感受「改得起」与「用不起」的现实张力。
+          代入一户北方农村家庭，在五回合里试不同清洁取暖路线，看清每年花费怎么变，帮你找到更划算、更舒服过冬的办法。
         </p>
         <div class="consent-actions">
           <button type="button" id="welcomeStartBtn" class="btn-primary">开始模拟</button>
@@ -1310,7 +1310,7 @@
           </li>
           <li>
             <strong>数据用途</strong>
-            你的回答只用于本课堂/研究项目，用来改进模拟器与理解煤改气议题，不会作广告或其他商业用途。
+            你的回答只用于本课堂/研究项目，用来改进模拟器、帮助农户更好地选择清洁取暖方案，不会作广告或其他商业用途。
           </li>
         </ul>
         <div class="consent-actions">
@@ -1322,9 +1322,9 @@
     <div class="wrap" id="mainApp">
       <header class="hero">
         <span class="hero-badge">5 分钟体验 · 无需注册</span>
-        <h1>农村换暖气，家里到底扛不扛得住？</h1>
+        <h1>农村换暖气，怎样选更暖和、更省心？</h1>
         <p class="hero-lead">
-          这是一个<strong>网页小模拟</strong>：代入河北一户农村家庭，在「煤改气 / 煤改电」政策下走 5 个回合，观察<strong>取暖费</strong>与<strong>家里存款</strong>的变化。
+          这是一个<strong>网页小模拟</strong>：代入河北一户农村家庭，在煤改气 / 煤改电等路线下走 5 个回合，提前看清<strong>取暖费</strong>与<strong>家里存款</strong>怎么变，帮你对比哪种方案更适合自家情况。
         </p>
         <div class="hero-what">
           <strong>你会做什么：</strong>填写家庭情况 → 每回合读情景并选一个选项 → 查看结局与智能分析。
@@ -1385,7 +1385,7 @@
                     <li><strong>学生</strong>：选「学生」填年级，代入熟悉的一户北方农村家庭</li>
                     <li><strong>已煤改农户</strong>：填村名，重走当年煤改过程，玩后请多提改进建议</li>
                     <li><strong>未煤改农户</strong>：填村名，借模拟未雨绸缪、选对改造路径</li>
-                    <li><strong>其他</strong>：说明身份，代入一户农家体验政策与民生的张力</li>
+                    <li><strong>其他</strong>：说明身份，代入一户农家，了解清洁取暖对家庭账本与过冬体验的影响</li>
                   </ul>
                 </li>
                 <li>下面数字填<strong>整户</strong>情况——点击各栏填写，可参考灰色小字里的常见区间</li>
@@ -1458,11 +1458,11 @@
                 <summary>高级设置：结局判定阈值（一般不用改）</summary>
                 <div class="accordion-body">
                   <div class="grid">
-                    <label>经济破产：能耗负担率（≤ %）
+                    <label>资金紧张：能耗负担率（≤ %）
                       <input type="text" value="10（固定）" disabled />
                       <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
                     </label>
-                    <label>被处罚：法律合规度（&lt;）
+                    <label>需尽快改造：合规度（&lt;）
                       <input type="text" value="30（固定）" disabled />
                       <input type="hidden" name="seized_compliance_threshold" value="30" />
                     </label>
@@ -1470,7 +1470,7 @@
                       <input type="text" value="80（固定）" disabled />
                       <input type="hidden" name="success_emission_threshold" value="80" />
                     </label>
-                    <label>成功：法律合规度（=）
+                    <label>成功：合规度（=）
                       <input type="text" value="100（固定）" disabled />
                       <input type="hidden" name="success_compliance_min" value="100" />
                     </label>
@@ -1530,7 +1530,7 @@
               <h2>第三步：智能分析</h2>
             </div>
             <p class="hint">
-              模拟结束后会自动生成三部分报告（农户画像、转型建议、政策矛盾解读）；阅读完成后点击下方按钮进入小调查。
+              模拟结束后会自动生成三部分报告（农户画像、转型建议、生活改善解读）；阅读完成后点击下方按钮进入小调查。
             </p>
             <div class="btn-row">
               <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成智能分析</button>
@@ -1569,8 +1569,8 @@
                   <ul style="margin:0 0 0 18px;padding:0;">
                     <li>玩家角色固定为河北农村<strong>农民家庭</strong>。</li>
                     <li>六项指标：取暖费、年收入、年盈余、合规度、排放达标度、能耗负担率。</li>
-                    <li>共 5 回合做选择；回合 2 持续违规可能被处罚。</li>
-                    <li>终局：成功转型 / 经济破产 / 被处罚。</li>
+                    <li>共 5 回合做选择；回合 2 若迟迟不改造，村里会入户了解情况并提醒。</li>
+                    <li>终局：成功转型 / 资金紧张 / 需尽快改造。</li>
                   </ul>
                 </div>
               </details>
@@ -1580,7 +1580,7 @@
                   <h3>研究问题</h3>
                   <p>能不能用村庄里每户的收入、住房、取暖成本数据，为整个村庄推荐更适合的清洁取暖路径？</p>
                   <h3>为什么重要</h3>
-                  <p>环境收益明显，但农户真正担心的是：冬天到底用不用得起。路径与多数家庭不匹配时，可能出现少开暖气甚至返煤。</p>
+                  <p>冬天暖和、花费合理，是每家都关心的。本工具用村里常见的收入、房子和取暖费数据，帮你比较天然气、热泵等路线，选更适合自己的方案。</p>
                   <h3>初步发现</h3>
                   <ul>
                     <li>清洁取暖要看补贴、气价、电价、房屋条件和可承受能力。</li>
@@ -1591,7 +1591,7 @@
               <details class="accordion-item" id="summaryAccordion">
                 <summary>研究摘要</summary>
                 <div class="accordion-body" id="summaryPanel">
-                  <p>清洁取暖成效明显，但运行成本受补贴退坡影响大，存在「改得起、用不起」问题。本工具帮助理解同一政策在不同家庭走向不同结局的原因。</p>
+                  <p>清洁取暖能让家里更干净、空气更好，但每年花费因路线和补贴而不同。本工具帮你提前算账、对比方案，减轻冬季负担，过更暖和、更省心的冬天。</p>
                 </div>
               </details>
             </div>
@@ -1991,7 +1991,7 @@
       const IDENTITY_GUIDANCE = {
         学生: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>借<strong>河北农村煤改气/电</strong>案例，关注环保要求与民生经济之间的矛盾，体会「改得起」与「用不起」的张力。</p>
+          <p>借<strong>河北农村煤改气/电</strong>案例，理解不同路线在花费、保暖和环保上的差别，学会帮家里做更合适的取暖选择。</p>
           <h4>2. 如何填写初始数据</h4>
           <ul>
             <li>身份选「学生」，并填写年级。</li>
@@ -2002,7 +2002,7 @@
           <h4>3. 五回合中如何做选择</h4>
           <ul>
             <li>每回合先读叙事和指标，再按「这户人家现实里会怎么选」来决策。</li>
-            <li>回合 1 是否准备转型；回合 2 合规压力；回合 3 技术路线投入；回合 4 增收或节能；回合 5 补贴退坡。</li>
+            <li>回合 1 是否准备转型；回合 2 入户了解与改造准备；回合 3 技术路线投入；回合 4 增收或节能；回合 5 补贴退坡。</li>
             <li>可换路线或回合 4 选择再玩一局，对比差异。</li>
           </ul>
           <h4>4. 如何理性看待结局与智能分析</h4>
@@ -2024,13 +2024,13 @@
           <h4>3. 五回合中如何做选择</h4>
           <ul>
             <li>按真实处境来选：更担心一次性设备钱，还是以后每年气费/电费？</li>
-            <li>留意回合 3（技术路线）和回合 5（补贴退坡）——往往最贴近「用不起」的感受。</li>
+            <li>留意回合 3（技术路线）和回合 5（补贴退坡）——往往最贴近「每年要花多少钱」的感受。</li>
             <li>玩后调查欢迎写明哪一步最像、最不像你家。</li>
           </ul>
           <h4>4. 如何理性看待结局与智能分析</h4>
           <ul>
             <li>模型采用河北地区平均参数，难完全复刻你村气价、补贴细则与房屋保温。</li>
-            <li>若结局与我家不像，请先看<strong>哪一步费用或合规逻辑</strong>出现差异。</li>
+            <li>若结局与我家不像，请先看<strong>哪一步费用或取暖方式</strong>出现差异。</li>
             <li>你的实地经验最可信；智能分析仅作辅助理解。</li>
           </ul>
         `,
@@ -2052,13 +2052,13 @@
           <h4>4. 如何理性看待结局与智能分析</h4>
           <ul>
             <li>模拟展示<strong>一种可能路径</strong>，具体补贴、气价以本县最新政策为准。</li>
-            <li>「经济破产」等标签提示现金流风险，不是对你家的评价。</li>
+            <li>「资金紧张」等标签提示现金流吃紧，不是对你家的评价。</li>
             <li>是否改造、选哪条路线，须结合收入、房屋并咨询村委或供气供电部门。</li>
           </ul>
         `,
         其他: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>代入<strong>一户普通河北农村家庭</strong>，理解同一清洁取暖政策为何在不同家庭走向不同结局。</p>
+          <p>代入<strong>一户普通河北农村家庭</strong>，理解同一清洁取暖方案为何在不同家庭会有不同的花费与过冬体验。</p>
           <h4>2. 如何填写初始数据</h4>
           <ul>
             <li>身份选「其他」，并简要说明你的角色（如政策研究、媒体报道、技术服务等）。</li>
@@ -2441,18 +2441,18 @@
         const roll = Math.random();
 
         pushLog(
-          `【执法模型】基础权重=${bp.toFixed(1)}，单次逃脱率=${p.toFixed(2)}，连续 ${state.nonRectifyStreak} 次违规后累计处罚概率 ${(pSeized * 100).toFixed(1)}%，随机值=${roll.toFixed(2)}。`
+          `【入户了解】住房面积权重=${bp.toFixed(1)}，单次暂不改造概率=${p.toFixed(2)}，连续 ${state.nonRectifyStreak} 次暂缓了解后累计需改造提醒概率 ${(pSeized * 100).toFixed(1)}%，随机值=${roll.toFixed(2)}。`
         );
 
         if (roll < pSeized) {
           finish(
             "seized",
-            "网格化执法与无人机巡检累计命中：你在合规压力回合持续拒绝整改，最终被处罚。"
+            "村里多次入户了解后，你家仍使用散煤取暖。长期如此，屋里烟尘多、炉火不安全、周边空气也受影响；按当地要求，需尽快选定并完成清洁取暖改造。"
           );
           return true;
         }
 
-        pushLog("本次巡查暂未命中，但重点监控仍未解除。");
+        pushLog("这次入户了解暂未要求立即改造，但村里仍会关注你家取暖方式，建议尽早了解清洁方案。");
         return false;
       }
 
@@ -2600,7 +2600,7 @@
         const cls = type === "success" ? "success" : "bankrupt";
         endingBoxEl.innerHTML = `
           <div class="ending ${cls}">
-            <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "被处罚" : "经济破产"}</h3>
+            <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "需尽快改造" : "资金紧张"}</h3>
             <p>${summary}</p>
           </div>
         `;
@@ -2616,7 +2616,7 @@
         if (burden > state.thresholds.bankrupt && state.user.surplus <= 0) {
           finish(
             "bankrupt",
-            "能耗负担率过高且可支配资金不足，家庭进入经济破产状态。"
+            "能耗负担率过高且可支配资金不足，家庭取暖开支已难以为继。"
           );
           return true;
         }
@@ -2638,12 +2638,12 @@
         } else if (state.user.surplus < state.thresholds.successSurplusMin) {
           finish(
             "bankrupt",
-            "回合5结束后年盈余为负，家庭现金流已无法维持，判定为经济破产。"
+            "回合5结束后年盈余为负，家里现金流已难以维持日常与取暖开支。"
           );
         } else {
           finish(
             "bankrupt",
-            "回合5发生补贴减少后，家庭未达到成功条件，判定为经济破产。"
+            "回合5补贴减少后，家庭未达到成功转型条件，取暖负担偏重，需调整路线或增收节支。"
           );
         }
       }
@@ -2659,16 +2659,16 @@
             state.nonRectifyStreak = 1;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `继续散煤取暖，合规度维持底线 ${COMPLIANCE_TURN1_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分，已进入重点监控名单。`;
+            note = `继续散煤取暖，合规度维持底线 ${COMPLIANCE_TURN1_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分；当地开始关注你家取暖方式，建议尽早了解清洁取暖选项。`;
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (evaluateEarlyEnding()) return;
             setStage(
-              "回合2：合规压力应对",
-              "你进入执法风险回合：可继续不整改，也可申请整改后进入技术转型。",
+              "回合2：了解清洁取暖",
+              "村里工作人员入户了解情况：可暂时继续用散煤（屋里烟尘多、清理麻烦、对空气也有影响），也可了解并开始准备改造。",
               [
-                { id: "1", label: "夜间继续违规取暖" },
-                { id: "2", label: "申请整改" }
+                { id: "1", label: "暂时继续用散煤" },
+                { id: "2", label: "了解并开始准备改造" }
               ]
             );
           } else {
@@ -2676,7 +2676,7 @@
             state.nonRectifyStreak = 0;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `表达整改意愿，合规度升至 ${COMPLIANCE_TURN1_PREPARE} 分；仍用散煤，排放达标度 ${Math.round(state.user.emission)} 分。`;
+            note = `表示愿意了解改造，合规度升至 ${COMPLIANCE_TURN1_PREPARE} 分；仍用散煤，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
@@ -2691,17 +2691,17 @@
             state.user.compliance = COMPLIANCE_TURN2_CONTINUE;
             state.nonRectifyStreak += 1;
             updateEmissionFromModel();
-            note = `继续违规取暖，合规度锁死 ${COMPLIANCE_TURN2_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分（连续 ${state.nonRectifyStreak} 次拒绝整改）。`;
+            note = `继续用散煤取暖，合规度锁死 ${COMPLIANCE_TURN2_CONTINUE} 分，排放达标度 ${Math.round(state.user.emission)} 分（已连续 ${state.nonRectifyStreak} 次暂缓了解改造方案）。`;
             pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
             setStage(
-              "回合2：合规压力应对",
-              "你仍处于执法风险回合。继续不整改将按住房面积与连续违规次数提高累计处罚概率。",
+              "回合2：了解清洁取暖",
+              "入户了解仍在进行。若一直不改，屋里通风、烟尘清理、环保方面的不便会持续；按本地惯例，改造提醒也会更频繁。",
               [
-                { id: "1", label: "夜间继续违规取暖" },
-                { id: "2", label: "申请整改" }
+                { id: "1", label: "暂时继续用散煤" },
+                { id: "2", label: "了解并开始准备改造" }
               ]
             );
           } else {
@@ -2710,7 +2710,7 @@
             state.nonRectifyStreak = 0;
             updateEmissionFromModel();
             state.turn += 1;
-            note = `申请整改，合规度回升至 ${COMPLIANCE_TURN2_RECTIFY} 分；尚未完成技术替代，排放达标度 ${Math.round(state.user.emission)} 分。`;
+            note = `了解并开始准备改造，合规度回升至 ${COMPLIANCE_TURN2_RECTIFY} 分；尚未完成技术替代，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
             setStage(
@@ -2878,7 +2878,7 @@
 
         setStage(
           "回合1：现状抉择（开局）",
-          "请选择开局策略：继续现状会进入执法风险，准备转型会先承受短期财务压力。",
+          "请选择开局策略：继续用散煤可先维持现有花费，但会遇到通风、卫生、环保方面的不便；准备转型会有一笔前期投入，但长期更暖和、更省心。",
           [
             { id: "A", label: "继续当前取暖方式" },
             { id: "B", label: "准备转型" }
@@ -2978,10 +2978,10 @@
       function buildPostGameSurveyForm(identity) {
         const common = `
           <p class="survey-section-title">共用题（所有人）</p>
-          ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是其中的「改得起但用不起」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
+          ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是「改造投入与每年取暖花费」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
           ${radioField("q3_biggest_impact", "Q3. 模拟中哪一项对你冲击最大？", [
             ["A", "A. 取暖费用突然上涨（如补贴退坡）"],
-            ["B", "B. 执法/合规压力"],
+            ["B", "B. 入户了解与改造提醒"],
             ["C", "C. 不同技术路线的一次性投入差异"],
             ["D", "D. 年盈余变负、家庭现金流紧张"],
             ["E", "E. 其他（开放补充）"]
@@ -3004,7 +3004,7 @@
             ["subsidy_cut", "补贴减少后的气价/电价"],
             ["poor_insulation", "房屋保温差导致用能高"],
             ["cold_home", "不敢开暖气、室温不够"],
-            ["reburn_risk", "返煤或违规取暖的风险"]
+            ["reburn_risk", "继续用散煤带来的不便与安全顾虑"]
           ], 3)}
           ${textField("s3_reflection", "S3. 这局模拟里，你最深的思考是什么？", "可选填写")}
         `;
@@ -3060,12 +3060,12 @@
             ["gas_supply", "气源不稳定/断气"],
             ["insulation", "房子保温差，改了也不暖和"],
             ["subsidy_drop", "补贴以后越来越少"],
-            ["voluntary", "不想被强制，希望自愿"]
+            ["voluntary", "希望按自家节奏自愿决定"]
           ], 3)}
           ${radioField("n3_attitude", "N3. 看完这局模拟，你对「要不要改」的态度？", [
             ["A", "A. 更愿意尽快改造"],
             ["B", "B. 仍想改，但必须补贴到位"],
-            ["C", "C. 更犹豫，担心用不起"],
+            ["C", "C. 更犹豫，担心每年花费太高"],
             ["D", "D. 倾向维持现状"],
             ["E", "E. 不确定"]
           ])}
@@ -3081,16 +3081,16 @@
             ["D", "D. 企业/技术服务"],
             ["E", "E. 一般公众兴趣"]
           ])}
-          ${likertField("o2_policy_variance_help", "O2. 模拟器对理解「同一政策在不同家庭走向不同结局」的帮助？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
+          ${likertField("o2_policy_variance_help", "O2. 模拟器对理解「同一方案在不同家庭花费与过冬体验差异」的帮助？", ["几乎没帮助", "帮助较小", "一般", "比较有帮助", "非常有帮助"])}
           ${checkboxField("o3_policy_gaps", "O3. 您认为当前政策最应优先补齐的短板？（多选，最多 2 项）", [
             ["subsidy", "运行补贴可持续"],
             ["tech_mix", "差异化技术路线（不一刀切煤改气）"],
             ["low_income", "低收入户兜底"],
             ["insulation", "房屋节能改造"],
             ["price_mechanism", "气价/电价机制"],
-            ["enforcement_balance", "执法与民生平衡"]
+            ["enforcement_balance", "改造推进与家庭承受能力衔接"]
           ], 2)}
-          ${textField("o4_policy_conflict_detail", "O4. 这局结果中，您认为最能代表「政策与民生矛盾」的一个细节是什么？", "请填写", true)}
+          ${textField("o4_policy_conflict_detail", "O4. 这局结果中，最能体现「家里账本吃紧」的一个细节是什么？", "请填写", true)}
           ${textField("o5_reflection", "O5. 这局模拟里，您最深的思考或者感受是什么？", "可选填写")}
         `;
 
