@@ -2461,6 +2461,22 @@
       userIdentitySelect?.addEventListener("change", updateIdentityDetailFields);
       updateIdentityDetailFields();
 
+      /** 北京时间（Asia/Shanghai）时间戳，写入 Supabase timestamp without time zone 列 */
+      function beijingTimestamp(date = new Date()) {
+        const base = new Intl.DateTimeFormat("sv-SE", {
+          timeZone: "Asia/Shanghai",
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false
+        }).format(date);
+        const ms = String(date.getMilliseconds()).padStart(3, "0");
+        return `${base.replace(" ", "T")}.${ms}`;
+      }
+
       function setSyncStatus(message, isError = false) {
         if (!syncStatusEl) return;
         syncStatusEl.textContent = message;
@@ -2609,7 +2625,7 @@
         const { data, error } = await supabaseClient
           .from("simulation_sessions")
           .update({
-            ended_at: new Date().toISOString(),
+            ended_at: beijingTimestamp(),
             ending_type: type,
             ending_summary: summary,
             event_log: researchSession.eventLog,
@@ -2640,7 +2656,7 @@
           .from("simulation_sessions")
           .update({
             ai_analysis: analysisText.trim(),
-            ai_analysis_at: new Date().toISOString()
+            ai_analysis_at: beijingTimestamp()
           })
           .eq("id", researchSession.id)
           .select("id");
@@ -3508,7 +3524,7 @@
         const identity = state.initialProfile?.user_identity || "";
 
         const responses = {
-          submitted_at: new Date().toISOString(),
+          submitted_at: beijingTimestamp(),
           user_identity: identity,
           common: {
             q1_understanding_before: researchSession.preSurveyQ1 || { value: null, label: "" },
