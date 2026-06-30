@@ -2609,7 +2609,9 @@
         };
 
         for (let attempt = 0; attempt < 2; attempt += 1) {
-          const { error } = await client.from("simulation_sessions").insert(payload);
+          const activeClient = (attempt === 0 ? client : await loadSupabaseClient()) || client;
+          if (attempt === 1) supabaseClient = activeClient;
+          const { error } = await activeClient.from("simulation_sessions").insert(payload);
           if (!error) {
             persistResearchSessionId(sessionId);
             setSyncStatus("研究数据已连接，本次模拟将自动保存。");
@@ -3881,7 +3883,9 @@
 
         const payload = flattenSurveyToColumns(responses);
         for (let attempt = 0; attempt < 2; attempt += 1) {
-          const { data, error } = await client
+          const activeClient = (attempt === 0 ? client : await loadSupabaseClient()) || client;
+          if (attempt === 1) supabaseClient = activeClient;
+          const { data, error } = await activeClient
             .from("simulation_sessions")
             .update(payload)
             .eq("id", sessionId)
