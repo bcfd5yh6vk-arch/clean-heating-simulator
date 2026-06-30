@@ -1895,20 +1895,98 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
       (async function bootstrapSimulator() {
+      const SUPABASE_FALLBACK = {
+        url: "https://zottuuavggzsjqvblydl.supabase.co",
+        anonKey:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpvdHR1dWF2Z2d6c2pxdmJseWRsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4MTA1MjksImV4cCI6MjA5NjM4NjUyOX0.zv7Ne_JIZWcOQaftIET8blOCEi0xOGda67jDdSXwp5M"
+      };
+      const RESEARCH_SESSION_STORAGE_KEY = "ch_sim_research_session_id";
+
+      async function ensureSupabaseScript() {
+        if (window.supabase) return true;
+        const sources = [
+          "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js",
+          "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"
+        ];
+        for (const src of sources) {
+          if (document.querySelector(`script[src="${src}"]`)) continue;
+          try {
+            await new Promise((resolve, reject) => {
+              const script = document.createElement("script");
+              script.src = src;
+              script.async = true;
+              script.onload = resolve;
+              script.onerror = reject;
+              document.head.appendChild(script);
+            });
+            if (window.supabase) return true;
+          } catch {
+            // try next CDN
+          }
+        }
+        return Boolean(window.supabase);
+      }
+
       async function loadSupabaseClient() {
+        await ensureSupabaseScript();
         if (!window.supabase) return null;
+
+        let url = "";
+        let anonKey = "";
         try {
-          const res = await fetch("/api/supabase-config");
-          if (!res.ok) return null;
-          const data = await res.json();
-          if (!data?.url || !data?.anonKey) return null;
-          return window.supabase.createClient(data.url, data.anonKey);
+          const res = await fetch("/api/supabase-config", { cache: "no-store" });
+          if (res.ok) {
+            const data = await res.json();
+            url = String(data?.url || "").trim();
+            anonKey = String(data?.anonKey || "").trim();
+          }
+        } catch {
+          // fall through to embedded publishable config
+        }
+
+        if (!url || !anonKey) {
+          url = SUPABASE_FALLBACK.url;
+          anonKey = SUPABASE_FALLBACK.anonKey;
+        }
+
+        return window.supabase.createClient(url, anonKey);
+      }
+
+      let supabaseClient = await loadSupabaseClient();
+
+      async function ensureSupabaseClient() {
+        if (supabaseClient) return supabaseClient;
+        supabaseClient = await loadSupabaseClient();
+        return supabaseClient;
+      }
+
+      function persistResearchSessionId(id) {
+        if (!id) return;
+        try {
+          sessionStorage.setItem(RESEARCH_SESSION_STORAGE_KEY, id);
+        } catch {
+          // ignore private browsing quota errors
+        }
+      }
+
+      function restoreResearchSessionId() {
+        if (researchSession.id) return researchSession.id;
+        try {
+          const stored = sessionStorage.getItem(RESEARCH_SESSION_STORAGE_KEY);
+          if (stored) researchSession.id = stored;
+          return stored;
         } catch {
           return null;
         }
       }
 
-      const supabaseClient = await loadSupabaseClient();
+      function clearResearchSessionId() {
+        try {
+          sessionStorage.removeItem(RESEARCH_SESSION_STORAGE_KEY);
+        } catch {
+          // ignore
+        }
+      }
 
       const state = {
         active: false,
@@ -1931,6 +2009,7 @@
         preSurveyQ1: null,
         turnChoices: { 1: null, 2: [], 3: null, 4: null, 5: null }
       };
+      restoreResearchSessionId();
 
       let syncTimer = null;
       let pendingFormData = null;
@@ -2489,6 +2568,7 @@
         researchSession.surveyShown = false;
         researchSession.preSurveyQ1 = null;
         researchSession.turnChoices = { 1: null, 2: [], 3: null, 4: null, 5: null };
+        clearResearchSessionId();
         pendingFormData = null;
         if (syncTimer) {
           clearTimeout(syncTimer);
@@ -2500,7 +2580,8 @@
       }
 
       async function createResearchSession(formData, preSurveyQ1) {
-        if (!supabaseClient) {
+        const client = await ensureSupabaseClient();
+        if (!client) {
           setSyncStatus("研究数据同步未启用（数据库客户端加载失败）。", true);
           return null;
         }
@@ -2527,22 +2608,30 @@
           sq_q1_understanding_before_label: preSurveyQ1?.label || null
         };
 
-        const { error } = await supabaseClient.from("simulation_sessions").insert(payload);
-
-        if (error) {
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          const { error } = await client.from("simulation_sessions").insert(payload);
+          if (!error) {
+            persistResearchSessionId(sessionId);
+            setSyncStatus("研究数据已连接，本次模拟将自动保存。");
+            return sessionId;
+          }
           console.error("创建研究记录失败", error);
-          setSyncStatus("研究数据提交失败，模拟仍可继续，但本次数据可能无法汇总。", true);
-          return null;
+          if (attempt === 0) {
+            supabaseClient = await loadSupabaseClient();
+            await new Promise((r) => setTimeout(r, 400));
+          }
         }
 
-        setSyncStatus("研究数据已连接，本次模拟将自动保存。");
-        return sessionId;
+        setSyncStatus("研究数据提交失败，模拟仍可继续，但本次数据可能无法汇总。", true);
+        return null;
       }
 
       async function syncResearchSession() {
-        if (!supabaseClient || !researchSession.id) return false;
+        const client = await ensureSupabaseClient();
+        restoreResearchSessionId();
+        if (!client || !researchSession.id) return false;
 
-        const { data, error } = await supabaseClient
+        const { data, error } = await client
           .from("simulation_sessions")
           .update({
             event_log: researchSession.eventLog
@@ -2618,11 +2707,13 @@
       }
 
       async function finalizeResearchSession(type, summary) {
-        if (!supabaseClient || !researchSession.id) return;
+        const client = await ensureSupabaseClient();
+        restoreResearchSessionId();
+        if (!client || !researchSession.id) return;
 
         await flushResearchSync();
 
-        const { data, error } = await supabaseClient
+        const { data, error } = await client
           .from("simulation_sessions")
           .update({
             ended_at: beijingTimestamp(),
@@ -2650,9 +2741,11 @@
       }
 
       async function saveAiAnalysisToSupabase(analysisText) {
-        if (!supabaseClient || !researchSession.id || !analysisText?.trim()) return false;
+        const client = await ensureSupabaseClient();
+        restoreResearchSessionId();
+        if (!client || !researchSession.id || !analysisText?.trim()) return false;
 
-        const { data, error } = await supabaseClient
+        const { data, error } = await client
           .from("simulation_sessions")
           .update({
             ai_analysis: analysisText.trim(),
@@ -3770,31 +3863,45 @@
       }
 
       async function submitPostGameSurvey(responses) {
-        if (!supabaseClient || !researchSession.id) {
-          surveyStatusEl.textContent = "调查数据未能同步（未连接研究数据库），但感谢你的填写。";
-          return false;
-        }
-        const { data, error } = await supabaseClient
-          .from("simulation_sessions")
-          .update(flattenSurveyToColumns(responses))
-          .eq("id", researchSession.id)
-          .select("id");
-        if (error) {
-          console.error("提交调查失败", error);
-          surveyStatusEl.textContent = "调查提交失败，请检查网络后重试。";
+        const client = await ensureSupabaseClient();
+        restoreResearchSessionId();
+        const sessionId = researchSession.id;
+
+        if (!client) {
+          surveyStatusEl.textContent = "调查数据未能同步（数据库连接失败），请检查网络后刷新页面重试。";
           surveyStatusEl.style.color = "var(--bad)";
           return false;
         }
-        if (!data || data.length === 0) {
-          console.error("提交调查失败：未更新任何记录", researchSession.id);
-          surveyStatusEl.textContent = "调查提交失败（权限或会话 ID 无效）。";
+        if (!sessionId) {
+          surveyStatusEl.textContent =
+            "调查数据未能同步（本会话未绑定数据库记录）。请从首页重新开始一局并完成模拟后再提交。";
           surveyStatusEl.style.color = "var(--bad)";
           return false;
         }
-        surveyStatusEl.textContent = "感谢！你的调查已保存。";
-        surveyStatusEl.style.color = "var(--good)";
-        setSyncStatus("本次模拟、智能分析与小调查均已保存。");
-        return true;
+
+        const payload = flattenSurveyToColumns(responses);
+        for (let attempt = 0; attempt < 2; attempt += 1) {
+          const { data, error } = await client
+            .from("simulation_sessions")
+            .update(payload)
+            .eq("id", sessionId)
+            .select("id");
+          if (!error && data && data.length > 0) {
+            surveyStatusEl.textContent = "感谢！你的调查已保存。";
+            surveyStatusEl.style.color = "var(--good)";
+            setSyncStatus("本次模拟、智能分析与小调查均已保存。");
+            return true;
+          }
+          console.error("提交调查失败", error, sessionId, data);
+          if (attempt === 0) {
+            supabaseClient = await loadSupabaseClient();
+            await new Promise((r) => setTimeout(r, 500));
+          }
+        }
+
+        surveyStatusEl.textContent = "调查提交失败，请检查网络后重试。";
+        surveyStatusEl.style.color = "var(--bad)";
+        return false;
       }
 
       function hidePreSurveyQ1() {
