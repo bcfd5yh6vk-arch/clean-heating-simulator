@@ -239,133 +239,146 @@
         color: var(--muted);
         line-height: 1.45;
       }
-      /* 首页背景数据与议题说明 */
-      .homepage-stats {
-        margin: 0 0 16px;
+      /* 欢迎首屏：背景数据与议题说明 */
+      .welcome-panel.consent-panel {
+        width: min(680px, 100%);
+        max-height: calc(100vh - 40px);
+        display: flex;
+        flex-direction: column;
+        padding: 20px 20px 18px;
       }
-      .homepage-stats-grid {
+      .welcome-body {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        margin: 0 0 14px;
+        padding-right: 2px;
+      }
+      .welcome-stats {
+        margin: 0 0 12px;
+      }
+      .welcome-stats-grid {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
+        gap: 8px;
       }
-      .homepage-stat {
-        background: var(--card);
+      .welcome-stat {
+        background: #f8fdf9;
         border: 1px solid var(--border);
         border-radius: var(--radius-sm);
-        padding: 14px 12px;
+        padding: 10px 8px;
         text-align: center;
-        box-shadow: var(--shadow);
       }
-      .homepage-stat-value {
-        font-size: clamp(1.25rem, 3vw, 1.55rem);
+      .welcome-stat-value {
+        font-size: clamp(1.05rem, 2.5vw, 1.3rem);
         font-weight: 700;
         color: var(--primary);
         line-height: 1.2;
       }
-      .homepage-stat-label {
-        margin-top: 4px;
-        font-size: 0.8rem;
+      .welcome-stat-label {
+        margin-top: 3px;
+        font-size: 0.72rem;
         color: var(--muted);
-        line-height: 1.35;
+        line-height: 1.3;
       }
-      .homepage-stats-note {
-        margin: 8px 0 0;
-        font-size: 0.75rem;
+      .welcome-stats-note {
+        margin: 6px 0 0;
+        font-size: 0.72rem;
         color: var(--muted);
         text-align: center;
-        line-height: 1.4;
+        line-height: 1.35;
       }
-      .homepage-context {
-        margin-bottom: 16px;
+      .welcome-context {
+        margin-bottom: 12px;
       }
-      .homepage-context > h2 {
+      .welcome-context > h2 {
         margin: 0 0 6px;
-        font-size: 1.15rem;
+        font-size: 1rem;
         color: var(--text);
       }
-      .homepage-context-lead {
-        margin: 0 0 14px;
-        font-size: 0.92rem;
+      .welcome-context-lead {
+        margin: 0 0 10px;
+        font-size: 0.88rem;
         color: var(--muted);
-        line-height: 1.55;
+        line-height: 1.5;
       }
-      .context-columns {
+      .welcome-context .context-columns {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 14px;
+        gap: 10px;
       }
-      .context-block {
+      .welcome-context .context-block {
         background: #f8fdf9;
         border: 1px solid var(--border);
         border-radius: var(--radius-sm);
-        padding: 14px;
+        padding: 10px 12px;
       }
-      .context-block h3 {
-        margin: 0 0 8px;
-        font-size: 0.95rem;
+      .welcome-context .context-block h3 {
+        margin: 0 0 6px;
+        font-size: 0.88rem;
         color: var(--primary);
       }
-      .context-block p {
-        margin: 0 0 10px;
-        font-size: 0.88rem;
-        color: var(--text);
-        line-height: 1.55;
-      }
-      .media-quote {
-        margin: 0;
-        padding: 10px 12px 10px 14px;
-        border-left: 3px solid var(--primary-light);
-        background: rgba(255, 255, 255, 0.85);
-        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-        font-size: 0.85rem;
+      .welcome-context .context-block p {
+        margin: 0 0 8px;
+        font-size: 0.82rem;
         color: var(--text);
         line-height: 1.5;
       }
-      .media-quote cite {
+      .welcome-context .media-quote {
+        margin: 0;
+        padding: 8px 10px 8px 12px;
+        border-left: 3px solid var(--primary-light);
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+        font-size: 0.8rem;
+        color: var(--text);
+        line-height: 1.45;
+      }
+      .welcome-context .media-quote cite {
         display: block;
-        margin-top: 6px;
+        margin-top: 4px;
         font-style: normal;
-        font-size: 0.78rem;
+        font-size: 0.74rem;
         color: var(--muted);
       }
-      .media-quote a {
+      .welcome-context .media-quote a {
         color: var(--primary);
         text-decoration: none;
       }
-      .media-quote a:hover {
+      .welcome-context .media-quote a:hover {
         text-decoration: underline;
       }
-      .homepage-invite {
-        margin-bottom: 16px;
+      .welcome-invite {
         background: linear-gradient(135deg, #edf7f0 0%, #f5faf7 100%);
-        border-color: #b7e4c7;
+        border: 1px solid #b7e4c7;
+        border-radius: var(--radius-sm);
+        padding: 12px 14px;
       }
-      .homepage-invite h2 {
+      .welcome-invite h2 {
+        margin: 0 0 6px;
+        font-size: 0.95rem;
+        color: var(--text);
+      }
+      .welcome-invite p {
         margin: 0 0 8px;
-        font-size: 1.12rem;
+        font-size: 0.86rem;
         color: var(--text);
+        line-height: 1.5;
       }
-      .homepage-invite p {
-        margin: 0 0 10px;
-        font-size: 0.92rem;
-        color: var(--text);
-        line-height: 1.55;
-      }
-      .homepage-invite-list {
-        margin: 0 0 12px;
-        padding-left: 20px;
-        font-size: 0.9rem;
-        color: var(--text);
-        line-height: 1.55;
-      }
-      .homepage-invite-list li {
-        margin-bottom: 4px;
-      }
-      .homepage-invite-cta {
+      .welcome-invite-list {
         margin: 0;
+        padding-left: 18px;
+        font-size: 0.84rem;
+        color: var(--text);
+        line-height: 1.45;
       }
-      .homepage-invite-cta .hero-scroll-link {
-        font-size: 0.92rem;
+      .welcome-invite-list li {
+        margin-bottom: 3px;
+      }
+      .welcome-footer {
+        margin: 8px 0 0;
+        text-align: center;
+        font-size: 0.82rem;
       }
       .ui-icon {
         display: inline-block;
@@ -1082,13 +1095,14 @@
       .welcome-panel h1 {
         font-size: 1.28rem;
         line-height: 1.45;
+        text-align: center;
       }
       .welcome-lead {
-        margin: 0 0 8px;
+        margin: 0 0 12px;
         color: var(--text);
-        font-size: 0.98rem;
-        text-align: center;
-        line-height: 1.65;
+        font-size: 0.92rem;
+        text-align: left;
+        line-height: 1.6;
       }
       .consent-lead {
         margin: 0 0 16px;
@@ -1325,11 +1339,6 @@
         .hero-tag,
         .hero-lead,
         .hero-what,
-        .homepage-context-lead,
-        .context-block p,
-        .media-quote,
-        .homepage-invite p,
-        .homepage-invite-list,
         .steps-bar li,
         .setup-quick-tip,
         .fixed-badge,
@@ -1384,10 +1393,10 @@
         .visual-flow {
           grid-template-columns: 1fr;
         }
-        .homepage-stats-grid {
+        .welcome-stats-grid {
           grid-template-columns: repeat(2, 1fr);
         }
-        .context-columns {
+        .welcome-context .context-columns {
           grid-template-columns: 1fr;
         }
         .steps-bar {
@@ -1423,11 +1432,70 @@
       <div class="welcome-panel consent-panel">
         <h1 id="welcomeTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
         <p class="welcome-lead">
-          代入一户北方农村家庭，在五回合里试不同清洁取暖路线，看清每年花费怎么变，帮你找到更划算、更舒服过冬的办法。
+          河北保定等地已有<strong>百余万户</strong>完成煤改气、煤改电——空气在变好，但不少家庭的<strong>取暖账单</strong>仍是每年冬天绕不开的话题。代入一户农家，在五回合里试不同清洁取暖路线，看清<strong>取暖费与存款</strong>会怎么变。
         </p>
+        <div class="welcome-body">
+          <section class="welcome-stats" aria-label="背景数据">
+            <div class="welcome-stats-grid">
+              <div class="welcome-stat">
+                <div class="welcome-stat-value">114.8 万+</div>
+                <div class="welcome-stat-label">保定累计清洁取暖用户</div>
+              </div>
+              <div class="welcome-stat">
+                <div class="welcome-stat-value">93 → 44</div>
+                <div class="welcome-stat-label">主城区 PM2.5（μg/m³，2016→2024）</div>
+              </div>
+              <div class="welcome-stat">
+                <div class="welcome-stat-value">23,006 元</div>
+                <div class="welcome-stat-label">2024 保定农村人均可支配收入</div>
+              </div>
+              <div class="welcome-stat">
+                <div class="welcome-stat-value">36%+</div>
+                <div class="welcome-stat-label">补贴退坡后取暖支出可能显著上升</div>
+              </div>
+            </div>
+            <p class="welcome-stats-note">数据来源：经济日报（2020）、保定市环境状况公报、统计公报、Zhao et al. 2024 等</p>
+          </section>
+
+          <section class="welcome-context" aria-label="为什么值得关注">
+            <h2>一件关乎千万家庭过冬的事</h2>
+            <p class="welcome-context-lead">
+              2016 年起，北方农村大规模推进煤改气、煤改电，保定是重点地区之一。政策带来了明显的环境改善——但<strong>「改得起、用得起、过得暖」</strong>仍是需要持续关注的现实问题。
+            </p>
+            <div class="context-columns">
+              <div class="context-block">
+                <h3>环境在变好，投入也很大</h3>
+                <p>截至 2020 年，保定清洁取暖用户累计超过 114.8 万户；2016–2020 年市县两级改造与运行补贴投入 60 亿元以上。同期主城区 PM2.5 从 93 降至 44 μg/m³。</p>
+                <blockquote class="media-quote">
+                  「截至去年冬季取暖季，保定市清洁取暖用户累计达到 114.8 万多户，其中气代煤 102 万多户。」
+                  <cite>—— <a href="http://paper.ce.cn/jjrb/html/2020-12/12/content_434025.htm" target="_blank" rel="noopener noreferrer">经济日报</a>，2020-12-12</cite>
+                </blockquote>
+              </div>
+              <div class="context-block">
+                <h3>账单压力，农户感受最直接</h3>
+                <p>澎湃新闻在保定、定州等地调查指出，用户普遍提到「贵」的问题。学术研究显示：若运行补贴完全退坡，农村取暖支出可能增加约 36%。</p>
+                <blockquote class="media-quote">
+                  「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
+                  <cite>—— <a href="https://www.thepaper.cn/newsDetail_forward_4926300" target="_blank" rel="noopener noreferrer">澎湃新闻</a> · 保定/定州调查，2019</cite>
+                </blockquote>
+              </div>
+            </div>
+          </section>
+
+          <section class="welcome-invite" aria-label="邀请参与">
+            <h2>邀请你试玩一把——你的体验很重要</h2>
+            <p>模拟器还在持续改进中。无论你是<strong>学生</strong>、<strong>关心农村议题的公众</strong>，还是<strong>经历过煤改的农户</strong>，花 5 分钟试玩一局，都是在帮助我们把政策数字翻译成普通人家账本上的真实感受。</p>
+            <ul class="welcome-invite-list">
+              <li><strong>学生：</strong>代入北方农村家庭，体验政策与生活的距离</li>
+              <li><strong>已煤改农户：</strong>对照自家情况试玩，告诉我们哪里不像</li>
+              <li><strong>其他朋友：</strong>任意填一组数字，看看不同收入、面积下结局有何不同</li>
+            </ul>
+          </section>
+        </div>
         <div class="consent-actions">
           <button type="button" id="welcomeStartBtn" class="btn-primary">开始模拟</button>
         </div>
+        <p class="welcome-footer hint">约 5 分钟 · 无需注册 · 数据匿名</p>
       </div>
     </div>
     <div id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
@@ -1460,19 +1528,18 @@
     </div>
     <div class="wrap" id="mainApp">
       <header class="hero">
-        <span class="hero-badge">5 分钟体验 · 无需注册 · 匿名参与</span>
+        <span class="hero-badge">5 分钟体验 · 无需注册</span>
         <h1>农村换暖气，怎样选更暖和、更省心？</h1>
         <p class="hero-lead">
-          河北保定等地已有<strong>百余万户</strong>完成煤改气、煤改电——空气在变好，但不少家庭的<strong>取暖账单</strong>仍是每年冬天绕不开的话题。这个网页模拟器让你代入一户农家，在 5 个回合里试不同路线，提前看清<strong>取暖费与存款</strong>会怎么变。
+          这是一个<strong>网页小模拟</strong>：代入河北一户农村家庭，在煤改气 / 煤改电等路线下走 5 个回合，提前看清<strong>取暖费</strong>与<strong>家里存款</strong>怎么变，帮你对比哪种方案更适合自家情况。
         </p>
         <div class="hero-what">
-          <strong>你会做什么：</strong>填写家庭情况 → 每回合读情景并选一个选项 → 查看结局与智能分析。试玩后的小调查，会帮助我们改进模拟器、更好地理解清洁取暖对普通家庭的真实影响。
+          <strong>你会做什么：</strong>填写家庭情况 → 每回合读情景并选一个选项 → 查看结局与智能分析。
         </div>
         <div class="hero-tags">
           <span class="hero-tag">⏱ 约 5 分钟</span>
           <span class="hero-tag">📱 手机可玩</span>
           <span class="hero-tag">🔒 数据匿名</span>
-          <span class="hero-tag">📊 基于公开数据</span>
         </div>
         <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 直接开始：往下填表，点「开始模拟」</a></p>
         <ol class="steps-bar" aria-label="操作步骤">
@@ -1491,53 +1558,6 @@
         </ol>
       </header>
 
-      <section class="homepage-stats" aria-label="背景数据">
-        <div class="homepage-stats-grid">
-          <div class="homepage-stat">
-            <div class="homepage-stat-value">114.8 万+</div>
-            <div class="homepage-stat-label">保定累计清洁取暖用户</div>
-          </div>
-          <div class="homepage-stat">
-            <div class="homepage-stat-value">93 → 44</div>
-            <div class="homepage-stat-label">主城区 PM2.5 年均浓度（μg/m³，2016→2024）</div>
-          </div>
-          <div class="homepage-stat">
-            <div class="homepage-stat-value">23,006 元</div>
-            <div class="homepage-stat-label">2024 保定农村人均可支配收入</div>
-          </div>
-          <div class="homepage-stat">
-            <div class="homepage-stat-value">36%+</div>
-            <div class="homepage-stat-label">补贴退坡后取暖支出可能显著上升（学术测算）</div>
-          </div>
-        </div>
-        <p class="homepage-stats-note">数据来源：经济日报（2020）、保定市环境状况公报、保定市统计公报、Zhao et al. 2024 等公开资料</p>
-      </section>
-
-      <section class="homepage-context card" aria-label="为什么值得关注">
-        <h2>一件关乎千万家庭过冬的事</h2>
-        <p class="homepage-context-lead">
-          2016 年起，北方农村大规模推进煤改气、煤改电，保定是重点地区之一。政策带来了明显的环境改善，也让许多农户第一次用上了管道天然气或电采暖——但<strong>「改得起、用得起、过得暖」</strong>仍是需要持续关注的现实问题。
-        </p>
-        <div class="context-columns">
-          <div class="context-block">
-            <h3>环境在变好，投入也很大</h3>
-            <p>截至 2020 年，保定市清洁取暖用户累计超过 114.8 万户，其中气代煤 102 万多户；2016–2020 年市县两级在改造与运行补贴上投入 60 亿元以上。同期，主城区 PM2.5 年均浓度从 2016 年的 93 μg/m³ 降至 2024 年的 44 μg/m³。</p>
-            <blockquote class="media-quote">
-              「截至去年冬季取暖季，保定市清洁取暖用户累计达到 114.8 万多户，其中气代煤 102 万多户。」
-              <cite>—— <a href="http://paper.ce.cn/jjrb/html/2020-12/12/content_434025.htm" target="_blank" rel="noopener noreferrer">经济日报</a>，2020-12-12</cite>
-            </blockquote>
-          </div>
-          <div class="context-block">
-            <h3>账单压力，农户感受最直接</h3>
-            <p>澎湃新闻在保定、定州等地的调查指出，清洁取暖推行两年多来，用户普遍提到「贵」的问题。学术研究也显示：若运行补贴完全退坡，农村取暖支出可能增加约 36%，部分家庭将难以承受。2024 年保定农村人均可支配收入约 2.3 万元，而 100 ㎡ 住房一个冬季的燃气取暖费，媒体报道区间可达数千至上万元。</p>
-            <blockquote class="media-quote">
-              「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
-              <cite>—— <a href="https://www.thepaper.cn/newsDetail_forward_4926300" target="_blank" rel="noopener noreferrer">澎湃新闻</a> · 保定/定州调查，2019</cite>
-            </blockquote>
-          </div>
-        </div>
-      </section>
-
       <!-- 【三步流程图标条】图标见页面顶部内联 SVG 图标库 -->
       <section class="visual-flow" aria-label="这个网页做什么">
         <article class="visual-flow-card">
@@ -1555,19 +1575,6 @@
           <h3>看钱和排放怎么变</h3>
           <p>取暖费、存款、合规度变化一目了然</p>
         </article>
-      </section>
-
-      <section class="homepage-invite card" aria-label="邀请参与">
-        <h2>邀请你试玩一把——你的体验很重要</h2>
-        <p>
-          这个模拟器还在持续改进中。无论你是<strong>学生</strong>、<strong>关心农村议题的公众</strong>，还是<strong>经历过煤改的农户</strong>，花 5 分钟试玩一局，都是在帮助我们把「政策文件里的数字」翻译成「普通人家账本上的真实感受」。
-        </p>
-        <ul class="homepage-invite-list">
-          <li><strong>学生：</strong>选「学生」身份，代入北方农村家庭走一遍流程，体验政策与生活的距离</li>
-          <li><strong>已煤改农户：</strong>填上村名，对照自家情况试玩，告诉我们哪里不像、哪里难懂</li>
-          <li><strong>其他朋友：</strong>任意填一组数字，看看不同收入、面积下结局有何不同</li>
-        </ul>
-        <p class="homepage-invite-cta"><a class="hero-scroll-link" href="#setupSection">↓ 现在就开始：填写家庭数据，开启模拟</a></p>
       </section>
 
       <div class="layout-main">
