@@ -134,6 +134,39 @@
       .setup-quick-tip li {
         margin-bottom: 4px;
       }
+      .farmer-quick-tip .guide-key {
+        font-size: 1.02rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.5;
+        margin: 0 0 8px;
+      }
+      .farmer-quick-tip .farmer-steps {
+        margin: 0;
+        padding-left: 20px;
+      }
+      .farmer-quick-tip .farmer-steps li {
+        margin-bottom: 8px;
+        line-height: 1.5;
+      }
+      .farmer-quick-tip .guide-sub {
+        display: block;
+        font-size: 0.86rem;
+        color: var(--muted);
+        font-weight: 400;
+        margin-top: 2px;
+      }
+      .fixed-setting-hint.farmer-form-hint .guide-key {
+        display: block;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text);
+        margin-top: 4px;
+      }
+      .fixed-setting-hint.farmer-form-hint .guide-sub {
+        font-size: 0.86rem;
+        color: var(--muted);
+      }
       .field-hint {
         font-size: 0.82rem;
         color: var(--muted);
@@ -790,6 +823,23 @@
       .guidance-content li {
         margin-bottom: 4px;
       }
+      .guidance-content.farmer-guide h4 {
+        font-size: 1.05rem;
+        margin-bottom: 6px;
+      }
+      .guidance-content.farmer-guide .guide-key {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.55;
+        margin: 0 0 6px;
+      }
+      .guidance-content.farmer-guide .guide-sub {
+        font-size: 0.86rem;
+        color: var(--muted);
+        line-height: 1.45;
+        margin: 0 0 10px;
+      }
       .pill {
         display: inline-block;
         padding: 4px 12px;
@@ -1383,6 +1433,7 @@
         .accordion-item summary,
         .survey-q legend,
         .guidance-content h4,
+        .guidance-content.farmer-guide .guide-key,
         .form-section-title,
         .survey-section-title {
           font-size: 1.1rem;
@@ -1614,7 +1665,7 @@
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></div>
               <h2>第一步：填写家庭数据</h2>
             </div>
-            <div class="setup-quick-tip">
+            <div class="setup-quick-tip" id="setupQuickTipDefault">
               <strong>30 秒上手：</strong>
               <ol>
                 <li>先选<strong>你的身份</strong>，并按你的情况对照：
@@ -1627,6 +1678,17 @@
                 </li>
                 <li>下面数字填<strong>整户</strong>情况——点击各栏填写，可参考灰色小字里的常见区间</li>
                 <li>填完点最下方绿色按钮 <strong>「开始模拟 →」</strong></li>
+              </ol>
+            </div>
+            <div class="setup-quick-tip farmer-quick-tip" id="setupFarmerTip" hidden>
+              <p class="guide-key">三步开始：选身份 → 填村名 → 填家里数字</p>
+              <ol class="farmer-steps">
+                <li>
+                  <span class="guide-key">填收入、人数、面积、取暖费</span>
+                  <span class="guide-sub">一整户家的数，记不清就估一个</span>
+                </li>
+                <li><span class="guide-key">点最下面绿色「开始模拟 →」</span></li>
+                <li><span class="guide-sub">每回合看说明、点一个按钮；玩完填短问卷</span></li>
               </ol>
             </div>
             <form id="profileForm">
@@ -1662,8 +1724,9 @@
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>河北</span></span>
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
               </div>
-              <p id="coalStartHint" class="hint fixed-setting-hint" hidden>
-                <strong>说明：</strong>模拟统一从「散煤时代」开局，方便对比不同改造路线；不代表你现在的取暖方式。已改气/改电的农户，请填改造前那 1～2 个冬天的取暖费。
+              <p id="coalStartHint" class="hint fixed-setting-hint farmer-form-hint" hidden>
+                <span class="guide-sub">模拟从散煤开始，方便对比不同路线。</span>
+                <span class="guide-key">已经改气/改电的，请填改之前一两个冬天取暖花了多少钱。</span>
               </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
@@ -1790,7 +1853,8 @@
               <details class="accordion-item" id="guidanceAccordion">
                 <summary>使用说明（推荐先看）</summary>
                 <div class="accordion-body" id="guidancePanel">
-                  <p class="hint">与左侧身份同步；也可点击下方按钮切换查看其他身份说明：</p>
+                  <p class="hint" id="guidancePanelHintDefault">与左侧身份同步；也可点击下方按钮切换查看其他身份说明：</p>
+                  <p class="hint" id="guidancePanelHintFarmer" hidden>跟着下面几步做就行：</p>
                   <div class="guidance-identity-row" id="guidanceIdentityRow">
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
@@ -2340,48 +2404,24 @@
           </ul>
         `,
         已煤改农户: `
-          <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>把你家经历过的<strong>煤改气/电</strong>过程放进可对比、可回放的框架：看哪条路线更适合你家，并判断模型哪些符合、哪些不符合真实体验。</p>
-          <h4>2. 如何填写初始数据</h4>
-          <ul>
-            <li>身份选「已煤改农户」，并填写<strong>所在村名</strong>。</li>
-            <li>请如实填写年收入、年盈余、住房面积、改造前散煤取暖费（记不清可用改造前一到两个冬天的大致花费）。</li>
-            <li>模型统一从散煤开局以便对比路线——不代表否认你已改气/改电，请按「若当时面对这些回合会怎么选」来体验。</li>
-          </ul>
-          <h4>3. 五回合中如何做选择</h4>
-          <ul>
-            <li>按真实处境来选：更担心一次性设备钱，还是以后每年气费/电费？</li>
-            <li>留意回合 3（技术路线）和回合 5（补贴退坡）——往往最贴近「每年要花多少钱」的感受。</li>
-            <li>玩后调查欢迎写明哪一步最像、最不像你家。</li>
-          </ul>
-          <h4>4. 如何理性看待结局与智能分析</h4>
-          <ul>
-            <li>模型采用河北地区平均参数，难完全复刻你村气价、补贴细则与房屋保温。</li>
-            <li>若结局与我家不像，请先看<strong>哪一步费用或取暖方式</strong>出现差异。</li>
-            <li>你的实地经验最可信；智能分析仅作辅助理解。</li>
-          </ul>
+          <h4>① 填表</h4>
+          <p class="guide-key">填<strong>村名</strong>，再填家里人数、年收入、面积、<strong>改气/改电前的取暖费</strong>。</p>
+          <p class="guide-sub">模拟从散煤开头，方便对比——不代表你还没改。数字记不清就估一个。</p>
+          <h4>② 玩</h4>
+          <p class="guide-key">每回合看说明，<strong>点一个按钮</strong>。多看<strong>第 3 回合（选路线）</strong>和<strong>第 5 回合（补贴少了）</strong>。</p>
+          <p class="guide-sub">按你家真实情况选。玩完可在调查里说哪里像、哪里不像。</p>
+          <h4>③ 说明</h4>
+          <p class="guide-sub">结果是推算，不是说你家好或不好。和你经历不一样很正常。</p>
         `,
         未煤改农户: `
-          <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>在尚未改造或正在观望时，提前看见不同路线和补贴变化下家庭账本的波动，<strong>未雨绸缪</strong>。</p>
-          <h4>2. 如何填写初始数据</h4>
-          <ul>
-            <li>身份选「未煤改农户」，并填写<strong>所在村名</strong>。</li>
-            <li>请如实填写年收入、年盈余、住房面积及当前取暖花费——这是推演起点。</li>
-            <li>年盈余可粗算：总收入减日常开支和取暖费；为负或很低也照实填写。</li>
-          </ul>
-          <h4>3. 五回合中如何做选择</h4>
-          <ul>
-            <li>最怕改造费就在回合 3 比较路线；最怕气价就重点看回合 5 补贴退坡。</li>
-            <li>可玩两局对比「尽快改」与「尽量拖」。</li>
-            <li>按真实顾虑来选，不必追求「成功转型」结局。</li>
-          </ul>
-          <h4>4. 如何理性看待结局与智能分析</h4>
-          <ul>
-            <li>模拟展示<strong>一种可能路径</strong>，具体补贴、气价以本县最新政策为准。</li>
-            <li>「资金紧张」等标签提示现金流吃紧，不是对你家的评价。</li>
-            <li>是否改造、选哪条路线，须结合收入、房屋并咨询村委或供气供电部门。</li>
-          </ul>
+          <h4>① 填表</h4>
+          <p class="guide-key">填<strong>村名</strong>，再填家里人数、收入、面积、<strong>现在一年取暖花多少钱</strong>。</p>
+          <p class="guide-sub">填一整户家的数，不是一个人的。记不清就估一个。</p>
+          <h4>② 玩</h4>
+          <p class="guide-key">每回合<strong>点一个按钮</strong>。重点看<strong>第 3 回合选哪条路线</strong>、<strong>第 5 回合补贴变少</strong>后钱够不够。</p>
+          <p class="guide-sub">不用追求「成功」结局，按真实顾虑选就行。</p>
+          <h4>③ 说明</h4>
+          <p class="guide-sub">具体补贴、气价问村委。这里是帮你提前算账，不是替你做决定。</p>
         `,
         其他: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
@@ -2413,6 +2453,7 @@
           btn.classList.toggle("active", btn.dataset.guidanceIdentity === identity);
         });
         guidanceContent.innerHTML = IDENTITY_GUIDANCE[identity] || "";
+        guidanceContent.classList.toggle("farmer-guide", isVillageIdentity(identity));
         guidanceContent.hidden = !identity;
 
         const guidanceAccordion = document.getElementById("guidanceAccordion");
@@ -2481,6 +2522,12 @@
         coalStartHint?.toggleAttribute("hidden", !isVillageIdentity(identity));
         profileForm?.classList.toggle("show-field-hints", identity === "学生" || identity === "其他");
         updateHouseholdFieldHints(identity);
+
+        const isFarmer = isVillageIdentity(identity);
+        document.getElementById("setupQuickTipDefault")?.toggleAttribute("hidden", isFarmer);
+        document.getElementById("setupFarmerTip")?.toggleAttribute("hidden", !isFarmer);
+        document.getElementById("guidancePanelHintDefault")?.toggleAttribute("hidden", isFarmer);
+        document.getElementById("guidancePanelHintFarmer")?.toggleAttribute("hidden", !isFarmer);
 
         const scrollHelp = Boolean(identity) && window.matchMedia("(max-width: 900px)").matches;
         showIdentityGuidance(identity, { scrollIntoView: scrollHelp });
