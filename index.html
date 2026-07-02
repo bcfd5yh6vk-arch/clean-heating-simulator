@@ -1186,6 +1186,32 @@
       .ai-reply.rendered h3:first-child {
         margin-top: 0;
       }
+      .ai-section-portrait {
+        font-size: 1.08rem;
+        line-height: 1.75;
+        margin-bottom: 4px;
+      }
+      .ai-section-portrait .ai-portrait-desc {
+        margin: 10px 0 14px;
+        padding: 14px 16px;
+        background: var(--primary-bg);
+        border: 2px solid #b7e4c7;
+        border-radius: var(--radius-sm);
+        font-size: clamp(1.22rem, 4.8vw, 1.5rem);
+        font-weight: 800;
+        line-height: 1.45;
+        color: var(--primary-deep);
+        letter-spacing: 0.02em;
+      }
+      .ai-section-portrait .ai-portrait-desc strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.92em;
+        color: var(--primary);
+      }
+      .ai-section-portrait ul {
+        font-size: 1.05rem;
+      }
       .ai-reply.rendered p {
         margin: 6px 0 10px;
       }
@@ -4396,6 +4422,24 @@
         const lines = String(text || "").split("\n");
         const parts = [];
         let inList = false;
+        let sectionIndex = 0;
+        let inPortraitSection = false;
+
+        function closePortraitSection() {
+          if (inPortraitSection) {
+            parts.push("</div>");
+            inPortraitSection = false;
+          }
+        }
+
+        function isPortraitSummaryLine(line) {
+          return /^\*\*(形象描述|一句话看懂)：\*\*/.test(line);
+        }
+
+        function renderPortraitSummaryLine(line) {
+          const body = line.replace(/^\*\*(形象描述|一句话看懂)：\*\*\s*/, "");
+          return `<p class="ai-portrait-desc"><strong>形象描述：</strong>${inlineMarkdown(body)}</p>`;
+        }
 
         for (const line of lines) {
           const trimmed = line.trim();
@@ -4411,7 +4455,13 @@
               parts.push("</ul>");
               inList = false;
             }
+            closePortraitSection();
+            sectionIndex += 1;
             parts.push(`<h3>${escapeHtml(trimmed.slice(3))}</h3>`);
+            if (sectionIndex === 1) {
+              parts.push('<div class="ai-section-portrait">');
+              inPortraitSection = true;
+            }
             continue;
           }
           if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
@@ -4426,9 +4476,14 @@
             parts.push("</ul>");
             inList = false;
           }
+          if (sectionIndex === 1 && isPortraitSummaryLine(trimmed)) {
+            parts.push(renderPortraitSummaryLine(trimmed));
+            continue;
+          }
           parts.push(`<p>${inlineMarkdown(trimmed)}</p>`);
         }
         if (inList) parts.push("</ul>");
+        closePortraitSection();
         return parts.join("");
       }
 
