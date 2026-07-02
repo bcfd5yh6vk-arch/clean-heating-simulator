@@ -1278,7 +1278,57 @@
       .welcome-panel .welcome-lead {
         text-align: center;
       }
-      .welcome-panel h1,
+      .welcome-panel h1.welcome-conflict-title {
+        margin: 0 0 24px;
+        padding: 0;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        color: inherit;
+      }
+      .welcome-conflict-line {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        font-size: clamp(1.85rem, 7vw, 2.75rem);
+        font-weight: 800;
+        line-height: 1.25;
+        letter-spacing: 0.04em;
+        margin: 0;
+      }
+      .welcome-conflict-line + .welcome-conflict-line {
+        margin-top: 14px;
+      }
+      .welcome-conflict-good {
+        color: var(--good);
+      }
+      .welcome-conflict-bad {
+        color: var(--bad);
+      }
+      .welcome-trend-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.15em;
+        height: 1.15em;
+        border-radius: 50%;
+        font-size: 0.72em;
+        font-weight: 900;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .welcome-trend-icon.down {
+        background: #d8f3dc;
+        color: var(--good);
+        border: 2px solid #95d5b2;
+      }
+      .welcome-trend-icon.up {
+        background: #fee2e2;
+        color: var(--bad);
+        border: 2px solid #fca5a5;
+      }
+      .welcome-panel h1:not(.welcome-conflict-title),
       .context-panel h1 {
         font-size: 1.35rem;
         line-height: 1.4;
@@ -1539,9 +1589,12 @@
           font-size: clamp(1.75rem, 6.5vw, 2.25rem);
         }
         .consent-panel h1,
-        .welcome-panel h1,
         .context-panel h1 {
           font-size: 1.65rem;
+        }
+        .welcome-conflict-line {
+          font-size: clamp(2rem, 8.5vw, 3rem);
+          gap: 14px;
         }
         h2 {
           font-size: 1.35rem;
@@ -1556,7 +1609,6 @@
         .hero-badge,
         .hero-lead,
         .hero-action-chips li,
-        .welcome-highlights li,
         .steps-bar li,
         .setup-quick-tip,
         .fixed-badge,
@@ -1622,8 +1674,7 @@
         .steps-bar {
           grid-template-columns: 1fr;
         }
-        .hero-action-chips,
-        .welcome-highlights {
+        .hero-action-chips {
           grid-template-columns: 1fr;
         }
         .hero-scroll-link {
@@ -1663,15 +1714,16 @@
     </svg>
     <div id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
       <div class="welcome-panel consent-panel">
-        <h1 id="welcomeTitle">农村取暖，怎样选更暖和、更省心？</h1>
-        <p class="welcome-lead">
-          <strong>五分钟试玩</strong>：代入一户农家，看清取暖费和存款会怎么变。
-        </p>
-        <ul class="welcome-highlights" aria-label="你会得到什么">
-          <li><span class="wh-icon" aria-hidden="true">🏠</span>填家里收入、面积、取暖费</li>
-          <li><span class="wh-icon" aria-hidden="true">🔀</span>五回合选路线</li>
-          <li><span class="wh-icon" aria-hidden="true">📊</span>看钱和排放怎么变</li>
-        </ul>
+        <h1 id="welcomeTitle" class="welcome-conflict-title">
+          <span class="welcome-conflict-line welcome-conflict-good">
+            <span class="welcome-trend-icon down" aria-hidden="true">↓</span>
+            空气在变好
+          </span>
+          <span class="welcome-conflict-line welcome-conflict-bad">
+            <span class="welcome-trend-icon up" aria-hidden="true">↑</span>
+            费用在上升
+          </span>
+        </h1>
         <div class="consent-actions">
           <button type="button" id="welcomeStartBtn" class="btn-primary">下一步，了解背景 →</button>
         </div>
