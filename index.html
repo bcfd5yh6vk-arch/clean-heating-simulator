@@ -15,21 +15,25 @@
     <style>
       :root {
         --bg: #f0f4ef;
-        --bg-hero: linear-gradient(135deg, #e8f3ec 0%, #f5f0e8 50%, #eef4f8 100%);
+        --bg-hero: linear-gradient(160deg, #e4f2e8 0%, #f6f1e6 45%, #eef5fa 100%);
         --card: #ffffff;
-        --text: #1a2e1f;
-        --muted: #5c6b62;
+        --text: #142318;
+        --muted: #4a5c52;
         --primary: #2d6a4f;
         --primary-light: #40916c;
         --primary-bg: #d8f3dc;
+        --primary-deep: #1b4332;
+        --accent-warm: #b86b12;
+        --surface-highlight: #f0faf2;
         --good: #1b7a3d;
         --bad: #c0392b;
         --warn: #b8860b;
-        --border: #c8d5cc;
-        --shadow: 0 2px 12px rgba(45, 106, 79, 0.08);
-        --shadow-lg: 0 8px 32px rgba(45, 106, 79, 0.12);
-        --radius: 14px;
-        --radius-sm: 10px;
+        --border: #b8c9be;
+        --shadow: 0 2px 14px rgba(45, 106, 79, 0.1);
+        --shadow-lg: 0 10px 36px rgba(45, 106, 79, 0.14);
+        --radius: 16px;
+        --radius-sm: 12px;
+        --touch-min: 48px;
       }
       * {
         box-sizing: border-box;
@@ -40,8 +44,17 @@
         color: var(--text);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC",
           "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-        line-height: 1.65;
-        font-size: 16px;
+        line-height: 1.7;
+        font-size: 17px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
       }
       .wrap {
         max-width: 1140px;
@@ -69,59 +82,87 @@
         border: 1px solid #b7e4c7;
       }
       .hero h1 {
-        font-size: clamp(1.5rem, 4vw, 2rem);
-        margin: 0 0 10px;
-        color: var(--text);
+        font-size: clamp(1.65rem, 5vw, 2.35rem);
+        margin: 0 0 12px;
+        color: var(--primary-deep);
         letter-spacing: -0.02em;
+        line-height: 1.3;
       }
       .hero-lead {
-        max-width: 640px;
+        max-width: 560px;
         margin: 0 auto;
-        color: var(--muted);
-        font-size: 1rem;
-      }
-      .hero-what {
-        max-width: 680px;
-        margin: 14px auto 0;
-        padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.92);
-        border: 1px solid var(--border);
-        border-radius: var(--radius-sm);
-        text-align: left;
-        font-size: 0.94rem;
-        line-height: 1.55;
         color: var(--text);
+        font-size: 1.08rem;
+        font-weight: 500;
+        line-height: 1.6;
       }
-      .hero-what strong {
+      .hero-lead strong {
         color: var(--primary);
+      }
+      .hero-action-chips {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        max-width: 640px;
+        margin: 18px auto 0;
+        list-style: none;
+        padding: 0;
+      }
+      .hero-action-chips li {
+        background: var(--card);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 12px 10px;
+        text-align: center;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.35;
+      }
+      .hero-action-chips .chip-icon {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 6px;
+        line-height: 1;
       }
       .hero-cta {
-        margin: 14px 0 0;
+        margin: 18px 0 0;
       }
       .hero-scroll-link {
-        display: inline-block;
-        color: var(--primary);
-        font-weight: 600;
-        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: var(--touch-min);
+        color: #fff;
+        font-weight: 700;
+        font-size: 1.05rem;
         text-decoration: none;
-        padding: 8px 14px;
+        padding: 12px 28px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid var(--border);
+        background: var(--primary);
+        border: 2px solid var(--primary);
+        box-shadow: var(--shadow);
       }
       .hero-scroll-link:hover {
+        background: var(--primary-light);
         border-color: var(--primary-light);
-        background: var(--primary-bg);
       }
       .setup-quick-tip {
-        background: #f8fdf9;
-        border: 1px solid var(--border);
-        border-left: 4px solid var(--primary);
+        background: var(--surface-highlight);
+        border: 2px solid var(--primary-bg);
+        border-left: 5px solid var(--primary);
         border-radius: var(--radius-sm);
-        padding: 12px 14px;
-        margin-bottom: 14px;
-        font-size: 0.92rem;
-        line-height: 1.55;
+        padding: 14px 16px;
+        margin-bottom: 16px;
+        font-size: 1rem;
+        line-height: 1.6;
+      }
+      .setup-quick-tip > strong {
+        display: block;
+        font-size: 1.08rem;
+        color: var(--primary-deep);
+        margin-bottom: 8px;
       }
       .setup-quick-tip ol {
         margin: 8px 0 0;
@@ -168,14 +209,15 @@
         color: var(--muted);
       }
       .field-hint {
-        font-size: 0.82rem;
-        color: var(--muted);
-        font-weight: 400;
-        line-height: 1.4;
-        display: none;
-      }
-      #profileForm.show-field-hints .field-hint {
+        font-size: 0.9rem;
+        color: var(--accent-warm);
+        font-weight: 500;
+        line-height: 1.45;
         display: block;
+        padding: 4px 8px;
+        background: #fff8ee;
+        border-radius: 6px;
+        border: 1px solid #f0d9b8;
       }
       .hero-tags {
         display: flex;
@@ -196,33 +238,34 @@
       .steps-bar {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
+        gap: 12px;
         max-width: 720px;
-        margin: 18px auto 0;
+        margin: 20px auto 0;
         padding: 0;
         list-style: none;
         text-align: left;
       }
       .steps-bar li {
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid var(--border);
+        background: var(--card);
+        border: 2px solid var(--border);
         border-radius: var(--radius-sm);
-        padding: 10px 12px;
-        font-size: 0.88rem;
-        color: var(--muted);
-        line-height: 1.4;
+        padding: 14px 12px;
+        font-size: 0.95rem;
+        color: var(--text);
+        line-height: 1.45;
+        font-weight: 500;
       }
       .steps-bar li strong {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 22px;
-        height: 22px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         background: var(--primary);
         color: #fff;
-        font-size: 0.78rem;
-        margin-right: 6px;
+        font-size: 0.95rem;
+        margin-right: 8px;
         vertical-align: middle;
       }
       .steps-bar .step-icon {
@@ -246,31 +289,50 @@
       }
       .visual-flow-card {
         background: var(--card);
-        border: 1px solid var(--border);
+        border: 2px solid var(--border);
         border-radius: var(--radius);
-        padding: 14px 12px;
+        padding: 18px 14px;
         text-align: center;
         box-shadow: var(--shadow);
+        position: relative;
+      }
+      .visual-flow-card .flow-step-num {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.78rem;
+        font-weight: 700;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid var(--card);
       }
       .visual-flow-card .ui-icon {
-        width: 36px;
-        height: 36px;
-        margin: 0 auto 8px;
-        padding: 8px;
+        width: 44px;
+        height: 44px;
+        margin: 8px auto 10px;
+        padding: 10px;
         border-radius: 50%;
         background: var(--primary-bg);
         color: var(--primary);
       }
       .visual-flow-card h3 {
-        margin: 0 0 4px;
-        font-size: 0.95rem;
-        color: var(--text);
+        margin: 0 0 6px;
+        font-size: 1.05rem;
+        color: var(--primary-deep);
+        font-weight: 700;
       }
       .visual-flow-card p {
         margin: 0;
-        font-size: 0.82rem;
+        font-size: 0.92rem;
         color: var(--muted);
-        line-height: 1.45;
+        line-height: 1.5;
       }
       /* 背景资讯第二屏 */
       .context-panel {
@@ -301,23 +363,24 @@
         gap: 8px;
       }
       .welcome-stat {
-        background: #f8fdf9;
-        border: 1px solid var(--border);
+        background: var(--surface-highlight);
+        border: 2px solid var(--border);
         border-radius: var(--radius-sm);
-        padding: 10px 8px;
+        padding: 12px 8px;
         text-align: center;
       }
       .welcome-stat-value {
-        font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-        font-weight: 700;
-        color: var(--primary);
+        font-size: clamp(1.15rem, 3vw, 1.45rem);
+        font-weight: 800;
+        color: var(--primary-deep);
         line-height: 1.2;
       }
       .welcome-stat-label {
-        margin-top: 3px;
-        font-size: 0.72rem;
-        color: var(--muted);
-        line-height: 1.3;
+        margin-top: 5px;
+        font-size: 0.8rem;
+        color: var(--text);
+        line-height: 1.35;
+        font-weight: 500;
       }
       .welcome-stats-note {
         margin: 6px 0 0;
@@ -330,15 +393,42 @@
         margin-bottom: 12px;
       }
       .welcome-context > h2 {
-        margin: 0 0 6px;
-        font-size: 1rem;
-        color: var(--text);
+        margin: 0 0 8px;
+        font-size: 1.12rem;
+        color: var(--primary-deep);
+        font-weight: 700;
       }
       .welcome-context-lead {
-        margin: 0 0 10px;
-        font-size: 0.88rem;
-        color: var(--muted);
-        line-height: 1.5;
+        margin: 0 0 12px;
+        font-size: 0.95rem;
+        color: var(--text);
+        line-height: 1.55;
+        font-weight: 500;
+      }
+      .key-point-card {
+        background: var(--surface-highlight);
+        border: 2px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 14px;
+        margin-bottom: 10px;
+      }
+      .key-point-card h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .key-point-card h3 .kp-icon {
+        font-size: 1.35rem;
+        line-height: 1;
+      }
+      .key-point-card p {
+        margin: 0 0 8px;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: var(--text);
       }
       .welcome-context .context-columns {
         display: grid;
@@ -525,6 +615,10 @@
       h1 {
         font-size: 1.7rem;
       }
+      .card-header h2 {
+        font-size: 1.2rem;
+        color: var(--primary-deep);
+      }
       h2 {
         font-size: 1.15rem;
         margin-top: 0;
@@ -544,13 +638,26 @@
       .form-section-title {
         display: flex;
         align-items: center;
-        gap: 6px;
-        font-size: 0.92rem;
+        gap: 8px;
+        font-size: 1.05rem;
         font-weight: 700;
-        color: var(--primary);
-        margin: 16px 0 10px;
-        padding-bottom: 6px;
-        border-bottom: 1px solid var(--border);
+        color: var(--primary-deep);
+        margin: 18px 0 12px;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--primary-bg);
+      }
+      .section-step-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.85rem;
+        font-weight: 700;
+        flex-shrink: 0;
       }
       .form-section-title:first-of-type {
         margin-top: 0;
@@ -645,12 +752,12 @@
         gap: 12px;
       }
       label {
-        font-size: 0.92rem;
-        color: var(--muted);
+        font-size: 1rem;
+        color: var(--text);
         display: flex;
         flex-direction: column;
-        gap: 6px;
-        font-weight: 500;
+        gap: 8px;
+        font-weight: 600;
       }
       input,
       select,
@@ -678,13 +785,16 @@
       }
       button {
         cursor: pointer;
-        min-height: 44px;
+        min-height: var(--touch-min);
       }
       .btn-primary {
         background: var(--primary);
         color: #fff;
         border-color: var(--primary);
-        font-weight: 600;
+        font-weight: 700;
+        font-size: 1.05rem;
+        min-height: var(--touch-min);
+        padding: 12px 20px;
       }
       .btn-primary:hover {
         background: var(--primary-light);
@@ -702,14 +812,15 @@
         flex-direction: column;
         align-items: flex-start;
         text-align: left;
-        gap: 4px;
+        gap: 6px;
         max-width: 100%;
         width: 100%;
-        padding: 14px 16px;
+        padding: 16px 18px;
         border: 2px solid var(--border);
         border-radius: var(--radius-sm);
         background: #fff;
         transition: border-color 0.15s, background 0.15s, transform 0.1s;
+        min-height: var(--touch-min);
       }
       .choice-btn:hover {
         border-color: var(--primary-light);
@@ -720,8 +831,8 @@
         transform: translateY(0);
       }
       .choice-label {
-        font-weight: 600;
-        font-size: 1rem;
+        font-weight: 700;
+        font-size: 1.08rem;
         color: var(--text);
       }
       .choice-hint {
@@ -867,9 +978,9 @@
         gap: 10px;
       }
       .stat-card {
-        border: 1px solid var(--border);
+        border: 2px solid var(--border);
         border-radius: var(--radius-sm);
-        padding: 12px;
+        padding: 14px 12px;
         background: #fafcfa;
         transition: transform 0.15s, box-shadow 0.15s;
       }
@@ -909,15 +1020,16 @@
         color: var(--bad);
       }
       .stat-card .stat-value {
-        font-size: 1.35rem;
-        font-weight: 700;
+        font-size: 1.45rem;
+        font-weight: 800;
         line-height: 1.2;
-        color: var(--text);
+        color: var(--primary-deep);
       }
       .stat-card .stat-label {
-        color: var(--muted);
-        font-size: 0.8rem;
-        margin-top: 2px;
+        color: var(--text);
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-top: 4px;
         line-height: 1.3;
       }
       .stat-bar {
@@ -971,14 +1083,15 @@
         font-weight: 500;
       }
       .narrative-box {
-        background: #f8fdf9;
-        border: 1px solid var(--border);
-        border-left: 4px solid var(--primary);
+        background: var(--surface-highlight);
+        border: 2px solid var(--border);
+        border-left: 5px solid var(--primary);
         border-radius: var(--radius-sm);
-        padding: 14px 16px;
-        margin: 12px 0;
-        font-size: 1rem;
-        line-height: 1.65;
+        padding: 18px 16px;
+        margin: 12px 0 14px;
+        font-size: 1.05rem;
+        line-height: 1.75;
+        color: var(--text);
         animation: fadeIn 0.3s ease;
       }
       @keyframes fadeIn {
@@ -1159,18 +1272,53 @@
         color: var(--text);
         text-align: center;
       }
+      .welcome-panel {
+        text-align: center;
+      }
+      .welcome-panel .welcome-lead {
+        text-align: center;
+      }
       .welcome-panel h1,
       .context-panel h1 {
-        font-size: 1.28rem;
-        line-height: 1.45;
+        font-size: 1.35rem;
+        line-height: 1.4;
         text-align: center;
+        color: var(--primary-deep);
+      }
+      .welcome-highlights {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin: 16px 0 4px;
+        padding: 0;
+        list-style: none;
+      }
+      .welcome-highlights li {
+        background: var(--surface-highlight);
+        border: 2px solid var(--primary-bg);
+        border-radius: var(--radius-sm);
+        padding: 12px 10px;
+        text-align: center;
+        font-size: 0.92rem;
+        font-weight: 600;
+        color: var(--text);
+        line-height: 1.4;
+      }
+      .welcome-highlights .wh-icon {
+        display: block;
+        font-size: 1.6rem;
+        margin-bottom: 6px;
       }
       .welcome-lead {
         margin: 0 0 12px;
         color: var(--text);
-        font-size: 0.92rem;
-        text-align: left;
-        line-height: 1.6;
+        font-size: 1.05rem;
+        text-align: center;
+        line-height: 1.65;
+        font-weight: 500;
+      }
+      .welcome-lead strong {
+        color: var(--primary);
       }
       .consent-lead {
         margin: 0 0 16px;
@@ -1186,12 +1334,12 @@
       }
       .consent-list li {
         margin-bottom: 12px;
-        padding: 12px 14px;
-        background: #f8fdf9;
-        border: 1px solid var(--border);
+        padding: 14px 16px;
+        background: var(--surface-highlight);
+        border: 2px solid var(--border);
         border-radius: var(--radius-sm);
-        font-size: 0.94rem;
-        line-height: 1.55;
+        font-size: 1rem;
+        line-height: 1.6;
         color: var(--text);
       }
       .consent-list li:last-child {
@@ -1199,9 +1347,9 @@
       }
       .consent-list strong {
         display: block;
-        color: var(--primary);
+        color: var(--primary-deep);
         margin-bottom: 4px;
-        font-size: 0.98rem;
+        font-size: 1.08rem;
       }
       .consent-actions {
         margin-top: 20px;
@@ -1209,8 +1357,9 @@
       }
       .consent-actions .btn-primary {
         width: 100%;
-        max-width: 280px;
-        font-size: 1.05rem;
+        max-width: 320px;
+        font-size: 1.1rem;
+        min-height: 52px;
       }
       .consent-footer {
         margin: 14px 0 0;
@@ -1405,9 +1554,9 @@
         .small,
         .visual-flow-card p,
         .hero-badge,
-        .hero-tag,
         .hero-lead,
-        .hero-what,
+        .hero-action-chips li,
+        .welcome-highlights li,
         .steps-bar li,
         .setup-quick-tip,
         .fixed-badge,
@@ -1425,7 +1574,8 @@
         .consent-footer,
         label,
         .likert-grid label,
-        .survey-options label {
+        .survey-options label,
+        .key-point-card p {
           font-size: 1rem;
         }
         .visual-flow-card h3,
@@ -1472,6 +1622,19 @@
         .steps-bar {
           grid-template-columns: 1fr;
         }
+        .hero-action-chips,
+        .welcome-highlights {
+          grid-template-columns: 1fr;
+        }
+        .hero-scroll-link {
+          width: 100%;
+          max-width: 360px;
+        }
+        .setup-actions .btn-primary {
+          width: 100%;
+          font-size: 1.12rem;
+          min-height: 52px;
+        }
         .stats {
           grid-template-columns: repeat(2, 1fr);
         }
@@ -1500,81 +1663,77 @@
     </svg>
     <div id="welcomeOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
       <div class="welcome-panel consent-panel">
-        <h1 id="welcomeTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
+        <h1 id="welcomeTitle">农村取暖，怎样选更暖和、更省心？</h1>
         <p class="welcome-lead">
-          代入一户北方农村家庭，在五回合里试不同清洁取暖路线，看清每年花费怎么变，帮你找到更划算、更舒服过冬的办法。
+          <strong>五分钟试玩</strong>：代入一户农家，看清取暖费和存款会怎么变。
         </p>
+        <ul class="welcome-highlights" aria-label="你会得到什么">
+          <li><span class="wh-icon" aria-hidden="true">🏠</span>填家里收入、面积、取暖费</li>
+          <li><span class="wh-icon" aria-hidden="true">🔀</span>五回合选路线</li>
+          <li><span class="wh-icon" aria-hidden="true">📊</span>看钱和排放怎么变</li>
+        </ul>
         <div class="consent-actions">
-          <button type="button" id="welcomeStartBtn" class="btn-primary">下一步</button>
+          <button type="button" id="welcomeStartBtn" class="btn-primary">下一步，了解背景 →</button>
         </div>
+        <p class="welcome-footer hint">约 5 分钟 · 无需注册 · 数据匿名</p>
       </div>
     </div>
     <div id="contextOverlay" role="dialog" aria-modal="true" aria-labelledby="contextTitle">
       <div class="context-panel">
-        <h1 id="contextTitle">中国北方农村煤改气/电方案选择全过程模拟器</h1>
+        <h1 id="contextTitle">为什么要关心这件事？</h1>
         <p class="welcome-lead">
-          河北保定等地已有<strong>百余万户</strong>完成煤改气、煤改电——空气在变好，但不少家庭的<strong>取暖账单</strong>仍是每年冬天绕不开的话题。代入一户农家，在五回合里试不同清洁取暖路线，看清<strong>取暖费与存款</strong>会怎么变。
+          河北等地已有<strong>百余万户</strong>完成煤改气、煤改电。空气在变好，但<strong>取暖账单</strong>仍是许多家庭每年冬天要算的一笔账。
         </p>
         <div class="context-body">
           <section class="welcome-stats" aria-label="背景数据">
             <div class="welcome-stats-grid">
               <div class="welcome-stat">
-                <div class="welcome-stat-value">114.8 万+</div>
-                <div class="welcome-stat-label">中国华北地区某地级市累计清洁取暖用户</div>
+                <div class="welcome-stat-value">114 万+</div>
+                <div class="welcome-stat-label">清洁取暖用户（以保定为例）</div>
               </div>
               <div class="welcome-stat">
-                <div class="welcome-stat-value">93 → 44</div>
-                <div class="welcome-stat-label">主城区 PM2.5（μg/m³，2016→2024）</div>
+                <div class="welcome-stat-value">93→44</div>
+                <div class="welcome-stat-label">空气 PM2.5 改善（2016→2024）</div>
               </div>
               <div class="welcome-stat">
-                <div class="welcome-stat-value">23,319 元</div>
-                <div class="welcome-stat-label">2025 年中国华北地区河北省农村地区人均可支配收入</div>
+                <div class="welcome-stat-value">2.3 万</div>
+                <div class="welcome-stat-label">河北农村年人均收入（元）</div>
               </div>
               <div class="welcome-stat">
                 <div class="welcome-stat-value">36%+</div>
-                <div class="welcome-stat-label">补贴退坡后取暖支出可能显著上升</div>
+                <div class="welcome-stat-label">补贴少了，取暖费可能涨</div>
               </div>
             </div>
-            <p class="welcome-stats-note">数据来源：经济日报（2020）、保定市环境状况公报、统计公报、Zhao et al. 2024 等</p>
+            <p class="welcome-stats-note">数据来源：经济日报、保定市环境公报、统计公报等</p>
           </section>
 
-          <section class="welcome-context" aria-label="为什么值得关注">
-            <h2>一件关乎千万家庭过冬的事</h2>
-            <p class="welcome-context-lead">
-              2016 年起，<strong>整个中国北方地区</strong>农村大规模推进煤改气、煤改电，涉及数千万家庭过冬方式的根本转变。下方数据与报道<strong>以河北省保定市为例</strong>——它是改造规模较大、资料较公开的代表性地区之一。政策带来了明显的环境改善，但<strong>「改得起、用得起、过得暖」</strong>仍是北方农村需要持续关注的现实问题。
-            </p>
-            <div class="context-columns">
-              <div class="context-block">
-                <h3>环境在变好，投入也很大</h3>
-                <p>以保定为例：截至 2020 年，当地清洁取暖用户累计超过 114.8 万户；2016–2020 年市县两级改造与运行补贴投入 60 亿元以上。同期主城区 PM2.5 从 93 降至 44 μg/m³——这类变化在华北多地均有体现。</p>
-                <blockquote class="media-quote">
-                  「截至去年冬季取暖季，保定市清洁取暖用户累计达到 114.8 万多户，其中气代煤 102 万多户。」
-                  <cite>—— <a href="http://paper.ce.cn/jjrb/html/2020-12/12/content_434025.htm" target="_blank" rel="noopener noreferrer">经济日报</a>，2020-12-12</cite>
-                </blockquote>
-              </div>
-              <div class="context-block">
-                <h3>账单压力，农户感受最直接</h3>
-                <p>北方农村普遍面临类似压力。澎湃新闻在保定、定州等地调查指出，用户普遍提到「贵」的问题。学术研究显示：若运行补贴完全退坡，农村取暖支出可能增加约 36%——这一情况不只限于某一个市。</p>
-                <blockquote class="media-quote">
-                  「有点贵——清洁取暖推行 2 年多来，用户都提到『贵』的问题。」
-                  <cite>—— <a href="https://www.thepaper.cn/newsDetail_forward_4926300" target="_blank" rel="noopener noreferrer">澎湃新闻</a> · 保定/定州调查，2019</cite>
-                </blockquote>
-              </div>
+          <section class="welcome-context" aria-label="两件大事">
+            <h2>两件大事，都和农家过冬有关</h2>
+            <div class="key-point-card">
+              <h3><span class="kp-icon" aria-hidden="true">🌿</span>空气在变好</h3>
+              <p>北方农村大规模推进煤改气、煤改电。以保定为例，清洁取暖用户超过 114 万户，PM2.5 从 93 降到 44。</p>
+              <blockquote class="media-quote">
+                「清洁取暖用户累计达到 114.8 万多户。」
+                <cite>—— <a href="http://paper.ce.cn/jjrb/html/2020-12/12/content_434025.htm" target="_blank" rel="noopener noreferrer">经济日报</a>，2020</cite>
+              </blockquote>
+            </div>
+            <div class="key-point-card">
+              <h3><span class="kp-icon" aria-hidden="true">💰</span>账单要算清楚</h3>
+              <p>不少农户觉得清洁取暖「有点贵」。研究显示，补贴退坡后取暖支出可能增加约 36%。</p>
+              <blockquote class="media-quote">
+                「用户都提到『贵』的问题。」
+                <cite>—— <a href="https://www.thepaper.cn/newsDetail_forward_4926300" target="_blank" rel="noopener noreferrer">澎湃新闻</a>，2019</cite>
+              </blockquote>
             </div>
           </section>
 
           <section class="welcome-invite" aria-label="邀请参与">
-            <h2>邀请你试玩一把——你的体验很重要</h2>
-            <p>模拟器还在持续改进中。无论你是<strong>学生</strong>、<strong>关心农村议题的公众</strong>，还是<strong>经历过煤改的农户</strong>，花 5 分钟试玩一局，都是在帮助我们把政策数字翻译成普通人家账本上的真实感受。</p>
-            <ul class="welcome-invite-list">
-              <li><strong>学生：</strong>代入北方农村家庭，体验政策与生活的距离</li>
-              <li><strong>已煤改农户：</strong>对照自家情况试玩，告诉我们哪里不像</li>
-              <li><strong>其他朋友：</strong>任意填一组数字，看看不同收入、面积下结局有何不同</li>
-            </ul>
+            <h2>花 5 分钟试一把</h2>
+            <p>无论你是<strong>学生</strong>、<strong>农户</strong>还是<strong>关心农村的朋友</strong>，试玩一局都是在帮我们把政策数字翻译成农家账本上的真实感受。</p>
           </section>
         </div>
         <div class="consent-actions">
-          <button type="button" id="contextContinueBtn" class="btn-primary">开始模拟</button>
+          <button type="button" id="contextContinueBtn" class="btn-primary">开始模拟 →</button>
         </div>
         <p class="welcome-footer hint">约 5 分钟 · 无需注册 · 数据匿名</p>
       </div>
@@ -1585,24 +1744,24 @@
         <p class="consent-lead">在使用本模拟器和小调查之前，请花约 30 秒阅读以下内容。</p>
         <ul class="consent-list">
           <li>
-            <strong>匿名</strong>
-            我们不会收集你的姓名、手机号等能直接认出你是谁的信息；填写的数字与选择以匿名方式汇总用于研究。
+            <strong>🔒 匿名</strong>
+            不收集姓名、手机号；你的选择以匿名方式汇总用于研究。
           </li>
           <li>
-            <strong>自愿</strong>
-            参不参加完全由你决定；不点「同意」也可以直接关闭本页，不会有任何后果。
+            <strong>✋ 自愿</strong>
+            参不参加由你决定；不点「同意」直接关掉网页也可以。
           </li>
           <li>
-            <strong>随时可退出</strong>
-            模拟或问卷做到一半不想继续了，随时关掉网页离开即可，不必填完。
+            <strong>🚪 随时可退出</strong>
+            做到一半不想继续，关掉网页就行，不必填完。
           </li>
           <li>
-            <strong>数据用途</strong>
-            你的回答只用于本课堂/研究项目，用来改进模拟器、帮助农户更好地选择清洁取暖方案，不会作广告或其他商业用途。
+            <strong>📋 数据用途</strong>
+            只用于改进模拟器、帮农户选取暖方案，不作广告或商业用途。
           </li>
         </ul>
         <div class="consent-actions">
-          <button type="button" id="consentAgreeBtn" class="btn-primary">同意，进入模拟器</button>
+          <button type="button" id="consentAgreeBtn" class="btn-primary">同意，进入模拟器 →</button>
         </div>
         <p class="consent-footer hint">若暂不同意，直接关闭本页即可。</p>
       </div>
@@ -1612,17 +1771,14 @@
         <span class="hero-badge">5 分钟体验 · 无需注册</span>
         <h1>农村换暖气，怎样选更暖和、更省心？</h1>
         <p class="hero-lead">
-          这是一个<strong>网页小模拟</strong>：代入河北一户农村家庭，在煤改气 / 煤改电等路线下走 5 个回合，提前看清<strong>取暖费</strong>与<strong>家里存款</strong>怎么变，帮你对比哪种方案更适合自家情况。
+          代入河北一户农家，走 <strong>5 个回合</strong>，提前看清<strong>取暖费</strong>和<strong>家里存款</strong>会怎么变。
         </p>
-        <div class="hero-what">
-          <strong>你会做什么：</strong>填写家庭情况 → 每回合读情景并选一个选项 → 查看结局与智能分析。
-        </div>
-        <div class="hero-tags">
-          <span class="hero-tag">⏱ 约 5 分钟</span>
-          <span class="hero-tag">📱 手机可玩</span>
-          <span class="hero-tag">🔒 数据匿名</span>
-        </div>
-        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 直接开始：往下填表，点「开始模拟」</a></p>
+        <ul class="hero-action-chips" aria-label="你会做什么">
+          <li><span class="chip-icon" aria-hidden="true">📝</span>填家庭情况</li>
+          <li><span class="chip-icon" aria-hidden="true">👆</span>每回合选一个</li>
+          <li><span class="chip-icon" aria-hidden="true">📈</span>看结局与分析</li>
+        </ul>
+        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 往下填表，开始模拟</a></p>
         <ol class="steps-bar" aria-label="操作步骤">
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-form"/></svg></span>
@@ -1630,11 +1786,11 @@
           </li>
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-choice"/></svg></span>
-            <strong>2</strong>点「开始模拟」，每回合读说明后选一个按钮
+            <strong>2</strong>点「开始模拟」，每回合选一个按钮
           </li>
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-chart"/></svg></span>
-            <strong>3</strong>看结局与智能分析，填写小调查
+            <strong>3</strong>看结局与智能分析，填短问卷
           </li>
         </ol>
       </header>
@@ -1642,19 +1798,22 @@
       <!-- 【三步流程图标条】图标见页面顶部内联 SVG 图标库 -->
       <section class="visual-flow" aria-label="这个网页做什么">
         <article class="visual-flow-card">
+          <span class="flow-step-num" aria-hidden="true">1</span>
           <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>
           <h3>代入一户农家</h3>
-          <p>填收入、住房、取暖费——就像替这家人管账本</p>
+          <p>填收入、住房、取暖费</p>
         </article>
         <article class="visual-flow-card">
+          <span class="flow-step-num" aria-hidden="true">2</span>
           <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-choice"/></svg></span>
           <h3>5 回合做选择</h3>
-          <p>改不改、选天然气还是热泵、补贴少了怎么办</p>
+          <p>改不改、选气还是电</p>
         </article>
         <article class="visual-flow-card">
+          <span class="flow-step-num" aria-hidden="true">3</span>
           <span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>
-          <h3>看钱和排放怎么变</h3>
-          <p>取暖费、存款、合规度变化一目了然</p>
+          <h3>看钱怎么变</h3>
+          <p>取暖费、存款一目了然</p>
         </article>
       </section>
 
@@ -1666,18 +1825,11 @@
               <h2>第一步：填写家庭数据</h2>
             </div>
             <div class="setup-quick-tip" id="setupQuickTipDefault">
-              <strong>30 秒上手：</strong>
+              <strong>三步开始：</strong>
               <ol>
-                <li>先选<strong>你的身份</strong>，并按你的情况对照：
-                  <ul>
-                    <li><strong>学生</strong>：选「学生」填年级，代入熟悉的一户北方农村家庭</li>
-                    <li><strong>已煤改农户</strong>：填村名，重走当年煤改过程，玩后请多提改进建议</li>
-                    <li><strong>未煤改农户</strong>：填村名，借模拟未雨绸缪、选对改造路径</li>
-                    <li><strong>其他</strong>：说明身份，代入一户农家，了解清洁取暖对家庭账本与过冬体验的影响</li>
-                  </ul>
-                </li>
-                <li>下面数字填<strong>整户</strong>情况——点击各栏填写，可参考灰色小字里的常见区间</li>
-                <li>填完点最下方绿色按钮 <strong>「开始模拟 →」</strong></li>
+                <li>先选<strong>你的身份</strong>（学生 / 农户 / 其他）</li>
+                <li>填<strong>整户</strong>收入、面积、取暖费——看橙色小字提示</li>
+                <li>点最下面绿色按钮 <strong>「开始模拟 →」</strong></li>
               </ol>
             </div>
             <div class="setup-quick-tip farmer-quick-tip" id="setupFarmerTip" hidden>
@@ -1691,8 +1843,8 @@
                 <li><span class="guide-sub">每回合看说明、点一个按钮；玩完填短问卷</span></li>
               </ol>
             </div>
-            <form id="profileForm">
-              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>你的身份与基本信息</p>
+            <form id="profileForm" class="show-field-hints">
+              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>选身份、填基本信息</p>
               <div class="grid">
                 <label>你的身份
                   <select name="user_identity" id="userIdentitySelect" required>
@@ -1730,7 +1882,7 @@
               </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
-              <p class="form-section-title"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>家庭经济与住房（请填整户数据）</p>
+              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">2</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
               <div class="grid">
                 <label>家中常住人口（人）
                   <span class="field-hint" data-field="household_population">用于算人均排放</span>
@@ -1786,7 +1938,7 @@
                 </div>
               </details>
 
-              <p class="hint" style="margin-top:10px;">不确定具体数字？可先按小字提示估一个数试玩。点「开始模拟」后每回合只需点一个选项。</p>
+              <p class="hint" style="margin-top:10px;">数字记不清？按橙色提示估一个也行。每回合只需点一个按钮。</p>
               <p id="syncStatus" class="small" aria-live="polite"></p>
               <div class="setup-actions">
                 <button type="submit" class="btn-primary">开始模拟 →</button>
@@ -1830,7 +1982,7 @@
               <h2>第三步：智能分析</h2>
             </div>
             <p class="hint">
-              模拟结束后会自动生成三部分报告（农户画像、转型建议、生活改善解读）；阅读完成后点击下方按钮进入小调查。
+              模拟结束后自动生成报告；看完点下方按钮进入短问卷。
             </p>
             <div class="btn-row">
               <button type="button" id="aiAnalyzeBtn" class="btn-primary">生成智能分析</button>
@@ -1848,7 +2000,7 @@
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-book"/></svg></div>
               <h2>帮助说明</h2>
             </div>
-            <p class="hint">在左侧选好身份后，此处会自动展开对应使用说明；也可在下方面板手动切换身份查看。</p>
+            <p class="hint">选好身份后，这里会显示对应说明；也可手动切换身份查看。</p>
             <div class="accordion">
               <details class="accordion-item" id="guidanceAccordion">
                 <summary>使用说明（推荐先看）</summary>
@@ -2520,7 +2672,7 @@
         if (villageInput) villageInput.required = isVillageIdentity(identity);
         if (otherInput) otherInput.required = identity === "其他";
         coalStartHint?.toggleAttribute("hidden", !isVillageIdentity(identity));
-        profileForm?.classList.toggle("show-field-hints", identity === "学生" || identity === "其他");
+        profileForm?.classList.add("show-field-hints");
         updateHouseholdFieldHints(identity);
 
         const isFarmer = isVillageIdentity(identity);

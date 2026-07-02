@@ -1,0 +1,15 @@
+---
+description: Frontend visual design for simulator pages — distinctive UI, rural-friendly hierarchy, no logic changes unless asked.
+globs: index.html,xiaohongshu/promo-images.html,xiaohongshu/**
+alwaysApply: false
+---
+
+# Frontend design (auto when editing UI files)
+
+When changing visuals in matched files, read `.cursor/skills/frontend-design/SKILL.md` and follow it.
+
+Quick rules:
+- Plan palette/type/layout in 5–10 lines before editing CSS.
+- Keep existing `--primary` green family; extend, don't replace with unrelated themes.
+- Prioritize scannable hierarchy for low-literacy users (size + color for key vs sub text).
+- Do not change simulation, survey, or Supabase logic unless the user explicitly asks.
