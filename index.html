@@ -1360,6 +1360,10 @@
         color: var(--bad);
         border: 2px solid #fca5a5;
       }
+      .welcome-stat-prefix {
+        font-weight: 700;
+        margin-right: 2px;
+      }
       .welcome-stat-arrow {
         font-weight: 700;
         opacity: 0.9;
@@ -1789,7 +1793,7 @@
               <span class="welcome-conflict-text">空气在变好</span>
             </span>
             <span class="welcome-stat-chip welcome-stat-chip-good" aria-label="PM2.5 年均浓度变化">
-              <span>71</span><span class="welcome-stat-arrow">→</span><span>38</span>
+              <span class="welcome-stat-prefix">PM2.5:</span><span>71</span><span class="welcome-stat-arrow">→</span><span>38</span>
             </span>
           </span>
           <span class="welcome-conflict-line welcome-conflict-bad">
@@ -1798,7 +1802,7 @@
               <span class="welcome-conflict-text">费用在上升</span>
             </span>
             <span class="welcome-stat-chip welcome-stat-chip-bad" aria-label="户均年取暖费用变化">
-              <span>3000</span><span class="welcome-stat-arrow">→</span><span>8000</span>
+              <span class="welcome-stat-prefix">取暖费用：</span><span>3000</span><span class="welcome-stat-arrow">→</span><span>8000</span>
             </span>
           </span>
         </h1>
