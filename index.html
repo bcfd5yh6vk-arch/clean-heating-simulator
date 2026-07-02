@@ -721,8 +721,14 @@
       body.is-playing #setupSection {
         display: none;
       }
-      body.is-playing .help-panel {
+      .help-back-to-setup {
         display: none;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px solid var(--border);
+      }
+      .help-back-to-setup .btn-primary {
+        width: 100%;
       }
       body.is-playing .layout-main {
         grid-template-columns: 1fr;
@@ -1640,8 +1646,9 @@
         body.is-playing .help-panel {
           display: none;
         }
-      }
-      @media (max-width: 640px) {
+        .help-back-to-setup {
+          display: block;
+        }
         body {
           font-size: 20px;
           line-height: 1.75;
