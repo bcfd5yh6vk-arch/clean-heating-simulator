@@ -2084,37 +2084,12 @@
                 </label>
               </div>
 
-              <details class="accordion-item" style="margin-top:12px;">
-                <summary>高级设置：结局判定阈值（一般不用改）</summary>
-                <div class="accordion-body">
-                  <div class="grid">
-                    <label>资金紧张：能耗负担率（≤ %）
-                      <input type="text" value="10（固定）" disabled />
-                      <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
-                    </label>
-                    <label>需尽快改造：合规度（&lt;）
-                      <input type="text" value="30（固定）" disabled />
-                      <input type="hidden" name="seized_compliance_threshold" value="30" />
-                    </label>
-                    <label>成功：排放达标度（≥）
-                      <input type="text" value="80（固定）" disabled />
-                      <input type="hidden" name="success_emission_threshold" value="80" />
-                    </label>
-                    <label>成功：合规度（=）
-                      <input type="text" value="100（固定）" disabled />
-                      <input type="hidden" name="success_compliance_min" value="100" />
-                    </label>
-                    <label>成功：能耗负担率（≤ %）
-                      <input type="text" value="10（固定）" disabled />
-                      <input type="hidden" name="success_energy_burden_max" value="10" />
-                    </label>
-                    <label>成功：年盈余（≥ 元）
-                      <input type="text" value="0（固定）" disabled />
-                      <input type="hidden" name="success_surplus_min" value="0" />
-                    </label>
-                  </div>
-                </div>
-              </details>
+              <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
+              <input type="hidden" name="seized_compliance_threshold" value="30" />
+              <input type="hidden" name="success_emission_threshold" value="80" />
+              <input type="hidden" name="success_compliance_min" value="100" />
+              <input type="hidden" name="success_energy_burden_max" value="10" />
+              <input type="hidden" name="success_surplus_min" value="0" />
 
               <p class="hint" style="margin-top:10px;">数字记不清？按橙色提示估一个也行。每回合只需点一个按钮。</p>
               <p id="syncStatus" class="small" aria-live="polite"></p>
