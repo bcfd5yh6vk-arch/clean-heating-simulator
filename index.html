@@ -1649,6 +1649,8 @@
         .help-back-to-setup {
           display: block;
         }
+      }
+      @media (max-width: 640px) {
         body {
           font-size: 20px;
           line-height: 1.75;
@@ -2207,6 +2209,9 @@
                   <p>清洁取暖能让家里更干净、空气更好，但每年花费因路线和补贴而不同。本工具帮你提前算账、对比方案，减轻冬季负担，过更暖和、更省心的冬天。</p>
                 </div>
               </details>
+            </div>
+            <div class="help-back-to-setup">
+              <button type="button" id="helpBackToSetupBtn" class="btn-primary">看完了，返回填表</button>
             </div>
           </section>
         </aside>
@@ -3635,6 +3640,10 @@
         btn.addEventListener("click", () => {
           showIdentityGuidance(btn.dataset.guidanceIdentity);
         });
+      });
+
+      document.getElementById("helpBackToSetupBtn")?.addEventListener("click", () => {
+        document.getElementById("setupSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
       document.getElementById("guidanceAccordion")?.addEventListener("toggle", (e) => {
