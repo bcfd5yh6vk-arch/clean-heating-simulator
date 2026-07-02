@@ -1302,38 +1302,81 @@
         font-weight: inherit;
         line-height: inherit;
         color: inherit;
+        max-width: min(100%, 400px);
+        margin-left: auto;
+        margin-right: auto;
       }
       .welcome-conflict-line {
         display: flex;
         align-items: center;
-        justify-content: center;
-        gap: 12px;
-        font-size: clamp(1.85rem, 7vw, 2.75rem);
-        font-weight: 800;
-        line-height: 1.25;
-        letter-spacing: 0.04em;
+        justify-content: space-between;
+        gap: 8px;
+        width: 100%;
         margin: 0;
       }
       .welcome-conflict-line + .welcome-conflict-line {
-        margin-top: 14px;
+        margin-top: 12px;
       }
-      .welcome-conflict-good {
+      .welcome-conflict-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+        flex-shrink: 1;
+      }
+      .welcome-conflict-text {
+        font-size: clamp(1.05rem, 4vw, 1.35rem);
+        font-weight: 800;
+        line-height: 1.25;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      .welcome-conflict-good .welcome-conflict-text {
         color: var(--good);
       }
-      .welcome-conflict-bad {
+      .welcome-conflict-bad .welcome-conflict-text {
         color: var(--bad);
+      }
+      .welcome-stat-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        padding: 6px 9px;
+        border-radius: var(--radius-sm);
+        font-size: clamp(0.82rem, 3.4vw, 0.98rem);
+        font-weight: 800;
+        line-height: 1;
+        flex-shrink: 0;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+      .welcome-stat-chip-good {
+        background: #d8f3dc;
+        color: var(--good);
+        border: 2px solid #95d5b2;
+      }
+      .welcome-stat-chip-bad {
+        background: #fee2e2;
+        color: var(--bad);
+        border: 2px solid #fca5a5;
+      }
+      .welcome-stat-arrow {
+        font-weight: 700;
+        opacity: 0.9;
       }
       .welcome-trend-icon {
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        width: 1.15em;
-        height: 1.15em;
         border-radius: 50%;
-        font-size: 0.72em;
         font-weight: 900;
         line-height: 1;
         flex-shrink: 0;
+      }
+      .welcome-conflict-label .welcome-trend-icon {
+        width: 1.65em;
+        height: 1.65em;
+        font-size: 0.72em;
       }
       .welcome-trend-icon.down {
         background: #d8f3dc;
@@ -1609,9 +1652,16 @@
         .context-panel h1 {
           font-size: 1.65rem;
         }
-        .welcome-conflict-line {
-          font-size: clamp(2rem, 8.5vw, 3rem);
-          gap: 14px;
+        .welcome-conflict-text {
+          font-size: clamp(1rem, 4.2vw, 1.2rem);
+        }
+        .welcome-stat-chip {
+          padding: 5px 8px;
+          font-size: clamp(0.78rem, 3.2vw, 0.92rem);
+          gap: 2px;
+        }
+        .welcome-conflict-title {
+          max-width: 100%;
         }
         h2 {
           font-size: 1.35rem;
@@ -1734,12 +1784,22 @@
         <p class="welcome-region-label">华北农村地区</p>
         <h1 id="welcomeTitle" class="welcome-conflict-title">
           <span class="welcome-conflict-line welcome-conflict-good">
-            <span class="welcome-trend-icon down" aria-hidden="true">↓</span>
-            空气在变好
+            <span class="welcome-conflict-label">
+              <span class="welcome-trend-icon down" aria-hidden="true">↓</span>
+              <span class="welcome-conflict-text">空气在变好</span>
+            </span>
+            <span class="welcome-stat-chip welcome-stat-chip-good" aria-label="PM2.5 年均浓度变化">
+              <span>71</span><span class="welcome-stat-arrow">→</span><span>38</span>
+            </span>
           </span>
           <span class="welcome-conflict-line welcome-conflict-bad">
-            <span class="welcome-trend-icon up" aria-hidden="true">↑</span>
-            费用在上升
+            <span class="welcome-conflict-label">
+              <span class="welcome-trend-icon up" aria-hidden="true">↑</span>
+              <span class="welcome-conflict-text">费用在上升</span>
+            </span>
+            <span class="welcome-stat-chip welcome-stat-chip-bad" aria-label="户均年取暖费用变化">
+              <span>3000</span><span class="welcome-stat-arrow">→</span><span>8000</span>
+            </span>
           </span>
         </h1>
         <p class="welcome-cta-prompt">让我们做点什么</p>
