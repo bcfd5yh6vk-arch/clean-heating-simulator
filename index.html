@@ -2101,7 +2101,7 @@
         <span class="hero-badge">5 分钟体验 · 无需注册</span>
         <h1>农村换暖气，怎样选更暖和、更省心？</h1>
         <p class="hero-lead">
-          代入河北一户农家，走 <strong>5 个回合</strong>，提前看清<strong>取暖费</strong>和<strong>家里存款</strong>会怎么变。
+          代入华北一户农家，走 <strong>5 个回合</strong>，提前看清<strong>取暖费</strong>和<strong>家里存款</strong>会怎么变。
         </p>
         <ul class="hero-action-chips" aria-label="你会做什么">
           <li><span class="chip-icon" aria-hidden="true">📝</span>填家庭情况</li>
@@ -2175,7 +2175,7 @@
             <form id="profileForm" class="show-field-hints">
               <div class="fixed-badges" aria-label="固定设定">
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>河北</span></span>
+                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>华北</span></span>
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
               </div>
               <p id="coalStartHint" class="hint fixed-setting-hint farmer-form-hint" hidden>
@@ -2341,7 +2341,7 @@
                 <summary>使用方法</summary>
                 <div class="accordion-body">
                   <ul style="margin:0 0 0 18px;padding:0;">
-                    <li>用户代入角色固定为河北农村<strong>农民家庭</strong>。</li>
+                    <li>用户代入角色固定为华北农村<strong>农民家庭</strong>。</li>
                     <li>六项指标：取暖费、年收入、年盈余、合规度、排放达标度、能耗负担率。</li>
                     <li>共 5 回合做选择；回合 2 若迟迟不改造，村里会入户了解情况并提醒。</li>
                     <li>终局：成功转型 / 资金紧张 / 需尽快改造。</li>
@@ -2855,11 +2855,11 @@
       const IDENTITY_GUIDANCE = {
         学生: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>借<strong>河北农村煤改气/电</strong>案例，理解不同路线在花费、保暖和环保上的差别，学会帮家里做更合适的取暖选择。</p>
+          <p>借<strong>华北农村煤改气/电</strong>案例，理解不同路线在花费、保暖和环保上的差别，学会帮家里做更合适的取暖选择。</p>
           <h4>2. 如何填写初始数据</h4>
           <ul>
             <li>身份选「学生」，并填写年级。</li>
-            <li>你扮演<strong>一户河北农村家庭</strong>，请用熟悉家庭或公开典型数据填写年收入、年盈余、住房面积、煤改前取暖费。</li>
+            <li>你扮演<strong>一户华北农村家庭</strong>，请用熟悉家庭或公开典型数据填写年收入、年盈余、住房面积、煤改前取暖费。</li>
             <li>可参考：全家年收入约 8–10 万元；住房约 100 平方米；散煤取暖年费约 2000–4000 元。</li>
             <li>选定一户具体家庭并前后一致，后面做选择时勿随意改口。</li>
           </ul>
@@ -2898,11 +2898,11 @@
         `,
         其他: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
-          <p>代入<strong>一户普通河北农村家庭</strong>，理解同一清洁取暖方案为何在不同家庭会有不同的花费与过冬体验。</p>
+          <p>代入<strong>一户普通华北农村家庭</strong>，理解同一清洁取暖方案为何在不同家庭会有不同的花费与过冬体验。</p>
           <h4>2. 如何填写初始数据</h4>
           <ul>
             <li>身份选「其他」，并简要说明你的角色（如政策研究、媒体报道、技术服务等）。</li>
-            <li>若无一手数据，可用调研案例或<strong>河北农村公开平均数据</strong>——关键是前后一致。</li>
+            <li>若无一手数据，可用调研案例或<strong>华北农村公开平均数据</strong>——关键是前后一致。</li>
             <li>可参考：年收入 8–10 万、住房约 100 平方米、取暖费 2000–4000 元。</li>
           </ul>
           <h4>3. 五回合中如何做选择</h4>
@@ -2953,6 +2953,10 @@
 
       function isVillageIdentity(identity) {
         return identity === "已煤改农户" || identity === "未煤改农户";
+      }
+
+      function getSimulationRegion(identity) {
+        return isVillageIdentity(identity) ? "河北" : "华北";
       }
 
       const FARMER_BAND_MAP = {
@@ -3792,12 +3796,13 @@
 
       async function beginSimulation(data, preSurveyQ1) {
         researchSession.preSurveyQ1 = preSurveyQ1;
+        const simRegion = getSimulationRegion(String(data.get("user_identity") || ""));
         state.isEnergySaving = false;
         state.operatingFactor = 1.0;
         state.emissionBaseline = buildEmissionBaseline(Number(data.get("winter_cost")));
         state.user = {
           role: "农民家庭",
-          region: "河北",
+          region: simRegion,
           heatingMethod: String(data.get("heating_method") || "散煤炉"),
           income: Number(data.get("annual_income")),
           surplus: Number(data.get("annual_surplus")),
@@ -3827,7 +3832,7 @@
           user_identity: String(data.get("user_identity") || ""),
           identity_detail: readIdentityDetail(data),
           role: "农民家庭",
-          region: "河北",
+          region: simRegion,
           heating_method: String(data.get("heating_method") || "散煤炉"),
           annual_income: Number(data.get("annual_income")),
           annual_surplus: Number(data.get("annual_surplus")),
