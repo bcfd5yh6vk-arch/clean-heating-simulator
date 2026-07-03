@@ -1289,6 +1289,32 @@
       html:not(.consent-accepted) body {
         overflow: hidden;
       }
+      html.farmer-flow .hero-badge,
+      html.farmer-flow .hero-lead,
+      html.farmer-flow .hero-action-chips,
+      html.farmer-flow .hero-cta,
+      html.farmer-flow .steps-bar,
+      html.farmer-flow .visual-flow,
+      html.farmer-flow #setupSection .card-header,
+      html.farmer-flow #setupQuickTipDefault,
+      html.farmer-flow #setupFarmerTip,
+      html.farmer-flow .fixed-badges,
+      html.farmer-flow #coalStartHint,
+      html.farmer-flow #setupSection > form > .hint,
+      html.farmer-flow .side-col {
+        display: none !important;
+      }
+      html.farmer-flow .layout-main {
+        grid-template-columns: 1fr;
+      }
+      html.farmer-flow .hero {
+        margin-bottom: 8px;
+        padding-bottom: 12px;
+      }
+      html.farmer-flow .household-fields-farmer label select {
+        min-height: 52px;
+        font-size: 1.05rem;
+      }
       .consent-panel {
         width: min(520px, 100%);
         background: var(--card);
@@ -2031,7 +2057,7 @@
       <div class="consent-panel">
         <h1 id="consentTitle">参与前请了解</h1>
         <p class="consent-lead">在使用本模拟器和小调查之前，请花约 30 秒阅读以下内容。</p>
-        <ul class="consent-list">
+        <ul class="consent-list" id="consentListFull">
           <li>
             <strong>🔒 匿名</strong>
             不收集姓名、手机号；你的选择以匿名方式汇总用于研究。
@@ -2049,8 +2075,23 @@
             只用于改进模拟器、帮农户选取暖方案，不作广告或商业用途。
           </li>
         </ul>
+        <ul class="consent-list" id="consentListFarmer" hidden>
+          <li>
+            <strong>匿名</strong>
+            不收集姓名、手机号；你的选择以匿名方式汇总用于研究。
+          </li>
+          <li>
+            <strong>自愿</strong>
+            参不参加由你决定；不点「同意」直接关掉网页也可以。
+          </li>
+          <li>
+            <strong>数据保密仅用于研究</strong>
+            只用于改进模拟器和学术研究，不作广告或商业用途。
+          </li>
+        </ul>
         <div class="consent-actions">
           <button type="button" id="consentAgreeBtn" class="btn-primary">同意，进入模拟器 →</button>
+          <button type="button" id="consentAgreeBtnFarmer" class="btn-primary" hidden>同意</button>
         </div>
         <p class="consent-footer hint">若暂不同意，直接关闭本页即可。</p>
       </div>
@@ -2144,7 +2185,7 @@
               <input type="hidden" name="heating_method" value="散煤炉" />
 
               <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
-              <div class="grid">
+              <div id="defaultHouseholdFields" class="grid household-fields-default">
                 <label>家中常住人口（人）
                   <span class="field-hint" data-field="household_population">用于算人均排放</span>
                   <input type="text" name="household_population" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
@@ -2164,6 +2205,52 @@
                 <label>煤改气/电前年取暖费用（元）
                   <span class="field-hint" data-field="winter_cost">煤改前一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
                   <input type="text" name="winter_cost" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                </label>
+              </div>
+              <div id="farmerHouseholdFields" class="grid household-fields-farmer" hidden>
+                <label>家中有几口人
+                  <select name="farmer_band_population">
+                    <option value="">请选择</option>
+                    <option value="le2">2 人及以下</option>
+                    <option value="3-4">3–4 人</option>
+                    <option value="ge5">5 人及以上</option>
+                  </select>
+                </label>
+                <label>一年总收入大概多少
+                  <select name="farmer_band_income">
+                    <option value="">请选择</option>
+                    <option value="lt3">3 万以下</option>
+                    <option value="3-5">3–5 万</option>
+                    <option value="6-7">6–7 万</option>
+                    <option value="8-9">8–9 万</option>
+                    <option value="ge10">10 万以上</option>
+                  </select>
+                </label>
+                <label>一年还能剩多少
+                  <select name="farmer_band_surplus">
+                    <option value="">请选择</option>
+                    <option value="lt5k">5000 以下</option>
+                    <option value="5k-1">5000–1 万</option>
+                    <option value="1-2">1–2 万</option>
+                    <option value="ge2">2 万以上</option>
+                  </select>
+                </label>
+                <label>房子大概多大
+                  <select name="farmer_band_area">
+                    <option value="">请选择</option>
+                    <option value="lt80">80 平米以下</option>
+                    <option value="80-120">80–120 平米</option>
+                    <option value="gt120">120 平米以上</option>
+                  </select>
+                </label>
+                <label>煤改前一年取暖花多少
+                  <select name="farmer_band_winter">
+                    <option value="">请选择</option>
+                    <option value="lt2k">2 千以下</option>
+                    <option value="2-4k">2–4 千</option>
+                    <option value="4-6k">4–6 千</option>
+                    <option value="ge6k">6 千以上</option>
+                  </select>
                 </label>
               </div>
 
@@ -2336,10 +2423,12 @@
         document.documentElement.classList.add("context-dismissed");
         window.scrollTo(0, 0);
       });
-      document.getElementById("consentAgreeBtn")?.addEventListener("click", () => {
+      function acceptConsentAndEnter() {
         document.documentElement.classList.add("consent-accepted");
         window.scrollTo(0, 0);
-      });
+      }
+      document.getElementById("consentAgreeBtn")?.addEventListener("click", acceptConsentAndEnter);
+      document.getElementById("consentAgreeBtnFarmer")?.addEventListener("click", acceptConsentAndEnter);
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -2866,6 +2955,71 @@
         return identity === "已煤改农户" || identity === "未煤改农户";
       }
 
+      const FARMER_BAND_MAP = {
+        population: { le2: 2, "3-4": 4, ge5: 5 },
+        income: { lt3: 25000, "3-5": 40000, "6-7": 65000, "8-9": 85000, ge10: 120000 },
+        surplus: { lt5k: 4000, "5k-1": 7500, "1-2": 15000, ge2: 25000 },
+        area: { lt80: 70, "80-120": 100, gt120: 140 },
+        winter: { lt2k: 1500, "2-4k": 3000, "4-6k": 5000, ge6k: 7000 }
+      };
+
+      const FARMER_BAND_LABELS = {
+        farmer_band_population: "家中有几口人",
+        farmer_band_income: "一年总收入",
+        farmer_band_surplus: "一年还能剩多少",
+        farmer_band_area: "房子大小",
+        farmer_band_winter: "一年取暖花费"
+      };
+
+      const defaultHouseholdFields = document.getElementById("defaultHouseholdFields");
+      const farmerHouseholdFields = document.getElementById("farmerHouseholdFields");
+
+      function setFarmerFlowMode(isFarmer) {
+        document.documentElement.classList.toggle("farmer-flow", isFarmer);
+        document.getElementById("consentListFull")?.toggleAttribute("hidden", isFarmer);
+        document.getElementById("consentListFarmer")?.toggleAttribute("hidden", !isFarmer);
+        document.getElementById("consentAgreeBtn")?.toggleAttribute("hidden", isFarmer);
+        document.getElementById("consentAgreeBtnFarmer")?.toggleAttribute("hidden", !isFarmer);
+      }
+
+      function applyFarmerHouseholdFieldsUi(isFarmer) {
+        defaultHouseholdFields?.toggleAttribute("hidden", isFarmer);
+        farmerHouseholdFields?.toggleAttribute("hidden", !isFarmer);
+        defaultHouseholdFields?.querySelectorAll("input[name]").forEach((el) => {
+          el.required = !isFarmer;
+          el.disabled = isFarmer;
+        });
+        farmerHouseholdFields?.querySelectorAll("select[name]").forEach((el) => {
+          el.required = isFarmer;
+          el.disabled = !isFarmer;
+        });
+      }
+
+      function validateFarmerHouseholdBands(formData) {
+        for (const [name, label] of Object.entries(FARMER_BAND_LABELS)) {
+          const band = String(formData.get(name) || "").trim();
+          if (!band) {
+            alert(`请选择${label}。`);
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function applyFarmerBandMapping(formData) {
+        const mapped = new FormData();
+        for (const [key, value] of formData.entries()) {
+          if (key.startsWith("farmer_band_")) continue;
+          mapped.append(key, value);
+        }
+        mapped.set("household_population", String(FARMER_BAND_MAP.population[formData.get("farmer_band_population")]));
+        mapped.set("annual_income", String(FARMER_BAND_MAP.income[formData.get("farmer_band_income")]));
+        mapped.set("annual_surplus", String(FARMER_BAND_MAP.surplus[formData.get("farmer_band_surplus")]));
+        mapped.set("housing_area", String(FARMER_BAND_MAP.area[formData.get("farmer_band_area")]));
+        mapped.set("winter_cost", String(FARMER_BAND_MAP.winter[formData.get("farmer_band_winter")]));
+        return mapped;
+      }
+
       const FIELD_HINTS_DEFAULT = {
         household_population: "用于算人均排放",
         annual_income: "全家一年进账，不是人均；常见约 8–10 万",
@@ -2913,11 +3067,20 @@
         document.getElementById("guidancePanelHintDefault")?.toggleAttribute("hidden", isFarmer);
         document.getElementById("guidancePanelHintFarmer")?.toggleAttribute("hidden", !isFarmer);
 
-        const scrollHelp =
-          Boolean(identity) &&
-          window.matchMedia("(max-width: 900px)").matches &&
-          document.documentElement.classList.contains("welcome-dismissed");
-        showIdentityGuidance(identity, { scrollIntoView: scrollHelp });
+        applyFarmerHouseholdFieldsUi(isFarmer);
+        if (document.documentElement.classList.contains("welcome-dismissed")) {
+          setFarmerFlowMode(isFarmer);
+        }
+
+        if (!isFarmer) {
+          const scrollHelp =
+            Boolean(identity) &&
+            window.matchMedia("(max-width: 900px)").matches &&
+            document.documentElement.classList.contains("welcome-dismissed");
+          showIdentityGuidance(identity, { scrollIntoView: scrollHelp });
+        } else {
+          document.getElementById("guidanceAccordion")?.removeAttribute("open");
+        }
       }
 
       function readIdentityDetail(formData) {
@@ -2976,7 +3139,14 @@
       document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
         const data = new FormData(profileForm);
         if (!validateIdentityFields(data)) return;
+        const identity = String(data.get("user_identity") || "");
+        const isFarmer = isVillageIdentity(identity);
+        setFarmerFlowMode(isFarmer);
+        applyFarmerHouseholdFieldsUi(isFarmer);
         document.documentElement.classList.add("welcome-dismissed");
+        if (isFarmer) {
+          document.documentElement.classList.add("context-dismissed");
+        }
         window.scrollTo(0, 0);
       });
 
@@ -3606,9 +3776,15 @@
 
       profileForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-        const data = new FormData(profileForm);
+        let data = new FormData(profileForm);
         if (!validateIdentityFields(data)) return;
-        if (!validateHouseholdFields(data)) return;
+        const identity = String(data.get("user_identity") || "");
+        if (isVillageIdentity(identity)) {
+          if (!validateFarmerHouseholdBands(data)) return;
+          data = applyFarmerBandMapping(data);
+        } else if (!validateHouseholdFields(data)) {
+          return;
+        }
         resetResearchSession();
         pendingFormData = data;
         showPreSurveyQ1();
@@ -4396,7 +4572,15 @@
         hideSurveySuccessModal();
         hidePostGameSurvey();
         resetSimulation(false);
-        document.documentElement.classList.remove("welcome-dismissed", "context-dismissed", "consent-accepted");
+        document.documentElement.classList.remove(
+          "welcome-dismissed",
+          "context-dismissed",
+          "consent-accepted",
+          "farmer-flow"
+        );
+        setFarmerFlowMode(false);
+        applyFarmerHouseholdFieldsUi(false);
+        updateIdentityDetailFields();
         window.scrollTo(0, 0);
       }
 
