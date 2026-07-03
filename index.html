@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="app-survey-version" content="farmer-v2" />
     <title>中国北方农村煤改气/电方案选择全过程模拟器</title>
     <script>
       (function () {
@@ -1288,6 +1289,9 @@
       }
       html:not(.consent-accepted) body {
         overflow: hidden;
+      }
+      html.farmer-flow #preSurveyOverlay {
+        display: none !important;
       }
       html.farmer-flow .hero-badge,
       html.farmer-flow .hero-lead,
@@ -4174,42 +4178,6 @@
           ${farmerInterviewBlock}
         `;
 
-        const converted = `
-          <p class="survey-section-title">已煤改农户专属题</p>
-          ${radioField("f1_heating_method", "F1. 你家目前主要清洁取暖方式是？", [
-            ["A", "A. 天然气"],
-            ["B", "B. 电采暖/空气源热泵"],
-            ["C", "C. 地源热泵"],
-            ["D", "D. 其他"]
-          ])}
-          <label id="f1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="f1_method_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${textField("f2_annual_heating_cost", "F2. 你家煤改气/电后一年取暖费多少钱？", "请填写", true)}
-          ${radioField("f3_reduce_spending", "F3. 你有没有采取一些手段减少取暖支出？", [
-            ["yes", "有"],
-            ["no", "没有"]
-          ])}
-          <label id="f3ReduceMethodsWrap" class="survey-q" hidden>具体途径是什么<textarea name="f3_reduce_methods" rows="3" class="survey-other-input" placeholder="请填写"></textarea></label>
-          ${radioField("f4_cost_realism", "F4. 模拟里的取暖费用变化，与你家真实感受相比？", [
-            ["A", "A. 非常接近"],
-            ["B", "B. 大体接近，但细节有差别"],
-            ["C", "C. 偏差较大"]
-          ])}
-          ${checkboxField("f5_subsidy_response", "F5. 补贴退坡后，你家的实际应对方式是？", [
-            ["normal_use", "正常用，费用可承受"],
-            ["less_heating", "少开暖气、降低室温"],
-            ["save_mode", "改用更省的方式（分区取暖等）"],
-            ["reburn", "仍有返煤或备用散煤"],
-            ["seek_subsidy", "申请/等待政策补贴或救济"],
-            ["income_boost", "寻找增收途径"],
-            ["other", "其他"]
-          ])}
-          <label id="f5OtherWrap" class="survey-q" hidden>F5 其他说明<input type="text" name="f5_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${textField("f6_realistic_part", "F6. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
-          ${textField("f7_unrealistic_part", "F7. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
-          ${textField("f8_policy_suggestion", "F8. 若给政策提一条建议，你会说什么？", "可选填写")}
-          ${farmerInterviewBlock}
-        `;
-
         const farmerUnconverted = `
           <p class="survey-section-title">关于你家的情况</p>
           ${radioField("n1_heating_method", "你家目前主要怎么取暖？", [
@@ -4240,35 +4208,6 @@
             ["insulation", "先把房子保温做好"],
             ["wait", "先观望"]
           ])}
-          ${farmerInterviewBlock}
-        `;
-
-        const unconverted = `
-          <p class="survey-section-title">未煤改农户专属题</p>
-          ${radioField("n1_heating_method", "N1. 你家目前主要取暖方式是？", [
-            ["A", "A. 散煤"],
-            ["B", "B. 电暖/小太阳等"],
-            ["C", "C. 液化气罐"],
-            ["D", "D. 其他"]
-          ])}
-          <label id="n1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="n1_method_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${checkboxField("n2_concerns", "N2. 若村里推进煤改气，你最担心的是？（多选，最多 3 项）", [
-            ["upfront_cost", "改造要掏太多钱"],
-            ["annual_cost", "以后每年取暖费太高"],
-            ["repair", "设备坏了没人修"],
-            ["gas_supply", "气源不稳定/断气"],
-            ["insulation", "房子保温差，改了也不暖和"],
-            ["subsidy_drop", "补贴以后越来越少"],
-            ["voluntary", "希望按自家节奏自愿决定"]
-          ], 3)}
-          ${radioField("n3_attitude", "N3. 看完这局模拟，你对「要不要改」的态度？", [
-            ["A", "A. 更愿意尽快改造"],
-            ["B", "B. 仍想改，但必须补贴到位"],
-            ["C", "C. 更犹豫，担心每年花费太高"],
-            ["D", "D. 倾向维持现状"],
-            ["E", "E. 不确定"]
-          ])}
-          ${textField("n4_preferred_path", "N4. 如果由你家决定，你会优先选哪条路线（天然气/热泵/保温改造/先观望）？理由是什么？", "请填写", true)}
           ${farmerInterviewBlock}
         `;
 
@@ -4332,8 +4271,8 @@
         let group = "";
         const isFarmer = isVillageIdentity(identity);
         if (identity === "学生") group = student;
-        else if (identity === "已煤改农户") group = isFarmer ? farmerConverted : converted;
-        else if (identity === "未煤改农户") group = isFarmer ? farmerUnconverted : unconverted;
+        else if (identity === "已煤改农户") group = farmerConverted;
+        else if (identity === "未煤改农户") group = farmerUnconverted;
         else if (identity === "其他") group = other;
 
         postGameSurveyForm.innerHTML = isFarmer
@@ -4768,6 +4707,14 @@
       }
 
       function showPreSurveyQ1() {
+        if (isFarmerSession()) {
+          if (pendingFormData) {
+            const data = pendingFormData;
+            pendingFormData = null;
+            beginSimulation(data, null);
+          }
+          return;
+        }
         if (!preSurveyOverlay || !preSurveyForm) {
           beginSimulation(pendingFormData, null);
           return;
