@@ -2056,7 +2056,8 @@
     <div id="consentOverlay" role="dialog" aria-modal="true" aria-labelledby="consentTitle">
       <div class="consent-panel">
         <h1 id="consentTitle">参与前请了解</h1>
-        <p class="consent-lead">在使用本模拟器和小调查之前，请花约 30 秒阅读以下内容。</p>
+        <p class="consent-lead" id="consentLead">在使用本模拟器和小调查之前，请花约 30 秒阅读以下内容。</p>
+        <p class="consent-lead" id="consentLeadFarmer" hidden>开始算账前，请花约 30 秒看一眼下面几条。</p>
         <ul class="consent-list" id="consentListFull">
           <li>
             <strong>🔒 匿名</strong>
@@ -2086,7 +2087,7 @@
           </li>
           <li>
             <strong>数据保密仅用于研究</strong>
-            只用于改进模拟器和学术研究，不作广告或商业用途。
+            只用于改进算账工具和学术研究，不作广告或商业用途。
           </li>
         </ul>
         <div class="consent-actions">
@@ -2162,14 +2163,14 @@
               </ol>
             </div>
             <div class="setup-quick-tip farmer-quick-tip" id="setupFarmerTip" hidden>
-              <p class="guide-key">两步开始：填家里数字 → 点开始模拟</p>
+              <p class="guide-key">两步开始：填家里数字 → 点开始算账</p>
               <ol class="farmer-steps">
                 <li>
                   <span class="guide-key">填收入、人数、面积、取暖费</span>
                   <span class="guide-sub">一整户家的数，记不清就估一个</span>
                 </li>
-                <li><span class="guide-key">点最下面绿色「开始模拟 →」</span></li>
-                <li><span class="guide-sub">每回合看说明、点一个按钮；玩完填短问卷</span></li>
+                <li><span class="guide-key">点最下面绿色「开始算账 →」</span></li>
+                <li><span class="guide-sub">每回合看说明、点一个按钮；玩完填几句话</span></li>
               </ol>
             </div>
             <form id="profileForm" class="show-field-hints">
@@ -2179,7 +2180,7 @@
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
               </div>
               <p id="coalStartHint" class="hint fixed-setting-hint farmer-form-hint" hidden>
-                <span class="guide-sub">模拟从散煤开始，方便对比不同路线。</span>
+                <span class="guide-sub">算一算从散煤开始，方便对比不同路线。</span>
                 <span class="guide-key">已经改气/改电的，请填改之前一两个冬天取暖花了多少钱。</span>
               </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
@@ -2264,7 +2265,7 @@
               <p class="hint" style="margin-top:10px;">数字记不清？按橙色提示估一个也行。每回合只需点一个按钮。</p>
               <p id="syncStatus" class="small" aria-live="polite"></p>
               <div class="setup-actions">
-                <button type="submit" class="btn-primary">开始模拟 →</button>
+                <button type="submit" class="btn-primary" id="profileSubmitBtn">开始模拟 →</button>
                 <button type="button" id="resetBtn">重置</button>
               </div>
             </form>
@@ -2274,7 +2275,7 @@
             <div class="card-header card-header-split">
               <div class="card-header-title">
                 <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-game"/></svg></div>
-                <h2>第二步：做选择</h2>
+                <h2 id="playAreaTitle">第二步：做选择</h2>
               </div>
               <button type="button" id="resetPlayBtn" class="btn-reset-play">重新填写 / 重置</button>
             </div>
@@ -2291,7 +2292,7 @@
                 <div id="endingBox"></div>
               </div>
               <aside class="play-side-panel">
-                <p class="form-section-title" style="margin-top:0;">当前指标</p>
+                <p class="form-section-title" style="margin-top:0;" id="statsSectionTitle">当前指标</p>
                 <div class="stats" id="stats"></div>
               </aside>
             </div>
@@ -2300,9 +2301,9 @@
           <section class="card ai-analysis compact-hint" id="aiAnalysisSection" style="display:none;">
             <div class="card-header">
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-ai"/></svg></div>
-              <h2>第三步：智能分析</h2>
+              <h2 id="aiAnalysisTitle">第三步：智能分析</h2>
             </div>
-            <p class="hint">
+            <p class="hint" id="aiAnalysisHint">
               模拟结束后自动生成报告；看完点下方按钮进入短问卷。
             </p>
             <div class="btn-row">
@@ -2380,10 +2381,10 @@
     <div id="preSurveyOverlay" class="survey-overlay" hidden>
       <div class="survey-modal" role="dialog" aria-labelledby="preSurveyTitle" aria-modal="true">
         <h2 id="preSurveyTitle">开始之前</h2>
-        <p class="hint">请用约 10 秒回答下面一题，然后进入模拟。</p>
+        <p class="hint" id="preSurveyHint">请用约 10 秒回答下面一题，然后进入模拟。</p>
         <form id="preSurveyForm">
           <fieldset class="survey-q">
-            <legend>Q1. 在开始本局模拟前，你对北方农村煤改气问题了解程度？</legend>
+            <legend id="preSurveyLegend">Q1. 在开始本局模拟前，你对北方农村煤改气问题了解程度？</legend>
             <div class="likert-grid">
               <label><input type="radio" name="q1_understanding_before" value="1" required />1 完全没感觉</label>
               <label><input type="radio" name="q1_understanding_before" value="2" required />2 略有了解</label>
@@ -2393,7 +2394,7 @@
             </div>
           </fieldset>
           <div class="survey-actions">
-            <button type="submit" class="btn-primary">开始模拟 →</button>
+            <button type="submit" class="btn-primary" id="preSurveySubmitBtn">开始模拟 →</button>
           </div>
         </form>
       </div>
@@ -2402,7 +2403,7 @@
     <div id="surveyOverlay" class="survey-overlay" hidden>
       <div class="survey-modal" role="dialog" aria-labelledby="surveyTitle" aria-modal="true">
         <h2 id="surveyTitle">2 分钟小调查</h2>
-        <p class="hint">感谢完成本局模拟与智能分析！请用约 2 分钟填写以下问题，帮助我们改进模拟器、更好地服务农户选路取暖。</p>
+        <p class="hint" id="surveyIntroHint">感谢完成本局模拟与智能分析！请用约 2 分钟填写以下问题，帮助我们改进模拟器、更好地服务农户选路取暖。</p>
         <form id="postGameSurveyForm"></form>
         <p id="surveyStatus" class="small" aria-live="polite"></p>
       </div>
@@ -2879,9 +2880,9 @@
         已煤改农户: `
           <h4>① 填表</h4>
           <p class="guide-key">填<strong>村名</strong>，再填家里人数、年收入、面积、<strong>改气/改电前的取暖费</strong>。</p>
-          <p class="guide-sub">模拟从散煤开头，方便对比——不代表你还没改。数字记不清就估一个。</p>
+          <p class="guide-sub">算一算从散煤开头，方便对比——不代表你还没改。数字记不清就估一个。</p>
           <h4>② 玩</h4>
-          <p class="guide-key">每回合看说明，<strong>点一个按钮</strong>。多看<strong>第 3 回合（选路线）</strong>和<strong>第 5 回合（补贴少了）</strong>。</p>
+          <p class="guide-key">每回合看说明，<strong>点一个按钮</strong>。多看<strong>第 3 回合（选路线）</strong>和<strong>第 5 回合（补贴变少了）</strong>。</p>
           <p class="guide-sub">按你家真实情况选。玩完可在调查里说哪里像、哪里不像。</p>
           <h4>③ 说明</h4>
           <p class="guide-sub">结果是推算，不是说你家好或不好。和你经历不一样很正常。</p>
@@ -2955,6 +2956,41 @@
         return identity === "已煤改农户" || identity === "未煤改农户";
       }
 
+      function isFarmerSession() {
+        if (document.documentElement.classList.contains("farmer-flow")) return true;
+        const identity =
+          state?.initialProfile?.user_identity || userIdentitySelect?.value || "";
+        return isVillageIdentity(identity);
+      }
+
+      const FARMER_PHRASE_REPLACEMENTS = [
+        ["开始模拟", "开始算账"],
+        ["回合5：补贴减少冲击", "回合5：补贴变少了"],
+        ["结算回合5（补贴减少）", "算一算今年账（补贴变少了）"],
+        ["固定事件触发：补贴减少。点击按钮结算最终结果。", "国家补贴变少了。点下面按钮，看看一年下来钱够不够。"],
+        ["智能分析", "看看结果"],
+        ["模拟器", "算账工具"],
+        ["模拟", "算一算"],
+        ["合规度", "要不要抓紧改"],
+        ["排放达标度", "干不干净，排放多少"],
+        ["能耗负担率", "取暖费占收入几成"],
+        ["年盈余", "一年还能剩多少钱"],
+        ["补贴退坡", "补贴变少了"],
+        ["增收/降耗策略", "多挣钱还是省取暖费"],
+        ["请选择一项家庭策略", "请选一样"],
+        ["请选择开局策略", "请选开局打算"],
+        ["开局策略", "开局打算"]
+      ];
+
+      function farmerize(text) {
+        if (!isFarmerSession() || text == null) return text;
+        let s = String(text);
+        for (const [from, to] of FARMER_PHRASE_REPLACEMENTS) {
+          s = s.split(from).join(to);
+        }
+        return s;
+      }
+
       function getSimulationRegion(identity) {
         return isVillageIdentity(identity) ? "河北" : "华北";
       }
@@ -2970,7 +3006,7 @@
       const FARMER_BAND_LABELS = {
         farmer_band_population: "家中有几口人",
         farmer_band_income: "一年总收入",
-        farmer_band_surplus: "一年还能剩多少",
+        farmer_band_surplus: "一年还能剩多少钱",
         farmer_band_area: "房子大小",
         farmer_band_winter: "一年取暖花费"
       };
@@ -2984,6 +3020,51 @@
         document.getElementById("consentListFarmer")?.toggleAttribute("hidden", !isFarmer);
         document.getElementById("consentAgreeBtn")?.toggleAttribute("hidden", isFarmer);
         document.getElementById("consentAgreeBtnFarmer")?.toggleAttribute("hidden", !isFarmer);
+        document.getElementById("consentLead")?.toggleAttribute("hidden", isFarmer);
+        document.getElementById("consentLeadFarmer")?.toggleAttribute("hidden", !isFarmer);
+        updateFarmerUiCopy();
+      }
+
+      function updateFarmerUiCopy() {
+        const isFarmer = document.documentElement.classList.contains("farmer-flow");
+        const submitBtn = document.getElementById("profileSubmitBtn");
+        if (submitBtn) submitBtn.textContent = isFarmer ? "开始算账 →" : "开始模拟 →";
+        const playTitle = document.getElementById("playAreaTitle");
+        if (playTitle) playTitle.textContent = isFarmer ? "第二步：每回合选一个" : "第二步：做选择";
+        const statsTitle = document.getElementById("statsSectionTitle");
+        if (statsTitle) statsTitle.textContent = isFarmer ? "你家现在啥情况" : "当前指标";
+        const aiTitle = document.getElementById("aiAnalysisTitle");
+        if (aiTitle) aiTitle.textContent = isFarmer ? "第三步：看看结果" : "第三步：智能分析";
+        const aiHint = document.getElementById("aiAnalysisHint");
+        if (aiHint) {
+          aiHint.textContent = isFarmer
+            ? "算完以后会出一份说明；看完点下面按钮，填几句话就行。"
+            : "模拟结束后自动生成报告；看完点下方按钮进入短问卷。";
+        }
+        const aiBtn = document.getElementById("aiAnalyzeBtn");
+        if (aiBtn) aiBtn.textContent = isFarmer ? "看看结果" : "生成智能分析";
+        const preHint = document.getElementById("preSurveyHint");
+        if (preHint) {
+          preHint.textContent = isFarmer
+            ? "请用约 10 秒回答下面一题，然后开始算账。"
+            : "请用约 10 秒回答下面一题，然后进入模拟。";
+        }
+        const preLegend = document.getElementById("preSurveyLegend");
+        if (preLegend) {
+          preLegend.textContent = isFarmer
+            ? "在开始算账前，你对煤改气和每年取暖花钱的问题了解多少？"
+            : "Q1. 在开始本局模拟前，你对北方农村煤改气问题了解程度？";
+        }
+        const preSubmit = document.getElementById("preSurveySubmitBtn");
+        if (preSubmit) preSubmit.textContent = isFarmer ? "开始算账 →" : "开始模拟 →";
+        const surveyHint = document.getElementById("surveyIntroHint");
+        if (surveyHint) {
+          surveyHint.textContent = isFarmer
+            ? "谢谢你看完了！请用约 2 分钟回答几个问题，帮我们把这个算账工具做得更好。"
+            : "感谢完成本局模拟与智能分析！请用约 2 分钟填写以下问题，帮助我们改进模拟器、更好地服务农户选路取暖。";
+        }
+        const surveyTitle = document.getElementById("surveyTitle");
+        if (surveyTitle) surveyTitle.textContent = isFarmer ? "几句话反馈" : "2 分钟小调查";
       }
 
       function applyFarmerHouseholdFieldsUi(isFarmer) {
@@ -3174,7 +3255,7 @@
 
       function setSyncStatus(message, isError = false) {
         if (!syncStatusEl) return;
-        syncStatusEl.textContent = message;
+        syncStatusEl.textContent = farmerize(message);
         syncStatusEl.style.color = isError ? "var(--bad)" : "var(--muted)";
       }
 
@@ -3465,7 +3546,7 @@
         segmentsEl.innerHTML = html;
         if (labelEl) {
           labelEl.textContent = finished
-            ? "模拟已结束"
+            ? isFarmerSession() ? "算一算已结束" : "模拟已结束"
             : `第 ${current} 回合 / 共 ${total} 回合`;
         }
       }
@@ -3488,6 +3569,7 @@
         const compliance = Math.round(state.user.compliance);
         const emission = Math.round(state.user.emission);
         const surplus = Math.round(state.user.surplus);
+        const isFarmer = isFarmerSession();
 
         const items = [
           { icon: "🔥", iconCls: "amber", label: "当前取暖年花费（元）", value: Math.round(state.user.heatingCost) },
@@ -3495,13 +3577,13 @@
           {
             icon: surplus >= 0 ? "✅" : "⚠️",
             iconCls: surplus >= 0 ? "green" : "red",
-            label: "年盈余（元）",
+            label: isFarmer ? "一年还能剩多少钱（元）" : "年盈余（元）",
             value: surplus
           },
           {
             icon: "⚖️",
             iconCls: barClassForScore(compliance, false) === "good" ? "green" : barClassForScore(compliance, false) === "warn" ? "amber" : "red",
-            label: "合规度（0—100）",
+            label: isFarmer ? "要不要抓紧改（0—100）" : "合规度（0—100）",
             value: compliance,
             bar: compliance,
             barCls: barClassForScore(compliance, false)
@@ -3509,16 +3591,16 @@
           {
             icon: "🌿",
             iconCls: barClassForScore(emission, false) === "good" ? "green" : barClassForScore(emission, false) === "warn" ? "amber" : "red",
-            label: "排放达标度（0—100）",
+            label: isFarmer ? "干不干净，排放多少（0—100）" : "排放达标度（0—100）",
             value: emission,
             bar: emission,
             barCls: barClassForScore(emission, false)
           },
-          { icon: "☁️", iconCls: "blue", label: "冬季二氧化碳排放量（吨）", value: (state.user.co2Tons ?? 0).toFixed(3) },
+          { icon: "☁️", iconCls: "blue", label: isFarmer ? "冬天排放多少二氧化碳（吨）" : "冬季二氧化碳排放量（吨）", value: (state.user.co2Tons ?? 0).toFixed(3) },
           {
             icon: "📊",
             iconCls: barClassForBurden(burden) === "good" ? "green" : barClassForBurden(burden) === "warn" ? "amber" : "red",
-            label: "能耗负担率（%）",
+            label: isFarmer ? "取暖费占收入几成（%）" : "能耗负担率（%）",
             value: burden.toFixed(1),
             bar: Math.min(100, burden * 5),
             barCls: barClassForBurden(burden)
@@ -3544,18 +3626,20 @@
 
       function setStage(stageName, narrative, options) {
         state.stage = stageName;
-        stageTitleEl.textContent = `第 ${state.turn} 回合 · ${stageName}`;
-        narrativeEl.textContent = narrative;
+        stageTitleEl.textContent = `第 ${state.turn} 回合 · ${farmerize(stageName)}`;
+        narrativeEl.textContent = farmerize(narrative);
         eventBoxEl.innerHTML = "";
         choicesEl.innerHTML = "";
         options.forEach((opt) => {
           const btn = document.createElement("button");
           btn.type = "button";
           btn.className = "choice-btn";
-          if (opt.hint) {
-            btn.innerHTML = `<span class="choice-label">${opt.label}</span><span class="choice-hint">${opt.hint}</span>`;
+          const displayLabel = farmerize(opt.label);
+          const displayHint = opt.hint ? farmerize(opt.hint) : null;
+          if (displayHint) {
+            btn.innerHTML = `<span class="choice-label">${displayLabel}</span><span class="choice-hint">${displayHint}</span>`;
           } else {
-            btn.innerHTML = `<span class="choice-label">${opt.label}</span>`;
+            btn.innerHTML = `<span class="choice-label">${displayLabel}</span>`;
           }
           btn.addEventListener("click", () => runChoice(opt.id, opt.label));
           choicesEl.appendChild(btn);
@@ -3569,10 +3653,11 @@
         choicesEl.innerHTML = "";
         renderStepper();
         const cls = type === "success" ? "success" : "bankrupt";
+        const displaySummary = farmerize(summary);
         endingBoxEl.innerHTML = `
           <div class="ending ${cls}">
             <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "需尽快改造" : "资金紧张"}</h3>
-            <p>${summary}</p>
+            <p>${displaySummary}</p>
           </div>
         `;
         pushLog(`【终局】${summary}`);
@@ -3587,7 +3672,9 @@
         if (burden > state.thresholds.bankrupt && state.user.surplus <= 0) {
           finish(
             "bankrupt",
-            "能耗负担率过高且可支配资金不足，家庭取暖开支已难以为继。"
+            isFarmerSession()
+              ? "取暖费占收入太多了，手里又没钱，家里取暖真扛不住了。"
+              : "能耗负担率过高且可支配资金不足，家庭取暖开支已难以为继。"
           );
           return true;
         }
@@ -3604,17 +3691,23 @@
         if (success) {
           finish(
             "success",
-            "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。"
+            isFarmerSession()
+              ? "排放还行、改造也跟上了、取暖费占收入不算太高，一年还能剩点钱，过冬比较踏实。"
+              : "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。"
           );
         } else if (state.user.surplus < state.thresholds.successSurplusMin) {
           finish(
             "bankrupt",
-            "回合5结束后年盈余为负，家里现金流已难以维持日常与取暖开支。"
+            isFarmerSession()
+              ? "第 5 回合结束后一年反而没钱了，家里日常和取暖开支都难维持。"
+              : "回合5结束后年盈余为负，家里现金流已难以维持日常与取暖开支。"
           );
         } else {
           finish(
             "bankrupt",
-            "回合5补贴减少后，家庭未达到成功转型条件，取暖负担偏重，需调整路线或增收节支。"
+            isFarmerSession()
+              ? "第 5 回合补贴变少了以后，钱还是不太够，取暖负担偏重，得想想别的办法或多挣点。"
+              : "回合5补贴减少后，家庭未达到成功转型条件，取暖负担偏重，需调整路线或增收节支。"
           );
         }
       }
@@ -3765,9 +3858,13 @@
           const gasVolume = estimatedGasVolumeFromCoalBaseline(state.user.initialHeatingCost);
           const rise = Math.round(gasVolume * SUBSIDY_REDUCTION_PER_M3);
           state.user.heatingCost += rise;
+          const subsidyEventTitle = isFarmerSession() ? "事件：补贴变少了" : "事件：补贴减少";
+          const subsidyEventDetail = isFarmerSession()
+            ? `按你家原来烧散煤的花费估算，一年大约要用 ${gasVolume.toFixed(1)} 立方米天然气。补贴每立方米少了 ${SUBSIDY_REDUCTION_PER_M3} 元，这一年取暖要多花 ${rise} 元。`
+            : `初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。`;
           eventBoxEl.innerHTML = `
-            <p class="pill bad">事件：补贴减少</p>
-            <p class="small">初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。</p>
+            <p class="pill bad">${subsidyEventTitle}</p>
+            <p class="small">${subsidyEventDetail}</p>
           `;
           pushLog(
             `回合5：补贴减少 -> 散煤 ${coalTons.toFixed(2)} 吨，等价天然气 ${gasVolume.toFixed(1)} 立方米，取暖年花费 +${rise} 元。`
@@ -3843,6 +3940,7 @@
 
         playArea.style.display = "block";
         document.body.classList.add("is-playing");
+        updateFarmerUiCopy();
         playArea.scrollIntoView({ behavior: "smooth", block: "start" });
         endingBoxEl.innerHTML = "";
         hideAiAnalysisSection();
@@ -3865,7 +3963,11 @@
 
       function resetSimulation(confirmIfActive = false) {
         if (confirmIfActive && state.active) {
-          const ok = window.confirm("确定要重置吗？当前模拟进度将清空，需重新填写数据。");
+          const ok = window.confirm(
+            isFarmerSession()
+              ? "确定要重来吗？现在进度会清空，要重新填表。"
+              : "确定要重置吗？当前模拟进度将清空，需重新填写数据。"
+          );
           if (!ok) return;
         }
         state.active = false;
@@ -3967,6 +4069,25 @@
           </fieldset>
         `;
 
+        const farmerCommon = `
+          <p class="survey-section-title">几个问题</p>
+          ${likertField("q2_understanding_after", "玩完以后，你对煤改气和每年取暖花钱的问题，理解了多少？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
+          ${radioField("q3_biggest_impact", "哪一件事让你印象最深？", [
+            ["A", "取暖费突然涨了（比如补贴变少了）"],
+            ["B", "村里来人了解情况、提醒改造"],
+            ["C", "改气/改电要先掏一大笔钱"],
+            ["D", "一年下来反而没钱了"],
+            ["E", "其他（请补充）"]
+          ])}
+          <label id="q3ImpactOtherWrap" class="survey-q" hidden>请补充说明<input type="text" name="q3_impact_other" class="survey-other-input" placeholder="请简要说明" /></label>
+          ${radioField("q4_strategy_change", "如果重来一次，你会换种选法吗？", [
+            ["A", "会，一开始就选不一样的"],
+            ["B", "会，但中间某一回合会换"],
+            ["C", "不会，还是差不多这么选"],
+            ["D", "说不准"]
+          ])}
+        `;
+
         const common = `
           <p class="survey-section-title">共用题（所有人）</p>
           ${likertField("q2_understanding_after", "Q2. 玩完以后，你对北方农村煤改气问题特别是「改造投入与每年取暖花费」理解程度？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
@@ -3998,6 +4119,42 @@
             ["reburn_risk", "继续用散煤带来的不便与安全顾虑"]
           ], 3)}
           ${textField("s3_reflection", "S3. 这局模拟里，你最深的思考是什么？", "可选填写")}
+        `;
+
+        const farmerConverted = `
+          <p class="survey-section-title">关于你家的情况</p>
+          ${radioField("f1_heating_method", "你家目前主要怎么取暖？", [
+            ["A", "天然气"],
+            ["B", "电采暖/空气源热泵"],
+            ["C", "地源热泵"],
+            ["D", "其他"]
+          ])}
+          <label id="f1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="f1_method_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${textField("f2_annual_heating_cost", "你家改气/改电后，一年取暖费大概多少钱？", "请填写", true)}
+          ${radioField("f3_reduce_spending", "你有没有想办法少花取暖费？", [
+            ["yes", "有"],
+            ["no", "没有"]
+          ])}
+          <label id="f3ReduceMethodsWrap" class="survey-q" hidden>具体是怎么省的<textarea name="f3_reduce_methods" rows="3" class="survey-other-input" placeholder="请填写"></textarea></label>
+          ${radioField("f4_cost_realism", "算一算里的取暖费变化，和你家真实情况比怎么样？", [
+            ["A", "非常接近"],
+            ["B", "大体接近，细节上有点差别"],
+            ["C", "差得比较多"]
+          ])}
+          ${checkboxField("f5_subsidy_response", "补贴变少了以后，你家实际怎么应对？（可多选）", [
+            ["normal_use", "正常用，费用还能承受"],
+            ["less_heating", "少开暖气、屋里凉一点"],
+            ["save_mode", "改用更省的办法（比如只暖一间屋）"],
+            ["reburn", "还是有返煤或备用散煤"],
+            ["seek_subsidy", "申请或等政策补贴"],
+            ["income_boost", "想办法多挣点钱"],
+            ["other", "其他"]
+          ])}
+          <label id="f5OtherWrap" class="survey-q" hidden>其他说明<input type="text" name="f5_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${textField("f6_realistic_part", "算一算里哪个环节最像你家的经历？为什么？", "请填写", true)}
+          ${textField("f7_unrealistic_part", "哪个环节最不像、最离谱？", "请填写", true)}
+          ${textField("f8_policy_suggestion", "若给政策提一条建议，你会说什么？", "可选填写")}
+          ${farmerInterviewBlock}
         `;
 
         const converted = `
@@ -4033,6 +4190,35 @@
           ${textField("f6_realistic_part", "F6. 模拟里哪个环节最像你家真实经历？为什么？", "请填写", true)}
           ${textField("f7_unrealistic_part", "F7. 模拟里哪个环节或系统变化你觉得最离谱、最不切实际？", "请填写", true)}
           ${textField("f8_policy_suggestion", "F8. 若给政策提一条建议，你会说什么？", "可选填写")}
+          ${farmerInterviewBlock}
+        `;
+
+        const farmerUnconverted = `
+          <p class="survey-section-title">关于你家的情况</p>
+          ${radioField("n1_heating_method", "你家目前主要怎么取暖？", [
+            ["A", "散煤"],
+            ["B", "电暖/小太阳等"],
+            ["C", "液化气罐"],
+            ["D", "其他"]
+          ])}
+          <label id="n1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="n1_method_other" class="survey-other-input" placeholder="请填写" /></label>
+          ${checkboxField("n2_concerns", "要是村里推行煤改气，你最担心什么？（可多选，最多 3 项）", [
+            ["upfront_cost", "改造要掏太多钱"],
+            ["annual_cost", "以后每年取暖费太高"],
+            ["repair", "设备坏了没人修"],
+            ["gas_supply", "气源不稳定/断气"],
+            ["insulation", "房子保温差，改了也不暖和"],
+            ["subsidy_drop", "补贴以后越来越少"],
+            ["voluntary", "希望按自家节奏自愿决定"]
+          ], 3)}
+          ${radioField("n3_attitude", "看完这一局，你对「要不要改」怎么想？", [
+            ["A", "更愿意尽快改造"],
+            ["B", "仍想改，但必须补贴到位"],
+            ["C", "更犹豫，担心每年花费太高"],
+            ["D", "倾向维持现状"],
+            ["E", "不确定"]
+          ])}
+          ${textField("n4_preferred_path", "要是你自家说了算，会优先选哪条路（天然气/热泵/保温/先观望）？为什么？", "请填写", true)}
           ${farmerInterviewBlock}
         `;
 
@@ -4087,6 +4273,24 @@
           ${textField("o5_reflection", "O5. 这局模拟里，您最深的思考或者感受是什么？", "可选填写")}
         `;
 
+        const farmerEnding = `
+          <p class="survey-section-title">最后几题</p>
+          ${likertField("q_end1_recommend", "你愿意把这个算账工具推荐给其他人吗？", ["完全不愿意", "较不愿意", "一般", "比较愿意", "非常愿意"])}
+          ${radioField("q_end_ai_helpfulness", "「看看结果」对你有没有帮助？", [
+            ["A", "完全没帮助"],
+            ["B", "帮助较小"],
+            ["C", "帮助较大"]
+          ])}
+          <fieldset id="qEndAiFeedbackWrap" class="survey-q" hidden>
+            <legend>你觉得哪里说得不对，或有什么建议？</legend>
+            <textarea name="q_end_ai_feedback" rows="3" class="survey-other-input" placeholder="请填写"></textarea>
+          </fieldset>
+          ${textField("q_end2_suggestions", "对这个工具有什么改进建议？", "随便写，可选")}
+          <div class="survey-actions">
+            <button type="submit" class="btn-primary">提交</button>
+          </div>
+        `;
+
         const ending = `
           <p class="survey-section-title">结尾共用题（所有人）</p>
           ${likertField("q_end1_recommend", "Q_end1. 你愿意把本模拟推荐给其他人体验吗？", ["完全不愿意", "较不愿意", "一般", "比较愿意", "非常愿意"])}
@@ -4106,12 +4310,15 @@
         `;
 
         let group = "";
+        const isFarmer = isVillageIdentity(identity);
         if (identity === "学生") group = student;
-        else if (identity === "已煤改农户") group = converted;
-        else if (identity === "未煤改农户") group = unconverted;
+        else if (identity === "已煤改农户") group = isFarmer ? farmerConverted : converted;
+        else if (identity === "未煤改农户") group = isFarmer ? farmerUnconverted : unconverted;
         else if (identity === "其他") group = other;
 
-        postGameSurveyForm.innerHTML = common + group + ending;
+        postGameSurveyForm.innerHTML = isFarmer
+          ? farmerCommon + group + farmerEnding
+          : common + group + ending;
         wireSurveyConditionalFields();
         wireSurveyCheckboxLimits();
       }
@@ -4414,8 +4621,9 @@
       }
 
       function validateSurveyResponses(responses) {
+        const isFarmer = isVillageIdentity(responses.user_identity);
         if (responses.common.q3_biggest_impact.value === "E" && !responses.common.q3_impact_other) {
-          alert("请补充 Q3「其他」的说明。");
+          alert(isFarmer ? "请补充「其他」的说明。" : "请补充 Q3「其他」的说明。");
           return false;
         }
         const id = responses.user_identity;
@@ -4426,23 +4634,23 @@
         if (id === "已煤改农户") {
           const f = responses.converted_farmer;
           if (f.f1_heating_method.value === "D" && !f.f1_method_other) {
-            alert("请填写 F1 的其他取暖方式。");
+            alert("请填写其他取暖方式。");
             return false;
           }
           if (!f.f2_annual_heating_cost) {
-            alert("请填写 F2 煤改气/电后一年取暖费。");
+            alert("请填写改气/改电后一年取暖费。");
             return false;
           }
           if (f.f3_reduce_spending.value === "yes" && !f.f3_reduce_methods) {
-            alert("请填写 F3 减少取暖支出的具体途径。");
+            alert("请填写你是怎么少花取暖费的。");
             return false;
           }
           if (f.f5_subsidy_response.length === 0) {
-            alert("F5 请至少选择 1 项。");
+            alert("请至少选 1 项。");
             return false;
           }
           if (f.f5_subsidy_response.some((item) => item.value === "other") && !f.f5_other) {
-            alert("请填写 F5 的其他说明。");
+            alert("请填写其他说明。");
             return false;
           }
           if (!f.farmer_interview_willing.value) {
@@ -4457,11 +4665,11 @@
         if (id === "未煤改农户") {
           const n = responses.unconverted_farmer;
           if (n.n1_heating_method.value === "D" && !n.n1_method_other) {
-            alert("请填写 N1 的其他取暖方式。");
+            alert("请填写其他取暖方式。");
             return false;
           }
           if (n.n2_concerns.length === 0) {
-            alert("N2 请至少选择 1 项。");
+            alert("请至少选 1 项。");
             return false;
           }
           if (!n.farmer_interview_willing.value) {
@@ -4479,7 +4687,7 @@
         }
         const aiHelp = responses.end.q_end_ai_helpfulness.value;
         if ((aiHelp === "A" || aiHelp === "B") && !responses.end.q_end_ai_feedback) {
-          alert("请填写智能分析不足与建议。");
+          alert(isFarmer ? "请填写你觉得不对的地方或建议。" : "请填写智能分析不足与建议。");
           return false;
         }
         return true;
@@ -4539,6 +4747,7 @@
           beginSimulation(pendingFormData, null);
           return;
         }
+        updateFarmerUiCopy();
         preSurveyForm.reset();
         preSurveyOverlay.hidden = false;
         preSurveyOverlay.scrollTop = 0;
@@ -4550,7 +4759,7 @@
         if (!pendingFormData) return;
         const preSurveyQ1 = collectLikertAnswer("q1_understanding_before", preSurveyForm);
         if (preSurveyQ1.value == null) {
-          alert("请先回答 Q1。");
+          alert(isFarmerSession() ? "请先回答上面这题。" : "请先回答 Q1。");
           return;
         }
         const data = pendingFormData;
@@ -4592,6 +4801,7 @@
       function showPostGameSurvey() {
         if (!state.initialProfile || researchSession.surveyShown) return;
         researchSession.surveyShown = true;
+        updateFarmerUiCopy();
         buildPostGameSurveyForm(state.initialProfile.user_identity || "");
         surveyOverlay.hidden = false;
         surveyOverlay.scrollTop = 0;
@@ -4753,13 +4963,13 @@
         if (!state.initialProfile) {
           aiAnalysisResultEl.hidden = false;
           aiAnalysisResultEl.className = "ai-reply error";
-          aiAnalysisResultEl.textContent = "请先填写农户信息并开始模拟。";
+          aiAnalysisResultEl.textContent = farmerize("请先填写农户信息并开始模拟。");
           return;
         }
         if (!researchSession.eventLog.length) {
           aiAnalysisResultEl.hidden = false;
           aiAnalysisResultEl.className = "ai-reply error";
-          aiAnalysisResultEl.textContent = "请先完成至少一步模拟。";
+          aiAnalysisResultEl.textContent = farmerize("请先完成至少一步模拟。");
           return;
         }
 
@@ -4767,7 +4977,9 @@
         hideAiAnalysisNextBtn();
         aiAnalysisResultEl.hidden = false;
         aiAnalysisResultEl.className = "ai-reply loading";
-        aiAnalysisResultEl.textContent = "正在分析农户画像与转型路径…";
+        aiAnalysisResultEl.textContent = isFarmerSession()
+          ? "正在根据你家情况算账说明…"
+          : "正在分析农户画像与转型路径…";
 
         try {
           const res = await fetch("/api/chat", {
@@ -4793,7 +5005,7 @@
         } catch (err) {
           aiAnalysisResultEl.className = "ai-reply error";
           aiAnalysisResultEl.textContent =
-            `${err.message}\n\n若智能分析无法使用，请联系管理员检查服务器配置。`;
+            `${err.message}\n\n${farmerize("若智能分析无法使用，请联系管理员检查服务器配置。")}`;
         } finally {
           aiAnalyzeBtn.disabled = false;
           if (state.ending) {
