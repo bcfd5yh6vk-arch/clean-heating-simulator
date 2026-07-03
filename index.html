@@ -1320,12 +1320,52 @@
         line-height: 1.35;
       }
       .welcome-cta-prompt {
-        margin: 0 0 18px;
+        margin: 0 0 14px;
         font-size: clamp(1.15rem, 4.2vw, 1.35rem);
         font-weight: 700;
         color: var(--primary-deep);
         text-align: center;
         line-height: 1.45;
+      }
+      .welcome-identity-block {
+        margin: 0 0 18px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        text-align: left;
+      }
+      .welcome-identity-block .welcome-identity-title {
+        margin: 0 0 12px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--primary-deep);
+        text-align: center;
+      }
+      .welcome-identity-block label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .welcome-identity-block select,
+      .welcome-identity-block input[type="text"] {
+        width: 100%;
+        min-height: 48px;
+        padding: 10px 12px;
+        font-size: 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: #fff;
+        color: var(--text);
+      }
+      .welcome-identity-block .identity-detail {
+        margin-top: 10px;
+      }
+      .welcome-panel.consent-panel {
+        width: min(560px, 100%);
       }
       .welcome-panel .welcome-lead {
         text-align: center;
@@ -1695,11 +1735,11 @@
           font-size: 1.65rem;
         }
         .welcome-panel.consent-panel {
-          padding: 40px 22px 36px;
-          min-height: min(78vh, 680px);
+          padding: 32px 22px 28px;
+          min-height: auto;
           display: flex;
           flex-direction: column;
-          justify-content: center;
+          justify-content: flex-start;
         }
         .welcome-region-label {
           font-size: clamp(1.85rem, 7.5vw, 2.35rem);
@@ -1733,10 +1773,19 @@
         }
         .welcome-cta-prompt {
           font-size: clamp(1.28rem, 5.2vw, 1.5rem);
-          margin-bottom: 24px;
+          margin-bottom: 14px;
+        }
+        .welcome-identity-block {
+          margin-bottom: 20px;
+          padding: 18px 16px;
+        }
+        .welcome-identity-block select,
+        .welcome-identity-block input[type="text"] {
+          min-height: 52px;
+          font-size: 1.05rem;
         }
         .welcome-panel .consent-actions {
-          margin-top: 8px;
+          margin-top: 4px;
         }
         .welcome-panel .consent-actions .btn-primary {
           min-height: 56px;
@@ -1884,6 +1933,33 @@
             </span>
           </span>
         </h1>
+        <div class="welcome-identity-block" id="welcomeIdentityBlock">
+          <p class="welcome-identity-title">先选身份、填基本信息</p>
+          <label>你的身份
+            <select name="user_identity" id="userIdentitySelect" form="profileForm" required>
+              <option value="">请选择</option>
+              <option value="学生">学生</option>
+              <option value="已煤改农户">已煤改农户</option>
+              <option value="未煤改农户">未煤改农户</option>
+              <option value="其他">其他</option>
+            </select>
+          </label>
+          <div id="identityStudentField" class="identity-detail">
+            <label>年级
+              <input type="text" name="student_grade" form="profileForm" placeholder="例如：高一、高三" />
+            </label>
+          </div>
+          <div id="identityVillageField" class="identity-detail">
+            <label>所在村
+              <input type="text" name="village_name" form="profileForm" placeholder="请填写村名" />
+            </label>
+          </div>
+          <div id="identityOtherField" class="identity-detail">
+            <label>你的身份
+              <input type="text" name="identity_other" form="profileForm" placeholder="请输入你的身份" />
+            </label>
+          </div>
+        </div>
         <p class="welcome-cta-prompt">让我们做点什么</p>
         <div class="consent-actions">
           <button type="button" id="welcomeStartBtn" class="btn-primary">参与进来</button>
@@ -1991,11 +2067,11 @@
           <li><span class="chip-icon" aria-hidden="true">👆</span>每回合选一个</li>
           <li><span class="chip-icon" aria-hidden="true">📈</span>看结局与分析</li>
         </ul>
-        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 往下填表，开始模拟</a></p>
+        <p class="hero-cta"><a class="hero-scroll-link" href="#setupSection">↓ 往下填家里数字，开始模拟</a></p>
         <ol class="steps-bar" aria-label="操作步骤">
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-form"/></svg></span>
-            <strong>1</strong>选身份，填收入、面积、取暖费
+            <strong>1</strong>填收入、面积、取暖费
           </li>
           <li>
             <span class="step-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-choice"/></svg></span>
@@ -2035,18 +2111,17 @@
           <section class="card" id="setupSection">
             <div class="card-header">
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></div>
-              <h2>第一步：填写家庭数据</h2>
+              <h2>填写家里收入和取暖费</h2>
             </div>
             <div class="setup-quick-tip" id="setupQuickTipDefault">
-              <strong>三步开始：</strong>
+              <strong>两步开始：</strong>
               <ol>
-                <li>先选<strong>你的身份</strong>（学生 / 农户 / 其他）</li>
-                <li>填<strong>整户</strong>收入、面积、取暖费——看橙色小字提示</li>
+                <li>填<strong>整户</strong>收入、人数、面积、取暖费——看橙色小字提示</li>
                 <li>点最下面绿色按钮 <strong>「开始模拟 →」</strong></li>
               </ol>
             </div>
             <div class="setup-quick-tip farmer-quick-tip" id="setupFarmerTip" hidden>
-              <p class="guide-key">三步开始：选身份 → 填村名 → 填家里数字</p>
+              <p class="guide-key">两步开始：填家里数字 → 点开始模拟</p>
               <ol class="farmer-steps">
                 <li>
                   <span class="guide-key">填收入、人数、面积、取暖费</span>
@@ -2057,33 +2132,6 @@
               </ol>
             </div>
             <form id="profileForm" class="show-field-hints">
-              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>选身份、填基本信息</p>
-              <div class="grid">
-                <label>你的身份
-                  <select name="user_identity" id="userIdentitySelect" required>
-                    <option value="">请选择</option>
-                    <option value="学生">学生</option>
-                    <option value="已煤改农户">已煤改农户</option>
-                    <option value="未煤改农户">未煤改农户</option>
-                    <option value="其他">其他</option>
-                  </select>
-                </label>
-                <div id="identityStudentField" class="identity-detail">
-                  <label>年级
-                    <input type="text" name="student_grade" placeholder="例如：高一、高三" />
-                  </label>
-                </div>
-                <div id="identityVillageField" class="identity-detail">
-                  <label>所在村
-                    <input type="text" name="village_name" placeholder="请填写村名" />
-                  </label>
-                </div>
-                <div id="identityOtherField" class="identity-detail">
-                  <label>你的身份
-                    <input type="text" name="identity_other" placeholder="请输入你的身份" />
-                  </label>
-                </div>
-              </div>
               <div class="fixed-badges" aria-label="固定设定">
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
                 <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>河北</span></span>
@@ -2095,7 +2143,7 @@
               </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
-              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">2</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
+              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
               <div class="grid">
                 <label>家中常住人口（人）
                   <span class="field-hint" data-field="household_population">用于算人均排放</span>
@@ -2284,10 +2332,6 @@
     </div>
 
     <script>
-      document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
-        document.documentElement.classList.add("welcome-dismissed");
-        window.scrollTo(0, 0);
-      });
       document.getElementById("contextContinueBtn")?.addEventListener("click", () => {
         document.documentElement.classList.add("context-dismissed");
         window.scrollTo(0, 0);
@@ -2869,7 +2913,10 @@
         document.getElementById("guidancePanelHintDefault")?.toggleAttribute("hidden", isFarmer);
         document.getElementById("guidancePanelHintFarmer")?.toggleAttribute("hidden", !isFarmer);
 
-        const scrollHelp = Boolean(identity) && window.matchMedia("(max-width: 900px)").matches;
+        const scrollHelp =
+          Boolean(identity) &&
+          window.matchMedia("(max-width: 900px)").matches &&
+          document.documentElement.classList.contains("welcome-dismissed");
         showIdentityGuidance(identity, { scrollIntoView: scrollHelp });
       }
 
@@ -2925,6 +2972,14 @@
       }
 
       userIdentitySelect?.addEventListener("change", updateIdentityDetailFields);
+
+      document.getElementById("welcomeStartBtn")?.addEventListener("click", () => {
+        const data = new FormData(profileForm);
+        if (!validateIdentityFields(data)) return;
+        document.documentElement.classList.add("welcome-dismissed");
+        window.scrollTo(0, 0);
+      });
+
       updateIdentityDetailFields();
 
       /** 北京时间（Asia/Shanghai）时间戳，写入 Supabase timestamp without time zone 列 */
