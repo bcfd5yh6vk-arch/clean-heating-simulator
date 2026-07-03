@@ -1297,9 +1297,10 @@
       html.farmer-flow .visual-flow,
       html.farmer-flow #setupSection .card-header,
       html.farmer-flow #setupQuickTipDefault,
-      html.farmer-flow #setupFarmerTip,
       html.farmer-flow .fixed-badges,
       html.farmer-flow #coalStartHint,
+      html.farmer-flow #defaultHouseholdBlock,
+      html.farmer-flow #setupMetaNonFarmer,
       html.farmer-flow #setupSection > form > .hint,
       html.farmer-flow .side-col {
         display: none !important;
@@ -2163,96 +2164,95 @@
               </ol>
             </div>
             <div class="setup-quick-tip farmer-quick-tip" id="setupFarmerTip" hidden>
-              <p class="guide-key">两步开始：填家里数字 → 点开始算账</p>
-              <ol class="farmer-steps">
-                <li>
-                  <span class="guide-key">填收入、人数、面积、取暖费</span>
-                  <span class="guide-sub">一整户家的数，记不清就估一个</span>
-                </li>
-                <li><span class="guide-key">点最下面绿色「开始算账 →」</span></li>
-                <li><span class="guide-sub">每回合看说明、点一个按钮；玩完填几句话</span></li>
-              </ol>
+              <p class="guide-key">下面 5 项按大概情况选就行，选完点「开始算账」</p>
             </div>
             <form id="profileForm" class="show-field-hints">
-              <div class="fixed-badges" aria-label="固定设定">
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>华北</span></span>
-                <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
+              <div id="setupMetaNonFarmer">
+                <div class="fixed-badges" aria-label="固定设定">
+                  <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-family"/></svg></span>角色：<span>农民家庭</span></span>
+                  <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></span>地区：<span>华北</span></span>
+                  <span class="fixed-badge"><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-heating"/></svg></span>煤改前取暖方式：<span>散煤</span></span>
+                </div>
+                <p id="coalStartHint" class="hint fixed-setting-hint farmer-form-hint" hidden>
+                  <span class="guide-sub">算一算从散煤开始，方便对比不同路线。</span>
+                  <span class="guide-key">已经改气/改电的，请填改之前一两个冬天取暖花了多少钱。</span>
+                </p>
               </div>
-              <p id="coalStartHint" class="hint fixed-setting-hint farmer-form-hint" hidden>
-                <span class="guide-sub">算一算从散煤开始，方便对比不同路线。</span>
-                <span class="guide-key">已经改气/改电的，请填改之前一两个冬天取暖花了多少钱。</span>
-              </p>
               <input type="hidden" name="heating_method" value="散煤炉" />
 
-              <p class="form-section-title"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
-              <div id="defaultHouseholdFields" class="grid household-fields-default">
-                <label>家中常住人口（人）
-                  <span class="field-hint" data-field="household_population">用于算人均排放</span>
-                  <input type="text" name="household_population" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
-                </label>
-                <label>年总收入（元）
-                  <span class="field-hint" data-field="annual_income">全家一年进账，不是人均；常见约 8–10 万</span>
-                  <input type="text" name="annual_income" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
-                </label>
-                <label>年盈余（元）
-                  <span class="field-hint" data-field="annual_surplus">一年忙完还剩多少钱（收入减日常开销和取暖费）；不确定可填 7–9 千元</span>
-                  <input type="text" name="annual_surplus" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
-                </label>
-                <label>住房面积（平方米）
-                  <span class="field-hint" data-field="housing_area">按实际采暖或建筑面积；常见约 80–120</span>
-                  <input type="text" name="housing_area" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
-                </label>
-                <label>煤改气/电前年取暖费用（元）
-                  <span class="field-hint" data-field="winter_cost">煤改前一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
-                  <input type="text" name="winter_cost" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
-                </label>
+              <div id="defaultHouseholdBlock">
+                <p class="form-section-title" id="setupHouseholdTitleDefault"><span class="section-step-badge" aria-hidden="true">1</span><span class="ui-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-money"/></svg></span>填家里收入和取暖费（整户）</p>
+                <div id="defaultHouseholdFields" class="grid household-fields-default">
+                  <label>家中常住人口（人）
+                    <span class="field-hint" data-field="household_population">用于算人均排放</span>
+                    <input type="text" name="household_population" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                  </label>
+                  <label>年总收入（元）
+                    <span class="field-hint" data-field="annual_income">全家一年进账，不是人均；常见约 8–10 万</span>
+                    <input type="text" name="annual_income" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                  </label>
+                  <label>年盈余（元）
+                    <span class="field-hint" data-field="annual_surplus">一年忙完还剩多少钱（收入减日常开销和取暖费）；不确定可填 7–9 千元</span>
+                    <input type="text" name="annual_surplus" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                  </label>
+                  <label>住房面积（平方米）
+                    <span class="field-hint" data-field="housing_area">按实际采暖或建筑面积；常见约 80–120</span>
+                    <input type="text" name="housing_area" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                  </label>
+                  <label>煤改气/电前年取暖费用（元）
+                    <span class="field-hint" data-field="winter_cost">煤改前一个冬天烧煤/取暖花多少钱；散煤常见约 2000–4000</span>
+                    <input type="text" name="winter_cost" inputmode="numeric" placeholder="请输入" autocomplete="off" required />
+                  </label>
+                </div>
               </div>
-              <div id="farmerHouseholdFields" class="grid household-fields-farmer" hidden>
-                <label>家中有几口人
-                  <select name="farmer_band_population">
-                    <option value="">请选择</option>
-                    <option value="le2">2 人及以下</option>
-                    <option value="3-4">3–4 人</option>
-                    <option value="ge5">5 人及以上</option>
-                  </select>
-                </label>
-                <label>一年总收入大概多少
-                  <select name="farmer_band_income">
-                    <option value="">请选择</option>
-                    <option value="lt3">3 万以下</option>
-                    <option value="3-5">3–5 万</option>
-                    <option value="6-7">6–7 万</option>
-                    <option value="8-9">8–9 万</option>
-                    <option value="ge10">10 万以上</option>
-                  </select>
-                </label>
-                <label>一年还能剩多少
-                  <select name="farmer_band_surplus">
-                    <option value="">请选择</option>
-                    <option value="lt5k">5000 以下</option>
-                    <option value="5k-1">5000–1 万</option>
-                    <option value="1-2">1–2 万</option>
-                    <option value="ge2">2 万以上</option>
-                  </select>
-                </label>
-                <label>房子大概多大
-                  <select name="farmer_band_area">
-                    <option value="">请选择</option>
-                    <option value="lt80">80 平米以下</option>
-                    <option value="80-120">80–120 平米</option>
-                    <option value="gt120">120 平米以上</option>
-                  </select>
-                </label>
-                <label>煤改前一年取暖花多少
-                  <select name="farmer_band_winter">
-                    <option value="">请选择</option>
-                    <option value="lt2k">2 千以下</option>
-                    <option value="2-4k">2–4 千</option>
-                    <option value="4-6k">4–6 千</option>
-                    <option value="ge6k">6 千以上</option>
-                  </select>
-                </label>
+              <div id="farmerHouseholdBlock" hidden>
+                <p class="form-section-title" id="setupHouseholdTitleFarmer">家里大概情况（选最接近的就行）</p>
+                <div id="farmerHouseholdFields" class="grid household-fields-farmer">
+                  <label>家中有几口人
+                    <select name="farmer_band_population">
+                      <option value="">请选择</option>
+                      <option value="le2">2 人及以下</option>
+                      <option value="3-4">3–4 人</option>
+                      <option value="ge5">5 人及以上</option>
+                    </select>
+                  </label>
+                  <label>一年总收入大概多少
+                    <select name="farmer_band_income">
+                      <option value="">请选择</option>
+                      <option value="lt3">3 万以下</option>
+                      <option value="3-5">3–5 万</option>
+                      <option value="6-7">6–7 万</option>
+                      <option value="8-9">8–9 万</option>
+                      <option value="ge10">10 万以上</option>
+                    </select>
+                  </label>
+                  <label>一年还能剩多少
+                    <select name="farmer_band_surplus">
+                      <option value="">请选择</option>
+                      <option value="lt5k">5000 以下</option>
+                      <option value="5k-1">5000–1 万</option>
+                      <option value="1-2">1–2 万</option>
+                      <option value="ge2">2 万以上</option>
+                    </select>
+                  </label>
+                  <label>房子大概多大
+                    <select name="farmer_band_area">
+                      <option value="">请选择</option>
+                      <option value="lt80">80 平米以下</option>
+                      <option value="80-120">80–120 平米</option>
+                      <option value="gt120">120 平米以上</option>
+                    </select>
+                  </label>
+                  <label>煤改前一年取暖花多少
+                    <select name="farmer_band_winter">
+                      <option value="">请选择</option>
+                      <option value="lt2k">2 千以下</option>
+                      <option value="2-4k">2–4 千</option>
+                      <option value="4-6k">4–6 千</option>
+                      <option value="ge6k">6 千以上</option>
+                    </select>
+                  </label>
+                </div>
               </div>
 
               <input type="hidden" name="bankrupt_energy_burden_threshold" value="10" />
@@ -3011,7 +3011,9 @@
         farmer_band_winter: "一年取暖花费"
       };
 
+      const defaultHouseholdBlock = document.getElementById("defaultHouseholdBlock");
       const defaultHouseholdFields = document.getElementById("defaultHouseholdFields");
+      const farmerHouseholdBlock = document.getElementById("farmerHouseholdBlock");
       const farmerHouseholdFields = document.getElementById("farmerHouseholdFields");
 
       function setFarmerFlowMode(isFarmer) {
@@ -3068,8 +3070,8 @@
       }
 
       function applyFarmerHouseholdFieldsUi(isFarmer) {
-        defaultHouseholdFields?.toggleAttribute("hidden", isFarmer);
-        farmerHouseholdFields?.toggleAttribute("hidden", !isFarmer);
+        defaultHouseholdBlock?.toggleAttribute("hidden", isFarmer);
+        farmerHouseholdBlock?.toggleAttribute("hidden", !isFarmer);
         defaultHouseholdFields?.querySelectorAll("input[name]").forEach((el) => {
           el.required = !isFarmer;
           el.disabled = isFarmer;
