@@ -3887,8 +3887,12 @@
           return;
         }
         resetResearchSession();
-        pendingFormData = data;
-        showPreSurveyQ1();
+        if (isVillageIdentity(identity)) {
+          await beginSimulation(data, null);
+        } else {
+          pendingFormData = data;
+          showPreSurveyQ1();
+        }
       });
 
       async function beginSimulation(data, preSurveyQ1) {
@@ -4064,27 +4068,18 @@
             ["no", "不愿意"]
           ])}
           <fieldset id="farmerInterviewContactWrap" class="survey-q" hidden>
-            <legend>你的联系方式（手机号）</legend>
+            <legend>你的联系方式（手机号）（选做）</legend>
             <input type="tel" name="farmer_interview_contact" class="survey-other-input" inputmode="tel" autocomplete="tel" placeholder="请填写手机号" />
           </fieldset>
         `;
 
         const farmerCommon = `
           <p class="survey-section-title">几个问题</p>
-          ${likertField("q2_understanding_after", "玩完以后，你对煤改气和每年取暖花钱的问题，理解了多少？", ["完全没感觉", "略有了解", "一般", "比较理解", "非常理解"])}
           ${radioField("q3_biggest_impact", "哪一件事让你印象最深？", [
             ["A", "取暖费突然涨了（比如补贴变少了）"],
             ["B", "村里来人了解情况、提醒改造"],
             ["C", "改气/改电要先掏一大笔钱"],
-            ["D", "一年下来反而没钱了"],
-            ["E", "其他（请补充）"]
-          ])}
-          <label id="q3ImpactOtherWrap" class="survey-q" hidden>请补充说明<input type="text" name="q3_impact_other" class="survey-other-input" placeholder="请简要说明" /></label>
-          ${radioField("q4_strategy_change", "如果重来一次，你会换种选法吗？", [
-            ["A", "会，一开始就选不一样的"],
-            ["B", "会，但中间某一回合会换"],
-            ["C", "不会，还是差不多这么选"],
-            ["D", "说不准"]
+            ["D", "一年下来反而没钱了"]
           ])}
         `;
 
@@ -4125,21 +4120,34 @@
           <p class="survey-section-title">关于你家的情况</p>
           ${radioField("f1_heating_method", "你家目前主要怎么取暖？", [
             ["A", "天然气"],
-            ["B", "电采暖/空气源热泵"],
-            ["C", "地源热泵"],
-            ["D", "其他"]
+            ["B", "电暖或热泵"],
+            ["C", "别的"]
           ])}
-          <label id="f1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="f1_method_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${textField("f2_annual_heating_cost", "你家改气/改电后，一年取暖费大概多少钱？", "请填写", true)}
+          ${radioField("f2_annual_heating_cost", "你家改气/改电后，一年取暖费大概多少钱？", [
+            ["lt_3k", "3千以下"],
+            ["3_5k", "3～5千"],
+            ["5_8k", "5～8千"],
+            ["gt_8k", "8千以上"],
+            ["unsure", "记不清"]
+          ])}
           ${radioField("f3_reduce_spending", "你有没有想办法少花取暖费？", [
             ["yes", "有"],
             ["no", "没有"]
           ])}
-          <label id="f3ReduceMethodsWrap" class="survey-q" hidden>具体是怎么省的<textarea name="f3_reduce_methods" rows="3" class="survey-other-input" placeholder="请填写"></textarea></label>
+          <fieldset id="f3ReduceMethodsWrap" class="survey-q" hidden>
+            <legend>具体怎么省的？（可多选）</legend>
+            <div class="survey-options">
+              <label><input type="checkbox" name="f3_reduce_methods" value="less_heating" />少开暖气</label>
+              <label><input type="checkbox" name="f3_reduce_methods" value="one_room" />只暖一间屋</label>
+              <label><input type="checkbox" name="f3_reduce_methods" value="wear_more" />多穿点硬扛</label>
+              <label><input type="checkbox" name="f3_reduce_methods" value="reburn" />还用点煤</label>
+              <label><input type="checkbox" name="f3_reduce_methods" value="income" />想别的办法挣钱</label>
+            </div>
+          </fieldset>
           ${radioField("f4_cost_realism", "算一算里的取暖费变化，和你家真实情况比怎么样？", [
-            ["A", "非常接近"],
-            ["B", "大体接近，细节上有点差别"],
-            ["C", "差得比较多"]
+            ["A", "很像"],
+            ["B", "差不多"],
+            ["C", "差得远"]
           ])}
           ${checkboxField("f5_subsidy_response", "补贴变少了以后，你家实际怎么应对？（可多选）", [
             ["normal_use", "正常用，费用还能承受"],
@@ -4147,13 +4155,20 @@
             ["save_mode", "改用更省的办法（比如只暖一间屋）"],
             ["reburn", "还是有返煤或备用散煤"],
             ["seek_subsidy", "申请或等政策补贴"],
-            ["income_boost", "想办法多挣点钱"],
-            ["other", "其他"]
+            ["income_boost", "想办法多挣点钱"]
           ])}
-          <label id="f5OtherWrap" class="survey-q" hidden>其他说明<input type="text" name="f5_other" class="survey-other-input" placeholder="请填写" /></label>
-          ${textField("f6_realistic_part", "算一算里哪个环节最像你家的经历？为什么？", "请填写", true)}
-          ${textField("f7_unrealistic_part", "哪个环节最不像、最离谱？", "请填写", true)}
-          ${textField("f8_policy_suggestion", "若给政策提一条建议，你会说什么？", "可选填写")}
+          ${radioField("f6_realistic_part", "算一算里哪个环节最像你家的经历？", [
+            ["turn1", "刚开始改的时候"],
+            ["tech_choice", "选天然气还是电"],
+            ["subsidy_cut", "补贴变少那阵"],
+            ["none", "都不太像"]
+          ])}
+          ${radioField("f7_unrealistic_part", "哪个环节最不像、最离谱？", [
+            ["cost", "花钱数目"],
+            ["village_visit", "村里来人的事"],
+            ["subsidy", "补贴变少"],
+            ["none", "都挺像"]
+          ])}
           ${farmerInterviewBlock}
         `;
 
@@ -4196,12 +4211,11 @@
         const farmerUnconverted = `
           <p class="survey-section-title">关于你家的情况</p>
           ${radioField("n1_heating_method", "你家目前主要怎么取暖？", [
-            ["A", "散煤"],
-            ["B", "电暖/小太阳等"],
-            ["C", "液化气罐"],
-            ["D", "其他"]
+            ["A", "烧煤"],
+            ["B", "电暖小太阳"],
+            ["C", "液化气"],
+            ["D", "别的"]
           ])}
-          <label id="n1MethodOtherWrap" class="survey-q" hidden>请说明其他方式<input type="text" name="n1_method_other" class="survey-other-input" placeholder="请填写" /></label>
           ${checkboxField("n2_concerns", "要是村里推行煤改气，你最担心什么？（可多选，最多 3 项）", [
             ["upfront_cost", "改造要掏太多钱"],
             ["annual_cost", "以后每年取暖费太高"],
@@ -4218,7 +4232,12 @@
             ["D", "倾向维持现状"],
             ["E", "不确定"]
           ])}
-          ${textField("n4_preferred_path", "要是你自家说了算，会优先选哪条路（天然气/热泵/保温/先观望）？为什么？", "请填写", true)}
+          ${radioField("n4_preferred_path", "要是你自家说了算，会优先选哪条路？", [
+            ["gas", "天然气"],
+            ["electric", "电热或热泵"],
+            ["insulation", "先把房子保温做好"],
+            ["wait", "先观望"]
+          ])}
           ${farmerInterviewBlock}
         `;
 
@@ -4275,17 +4294,16 @@
 
         const farmerEnding = `
           <p class="survey-section-title">最后几题</p>
-          ${likertField("q_end1_recommend", "你愿意把这个算账工具推荐给其他人吗？", ["完全不愿意", "较不愿意", "一般", "比较愿意", "非常愿意"])}
+          ${radioField("q_end1_recommend", "你愿意把这个算账工具推荐给其他人吗？", [
+            ["1", "不太愿意"],
+            ["2", "一般"],
+            ["3", "很愿意"]
+          ])}
           ${radioField("q_end_ai_helpfulness", "「看看结果」对你有没有帮助？", [
             ["A", "完全没帮助"],
             ["B", "帮助较小"],
             ["C", "帮助较大"]
           ])}
-          <fieldset id="qEndAiFeedbackWrap" class="survey-q" hidden>
-            <legend>你觉得哪里说得不对，或有什么建议？</legend>
-            <textarea name="q_end_ai_feedback" rows="3" class="survey-other-input" placeholder="请填写"></textarea>
-          </fieldset>
-          ${textField("q_end2_suggestions", "对这个工具有什么改进建议？", "随便写，可选")}
           <div class="survey-actions">
             <button type="submit" class="btn-primary">提交</button>
           </div>
@@ -4343,14 +4361,14 @@
         });
 
         const f3ReduceWrap = document.getElementById("f3ReduceMethodsWrap");
-        const f3ReduceMethods = postGameSurveyForm.querySelector('[name="f3_reduce_methods"]');
         postGameSurveyForm.querySelectorAll('[name="f3_reduce_spending"]').forEach((el) => {
           el.addEventListener("change", () => {
             const show = [...postGameSurveyForm.querySelectorAll('[name="f3_reduce_spending"]')].find((x) => x.checked)?.value === "yes";
             if (f3ReduceWrap) f3ReduceWrap.hidden = !show;
-            if (f3ReduceMethods) {
-              f3ReduceMethods.required = show;
-              if (!show) f3ReduceMethods.value = "";
+            if (!show) {
+              postGameSurveyForm.querySelectorAll('[name="f3_reduce_methods"]').forEach((cb) => {
+                cb.checked = false;
+              });
             }
           });
         });
@@ -4392,10 +4410,7 @@
             const val = [...postGameSurveyForm.querySelectorAll('[name="farmer_interview_willing"]')].find((x) => x.checked)?.value;
             const show = val === "yes";
             if (farmerInterviewContactWrap) farmerInterviewContactWrap.hidden = !show;
-            if (farmerInterviewContact) {
-              farmerInterviewContact.required = show;
-              if (!show) farmerInterviewContact.value = "";
-            }
+            if (farmerInterviewContact && !show) farmerInterviewContact.value = "";
           });
         });
       }
@@ -4445,28 +4460,33 @@
 
       function collectSurveyResponses() {
         const identity = state.initialProfile?.user_identity || "";
+        const isFarmer = isVillageIdentity(identity);
 
         const responses = {
           submitted_at: beijingTimestamp(),
           user_identity: identity,
           common: {
             q1_understanding_before: researchSession.preSurveyQ1 || { value: null, label: "" },
-            q2_understanding_after: collectLikertAnswer("q2_understanding_after"),
+            q2_understanding_after: isFarmer
+              ? { value: null, label: "" }
+              : collectLikertAnswer("q2_understanding_after"),
             q3_biggest_impact: collectRadioAnswer("q3_biggest_impact"),
             q3_impact_other:
-              collectRadioAnswer("q3_biggest_impact").value === "E"
+              !isFarmer && collectRadioAnswer("q3_biggest_impact").value === "E"
                 ? collectTextAnswer("q3_impact_other")
                 : "",
-            q4_strategy_change: collectRadioAnswer("q4_strategy_change")
+            q4_strategy_change: isFarmer ? { value: "", label: "" } : collectRadioAnswer("q4_strategy_change")
           },
           end: {
-            q_end1_recommend: collectLikertAnswer("q_end1_recommend"),
+            q_end1_recommend: isFarmer
+              ? collectRadioAnswer("q_end1_recommend")
+              : collectLikertAnswer("q_end1_recommend"),
             q_end_ai_helpfulness: collectRadioAnswer("q_end_ai_helpfulness"),
             q_end_ai_feedback:
-              ["A", "B"].includes(collectRadioAnswer("q_end_ai_helpfulness").value)
+              !isFarmer && ["A", "B"].includes(collectRadioAnswer("q_end_ai_helpfulness").value)
                 ? collectTextAnswer("q_end_ai_feedback")
                 : "",
-            q_end2_suggestions: collectTextAnswer("q_end2_suggestions")
+            q_end2_suggestions: isFarmer ? "" : collectTextAnswer("q_end2_suggestions")
           }
         };
 
@@ -4483,29 +4503,28 @@
           const farmerInterview = collectRadioAnswer("farmer_interview_willing");
           responses.converted_farmer = {
             f1_heating_method: f1,
-            f1_method_other: f1.value === "D" ? collectTextAnswer("f1_method_other") : "",
-            f2_annual_heating_cost: collectTextAnswer("f2_annual_heating_cost"),
+            f1_method_other: "",
+            f2_annual_heating_cost: collectRadioAnswer("f2_annual_heating_cost"),
             f3_reduce_spending: f3Reduce,
-            f3_reduce_methods: f3Reduce.value === "yes" ? collectTextAnswer("f3_reduce_methods") : "",
+            f3_reduce_methods:
+              f3Reduce.value === "yes" ? collectCheckboxAnswers("f3_reduce_methods") : [],
             f4_cost_realism: collectRadioAnswer("f4_cost_realism"),
             f5_subsidy_response: f5,
-            f5_other: f5.some((item) => item.value === "other") ? collectTextAnswer("f5_other") : "",
-            f6_realistic_part: collectTextAnswer("f6_realistic_part"),
-            f7_unrealistic_part: collectTextAnswer("f7_unrealistic_part"),
-            f8_policy_suggestion: collectTextAnswer("f8_policy_suggestion"),
+            f5_other: "",
+            f6_realistic_part: collectRadioAnswer("f6_realistic_part"),
+            f7_unrealistic_part: collectRadioAnswer("f7_unrealistic_part"),
             farmer_interview_willing: farmerInterview,
             farmer_interview_contact:
               farmerInterview.value === "yes" ? collectTextAnswer("farmer_interview_contact") : ""
           };
         } else if (identity === "未煤改农户") {
-          const n1 = collectRadioAnswer("n1_heating_method");
           const farmerInterview = collectRadioAnswer("farmer_interview_willing");
           responses.unconverted_farmer = {
-            n1_heating_method: n1,
-            n1_method_other: n1.value === "D" ? collectTextAnswer("n1_method_other") : "",
+            n1_heating_method: collectRadioAnswer("n1_heating_method"),
+            n1_method_other: "",
             n2_concerns: collectCheckboxAnswers("n2_concerns"),
             n3_attitude: collectRadioAnswer("n3_attitude"),
-            n4_preferred_path: collectTextAnswer("n4_preferred_path"),
+            n4_preferred_path: collectRadioAnswer("n4_preferred_path"),
             farmer_interview_willing: farmerInterview,
             farmer_interview_contact:
               farmerInterview.value === "yes" ? collectTextAnswer("farmer_interview_contact") : ""
@@ -4568,18 +4587,22 @@
             sq_f1_heating_method: f.f1_heating_method.value || null,
             sq_f1_heating_method_label: f.f1_heating_method.label || null,
             sq_f1_method_other: f.f1_method_other || null,
-            sq_f2_annual_heating_cost: f.f2_annual_heating_cost || null,
+            sq_f2_annual_heating_cost: f.f2_annual_heating_cost.value || null,
+            sq_f2_annual_heating_cost_label: f.f2_annual_heating_cost.label || null,
             sq_f3_reduce_spending: f.f3_reduce_spending.value || null,
             sq_f3_reduce_spending_label: f.f3_reduce_spending.label || null,
-            sq_f3_reduce_methods: f.f3_reduce_methods || null,
+            sq_f3_reduce_methods: joinCheckboxValues(f.f3_reduce_methods),
+            sq_f3_reduce_methods_labels: joinCheckboxLabels(f.f3_reduce_methods),
             sq_f4_cost_realism: f.f4_cost_realism.value || null,
             sq_f4_cost_realism_label: f.f4_cost_realism.label || null,
             sq_f5_subsidy_response: joinCheckboxValues(f.f5_subsidy_response),
             sq_f5_subsidy_response_labels: joinCheckboxLabels(f.f5_subsidy_response),
             sq_f5_other: f.f5_other || null,
-            sq_f6_realistic_part: f.f6_realistic_part || null,
-            sq_f7_unrealistic_part: f.f7_unrealistic_part || null,
-            sq_f8_policy_suggestion: f.f8_policy_suggestion || null,
+            sq_f6_realistic_part: f.f6_realistic_part.value || null,
+            sq_f6_realistic_part_label: f.f6_realistic_part.label || null,
+            sq_f7_unrealistic_part: f.f7_unrealistic_part.value || null,
+            sq_f7_unrealistic_part_label: f.f7_unrealistic_part.label || null,
+            sq_f8_policy_suggestion: null,
             sq_farmer_interview_willing: f.farmer_interview_willing.value || null,
             sq_farmer_interview_willing_label: f.farmer_interview_willing.label || null,
             sq_farmer_interview_contact: f.farmer_interview_contact || null
@@ -4596,7 +4619,8 @@
             sq_n2_concerns_labels: joinCheckboxLabels(n.n2_concerns),
             sq_n3_attitude: n.n3_attitude.value || null,
             sq_n3_attitude_label: n.n3_attitude.label || null,
-            sq_n4_preferred_path: n.n4_preferred_path || null,
+            sq_n4_preferred_path: n.n4_preferred_path.value || null,
+            sq_n4_preferred_path_label: n.n4_preferred_path.label || null,
             sq_farmer_interview_willing: n.farmer_interview_willing.value || null,
             sq_farmer_interview_willing_label: n.farmer_interview_willing.label || null,
             sq_farmer_interview_contact: n.farmer_interview_contact || null
@@ -4622,8 +4646,12 @@
 
       function validateSurveyResponses(responses) {
         const isFarmer = isVillageIdentity(responses.user_identity);
-        if (responses.common.q3_biggest_impact.value === "E" && !responses.common.q3_impact_other) {
-          alert(isFarmer ? "请补充「其他」的说明。" : "请补充 Q3「其他」的说明。");
+        if (
+          !isFarmer &&
+          responses.common.q3_biggest_impact.value === "E" &&
+          !responses.common.q3_impact_other
+        ) {
+          alert("请补充 Q3「其他」的说明。");
           return false;
         }
         const id = responses.user_identity;
@@ -4633,51 +4661,43 @@
         }
         if (id === "已煤改农户") {
           const f = responses.converted_farmer;
-          if (f.f1_heating_method.value === "D" && !f.f1_method_other) {
-            alert("请填写其他取暖方式。");
+          if (!f.f2_annual_heating_cost.value) {
+            alert("请选择改气/改电后一年取暖费区间。");
             return false;
           }
-          if (!f.f2_annual_heating_cost) {
-            alert("请填写改气/改电后一年取暖费。");
-            return false;
-          }
-          if (f.f3_reduce_spending.value === "yes" && !f.f3_reduce_methods) {
-            alert("请填写你是怎么少花取暖费的。");
+          if (f.f3_reduce_spending.value === "yes" && f.f3_reduce_methods.length === 0) {
+            alert("请至少选 1 项省取暖费的办法。");
             return false;
           }
           if (f.f5_subsidy_response.length === 0) {
             alert("请至少选 1 项。");
             return false;
           }
-          if (f.f5_subsidy_response.some((item) => item.value === "other") && !f.f5_other) {
-            alert("请填写其他说明。");
+          if (!f.f6_realistic_part.value) {
+            alert("请选择最像你家的经历。");
+            return false;
+          }
+          if (!f.f7_unrealistic_part.value) {
+            alert("请选择最不像的环节。");
             return false;
           }
           if (!f.farmer_interview_willing.value) {
             alert("请选择是否愿意接受后续访谈。");
             return false;
           }
-          if (f.farmer_interview_willing.value === "yes" && !f.farmer_interview_contact) {
-            alert("请填写你的联系方式（手机号）。");
-            return false;
-          }
         }
         if (id === "未煤改农户") {
           const n = responses.unconverted_farmer;
-          if (n.n1_heating_method.value === "D" && !n.n1_method_other) {
-            alert("请填写其他取暖方式。");
-            return false;
-          }
           if (n.n2_concerns.length === 0) {
             alert("请至少选 1 项。");
             return false;
           }
-          if (!n.farmer_interview_willing.value) {
-            alert("请选择是否愿意接受后续访谈。");
+          if (!n.n4_preferred_path.value) {
+            alert("请选择你会优先选哪条路。");
             return false;
           }
-          if (n.farmer_interview_willing.value === "yes" && !n.farmer_interview_contact) {
-            alert("请填写你的联系方式（手机号）。");
+          if (!n.farmer_interview_willing.value) {
+            alert("请选择是否愿意接受后续访谈。");
             return false;
           }
         }
@@ -4685,9 +4705,12 @@
           alert("O3 请至少选择 1 项。");
           return false;
         }
-        const aiHelp = responses.end.q_end_ai_helpfulness.value;
-        if ((aiHelp === "A" || aiHelp === "B") && !responses.end.q_end_ai_feedback) {
-          alert(isFarmer ? "请填写你觉得不对的地方或建议。" : "请填写智能分析不足与建议。");
+        if (
+          !isFarmer &&
+          (responses.end.q_end_ai_helpfulness.value === "A" || responses.end.q_end_ai_helpfulness.value === "B") &&
+          !responses.end.q_end_ai_feedback
+        ) {
+          alert("请填写智能分析不足与建议。");
           return false;
         }
         return true;
