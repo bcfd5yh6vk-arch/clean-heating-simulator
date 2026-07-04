@@ -4916,7 +4916,10 @@
           sq_q3_impact_other: responses.common.q3_impact_other || null,
           sq_q4_strategy_change: responses.common.q4_strategy_change.value || null,
           sq_q4_strategy_change_label: responses.common.q4_strategy_change.label || null,
-          sq_q_end1_recommend: responses.end.q_end1_recommend.value,
+          sq_q_end1_recommend:
+            responses.end.q_end1_recommend.value != null && responses.end.q_end1_recommend.value !== ""
+              ? String(responses.end.q_end1_recommend.value)
+              : null,
           sq_q_end1_recommend_label: responses.end.q_end1_recommend.label || null,
           sq_q_end_ai_helpfulness: responses.end.q_end_ai_helpfulness.value || null,
           sq_q_end_ai_helpfulness_label: responses.end.q_end_ai_helpfulness.label || null,
