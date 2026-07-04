@@ -1972,7 +1972,7 @@
               <option value="学生">学生</option>
               <option value="已煤改农户">已煤改农户</option>
               <option value="未煤改农户">未煤改农户</option>
-              <option value="其他">其他</option>
+              <option value="其他">其他关心农村的朋友</option>
             </select>
           </label>
           <div id="identityStudentField" class="identity-detail">
@@ -1986,8 +1986,9 @@
             </label>
           </div>
           <div id="identityOtherField" class="identity-detail">
-            <label>你的身份
-              <input type="text" name="identity_other" form="profileForm" placeholder="请输入你的身份" />
+            <p class="hint identity-other-intro">你是来看政策/做研究的，会代入一户农家算账。</p>
+            <label>简要说明你的角色
+              <input type="text" name="identity_other" form="profileForm" placeholder="例如：政策研究、媒体报道、技术服务" />
             </label>
           </div>
         </div>
@@ -2337,7 +2338,7 @@
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="学生">学生</button>
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="已煤改农户">已煤改农户</button>
                     <button type="button" class="guidance-identity-btn" data-guidance-identity="未煤改农户">未煤改农户</button>
-                    <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他</button>
+                    <button type="button" class="guidance-identity-btn" data-guidance-identity="其他">其他关心农村的朋友</button>
                   </div>
                   <div id="guidanceContent" class="guidance-content" hidden></div>
                 </div>
@@ -2906,7 +2907,7 @@
           <p>代入<strong>一户普通华北农村家庭</strong>，理解同一清洁取暖方案为何在不同家庭会有不同的花费与过冬体验。</p>
           <h4>2. 如何填写初始数据</h4>
           <ul>
-            <li>身份选「其他」，并简要说明你的角色（如政策研究、媒体报道、技术服务等）。</li>
+            <li>身份选「其他关心农村的朋友」，并简要说明你的角色（如政策研究、媒体报道、技术服务等）。</li>
             <li>若无一手数据，可用调研案例或<strong>华北农村公开平均数据</strong>——关键是前后一致。</li>
             <li>可参考：年收入 8–10 万、住房约 100 平方米、取暖费 2000–4000 元。</li>
           </ul>
@@ -3422,7 +3423,7 @@
         if (!detail) {
           if (identity === "学生") alert("请填写年级。");
           else if (isVillageIdentity(identity)) alert("请填写所在村的名字。");
-          else alert("请输入你的身份。");
+          else alert("请简要说明你的角色（如政策研究、媒体报道等）。");
           return false;
         }
         return true;
