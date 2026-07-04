@@ -2105,8 +2105,8 @@
     <div class="wrap" id="mainApp">
       <header class="hero">
         <span class="hero-badge">5 分钟体验 · 无需注册</span>
-        <h1>农村换暖气，怎样选更暖和、更省心？</h1>
-        <p class="hero-lead">
+        <h1 id="heroTitle">农村换暖气，怎样选更暖和、更省心？</h1>
+        <p class="hero-lead" id="heroLead">
           代入华北一户农家，走 <strong>5 个回合</strong>，提前看清<strong>取暖费</strong>和<strong>家里存款</strong>会怎么变。
         </p>
         <ul class="hero-action-chips" aria-label="你会做什么">
@@ -2158,7 +2158,7 @@
           <section class="card" id="setupSection">
             <div class="card-header">
               <div class="card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><use href="#icon-home"/></svg></div>
-              <h2>填写家里收入和取暖费</h2>
+              <h2 id="setupSectionHeading">填写家里收入和取暖费</h2>
             </div>
             <div class="setup-quick-tip" id="setupQuickTipDefault">
               <strong>两步开始：</strong>
@@ -2883,23 +2883,23 @@
         `,
         已煤改农户: `
           <h4>① 填表</h4>
-          <p class="guide-key">填<strong>村名</strong>，再填家里人数、年收入、面积、<strong>改气/改电前的取暖费</strong>。</p>
-          <p class="guide-sub">算一算从散煤开头，方便对比——不代表你还没改。数字记不清就估一个。</p>
+          <p class="guide-key">填<strong>村名</strong>，再选家里人数、收入、面积、<strong>改之前的取暖费</strong>大概区间。</p>
+          <p class="guide-sub">帮你<strong>对照改前改后</strong>，算算补贴变少后钱还够不够——不是说你还没改。</p>
           <h4>② 玩</h4>
-          <p class="guide-key">每回合看说明，<strong>点一个按钮</strong>。多看<strong>第 3 回合（选路线）</strong>和<strong>第 5 回合（补贴变少了）</strong>。</p>
-          <p class="guide-sub">按你家真实情况选。玩完可在调查里说哪里像、哪里不像。</p>
+          <p class="guide-key">按<strong>你家真实经历</strong>点按钮，重点看<strong>补贴变少了</strong>那一步和<strong>一年还能剩多少钱</strong>。</p>
+          <p class="guide-sub">屋里更干净、更省心是改完的好处；玩完可以说哪里像、哪里不像。</p>
           <h4>③ 说明</h4>
-          <p class="guide-sub">结果是推算，不是说你家好或不好。和你经历不一样很正常。</p>
+          <p class="guide-sub">结果是推算对照，不是评判你好不好。和你经历不一样很正常。</p>
         `,
         未煤改农户: `
           <h4>① 填表</h4>
-          <p class="guide-key">填<strong>村名</strong>，再填家里人数、收入、面积、<strong>现在一年取暖花多少钱</strong>。</p>
-          <p class="guide-sub">填一整户家的数，不是一个人的。记不清就估一个。</p>
+          <p class="guide-key">填<strong>村名</strong>，再选家里人数、收入、面积、<strong>现在一年取暖花多少钱</strong>大概区间。</p>
+          <p class="guide-sub">帮你<strong>提前算账</strong>：改要花多少钱、以后每年多少、补贴会不会少。</p>
           <h4>② 玩</h4>
-          <p class="guide-key">每回合<strong>点一个按钮</strong>。重点看<strong>第 3 回合选哪条路线</strong>、<strong>第 5 回合补贴变少</strong>后钱够不够。</p>
-          <p class="guide-sub">不用追求「成功」结局，按真实顾虑选就行。</p>
+          <p class="guide-key">每回合<strong>点一个按钮</strong>。重点看<strong>选哪条路线</strong>、<strong>补贴变少</strong>后钱够不够。</p>
+          <p class="guide-sub">不用追求「成功」，按真实顾虑选；具体补贴气价问村委。</p>
           <h4>③ 说明</h4>
-          <p class="guide-sub">具体补贴、气价问村委。这里是帮你提前算账，不是替你做决定。</p>
+          <p class="guide-sub">这里是帮你提前想清楚，不是替你做决定。</p>
         `,
         其他: `
           <h4>1. 我希望你通过本模拟达到什么</h4>
@@ -2965,6 +2965,221 @@
         const identity =
           state?.initialProfile?.user_identity || userIdentitySelect?.value || "";
         return isVillageIdentity(identity);
+      }
+
+      function getFarmerIdentity() {
+        const identity =
+          state?.initialProfile?.user_identity || userIdentitySelect?.value || "";
+        return isVillageIdentity(identity) ? identity : null;
+      }
+
+      const FARMER_MOTIVATION = {
+        已煤改农户: {
+          consentLead: "帮你对照改前改后，算算补贴变少后钱还够不够。开始之前看一眼下面几条。",
+          heroTitle: "改完气/电了，补贴变少后还撑得住吗？",
+          heroLead:
+            "对照<strong>改之前</strong>和<strong>现在</strong>，走 5 步看看<strong>取暖费</strong>和<strong>一年还能剩多少钱</strong>——和你家像不像。",
+          setupCardTitle: "选一下家里大概情况",
+          setupTip: "对照改前改后算账：下面 5 项按大概情况选，选完点「开始算账」",
+          setupSectionTitle: "改之前家里大概啥情况（选最接近的）",
+          aiHint: "对照完了会有一份说明，帮你看看和自家经历像不像；看完填几句话就行。",
+          aiLoading: "正在对照你家情况整理说明…",
+          endingTitles: {
+            success: "和你家对照：还撑得住",
+            bankrupt: "和你家对照：钱偏紧",
+            seized: "需要留意"
+          },
+          endings: {
+            earlyBankrupt: "取暖费占收入太多了，手里又没钱——要是补贴再少，和你家感受可能差不多，得早打算。",
+            success:
+              "对照下来，改完以后排放更干净、屋里更省心；取暖费占收入不算太高，一年还能剩点钱，补贴变少也还撑得住。",
+            bankruptSurplus:
+              "对照到补贴变少那一步，一年反而没钱了——和你家现在比，可能偏紧，得多想想省取暖或增收的办法。",
+            bankruptGeneral:
+              "对照下来，补贴变少以后取暖负担偏重——不是说你改错了，而是提醒：以后补贴少了，得早问清楚、早打算。",
+            seized:
+              "对照回忆：要是改之前一直拖着不改，村里会多次来人了解情况。改完就省心多了——屋里干净、不用天天倒煤渣。"
+          },
+          subsidyEventDetail: (gasVolume, rise) =>
+            `你家已经改完了。按改之前烧散煤的花费估算，一年大约用 ${gasVolume.toFixed(1)} 立方米天然气。现在补贴每立方米少了，这一年取暖要多花 ${rise} 元——和你家真实感受比怎么样？`,
+          stages: {
+            turn1: {
+              name: "回合1：回想改之前",
+              narrative:
+                "你家已经改完清洁取暖了。这一步对照着想想：改之前那年冬天，取暖主要靠散煤，当时你家是什么情况？",
+              choices: [
+                { id: "A", label: "改之前一直烧散煤，花费还低一些" },
+                { id: "B", label: "改之前就想早点改，图干净省心" }
+              ]
+            },
+            turn2: {
+              name: "回合2：改之前村里来人",
+              narrative:
+                "改之前村里工作人员入户了解情况。对照想想：当时（或你了解的邻居）是继续观望，还是准备登记改造？",
+              choices: [
+                { id: "1", label: "还想再观望，继续用煤" },
+                { id: "2", label: "准备登记改造" }
+              ]
+            },
+            turn2Repeat: {
+              name: "回合2：改之前村里来人",
+              narrative:
+                "改之前若一直拖着不改，村里还会再来。对照想想：是继续观望，还是准备改造？",
+              choices: [
+                { id: "1", label: "还想再观望" },
+                { id: "2", label: "准备登记改造" }
+              ]
+            },
+            turn3: {
+              name: "回合3：当时选的路线",
+              narrative:
+                "对照看看：当时选了哪条改造路线？（选一条，算算花费和以后每年取暖费会怎样变）",
+              choices: null
+            },
+            turn4: {
+              name: "回合4：改完后的应对",
+              narrative:
+                "改完以后，有的家里取暖费涨了、有的省了。对照想想：补贴还高那两年，你怎么应对的？",
+              choices: null
+            },
+            turn5: {
+              name: "回合5：补贴变少了",
+              narrative: "现在国家补贴变少了。点下面按钮，对照算算这一年账还够不够。",
+              choices: [{ id: "SETTLE", label: "算一算今年账（补贴变少了）" }]
+            }
+          }
+        },
+        未煤改农户: {
+          consentLead: "帮你提前算算：改不改、改哪条路更划算。开始之前看一眼下面几条。",
+          heroTitle: "还没改，改不改、改哪条路更划算？",
+          heroLead:
+            "代入和你差不多的一户农家，走 <strong>5 个回合</strong>，提前看清<strong>改要花多少钱</strong>、<strong>补贴变少后</strong>还撑不撑得住。",
+          setupCardTitle: "选一下家里大概情况",
+          setupTip: "提前算账：下面 5 项按大概情况选，选完点「开始算账」",
+          setupSectionTitle: "家里现在大概啥情况（选最接近的）",
+          aiHint: "算完会有一份说明，帮你想清楚改不改、改哪条路；看完填几句话就行。",
+          aiLoading: "正在根据你家情况帮你算账说明…",
+          endingTitles: {
+            success: "要是改：可能过得稳",
+            bankrupt: "要是改：可能偏紧",
+            seized: "村里会催了解"
+          },
+          endings: {
+            earlyBankrupt:
+              "取暖费占收入太多了，手里又没钱——还没改就这样，更得先把自家账算清楚再决定。",
+            success:
+              "要是按这个路线改，排放更干净、屋里更省心；取暖费占收入不算太高，一年还能剩点钱，改完可能过得比较踏实。",
+            bankruptSurplus:
+              "算到补贴变少那一步，一年反而没钱了——要是真改，得先问清楚补贴能补几年、气价会不会涨。",
+            bankruptGeneral:
+              "算下来补贴变少以后取暖负担偏重——不是说一定不能改，而是提醒：改之前把每年花费和补贴问清楚。",
+            seized:
+              "村里多次来人了解后，若一直不改，会反复提醒。散煤屋里烟尘多、清理麻烦，也影响空气——可以趁这次算算，想想改哪条路合适。"
+          },
+          subsidyEventDetail: (gasVolume, rise) =>
+            `要是改天然气，按你现在烧散煤的花费估算，一年大约要用 ${gasVolume.toFixed(1)} 立方米气。补贴每立方米少了 ${rise} 元的话，一年取暖要多花这么多——值得提前想想。`,
+          stages: {
+            turn1: {
+              name: "回合1：这一冬怎么取暖",
+              narrative:
+                "你家还没改。开年想：这一冬打算怎么取暖？继续烧散煤花费低一些，但屋里烟尘多、清理麻烦；了解改造要花一笔钱，但长期更干净省心。",
+              choices: [
+                { id: "A", label: "继续烧散煤，先把花费控制住" },
+                { id: "B", label: "想了解改气/改电，先算算划不划算" }
+              ]
+            },
+            turn2: {
+              name: "回合2：村里来人了解情况",
+              narrative:
+                "村里工作人员入户了解情况：可以暂时继续用散煤，也可以了解并开始准备改造。改不改、什么时候改，可以按自家情况决定。",
+              choices: [
+                { id: "1", label: "暂时继续用散煤" },
+                { id: "2", label: "了解并开始准备改造" }
+              ]
+            },
+            turn2Repeat: {
+              name: "回合2：村里来人了解情况",
+              narrative:
+                "入户了解仍在进行。一直不改，屋里通风、烟尘清理、环保方面的不便会持续；也可以趁这次把改气、改电、热泵各要花多少钱问清楚。",
+              choices: [
+                { id: "1", label: "暂时继续用散煤" },
+                { id: "2", label: "了解并开始准备改造" }
+              ]
+            },
+            turn3: {
+              name: "回合3：选哪条改造路线",
+              narrative:
+                "要是决定改，选哪条路线？天然气、地源热泵、空气源热泵——各要掏多少钱、以后每年取暖费差多少，点一条算算。",
+              choices: null
+            },
+            turn4: {
+              name: "回合4：改完怎么过日子",
+              narrative:
+                "改完之后，有的年取暖费会涨一截。想想：多挣点、少开暖气，还是给外墙做保温——选一样看看钱怎么变。",
+              choices: null
+            },
+            turn5: {
+              name: "回合5：补贴变少了",
+              narrative: "要是改完以后补贴变少，取暖费会涨一截。点下面按钮，算算这一年账还够不够。",
+              choices: [{ id: "SETTLE", label: "算一算今年账（补贴变少了）" }]
+            }
+          }
+        }
+      };
+
+      function farmerStageCopy(stageKey) {
+        const identity = getFarmerIdentity();
+        return identity ? FARMER_MOTIVATION[identity]?.stages?.[stageKey] : null;
+      }
+
+      function farmerEndingCopy(variant) {
+        const identity = getFarmerIdentity();
+        return identity ? FARMER_MOTIVATION[identity]?.endings?.[variant] : null;
+      }
+
+      function farmerEndingTitle(type) {
+        const identity = getFarmerIdentity();
+        const titles = identity ? FARMER_MOTIVATION[identity]?.endingTitles : null;
+        if (!titles) {
+          return type === "success" ? "成功转型" : type === "seized" ? "需尽快改造" : "资金紧张";
+        }
+        if (type === "success") return titles.success;
+        if (type === "seized") return titles.seized;
+        return titles.bankrupt;
+      }
+
+      function farmerSetStage(stageKey, fallbackName, fallbackNarrative, fallbackOptions) {
+        const copy = isFarmerSession() ? farmerStageCopy(stageKey) : null;
+        if (copy) {
+          const opts =
+            copy.choices ??
+            (stageKey === "turn3"
+              ? techRouteChoices()
+              : stageKey === "turn4"
+                ? turn4Choices()
+                : fallbackOptions);
+          setStage(copy.name, copy.narrative, opts);
+        } else {
+          setStage(fallbackName, fallbackNarrative, fallbackOptions);
+        }
+      }
+
+      function applyFarmerMotivationUi() {
+        const identity = getFarmerIdentity();
+        const m = identity ? FARMER_MOTIVATION[identity] : null;
+        if (!m) return;
+        const consentFarmer = document.getElementById("consentLeadFarmer");
+        if (consentFarmer) consentFarmer.textContent = m.consentLead;
+        const heroTitle = document.getElementById("heroTitle");
+        if (heroTitle) heroTitle.textContent = m.heroTitle;
+        const heroLead = document.getElementById("heroLead");
+        if (heroLead) heroLead.innerHTML = m.heroLead;
+        const setupHeading = document.getElementById("setupSectionHeading");
+        if (setupHeading) setupHeading.textContent = m.setupCardTitle;
+        const setupTipEl = document.getElementById("setupFarmerTip")?.querySelector(".guide-key");
+        if (setupTipEl) setupTipEl.textContent = m.setupTip;
+        const householdTitle = document.getElementById("setupHouseholdTitleFarmer");
+        if (householdTitle) householdTitle.textContent = m.setupSectionTitle;
       }
 
       const FARMER_PHRASE_REPLACEMENTS = [
@@ -3033,19 +3248,28 @@
 
       function updateFarmerUiCopy() {
         const isFarmer = document.documentElement.classList.contains("farmer-flow");
+        const m = getFarmerIdentity() ? FARMER_MOTIVATION[getFarmerIdentity()] : null;
+        if (isFarmer) applyFarmerMotivationUi();
         const submitBtn = document.getElementById("profileSubmitBtn");
         if (submitBtn) submitBtn.textContent = isFarmer ? "开始算账 →" : "开始模拟 →";
         const playTitle = document.getElementById("playAreaTitle");
-        if (playTitle) playTitle.textContent = isFarmer ? "第二步：每回合选一个" : "第二步：做选择";
+        if (playTitle) {
+          playTitle.textContent = isFarmer
+            ? getFarmerIdentity() === "已煤改农户"
+              ? "第二步：对照改前改后"
+              : "第二步：每回合选一个"
+            : "第二步：做选择";
+        }
         const statsTitle = document.getElementById("statsSectionTitle");
         if (statsTitle) statsTitle.textContent = isFarmer ? "你家现在啥情况" : "当前指标";
         const aiTitle = document.getElementById("aiAnalysisTitle");
         if (aiTitle) aiTitle.textContent = isFarmer ? "第三步：看看结果" : "第三步：智能分析";
         const aiHint = document.getElementById("aiAnalysisHint");
         if (aiHint) {
-          aiHint.textContent = isFarmer
-            ? "算完以后会出一份说明；看完点下面按钮，填几句话就行。"
-            : "模拟结束后自动生成报告；看完点下方按钮进入短问卷。";
+          aiHint.textContent = m?.aiHint
+            ?? (isFarmer
+              ? "算完以后会出一份说明；看完点下面按钮，填几句话就行。"
+              : "模拟结束后自动生成报告；看完点下方按钮进入短问卷。");
         }
         const aiBtn = document.getElementById("aiAnalyzeBtn");
         if (aiBtn) aiBtn.textContent = isFarmer ? "看看结果" : "生成智能分析";
@@ -3058,16 +3282,21 @@
         const preLegend = document.getElementById("preSurveyLegend");
         if (preLegend) {
           preLegend.textContent = isFarmer
-            ? "在开始算账前，你对煤改气和每年取暖花钱的问题了解多少？"
+            ? getFarmerIdentity() === "已煤改农户"
+              ? "在开始对照算账前，你对改完以后每年取暖花费的变化了解多少？"
+              : "在开始算账前，你对煤改气和每年取暖花钱的问题了解多少？"
             : "Q1. 在开始本局模拟前，你对北方农村煤改气问题了解程度？";
         }
         const preSubmit = document.getElementById("preSurveySubmitBtn");
         if (preSubmit) preSubmit.textContent = isFarmer ? "开始算账 →" : "开始模拟 →";
         const surveyHint = document.getElementById("surveyIntroHint");
         if (surveyHint) {
-          surveyHint.textContent = isFarmer
-            ? "谢谢你看完了！请用约 2 分钟回答几个问题，帮我们把这个算账工具做得更好。"
-            : "感谢完成本局模拟与智能分析！请用约 2 分钟填写以下问题，帮助我们改进模拟器、更好地服务农户选路取暖。";
+          surveyHint.textContent =
+            getFarmerIdentity() === "已煤改农户"
+              ? "谢谢你对照完了！请用约 2 分钟回答几个问题，说说和自家经历像不像，帮我们做得更好。"
+              : isFarmer
+                ? "谢谢你看完了！请用约 2 分钟回答几个问题，帮我们把这个算账工具做得更好。"
+                : "感谢完成本局模拟与智能分析！请用约 2 分钟填写以下问题，帮助我们改进模拟器、更好地服务农户选路取暖。";
         }
         const surveyTitle = document.getElementById("surveyTitle");
         if (surveyTitle) surveyTitle.textContent = isFarmer ? "几句话反馈" : "2 分钟小调查";
@@ -3159,6 +3388,7 @@
         document.getElementById("guidancePanelHintFarmer")?.toggleAttribute("hidden", !isFarmer);
 
         applyFarmerHouseholdFieldsUi(isFarmer);
+        if (isFarmer) applyFarmerMotivationUi();
         if (document.documentElement.classList.contains("welcome-dismissed")) {
           setFarmerFlowMode(isFarmer);
         }
@@ -3234,6 +3464,7 @@
         const isFarmer = isVillageIdentity(identity);
         setFarmerFlowMode(isFarmer);
         applyFarmerHouseholdFieldsUi(isFarmer);
+        if (isFarmer) applyFarmerMotivationUi();
         document.documentElement.classList.add("welcome-dismissed");
         if (isFarmer) {
           document.documentElement.classList.add("context-dismissed");
@@ -3509,7 +3740,8 @@
         if (roll < pSeized) {
           finish(
             "seized",
-            "村里多次入户了解后，你家仍使用散煤取暖。长期如此，屋里烟尘多、炉火不安全、周边空气也受影响；按当地要求，需尽快选定并完成清洁取暖改造。"
+            farmerEndingCopy("seized") ??
+              "村里多次入户了解后，你家仍使用散煤取暖。长期如此，屋里烟尘多、炉火不安全、周边空气也受影响；按当地要求，需尽快选定并完成清洁取暖改造。"
           );
           return true;
         }
@@ -3660,9 +3892,10 @@
         renderStepper();
         const cls = type === "success" ? "success" : "bankrupt";
         const displaySummary = farmerize(summary);
+        const endingTitle = isFarmerSession() ? farmerEndingTitle(type) : (type === "success" ? "成功转型" : type === "seized" ? "需尽快改造" : "资金紧张");
         endingBoxEl.innerHTML = `
           <div class="ending ${cls}">
-            <h3>终局：${type === "success" ? "成功转型" : type === "seized" ? "需尽快改造" : "资金紧张"}</h3>
+            <h3>终局：${endingTitle}</h3>
             <p>${displaySummary}</p>
           </div>
         `;
@@ -3678,9 +3911,10 @@
         if (burden > state.thresholds.bankrupt && state.user.surplus <= 0) {
           finish(
             "bankrupt",
-            isFarmerSession()
-              ? "取暖费占收入太多了，手里又没钱，家里取暖真扛不住了。"
-              : "能耗负担率过高且可支配资金不足，家庭取暖开支已难以为继。"
+            farmerEndingCopy("earlyBankrupt") ??
+              (isFarmerSession()
+                ? "取暖费占收入太多了，手里又没钱，家里取暖真扛不住了。"
+                : "能耗负担率过高且可支配资金不足，家庭取暖开支已难以为继。")
           );
           return true;
         }
@@ -3697,23 +3931,26 @@
         if (success) {
           finish(
             "success",
-            isFarmerSession()
-              ? "排放还行、改造也跟上了、取暖费占收入不算太高，一年还能剩点钱，过冬比较踏实。"
-              : "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。"
+            farmerEndingCopy("success") ??
+              (isFarmerSession()
+                ? "排放还行、改造也跟上了、取暖费占收入不算太高，一年还能剩点钱，过冬比较踏实。"
+                : "排放、合规、能耗负担率达标且年盈余不为负，成功实现绿色转型。")
           );
         } else if (state.user.surplus < state.thresholds.successSurplusMin) {
           finish(
             "bankrupt",
-            isFarmerSession()
-              ? "第 5 回合结束后一年反而没钱了，家里日常和取暖开支都难维持。"
-              : "回合5结束后年盈余为负，家里现金流已难以维持日常与取暖开支。"
+            farmerEndingCopy("bankruptSurplus") ??
+              (isFarmerSession()
+                ? "第 5 回合结束后一年反而没钱了，家里日常和取暖开支都难维持。"
+                : "回合5结束后年盈余为负，家里现金流已难以维持日常与取暖开支。")
           );
         } else {
           finish(
             "bankrupt",
-            isFarmerSession()
-              ? "第 5 回合补贴变少了以后，钱还是不太够，取暖负担偏重，得想想别的办法或多挣点。"
-              : "回合5补贴减少后，家庭未达到成功转型条件，取暖负担偏重，需调整路线或增收节支。"
+            farmerEndingCopy("bankruptGeneral") ??
+              (isFarmerSession()
+                ? "第 5 回合补贴变少了以后，钱还是不太够，取暖负担偏重，得想想别的办法或多挣点。"
+                : "回合5补贴减少后，家庭未达到成功转型条件，取暖负担偏重，需调整路线或增收节支。")
           );
         }
       }
@@ -3733,7 +3970,8 @@
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
             if (evaluateEarlyEnding()) return;
-            setStage(
+            farmerSetStage(
+              "turn2",
               "回合2：了解清洁取暖",
               "村里工作人员入户了解情况：可暂时继续用散煤（屋里烟尘多、清理麻烦、对空气也有影响），也可了解并开始准备改造。",
               [
@@ -3749,7 +3987,8 @@
             note = `表示愿意了解改造，合规度升至 ${COMPLIANCE_TURN1_PREPARE} 分；仍用散煤，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合1：${label} -> ${note}`);
             logCurrentHeatingCo2();
-            setStage(
+            farmerSetStage(
+              "turn3",
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
               techRouteChoices()
@@ -3766,7 +4005,8 @@
             logCurrentHeatingCo2();
             if (tryProbabilisticSeizedEnforcement()) return;
             if (evaluateEarlyEnding()) return;
-            setStage(
+            farmerSetStage(
+              "turn2Repeat",
               "回合2：了解清洁取暖",
               "入户了解仍在进行。若一直不改，屋里通风、烟尘清理、环保方面的不便会持续；按本地惯例，改造提醒也会更频繁。",
               [
@@ -3783,7 +4023,8 @@
             note = `了解并开始准备改造，合规度回升至 ${COMPLIANCE_TURN2_RECTIFY} 分；尚未完成技术替代，排放达标度 ${Math.round(state.user.emission)} 分。`;
             pushLog(`回合2：${label} -> ${note}`);
             logCurrentHeatingCo2();
-            setStage(
+            farmerSetStage(
+              "turn3",
               "回合3：技术路线选择",
               "请选择技术路线（会产生一次性投入并改变后续成本）。",
               techRouteChoices()
@@ -3816,7 +4057,8 @@
           pushLog(`回合3：${label} -> ${note}`);
           logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
-          setStage(
+          farmerSetStage(
+            "turn4",
             "回合4：增收/降耗策略",
             "请选择一项家庭策略：提高收入、节约取暖，或对外墙做保暖修缮。",
             turn4Choices()
@@ -3853,7 +4095,8 @@
           pushLog(`回合4：${label} -> ${note}`);
           logCurrentHeatingCo2();
           if (evaluateEarlyEnding()) return;
-          setStage(
+          farmerSetStage(
+            "turn5",
             "回合5：补贴减少冲击",
             "固定事件触发：补贴减少。点击按钮结算最终结果。",
             [{ id: "SETTLE", label: "结算回合5（补贴减少）" }]
@@ -3865,9 +4108,15 @@
           const rise = Math.round(gasVolume * SUBSIDY_REDUCTION_PER_M3);
           state.user.heatingCost += rise;
           const subsidyEventTitle = isFarmerSession() ? "事件：补贴变少了" : "事件：补贴减少";
-          const subsidyEventDetail = isFarmerSession()
-            ? `按你家原来烧散煤的花费估算，一年大约要用 ${gasVolume.toFixed(1)} 立方米天然气。补贴每立方米少了 ${SUBSIDY_REDUCTION_PER_M3} 元，这一年取暖要多花 ${rise} 元。`
-            : `初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。`;
+          const identity = getFarmerIdentity();
+          const customDetail = identity
+            ? FARMER_MOTIVATION[identity]?.subsidyEventDetail?.(gasVolume, rise)
+            : null;
+          const subsidyEventDetail =
+            customDetail ??
+            (isFarmerSession()
+              ? `按你家原来烧散煤的花费估算，一年大约要用 ${gasVolume.toFixed(1)} 立方米天然气。补贴每立方米少了 ${SUBSIDY_REDUCTION_PER_M3} 元，这一年取暖要多花 ${rise} 元。`
+              : `初始年取暖费 ${state.user.initialHeatingCost} 元按散煤 ${SCATTERED_COAL_PRICE_PER_TON} 元/吨计，约 ${coalTons.toFixed(2)} 吨；按 1 吨散煤≈${GAS_M3_PER_COAL_TON} 立方米天然气，年用气量≈${gasVolume.toFixed(1)} 立方米。补贴退坡 ${SUBSIDY_REDUCTION_PER_M3} 元/立方米，取暖年花费增加 ${rise} 元。`);
           eventBoxEl.innerHTML = `
             <p class="pill bad">${subsidyEventTitle}</p>
             <p class="small">${subsidyEventDetail}</p>
@@ -3961,7 +4210,11 @@
           `初始化：身份=${state.initialProfile.user_identity}（${state.initialProfile.identity_detail}），常住人口=${state.initialProfile.household_population || DEFAULT_POPULATION}人，方式=${state.user.heatingMethod}，收入=${state.user.income}，煤改前取暖费=${state.user.heatingCost}，二氧化碳=${state.user.co2Tons.toFixed(3)} 吨，排放达标度=${Math.round(state.user.emission)} 分。`
         );
 
-        setStage(
+        applyFarmerMotivationUi();
+        updateFarmerUiCopy();
+
+        farmerSetStage(
+          "turn1",
           "回合1：现状抉择（开局）",
           "请选择开局策略：继续用散煤可先维持现有花费，但会遇到通风、卫生、环保方面的不便；准备转型会有一笔前期投入，但长期更暖和、更省心。",
           [
@@ -4949,9 +5202,11 @@
         hideAiAnalysisNextBtn();
         aiAnalysisResultEl.hidden = false;
         aiAnalysisResultEl.className = "ai-reply loading";
-        aiAnalysisResultEl.textContent = isFarmerSession()
-          ? "正在根据你家情况算账说明…"
-          : "正在分析农户画像与转型路径…";
+        aiAnalysisResultEl.textContent =
+          FARMER_MOTIVATION[getFarmerIdentity()]?.aiLoading ??
+          (isFarmerSession()
+            ? "正在根据你家情况算账说明…"
+            : "正在分析农户画像与转型路径…");
 
         try {
           const res = await fetch("/api/chat", {
