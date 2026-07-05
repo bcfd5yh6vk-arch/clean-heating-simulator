@@ -25,6 +25,25 @@ FARMER_IDENTITIES = {"已煤改农户", "未煤改农户"}
 STUDENT_OTHER = {"学生", "其他"}
 
 
+def normalize_identity_detail(detail: Any) -> str:
+    return str(detail or "").strip()
+
+
+def is_test_item(row: dict[str, Any]) -> bool:
+    """Test records: identity_detail is Lawted 村 (case-insensitive) or 测试."""
+    detail = normalize_identity_detail(row.get("identity_detail"))
+    if detail == "测试":
+        return True
+    return detail.lower() == "lawted 村"
+
+
+def test_item_reason(row: dict[str, Any]) -> str:
+    detail = normalize_identity_detail(row.get("identity_detail"))
+    return (
+        f"测试项：identity_detail 为「{detail}」（定义为 Lawted 村 或 测试），非真实研究样本"
+    )
+
+
 def fetch_all_rows() -> list[dict[str, Any]]:
     url = f"{SUPABASE_URL.rstrip('/')}/rest/v1/simulation_sessions?select=*&order=created_at.asc"
     req = urllib.request.Request(
@@ -62,20 +81,21 @@ def is_fully_complete(row: dict[str, Any]) -> bool:
     return True
 
 
-def cleaning_reasons(row: dict[str, Any]) -> list[str]:
+def cleaning_reasons(row: dict[str, Any], *, include_test_item: bool = True) -> list[str]:
     reasons: list[str] = []
+    if include_test_item and is_test_item(row):
+        reasons.append(test_item_reason(row))
+
     duration = row.get("session_duration_seconds")
-    detail = (row.get("identity_detail") or "").strip()
+    detail = normalize_identity_detail(row.get("identity_detail"))
 
     if duration is None or duration < 30:
-        reasons.append(f"会话时长不足30秒（{duration if duration is not None else '未知'}s），难以视为有效体验")
+        reasons.append(
+            f"会话时长不足30秒（{duration if duration is not None else '未知'}s），难以视为有效体验"
+        )
 
     if row.get("ended_at") is None:
         reasons.append("模拟未结束（无 ended_at），行为与结局数据不完整")
-
-    lowered = detail.lower()
-    if detail == "测试" or "test" in lowered or "e2e" in lowered:
-        reasons.append(f"身份备注疑似测试记录（identity_detail={detail!r}）")
 
     if not reasons:
         reasons.append("不在≥30s且已结束的有效样本池内，需人工复核")
@@ -85,6 +105,25 @@ def cleaning_reasons(row: dict[str, Any]) -> list[str]:
 
 def annotate_row(row: dict[str, Any]) -> tuple[str, str]:
     """Return (analysis_tag, remark)."""
+    if is_test_item(row):
+        reasons = [test_item_reason(row)]
+        if is_fully_complete(row):
+            reasons.append(
+                "该记录形式上满足全部完成条件，但属于测试项，不纳入主分析。"
+            )
+        elif is_valid_pool(row):
+            reasons.append(
+                "该记录处于有效样本池（≥30s 且模拟已结束），但属于测试项，不纳入主分析。"
+            )
+        else:
+            reasons.extend(
+                cleaning_reasons(row, include_test_item=False),
+            )
+        return (
+            "C_需清洗",
+            "建议清洗或排除出主分析：" + "；".join(reasons),
+        )
+
     if is_fully_complete(row):
         identity = row.get("user_identity") or ""
         if identity in FARMER_IDENTITIES:
@@ -93,7 +132,7 @@ def annotate_row(row: dict[str, Any]) -> tuple[str, str]:
             extra = "学生/其他：已结束模拟、提交 post-survey，且 Q1/Q2 前后测齐全。"
         return (
             "A_全部完成",
-            f"纳入分析样本（全部完成，n=20 之一）。{extra}",
+            f"纳入分析样本（全部完成）。{extra}",
         )
 
     if is_valid_pool(row):
