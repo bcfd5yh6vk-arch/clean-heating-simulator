@@ -63,6 +63,9 @@ def fetch_all_rows() -> list[dict[str, Any]]:
 
 
 def is_valid_pool(row: dict[str, Any]) -> bool:
+    """≥30s, simulation ended, and not a test item (A/B pool only)."""
+    if is_test_item(row):
+        return False
     duration = row.get("session_duration_seconds")
     return duration is not None and duration >= 30 and row.get("ended_at") is not None
 
@@ -98,30 +101,21 @@ def cleaning_reasons(row: dict[str, Any], *, include_test_item: bool = True) -> 
         reasons.append("模拟未结束（无 ended_at），行为与结局数据不完整")
 
     if not reasons:
-        reasons.append("不在≥30s且已结束的有效样本池内，需人工复核")
+        duration_ok = duration is not None and duration >= 30
+        if not duration_ok or row.get("ended_at") is None:
+            reasons.append("不在≥30s且已结束的有效样本池内，需人工复核")
 
     return reasons
 
 
 def annotate_row(row: dict[str, Any]) -> tuple[str, str]:
-    """Return (analysis_tag, remark)."""
+    """Return (analysis_tag, remark). Test items are always C, never A or B."""
     if is_test_item(row):
         reasons = [test_item_reason(row)]
-        if is_fully_complete(row):
-            reasons.append(
-                "该记录形式上满足全部完成条件，但属于测试项，不纳入主分析。"
-            )
-        elif is_valid_pool(row):
-            reasons.append(
-                "该记录处于有效样本池（≥30s 且模拟已结束），但属于测试项，不纳入主分析。"
-            )
-        else:
-            reasons.extend(
-                cleaning_reasons(row, include_test_item=False),
-            )
+        reasons.extend(cleaning_reasons(row, include_test_item=False))
         return (
             "C_需清洗",
-            "建议清洗或排除出主分析：" + "；".join(reasons),
+            "建议清洗或排除出主分析：" + "；".join(dict.fromkeys(reasons)),
         )
 
     if is_fully_complete(row):
@@ -198,7 +192,7 @@ def main() -> None:
     for row in rows:
         tag, remark = annotate_row(row)
         tag_counts[tag] += 1
-        if is_valid_pool(row):
+        if tag in ("A_全部完成", "B_有效未完成"):
             valid_pool_count += 1
         annotated.append(
             {
@@ -225,7 +219,7 @@ def main() -> None:
 
     print(f"Exported {len(rows)} rows -> {out_path}")
     print(f"Also wrote {latest_path}")
-    print(f"Valid pool (>=30s & ended): {valid_pool_count}")
+    print(f"Valid pool (A+B, excludes test items): {valid_pool_count}")
     print("Tag counts:", tag_counts)
 
 
