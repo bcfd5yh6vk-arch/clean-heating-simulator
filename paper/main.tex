@@ -1,0 +1,84 @@
+\documentclass[stu,12pt,floatsintext]{apa7}
+
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage[style=apa,sortcites=true,sorting=nyt,backend=biber]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+\addbibresource{bibliography.bib}
+
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{booktabs}
+\usepackage{url}
+
+\title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
+\shorttitle{Coal-to-X Simulator}
+\author{Guo Hang}
+\duedate{[TODO: submission date]}
+\affiliation{PKUHS Stanford}
+\course{CTB 2025--26}
+\professor{[TODO: instructor name]}
+
+\abstract{%
+Northern China's coal-to-X transition cuts pollution, yet many rural North China households still struggle with winter heating costs as subsidies taper---while public debate often asks only whether clean heating is good. Prior work stays largely regional or policy-level and rarely offers household-data tools for village pathway choice. We built a village-level clean-heating transition simulation sandbox where users enter income, housing area, and heating costs, then compare coal-to-X routes across five rounds with AI debrief. In a pre/post study targeting [TODO: final $N$, planned 20+] participants (students and rural users via [TODO: recruitment channel/village]), we measure understanding of heating costs and subsidies, pathway preferences, perceived realism, and logged choices alongside energy burden, compliance, and emission indicators. We expect the sandbox to sharpen trade-off awareness and clarify which pathway best fits most households in one village.%
+}
+
+\begin{document}
+\maketitle
+
+\section{Method}
+
+\subsection{Participants}
+
+We targeted 20+ participants, including classmates and rural users [TODO: confirm village-cadre-assisted recruitment], plus organic traffic via the public deployment URL. [TODO: recruitment period, final $N$, target village name.] Simulator constants were additionally calibrated from prior field conversations in rural North China and from published literature [TODO: interview $N$ and whether reported separately].
+
+\subsection{Materials}
+
+We deployed a village-level clean-heating transition simulation sandbox for rural North China coal-to-X contexts (\url{https://www.clean-heating-simulator.com}; single-page web application hosted on Vercel). Participants needed no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they created a North China farm household profile: whole-household annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) were fixed.
+
+The simulation ran five turns: (1)~status quo choice (continue coal or prepare transition); (2)~compliance pressure (probabilistic home visit if coal continues, scaled by floor area and consecutive non-compliance); (3)~technology route (natural gas, ground-source heat pump, or air-source heat pump; retrofit and operating costs linearly scaled from a 100\,m\textsuperscript{2} baseline); (4)~income boost or energy saving (one of three options); (5)~subsidy phase-out (equivalent gas volume derived from initial coal spending, then a fixed per-m\textsuperscript{3} cost increase, followed by terminal adjudication). The interface displayed six live indicators---annual heating cost, income, surplus, legal compliance (0--100), emission score (0--100), and energy burden rate (\%)---plus a turn-by-turn narrative log. Terminal outcomes were successful transition, financial strain, or enforcement-related seizure.
+
+After the terminal state, participants could request an AI debrief: the browser submitted initial inputs, stepwise logs, and final state to a server endpoint; the server called the DeepSeek Chat Completions API (\texttt{deepseek-v4-flash}) with one of three human-authored structured system prompts (converted-farmer comparison, unconverted-farmer retrofit advice, or default analysis). The model was instructed to use only logged numbers and return three Markdown sections. If the API key was missing or the call failed, the interface showed an error---no curated mock script was served as fallback. The simulation engine itself was deterministic; economic, compliance, and emission constants were literature-calibrated, with some thresholds simplified as noted in-app.
+
+Each session was stored anonymously (UUID) in a Supabase database table (\texttt{simulation\_sessions}), including baseline inputs, turn-choice IDs and labels, event logs, terminal type and summary, final metrics, AI analysis text (if generated), and post-survey fields. Table~\ref{tab:material-boundaries} summarizes component boundaries.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Material Boundaries: Simulation Engine, AI Debrief, and Empirical Logging}
+    \label{tab:material-boundaries}
+    \begin{tabular}{@{}p{0.22\linewidth}p{0.28\linewidth}p{0.42\linewidth}@{}}
+        \toprule
+        Component & Nature & Note \\
+        \midrule
+        Five-turn engine & Deterministic algorithm with literature constants & Outcomes computed by rules and probability models, not by an LLM \\
+        AI debrief & Live DeepSeek API & Human-curated system prompts; output varies by session log; no mock fallback on failure \\
+        Questionnaires and logs & Empirical capture & Stored in Supabase for pre/post and pathway analysis \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection{Measures}
+
+Dependent variables fell into three layers. \textit{Survey cognition and attitudes:} for students and other non-farmers, pre Q1 and post Q2 (5-point Likert on understanding of coal-to-gas and heating costs), Q4 (strategy change if replayed), S1 (simulator helpfulness vs.\ text), recommendation intent, and AI helpfulness; for converted farmers, cost realism (F4), best- and worst-matching stages (F6--F7), and subsidy coping; for unconverted farmers, concerns (N2), attitude shift (N3), and preferred route (N4). \textit{Behavioral logs:} five-turn choices and terminal type. \textit{Simulated outcomes:} terminal energy burden, heating cost, surplus, compliance, emission score, and CO\textsubscript{2} tons.
+
+Open-ended post-survey text (e.g., student reflection, policy conflict detail, improvement suggestions, and negative AI feedback) will be analyzed via [TODO: coding scheme, e.g., dual-coder thematic analysis / codebook]; no codebook is fixed yet.
+
+\subsection{Design}
+
+We used a single-session exposure design combining pre/post questionnaires and behavioral logging. The intervention was completing one full sandbox run (optional AI debrief and post-survey).
+
+Independent variables were (a)~exposure to the live sandbox and self-selected pathway (technology, compliance branch, income/energy choices---not experimenter-assigned) and (b)~participant identity (student, converted farmer, unconverted farmer, other) as a between-subjects factor.
+
+Non-farmers completed a one-item pre-survey (Q1) before simulation and a approximately 2-minute post-survey after AI debrief. Converted and unconverted farmers skipped the pre-survey and only completed the post-survey (optional interview willingness; phone number collected only if interview was accepted).
+
+Comparison targets included within-person pre/post deltas (Q2$-$Q1, non-farmers only); distributions of burden, compliance, and emission by route and terminal type; and cross-household comparison within the same village (\texttt{village\_name}) [TODO: whether village-level aggregation is implemented]. Exported Supabase records will be analyzed with [TODO: paired pre/post test, e.g., Wilcoxon signed-rank or paired $t$-test with normality check] for Likert items; categorical outcomes (route, terminal type, attitude shift) via [TODO: descriptive frequencies / Fisher's exact / $\chi^2$]; and simulated metrics compared across routes and identities [TODO: specific grouping and tests]. Thematic coding will supplement quantitative findings [TODO: whether themes enter formal inferential models].
+
+\subsection{Procedure}
+
+Participation began with three first-screen layers: welcome (identity and background), context briefing, and informed consent. The consent screen stated that data were anonymous (no name; phone not collected by default), participation was voluntary, users could exit at any time, and data were used only to improve the simulator and for academic research (not advertising). The main application unlocked only after clicking Agree. The tool was a policy and livelihood decision simulation for public education, not a clinical, diagnostic, or therapeutic intervention.
+
+After consent, participants entered household data, completed the pre-survey when applicable, played through five simulation turns while viewing live indicators and logs, optionally requested AI debrief, and then completed the identity-tailored post-survey.
+
+\printbibliography
+
+\end{document}
