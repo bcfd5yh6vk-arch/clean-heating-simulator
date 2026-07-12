@@ -9,31 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600&family=Noto+Sans+SC:wght@200;300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
   :root{
-    /* ============ 主题色(默认: 🔵 克莱因蓝 IKB) ============
-       切换主题: 从 references/themes-swiss.md 复制对应的 :root 块
-       整体替换标有"主题色"注释的所有变量,其他散落的 var() 引用无需逐处改 */
-    --paper:#fafaf8;          /* 主底色: 高级灰白 */
-    --paper-rgb:250,250,248;
-    --ink:#0a0a0a;            /* 文字主色: 近黑 */
-    --ink-rgb:10,10,10;
-    --grey-1:#f0f0ee;         /* 浅灰底 */
-    --grey-2:#d4d4d2;         /* 中灰(分割线) */
-    --grey-3:#737373;         /* 暗灰(辅助文字) */
-    --accent:#002FA7;         /* 高亮色: 克莱因蓝 IKB */
-    --accent-rgb:0,47,167;
+    /* ============ 主题色 · 乡村清洁取暖 · 森林绿 ============ */
+    --paper:#f6f4ef;          /* 暖米白底 */
+    --paper-rgb:246,244,239;
+    --ink:#1a2318;            /* 深墨绿黑 */
+    --ink-rgb:26,35,24;
+    --grey-1:#eceae3;         /* 浅灰绿底 */
+    --grey-2:#c9c5bb;         /* 中灰(分割线) */
+    --grey-3:#6b7268;         /* 暗灰(辅助文字) */
+    --accent:#2f6b4f;         /* 森林绿 · 清洁取暖 / 乡村 */
+    --accent-rgb:47,107,79;
     --accent-on:#ffffff;      /* accent 上的反色文字 */
-    --accent-bright:#5B7BFF;  /* 暗底高亮: IKB 提亮版 */
+    --accent-bright:#5a9a78;  /* 暗底高亮: 浅绿 */
 
     /* ============ Carbon 文本角色 token (role-based,代替 opacity) ============
        亮底:  primary 主文 / secondary 次文 / helper 辅助 / placeholder 占位
        暗底:  inverse 自动反向 */
-    --text-primary:#0a0a0a;        /* = ink, 100% */
-    --text-secondary:#525252;      /* gray 70 */
-    --text-helper:#737373;         /* gray 60 */
-    --text-placeholder:#a3a3a3;    /* gray 40 */
+    --text-primary:#1a2318;        /* = ink, 100% */
+    --text-secondary:#3f4f44;      /* 灰绿 70 */
+    --text-helper:#6b7268;         /* gray 60 */
+    --text-placeholder:#a3a399;    /* gray 40 */
     --text-on-color:#ffffff;       /* accent/dark 反色 */
-    --border-subtle:#e0e0e0;       /* gray 20, 极细分隔 */
-    --border-strong:#a3a3a3;       /* gray 40, 强分隔 */
+    --border-subtle:#ddd9d0;       /* 暖灰分隔 */
+    --border-strong:#a8a399;       /* gray 40, 强分隔 */
 
     /* ============ 字体(跨主题固定) ============ */
     --sans:"Inter","Helvetica Neue","Helvetica","Arial","Segoe UI Variable","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -88,7 +86,7 @@
   body.low-power canvas.ascii-bg{display:none!important}
 
   /* ============ Deck 容器 + 翻页 ============ */
-  #deck{position:fixed;inset:0;width:10000vw;height:100vh;display:flex;flex-wrap:nowrap;transition:transform .9s cubic-bezier(.77,0,.175,1);z-index:10;will-change:transform}
+  #deck{position:fixed;inset:0;width:10000vw;height:100vh;display:flex;flex-wrap:nowrap;transition:transform .55s ease-out;z-index:10;will-change:transform}
   .slide{
     width:100vw;height:100vh;flex:0 0 100vw;
     position:relative;
@@ -604,7 +602,7 @@
   #overview .slide *{animation:none!important;transition:none!important}
 
   /* 统一卡片样式 token: card-fill (默认灰底 · 中性) + card-ink (反转高对比) + card-accent (单一焦点) */
-  .card-fill{background:#f5f5f4;border:0;color:var(--text-primary)}
+  .card-fill{background:var(--grey-1);border:0;color:var(--text-primary)}
   .card-ink{background:var(--ink);border:0;color:var(--paper)}
   .card-ink .t-meta,.card-ink .t-cat{color:rgba(255,255,255,.6)}
   .card-accent{background:var(--accent);border:0;color:var(--accent-on)}
@@ -640,7 +638,8 @@
 
   /* 全屏铺满模式 · 关闭 WebGL · 卡片即页面 */
   body.canvas-mode{background:var(--paper)}
-  body.canvas-mode canvas.bg{display:none !important}
+  body.canvas-mode canvas.bg,
+  body.canvas-mode canvas.ascii-bg{display:none !important}
   body.canvas-mode .slide{background:var(--paper);padding:0;align-items:stretch;justify-content:stretch}
   body.canvas-mode .slide.hero{background:var(--paper)}
 
@@ -659,7 +658,7 @@
   .slide.grey .canvas-card{background:var(--grey-1);color:var(--ink)}
   .slide.split .canvas-card{padding:0;flex-direction:row}
 
-  /* ============ ASCII 点阵呼吸场 · IKB 封面/封底专用 ============
+  /* ============ ASCII 点阵呼吸场 · 封面/封底（默认关闭，按 B 开启动画后可见） ============
      用法:在 .canvas-card(或 split .half.b-accent)内首位插入 <canvas class="ascii-bg" aria-hidden="true">.
      动画由本文件底部的 ASCII IIFE 自动启动,所有 canvas.ascii-bg 都会被扫到.
      其他内容靠 .canvas-card > *:not(.ascii-bg){z-index:1} 自动浮在上层. */
@@ -918,7 +917,7 @@
   .bar-tower .body-block.h-2{min-height:30vh}
   .bar-tower .body-block.h-3{min-height:38vh}
   .bar-tower .body-block.h-4{min-height:46vh}
-  /* 默认所有 KPI 塔统一为浅描边卡 — 不抢戏;只有 .b-accent 突出为 IKB */
+  /* 默认所有 KPI 塔统一为浅描边卡 — 不抢戏;只有 .b-accent 突出为 accent 绿 */
   .bar-tower .body-block{background:var(--paper);color:var(--ink);border:1px solid var(--grey-2)}
   .bar-tower .body-block.b-accent{background:var(--accent);color:var(--accent-on);border-color:var(--accent)}
   .bar-tower .lbl{font-family:var(--mono);font-size:max(14px,.82vw);letter-spacing:.16em;text-transform:uppercase;opacity:.65;margin-bottom:1vh}
@@ -1212,7 +1211,7 @@
     const KEY = 'guizang-ppt-low-power';
     const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const stored = localStorage.getItem(KEY);
-    window.__lowPowerMode = stored === '1' || (stored === null && reduced);
+    window.__lowPowerMode = stored === '0' ? false : true;
     function updateHint(){
       const hint = document.getElementById('hint');
       if(hint) hint.textContent = `← → Navigate · B ${window.__lowPowerMode ? 'Motion' : 'Static'} · ESC Index`;
@@ -1234,7 +1233,7 @@
 </script>
 
 <canvas id="bg-grid" class="bg"></canvas>
-<div id="hint">← → Navigate · B Static · ESC Index</div>
+<div id="hint">← → Navigate · B Motion · ESC Index</div>
 
 <div id="deck">
 
@@ -1739,9 +1738,9 @@ function bootGL(canvasId, fsSrc){
   // 读取 CSS 变量,把 accent 颜色塞进 shader
   function readAccent(){
     const cs = getComputedStyle(document.documentElement);
-    const hex = cs.getPropertyValue('--accent').trim() || '#002FA7';
+    const hex = cs.getPropertyValue('--accent').trim() || '#2f6b4f';
     const m = hex.match(/^#([0-9a-f]{6})$/i);
-    if(!m) return [0, 0.18, 0.65];
+    if(!m) return [0.18, 0.42, 0.31];
     const n = parseInt(m[1], 16);
     return [((n>>16)&255)/255, ((n>>8)&255)/255, (n&255)/255];
   }
@@ -1813,15 +1812,15 @@ function go(n){
   const isDark = el.classList.contains('dark') || el.classList.contains('accent');
   document.body.classList.toggle('dark-bg', isDark);
   darkMode = isDark;
-  if(window.__playSlide) setTimeout(()=>window.__playSlide(idx), 450);
-  lock=true;setTimeout(()=>lock=false,700);
+  if(window.__playSlide) setTimeout(()=>window.__playSlide(idx), 120);
+  lock=true;setTimeout(()=>lock=false,480);
 }
 
 /* =============== ESC 索引视图 =============== */
 let overviewOn=false;
 const ov=document.createElement('div');
 ov.id='overview';
-ov.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(250,250,248,.96);backdrop-filter:blur(12px);display:none;overflow-y:auto;padding:4vh 4vw';
+ov.style.cssText='position:fixed;inset:0;z-index:100;background:rgba(246,244,239,.96);backdrop-filter:blur(8px);display:none;overflow-y:auto;padding:4vh 4vw';
 document.body.appendChild(ov);
 
 function buildOverview(){
@@ -2618,12 +2617,12 @@ if(motion){
 </script>
 
 <script>
-/* ============== ASCII 点阵呼吸场 · IKB 封面/封底专用 ==============
-   sin/cos 二维噪声场驱动字符显隐,营造工业仪表板的"涌动呼吸"质感.
-   纯 canvas 2D, mix-blend-mode:screen 让字符在 IKB 底色上自然发亮.
+/* ============== ASCII 点阵呼吸场 · 封面/封底（canvas-mode 下不启动） ==============
+   sin/cos 二维噪声场驱动字符显隐;默认静态,按 B 开启动画后才会运行.
    用法:在需要呼吸场的容器(.canvas-card 或 split .half.b-accent)内首位插入
         <canvas class="ascii-bg" aria-hidden="true">,本脚本会自动扫描并启动. */
 (function(){
+  if(document.body.classList.contains('canvas-mode')) return;
   const canvases = [...document.querySelectorAll('canvas.ascii-bg')];
   if(!canvases.length) return;
 
