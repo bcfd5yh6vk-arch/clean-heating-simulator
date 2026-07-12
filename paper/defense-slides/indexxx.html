@@ -1485,38 +1485,29 @@
   </div>
 </section>
 
-<!-- ========== Slide 7 · Demo · S22 iframe ========== -->
-<section class="slide light" data-layout="S22" data-animate="image-hero">
-  <div class="canvas-card" style="padding:0;display:flex;flex-direction:column;overflow:hidden">
-    <!-- DEMO_URL: Change the iframe src below to your demo URL (default: live deployment) -->
-    <div data-anim="img" style="position:relative;flex:0 0 62%;overflow:hidden;background:var(--grey-1)">
-      <img data-image-slot="s22-hero-21x9" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%;opacity:0;pointer-events:none;z-index:0" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='9'/%3E" />
-      <iframe
-        id="demoFrame"
-        title="Clean Heating Simulator Demo"
-        src="https://www.clean-heating-simulator.com"
-        style="position:absolute;inset:0;width:100%;height:100%;border:0;background:#fafaf8;z-index:1"
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-      <div class="chrome-min" style="position:absolute;top:0;left:0;right:0;z-index:2;color:rgba(255,255,255,.95);padding:5.6vh 5vw 0;pointer-events:none">
-        <div class="l">07 · LIVE DEMO</div>
-        <div class="r">07 / 09</div>
-      </div>
-      <div data-anim="title-block" style="position:absolute;left:5vw;top:11vh;z-index:2;background:var(--paper);padding:2.4vh 2.4vw;max-width:44vw;pointer-events:none">
-        <div class="t-meta" style="margin-bottom:.8vh">Live sandbox · click to try</div>
-        <div style="font-family:var(--sans);font-weight:200;font-size:min(4.6vw,8vh);line-height:1;letter-spacing:-.035em;color:var(--text-primary)">clean-heating<br/>simulator.com</div>
-      </div>
+<!-- ========== Slide 7 · Discussion · S16 ========== -->
+<section class="slide light" data-layout="S16" data-animate="four-cards">
+  <div class="canvas-card">
+    <div class="chrome-min">
+      <div class="l">07 · DISCUSSION</div>
+      <div class="r">07 / 09</div>
     </div>
-    <div data-anim="kpi" class="image-hero-body nav-safe-bottom" style="padding:3vh 5vw 4vh;display:grid;grid-template-rows:auto auto;gap:2.4vh">
-      <div style="font-family:var(--sans);font-size:max(18px,1.2vw);line-height:1.55;font-weight:400;color:var(--text-primary);max-width:62ch">
-        Present this slide full-screen; if the iframe is blocked, open the URL directly.
-        <strong style="font-weight:600;color:var(--accent)">Change demo URL:</strong> search <code style="font-family:var(--mono);font-size:max(14px,.9vw)">DEMO_URL</code> or edit the <code style="font-family:var(--mono);font-size:max(14px,.9vw)">src</code> on <code style="font-family:var(--mono);font-size:max(14px,.9vw)">#demoFrame</code>.
+    <div style="flex:1;padding:0;display:grid;grid-template-rows:auto 1fr;gap:3vh">
+      <div data-anim="head" style="display:flex;flex-direction:column;gap:1vh">
+        <div class="t-meta">PRIOR WORK VS. THIS STUDY · PRACTICAL IMPLICATIONS</div>
+        <h2 class="h-xl-zh" style="font-family:var(--sans);font-weight:200;font-size:min(4.6vw,7.8vh);line-height:1.02;letter-spacing:-.03em;margin:0">From regional evidence<br/>to household-level decisions.</h2>
       </div>
-      <div class="image-hero-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:3vw">
-        <div style="display:flex;flex-direction:column;gap:.6vh"><div style="height:1px;background:var(--ink)"></div><div class="t-meta">Turns</div><div style="font-family:var(--sans);font-weight:200;font-size:min(4.2vw,7vh);line-height:.95">5</div><p style="font-size:max(16px,.95vw);color:var(--text-secondary);font-weight:400;margin:0;margin-top:auto">Tech · compliance · subsidies</p></div>
-        <div style="display:flex;flex-direction:column;gap:.6vh"><div style="height:1px;background:var(--ink)"></div><div class="t-meta">Metrics</div><div style="font-family:var(--sans);font-weight:200;font-size:min(4.2vw,7vh);line-height:.95">6</div><p style="font-size:max(16px,.95vw);color:var(--text-secondary);font-weight:400;margin:0;margin-top:auto">Heating cost · compliance · emissions…</p></div>
-        <div style="display:flex;flex-direction:column;gap:.6vh"><div style="height:1px;background:var(--accent)"></div><div class="t-meta">AI</div><div style="font-family:var(--sans);font-weight:200;font-size:min(4.2vw,7vh);line-height:.95;color:var(--accent)">ON</div><p style="font-size:max(16px,.95vw);color:var(--text-secondary);font-weight:400;margin:0;margin-top:auto">DeepSeek debrief (optional)</p></div>
+      <div data-anim="cards" style="display:grid;grid-template-columns:1fr 1fr;gap:2.4vw;align-items:stretch" class="nav-safe-bottom-tight">
+        <div style="border-top:2px solid var(--accent);padding-top:1.6vh;display:flex;flex-direction:column;gap:1.4vh">
+          <div class="t-meta">Difference from Prior Work</div>
+          <p style="font-family:var(--sans);font-size:max(20px,1.2vw);line-height:1.36;color:var(--text-primary);font-weight:400;margin:0">Earlier studies mainly prove pollution, carbon, and affordability at regional or policy level.</p>
+          <p style="font-family:var(--sans);font-size:max(17px,1.02vw);line-height:1.38;color:var(--text-secondary);font-weight:400;margin:0">This sandbox links household inputs with turn-by-turn route choices and terminal outcomes, so the question becomes which coal-to-X path fits this household, not only whether clean heating is good.</p>
+        </div>
+        <div style="border-top:2px solid var(--accent);padding-top:1.6vh;display:flex;flex-direction:column;gap:1.4vh">
+          <div class="t-meta">Practical Implications</div>
+          <p style="font-family:var(--sans);font-size:max(20px,1.2vw);line-height:1.36;color:var(--text-primary);font-weight:400;margin:0">Live Supabase data show awareness gains and usable route signals.</p>
+          <p style="font-family:var(--sans);font-size:max(17px,1.02vw);line-height:1.38;color:var(--text-secondary);font-weight:400;margin:0">Pre/post surveys: +1.50 understanding (11/14 improved). Farmer turn-3 choices split across gas and heat pumps (n=12). 17/21 would recommend the tool. This supports differentiated village planning, subsidy-risk previews, and public outreach before one common decision.</p>
+        </div>
       </div>
     </div>
   </div>
