@@ -1,4 +1,4 @@
-# 论文草稿（Abstract + Introduction + Methods）
+# 论文草稿（Abstract + Introduction + Literature Review + Methods）
 
 > 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
 > Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
@@ -28,7 +28,7 @@ Rural North China's coal-to-X transition has reduced coal pollution, but many ho
 
 本研究针对上述空白，设计、部署并评估了一款**华北村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com）。参与者代入一户农家，输入整户年收入、盈余、住房面积与煤改前年取暖费，在五个回合中做出是否转型、技术路线、增收或节能、应对补贴退坡等选择，并实时查看年取暖费、能耗负担率、法律合规度与排放达标度；终局后可请求基于操作日志的智能分析（真实大语言模型 API，非预设脚本文本）。模拟引擎本身为确定性算法，参数来自文献与公开统计校准。研究问题为：**户级交互模拟能否帮助不同身份用户（学生、已改/未改农户、政策与媒体关注者）更具体地理解清洁取暖在环保、成本与合规之间的权衡，并为村级路径比较提供可汇总的行为与态度证据？** 我们假设：（H1）农户用户能借助模拟识别与自身条件更匹配的煤改X路径；（H2）学生与其他非农户用户的取暖花费认知在试玩后有所提升。2026 年 6 月 28 日至 7 月 5 日，我们通过课程同学与公开链接招募 21 名全部完成样本（含河北省多地及北京市延庆农村用户），采用 pre/post 问卷与 Supabase 行为日志评估上述问题。
 
-本文结构如下：引言阐述问题背景与研究意义；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果与讨论将报告问卷、日志与模拟结局的发现及其对村级清洁取暖决策的启示（待写入）。
+本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果与讨论将报告问卷、日志与模拟结局的发现及其对村级清洁取暖决策的启示（待写入）。
 
 ### English
 
@@ -40,7 +40,47 @@ This study addresses that gap by designing, deploying, and evaluating a **villag
 
 Our research question is: *Can household-level interactive simulation help users with different identities—students, converted and unconverted farmers, and other stakeholders—understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?* We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs stored in Supabase.
 
-The remainder of the paper is organized as follows. The Method section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions (to be written).
+The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Method section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions (to be written).
+
+---
+
+## Literature Review · 文献综述
+
+### 中文
+
+#### 2.1 清洁取暖的环境收益
+
+既有研究首先证明了煤改气、煤改电等清洁取暖政策的环境意义。北方地区冬季清洁取暖规划提出，以替代农村散煤为核心路径，减少冬季燃煤污染并提高农村清洁取暖率。围绕华北农村的实证研究也表明，清洁取暖能够降低散煤燃烧带来的 PM₂.₅、PAHs 与碳排放压力；Yuan 等关于河北农村清洁取暖碳减排方法的研究，进一步说明了将煤炭替代转化为可量化排放指标的必要性。也就是说，清洁取暖不是单纯的生活方式改变，而是大气治理、碳减排和农村能源转型共同作用的政策工具。
+
+#### 2.2 可负担性、能源贫困与返煤风险
+
+第二类文献指出，环境收益背后存在明显的户级经济压力。Zhai 和 Li 对北方农村清洁取暖改造的综述强调，高运行成本、基础设施不稳和农户返煤风险是政策持续推进的主要问题。Liu 等关于清洁取暖成本的研究表明，气、电等清洁路径在没有补贴时可能显著高于散煤成本；Zhao 等关于农村清洁取暖经济可持续性的研究进一步指出，补贴退坡会提高家庭取暖支出，并扩大能源负担不可承受人群。He 等关于 2+26 城市清洁取暖转型的研究也记录了复烧散煤和补贴依赖问题。这些研究共同说明，清洁取暖能否持续，不仅取决于是否安装设备，也取决于农户是否能长期承担运行费用。
+
+#### 2.3 技术路线与村级决策问题
+
+第三类研究关注不同煤改X路径的技术差异。天然气、电采暖、空气源热泵、地源热泵和保温改造在一次性投入、运行费、舒适度、基础设施依赖和后期维护方面差异较大。Qin 和 Qiu 关于煤改气争议后的未来取暖路径讨论提醒，煤改气并不一定是所有地区的长期最优解；Zhai 和 Li 也强调，北方农村清洁取暖改造应结合地方资源、农户收入、建筑条件和运行成本进行因地制宜选择。由于许多农村地区的取暖路线往往在村级或乡镇层面集中推进，单一技术路线如果不能适配多数家庭，可能导致「政策完成」和「农户承受」之间的脱节。
+
+#### 2.4 政策模拟、AI 方法与本研究空白
+
+第四类文献为本研究提供方法启发。Wang 和 Gao 对公共政策仿真中的 agent-based modeling 研究进行了综述，说明个体行为可以通过模拟连接到群体或区域结果。Ma、Wang 和 Wang 关于 AGI+MAS 的研究则提示，人工智能和多智能体模拟可以被用于公共政策推演和复杂决策辅助。现有研究已经能证明清洁取暖的环境收益、识别能源负担风险，并讨论技术路线差异；但较少有面向普通农户和公众的交互工具，让用户输入自己的家庭收入、住房面积和取暖费，在同一界面里比较天然气、热泵、保温、补贴退坡和合规压力。本研究的贡献正是在这一空白上，将区域层面的政策问题转化为户级、回合制、可记录数据的村级决策沙盘。
+
+### English
+
+#### 2.1 Environmental benefits of clean heating
+
+Prior research first establishes the environmental importance of coal-to-X heating. National clean-heating policy framed rural scattered-coal replacement as a key route for reducing winter air pollution and raising clean-heating coverage in northern China. Empirical studies on rural clean heating also show that replacing coal can reduce PM₂.₅, PAH, and carbon-emission pressure. Yuan et al.'s work on carbon-emission reduction methods for rural clean heating in Hebei further shows why household heating choices need to be translated into measurable emission indicators. Clean heating is therefore not only a household technology change; it is also part of air-pollution control, carbon reduction, and rural energy transition.
+
+#### 2.2 Affordability, energy poverty, and coal rebound
+
+A second body of work shows that environmental benefits are accompanied by household-level cost pressure. Zhai and Li's review of clean-heating renovation in northern rural China identifies high operating costs, weak infrastructure, and coal rebound as key barriers. Liu and Mauzerall's research on clean-heating costs suggests that gas and electric routes can be much more expensive than coal without subsidies. Zhao et al. further show that subsidy withdrawal increases winter heating expenses and expands the share of households under affordability stress. He et al.'s study of the 2+26 region also documents coal rebound and subsidy dependence. Together, these studies show that a transition is not sustainable simply because equipment has been installed; households must also be able to afford daily winter use.
+
+#### 2.3 Technology routes and village-level choice
+
+A third set of studies focuses on differences among coal-to-X routes. Natural gas, electric heating, air-source heat pumps, ground-source heat pumps, and insulation retrofits differ in upfront cost, operating cost, comfort, infrastructure dependence, and maintenance. Qin and Qiu's discussion of future heating pathways after the coal-to-gas controversy suggests that coal-to-gas is not always the best long-term route. Zhai and Li similarly argue that clean-heating renovation should match local resources, household income, building conditions, and operating costs. Because many rural heating transitions are organized at village or township scale, a single route that does not fit most households can create a gap between policy completion and household affordability.
+
+#### 2.4 Policy simulation, AI methods, and this study's gap
+
+A fourth body of literature informs this study's method. Wang and Gao's review of agent-based modeling in public policy simulation shows how individual behavior can be linked to group or regional outcomes. Ma, Wang, and Wang's work on AGI+MAS suggests that AI and multi-agent simulation can support public-policy reasoning and complex decision-making. Existing studies can demonstrate environmental benefits, identify affordability risks, and compare technology routes, but few public-facing tools let farmers and other users enter household income, housing area, and heating costs, then compare gas, heat-pump, insulation, subsidy phase-out, and compliance pressure in one interface. This study fills that gap by turning a regional policy problem into a household-level, turn-based, data-recording village decision sandbox.
 
 ---
 
@@ -48,7 +88,7 @@ The remainder of the paper is organized as follows. The Method section describes
 
 ### 中文
 
-#### 2.1 研究作品（Artifact）
+#### 3.1 研究作品（Artifact）
 
 本研究部署并上线了一款面向华北农村煤改X语境的**村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com；静态单页 `index.html`，托管于 Vercel）。参与者无需注册账号：在首屏选择身份（学生、已煤改农户、未煤改农户或其他关心者）并填写基本背景后，进入华北农户家庭建档界面，输入**整户**年收入、年盈余、住房面积、常住人口与煤改前年取暖费用；固定设定为农民家庭、华北地区、初始取暖方式为散煤。
 
@@ -58,7 +98,7 @@ The remainder of the paper is organized as follows. The Method section describes
 
 每次会话以 UUID 匿名写入 Supabase 表 `simulation_sessions`，记录初始户级输入、各回合选择 ID/标签、逐步 `event_log`、终局类型与摘要、终局六项指标、智能分析全文（若成功生成）及 post-survey 字段。
 
-#### 2.2 研究设计（Design）
+#### 3.2 研究设计（Design）
 
 本研究采用**单次交互暴露 + 前后测问卷 + 行为日志**的混合设计，核心干预为完成一局完整模拟（含可选智能分析与 post-survey）。
 
@@ -70,11 +110,11 @@ The remainder of the paper is organized as follows. The Method section describes
 
 **比较指标**：同一参与者 pre/post 认知差值（Q2−Q1，限非农户）；post-survey 中推荐意愿、智能分析帮助程度、学生帮助程度、农户真实感/改造态度等比例；不同技术路线与终局类型下的负担率、合规度、排放分布；以及 A+B 有效样本池中完成模拟但未提交 post-survey 的路线选择与终局分布，用于分析行为路径和流失，而不混入问卷主分析。
 
-#### 2.3 知情同意（Consent）
+#### 3.3 知情同意（Consent）
 
 参与流程以三层首屏呈现：**欢迎页**（身份与背景）、**背景说明页**、**知情同意页**（`consentOverlay`）。同意页明确四项：数据**匿名**（不收集姓名；默认不收集手机号）、参与**自愿**（不点同意可关闭页面）、**随时可退出**、数据**仅用于改进模拟器与学术研究**（不作广告或商业用途）。用户点击「同意，进入模拟器」后方解锁主界面。本工具为**政策/生计决策模拟与公共教育**，不涉及临床诊断、治疗或心理干预；同意文案未使用医疗术语。
 
-#### 2.4 招募、编码与统计分析（Recruitment, coding & analysis）
+#### 3.4 招募、编码与统计分析（Recruitment, coding & analysis）
 
 **招募与样本构成**：实际 Supabase 原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至 7 月 5 日**。参与者包括学生、华北地区农民（已煤改农户与未煤改农户）以及其他关注农村清洁取暖议题的人士，主要通过课程同学、公开链接和线上转发自然招募；本研究仅分析网页会话、问卷与行为日志数据。53 条记录中，身份分布为学生 19 条、已煤改农户 15 条、未煤改农户 8 条、其他人士 11 条。
 
@@ -86,7 +126,7 @@ The remainder of the paper is organized as follows. The Method section describes
 
 ### English
 
-#### 2.1 Artifact
+#### 3.1 Artifact
 
 We deployed a **village-level clean-heating transition simulation sandbox** for rural North China coal-to-X contexts (https://www.clean-heating-simulator.com; single-page `index.html` on Vercel). Participants need no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they create a North China farm household profile: **whole-household** annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) are fixed.
 
@@ -96,7 +136,7 @@ After the terminal state, participants may request **AI debrief**: the browser P
 
 Each session is stored anonymously (UUID) in Supabase `simulation_sessions`, including baseline inputs, turn-choice IDs/labels, `event_log`, terminal type/summary, final metrics, AI analysis text (if generated), and post-survey fields.
 
-#### 2.2 Design
+#### 3.2 Design
 
 We used a **single-session exposure design** combining pre/post questionnaires and behavioral logging. The intervention was completing one full sandbox run (optional AI debrief and post-survey).
 
@@ -108,11 +148,11 @@ We used a **single-session exposure design** combining pre/post questionnaires a
 
 **Comparison targets:** within-person pre/post deltas (Q2−Q1, non-farmers only); post-survey rates for recommendation intent, AI helpfulness, student helpfulness, farmer realism, and farmer attitude shift; distributions of burden/compliance/emission by route and terminal type; and behavior logs from completed simulations that lacked post-survey, reported separately as route/dropout evidence rather than as survey evidence.
 
-#### 2.3 Consent
+#### 3.3 Consent
 
 Participation began with three first-screen layers: **welcome** (identity/background), **context briefing**, and **informed consent** (`consentOverlay`). The consent screen stated that data are **anonymous** (no name; phone not collected by default), participation is **voluntary**, users may **exit anytime**, and data are used **only to improve the simulator and for academic research** (not advertising). The main app unlocked only after clicking “Agree.” The tool is a **policy/livelihood decision simulation for public education**, not a clinical, diagnostic, or therapeutic intervention.
 
-#### 2.4 Recruitment, coding & analysis
+#### 3.4 Recruitment, coding & analysis
 
 **Recruitment and sample:** Supabase contained **53 raw session records** collected from **June 28 to July 5, 2026**. Participants included students, rural North China farmers (converted and unconverted), and other public users interested in rural clean heating, recruited through course outreach, a public URL, and online sharing. The raw identity distribution was 19 students, 15 converted farmers, 8 unconverted farmers, and 11 other users. The study analyzes only web sessions, survey responses, and behavioral logs.
 
