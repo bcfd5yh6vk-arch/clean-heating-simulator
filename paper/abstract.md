@@ -6,13 +6,15 @@
 
 ---
 
-## 中文（学术、一段）
+## Abstract · 摘要
+
+### 中文
 
 华北农村煤改气/煤改电减少了散煤污染，但补贴退坡后，不同家庭是否用得起、用得稳，仍取决于收入、住房面积、保温条件与取暖需求。本研究提出的问题是：户级交互模拟能否帮助用户理解清洁取暖在环保、成本和合规之间的权衡，并为村级煤改X路径选择提供证据。我们构建并上线了一个五回合清洁取暖转型沙盘，用户输入整户收入、住房面积和年取暖费，比较天然气、地源热泵、空气源热泵等路线，并查看能耗负担率、合规度和排放达标度。2026 年 6 月 28 日至 7 月 5 日，21 名参与者完成了模拟和 post-survey，其中 14 名非农户用户具备可配对的 pre/post 认知数据，11 人试玩后理解分数提高；17 人认为智能分析帮助较大；农户样本显示，不同家庭会走向不同技术路线或终局。结果表明，该沙盘能把抽象政策转化为可体验的家庭账本和路径比较，并支持将户级数据汇总为华北农村村级清洁取暖决策参考。
 
 ---
 
-## English（100–200 words, one paragraph)
+### English · Abstract
 
 Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.
 
@@ -30,7 +32,7 @@ Rural North China's coal-to-X transition has reduced coal pollution, but many ho
 
 本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果与讨论将报告问卷、日志与模拟结局的发现及其对村级清洁取暖决策的启示（待写入）。
 
-### English
+### English · Introduction
 
 Winter heating is a basic livelihood need in rural North China. Since the national push for clean winter heating in the mid-2010s, tens of millions of farm households have shifted from scattered coal to coal-to-X routes such as natural gas, electricity, or heat pumps. Regional air quality has improved and winter coal use has fallen sharply. Environmental gains, however, do not automatically translate into sustainable energy use for every family. Upfront retrofit costs and recurring winter bills are largely borne by households; as equipment and operating subsidies phase down by cohort, many face a familiar tension: households can afford the switch but not everyday use. Heating bills rise as a share of annual income, indoor temperatures drop, and some households return to coal or maintain dual fuel sources. Public debate often still asks only whether clean heating is "good," rather than which coal-to-X pathway fits diverse household budgets, housing conditions, and compliance constraints.
 
@@ -64,7 +66,7 @@ The remainder of the paper is organized as follows. The Literature Review summar
 
 第四类文献为本研究提供方法启发。Wang 和 Gao 对公共政策仿真中的 agent-based modeling 研究进行了综述，说明个体行为可以通过模拟连接到群体或区域结果。Ma、Wang 和 Wang 关于 AGI+MAS 的研究则提示，人工智能和多智能体模拟可以被用于公共政策推演和复杂决策辅助。现有研究已经能证明清洁取暖的环境收益、识别能源负担风险，并讨论技术路线差异；但较少有面向普通农户和公众的交互工具，让用户输入自己的家庭收入、住房面积和取暖费，在同一界面里比较天然气、热泵、保温、补贴退坡和合规压力。本研究的贡献正是在这一空白上，将区域层面的政策问题转化为户级、回合制、可记录数据的村级决策沙盘。
 
-### English
+### English · Literature Review
 
 #### 2.1 Environmental benefits of clean heating
 
@@ -124,7 +126,7 @@ A fourth body of literature informs this study's method. Wang and Gao's review o
 
 ---
 
-### English
+### English · Methodology
 
 #### 3.1 Artifact
 
@@ -179,7 +181,7 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 | 1 Hook | 减污 vs 用不起；误解＝只问「清洁取暖好不好」 |
 | 2 Gap | 宏观/政策层研究多，缺户级可交互村级选路工具 |
 | 3 Artifact | 华北村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
-| 4 Method | Supabase 53 条原始记录；A=21 主分析、B=7 路线/流失补充、C=25 排除 |
+| 4 Methodology | Supabase 53 条原始记录；A=21 主分析、B=7 路线/流失补充、C=25 排除 |
 | 5 Results / Conclusion | 14 个可配对非农户样本中 11 个理解提升；17/21 认为 AI 分析帮助较大；结论强调户级可负担性比较 |
 
 ---
