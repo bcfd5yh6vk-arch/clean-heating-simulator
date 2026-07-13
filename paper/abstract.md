@@ -1,8 +1,8 @@
-# 论文草稿（Abstract + Introduction + Literature Review + Methodology + Results + Discussion）
+# 论文草稿（Abstract + Introduction + Literature Review + Methodology + Results + Discussion + Conclusion）
 
 > 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
 > Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
-> Methodology、Results 与 Discussion 已按最新 Supabase 数据与 post-survey 结构更新。
+> Methodology、Results、Discussion 与 Conclusion 已按最新 Supabase 数据与 post-survey 结构更新。
 
 ---
 
@@ -30,7 +30,7 @@ Rural North China's coal-to-X transition has reduced coal pollution, but many ho
 
 本研究针对上述空白，设计、部署并评估了一款**华北村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com）。参与者代入一户农家，输入整户年收入、盈余、住房面积与煤改前年取暖费，在五个回合中做出是否转型、技术路线、增收或节能、应对补贴退坡等选择，并实时查看年取暖费、能耗负担率、法律合规度与排放达标度；终局后可请求基于操作日志的智能分析（真实大语言模型 API，非预设脚本文本）。模拟引擎本身为确定性算法，参数来自文献与公开统计校准。研究问题为：**户级交互模拟能否帮助不同身份用户（学生、已改/未改农户、政策与媒体关注者）更具体地理解清洁取暖在环保、成本与合规之间的权衡，并为村级路径比较提供可汇总的行为与态度证据？** 我们假设：（H1）农户用户能借助模拟识别与自身条件更匹配的煤改X路径；（H2）学生与其他非农户用户的取暖花费认知在试玩后有所提升。2026 年 6 月 28 日至 7 月 5 日，我们通过课程同学与公开链接招募 21 名全部完成样本（含河北省多地及北京市延庆农村用户），采用 pre/post 问卷与 Supabase 行为日志评估上述问题。
 
-本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果部分报告问卷、日志与模拟结局数据；讨论部分说明这些结果如何回应研究问题、H1/H2 以及研究不足。
+本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果部分报告问卷、日志与模拟结局数据；讨论部分说明这些结果如何回应研究问题、H1/H2 以及研究不足；结论部分总结贡献、意义、限制与未来方向。
 
 ### English · Introduction
 
@@ -42,7 +42,7 @@ This study addresses that gap by designing, deploying, and evaluating a **villag
 
 Our research question is: *Can household-level interactive simulation help users with different identities—students, converted and unconverted farmers, and other stakeholders—understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?* We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs stored in Supabase.
 
-The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. The Results section reports survey, log, and simulated-outcome data; the Discussion section explains how these results answer the research question and H1/H2, and identifies limitations.
+The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. The Results section reports survey, log, and simulated-outcome data; the Discussion section explains how these results answer the research question and H1/H2, and identifies limitations; the Conclusion summarizes contributions, implications, limitations, and future directions.
 
 ---
 
@@ -460,6 +460,62 @@ Third, the simulator uses a deterministic algorithm, literature constants, and s
 
 ---
 
+## Conclusion · 结论
+
+### 中文
+
+#### 6.1 总结结论
+
+本研究的结论是：华北农村清洁取暖转型不应被理解为“清洁取暖是否值得做”的单一判断，而应被理解为“哪一条煤改X路径在具体家庭条件下更可负担、更可维持、更能兼顾合规与减排”的比较问题。通过五回合交互式模拟器，本研究把收入、住房面积、初始取暖费、技术路线、补贴退坡、合规压力和终局指标放到同一个可操作场景中。结果显示，非农户用户的理解分数在试玩后提高，农户样本也产生了不同路线选择和不同终局。这说明该模拟器不仅是展示政策的网页工具，也可以作为收集户级数据、呈现路径差异和辅助村级比较的研究工具。
+
+这一结论并不是简单重复 Results 中的数字，而是将它们合并为一个更具体的判断：交互式模拟能够把宏观政策争论转化为家庭层面的成本、排放和合规权衡。它不能直接替代真实政策评估，但能够让参与者在低风险环境中提前看到不同选择的后果，从而把讨论从“煤改气/煤改电好不好”推进到“对这一户、这一村，哪种组合更合适”。
+
+#### 6.2 研究意义
+
+理论上，本研究补充了清洁取暖研究中较少被呈现的“户级可交互证据”。已有文献已经说明清洁取暖有环境收益，也指出补贴退坡、运行费用和返煤风险会影响政策持续性；本研究进一步展示了如何把这些变量整合进一个普通用户也能操作的村级决策沙盘。它把政策模拟从专家模型和区域统计，向公众可体验、可记录、可汇总的形式推进了一步。
+
+实践上，模拟器可以为村级或乡镇层面的清洁取暖路径选择提供前期试算。村庄不必只依赖单一技术路线或平均户数据，而可以收集多户家庭输入，比较不同路线下的能耗负担率、年取暖费、排放达标度和资金紧张风险。对农户而言，模拟器可以帮助他们在正式改造前理解补贴退坡、一次性投入和运行费用的长期影响；对学生和公众而言，它能把抽象能源政策转化为具体家庭账本，提高公共理解。
+
+#### 6.3 研究限制
+
+本研究的限制主要有三点。第一，样本量较小且自选进入，A 类问卷主分析只有 21 条，农户 A+B 有效样本为 14 条，因此不能代表整个华北农村，也不能作为强因果检验。第二，农户样本没有设置与非农户相同的 pre-survey，因此 H1 的证据主要来自行为日志、路线选择和 post-survey 反馈，而 H2 的 pre/post 证据更直接。第三，模拟器参数来自文献常数和简化规则，未能完全覆盖不同地区的气价、电价、补贴政策、房屋保温、设备效率和家庭劳动力差异。
+
+此外，AI 分析虽然被多数用户评价为 helpful，但它仍是基于会话日志生成的解释文本，不是独立的政策预测模型。它的作用更接近帮助用户理解自己的模拟路径，而不是替代专家评估或真实工程测算。
+
+#### 6.4 未来方向
+
+未来研究可以从四个方向推进。第一，扩大样本，特别是增加不同县域、不同收入水平、不同住房条件的农户样本，并将线上模拟与线下访谈结合。第二，为农户用户加入 pre/post 结构，测量他们在模拟前后对天然气、空气源热泵、地源热泵、保温改造等路径的偏好变化，从而更严格检验 H1。第三，改进模型参数，将地方气价、电价、补贴规则、建筑保温等级和设备维护成本做成可切换参数，提高模拟器对具体村庄的适配度。第四，把多户模拟结果汇总为村级 dashboard，让村干部、农户和研究者能同时看到不同路线下的负担分布、减排结果和资金紧张风险。
+
+更长期来看，本研究可以发展为一个参与式政策模拟工具：农户输入自己的家庭条件，村庄汇总不同家庭的模拟结果，政策制定者据此比较不同煤改X组合的可负担性和环境收益。这样，清洁取暖决策就不只是从上到下完成一项改造任务，而是以户级数据为基础，寻找更公平、更稳定、更能持续减排的村级转型路径。
+
+### English · Conclusion
+
+#### 6.1 Summary of conclusions
+
+This study concludes that rural North China's clean-heating transition should not be framed as a single question of whether clean heating is worthwhile. It should be treated as a comparative question: which coal-to-X pathway is affordable, maintainable, compliant, and emission-reducing under specific household conditions? Through a five-turn interactive simulator, this study placed income, floor area, initial heating cost, technology route, subsidy phase-out, compliance pressure, and terminal metrics into one usable scenario. The results show improved understanding among non-farmer users after the session, and farmer records produced different route choices and terminal outcomes. The simulator is therefore not only a policy-display website; it can also serve as a research tool for collecting household-level data, showing pathway differences, and supporting village comparison.
+
+This conclusion is not a simple repetition of the numerical results. It synthesizes them into a more specific claim: interactive simulation can translate macro-level policy debate into household-level trade-offs among cost, emissions, and compliance. It cannot replace real policy evaluation, but it lets users preview the consequences of different choices in a low-risk setting, moving the question from “Is coal-to-X good?” to “Which combination fits this household and this village?”
+
+#### 6.2 Implications
+
+Theoretically, this study adds a form of household-level interactive evidence that is still uncommon in clean-heating research. Existing studies have shown environmental benefits and identified risks from subsidy withdrawal, operating cost, and coal rebound. This project shows how those variables can be integrated into a village decision sandbox that ordinary users can operate, and whose outputs can be recorded and aggregated. It moves policy simulation one step from expert models and regional statistics toward public-facing, experiential, and data-generating tools.
+
+Practically, the simulator can support early-stage trial calculation for village- or township-level pathway choice. Villages do not need to rely only on one technology route or average household data; they can collect household inputs and compare energy burden, annual heating cost, emission score, and financial-strain risk across routes. For farmers, the simulator can make subsidy phase-out, upfront retrofit cost, and long-term operating cost visible before formal retrofit decisions. For students and the wider public, it turns abstract energy policy into a concrete household budget and improves public understanding.
+
+#### 6.3 Limitations
+
+This study has three main limitations. First, the sample is small and self-selected. The A-record main survey sample has 21 cases, and the farmer A+B valid pool has 14 cases, so the findings cannot represent all rural North China and should not be treated as strong causal evidence. Second, farmer users did not complete the same pre-survey as non-farmer users. As a result, H1 relies mainly on behavioral logs, route choices, and post-survey feedback, while H2 has more direct pre/post evidence. Third, the simulator uses literature constants and simplified rules, so it cannot fully capture local gas prices, electricity prices, subsidy rules, building insulation, equipment efficiency, or household labor differences.
+
+In addition, although most users rated the AI debrief as helpful, it remains an explanatory text generated from session logs, not an independent policy prediction model. Its role is closer to helping users interpret their own simulated pathway than to replacing expert assessment or real engineering calculation.
+
+#### 6.4 Future directions
+
+Future research can move in four directions. First, it should expand the sample, especially farmer participants from different counties, income levels, housing conditions, and heating histories, and combine online simulation with offline interviews. Second, it should add a pre/post structure for farmer users, measuring whether their preferences among natural gas, air-source heat pumps, ground-source heat pumps, and insulation change after simulation; this would provide a stronger test of H1. Third, the model should improve parameter flexibility by allowing local gas prices, electricity prices, subsidy rules, insulation levels, and maintenance costs to be adjusted for specific villages. Fourth, multi-household results could be aggregated into a village dashboard showing burden distribution, emission outcomes, and financial-strain risk under different routes.
+
+In the longer term, this project can develop into a participatory policy-simulation tool. Farmers would enter their household conditions, villages would aggregate simulated results, and policymakers could compare affordability and environmental outcomes across coal-to-X combinations. Clean-heating decisions would then become less about completing a top-down retrofit task and more about using household-level evidence to find fairer, more stable, and more durable village transition pathways.
+
+---
+
 ### 材料边界说明（Simulation vs. AI）
 
 | 组件 | 性质 | 说明 |
@@ -479,16 +535,18 @@ Third, the simulator uses a deterministic algorithm, literature constants, and s
 | 3 Artifact | 华北村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
 | 4 Methodology | Supabase 53 条原始记录；A=21 主分析、B=7 路线/流失补充、C=25 排除 |
 | 5 Results / Discussion | 14 个可配对非农户样本中 11 个理解提升；17/21 认为 AI 分析帮助较大；讨论强调户级可负担性比较、H1/H2 对应与研究不足 |
+| 6 Conclusion | 总结核心结论、研究意义、限制与未来方向 |
 
 ---
 
-## 数据、Methodology、Results 与 Discussion 完成状态
+## 数据、Methodology、Results、Discussion 与 Conclusion 完成状态
 
 - 招募与清洗：已写入 53 条原始记录、A/B/C 分类、2026-06-28—07-05 时间范围。
 - 主分析：A 类 21 条全部完成样本；B 类 7 条仅用于路线/流失分析；C 类 25 条排除。
 - 问卷：已按最新 post-survey 结构更新，不再设置强制开放题编码。
 - 结果：已写入 pre/post 描述、Wilcoxon signed-rank 秩和口径、频数/百分比、路线与终局指标表。
 - 讨论：已写入结果含义、研究问题与 H1/H2 对应、村级决策含义和不足。
+- 结论：已写入总结结论、研究意义、限制与未来方向。
 - 联系字段：农户手机号仅作为自愿后续联系字段，不进入分析。
 
 ---
