@@ -1,11 +1,3 @@
-# 论文草稿（Abstract + Introduction + Literature Review + Methodology + Results + Discussion + Conclusion）
-
-> 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
-> Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
-> Methodology、Results、Discussion 与 Conclusion 已按最新 Supabase 数据与 post-survey 结构更新。
-
----
-
 ## Abstract · 摘要
 
 ### 中文
@@ -513,51 +505,3 @@ In addition, although most users rated the AI debrief as helpful, it remains an 
 Future research can move in four directions. First, it should expand the sample, especially farmer participants from different counties, income levels, housing conditions, and heating histories, and combine online simulation with offline interviews. Second, it should add a pre/post structure for farmer users, measuring whether their preferences among natural gas, air-source heat pumps, ground-source heat pumps, and insulation change after simulation; this would provide a stronger test of H1. Third, the model should improve parameter flexibility by allowing local gas prices, electricity prices, subsidy rules, insulation levels, and maintenance costs to be adjusted for specific villages. Fourth, multi-household results could be aggregated into a village dashboard showing burden distribution, emission outcomes, and financial-strain risk under different routes.
 
 In the longer term, this project can develop into a participatory policy-simulation tool. Farmers would enter their household conditions, villages would aggregate simulated results, and policymakers could compare affordability and environmental outcomes across coal-to-X combinations. Clean-heating decisions would then become less about completing a top-down retrofit task and more about using household-level evidence to find fairer, more stable, and more durable village transition pathways.
-
----
-
-### 材料边界说明（Simulation vs. AI）
-
-| 组件 | 性质 | 说明 |
-|------|------|------|
-| 五回合模拟引擎 | 确定性算法 + 文献常数 | 非 LLM 预测；结局由规则与概率模型计算 |
-| 智能分析 | 真实 DeepSeek API | 系统提示词为人工 curated；输出随会话日志变化；失败无 mock 回退 |
-| 问卷与日志 | 实证采集 | 存入 Supabase，供 pre/post 与路径分析 |
-
----
-
-## 五步对照（Abstract）
-
-| 步 | 内容要点 |
-|---|---|
-| 1 Hook | 减污 vs 用不起；误解＝只问「清洁取暖好不好」 |
-| 2 Gap | 宏观/政策层研究多，缺户级可交互村级选路工具 |
-| 3 Artifact | 华北村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
-| 4 Methodology | Supabase 53 条原始记录；A=21 主分析、B=7 路线/流失补充、C=25 排除 |
-| 5 Results / Discussion | 14 个可配对非农户样本中 11 个理解提升；17/21 认为 AI 分析帮助较大；讨论强调户级可负担性比较、H1/H2 对应与研究不足 |
-| 6 Conclusion | 总结核心结论、研究意义、限制与未来方向 |
-
----
-
-## 数据、Methodology、Results、Discussion 与 Conclusion 完成状态
-
-- 招募与清洗：已写入 53 条原始记录、A/B/C 分类、2026-06-28—07-05 时间范围。
-- 主分析：A 类 21 条全部完成样本；B 类 7 条仅用于路线/流失分析；C 类 25 条排除。
-- 问卷：已按最新 post-survey 结构更新，不再设置强制开放题编码。
-- 结果：已写入 pre/post 描述、Wilcoxon signed-rank 秩和口径、频数/百分比、路线与终局指标表。
-- 讨论：已写入结果含义、研究问题与 H1/H2 对应、村级决策含义和不足。
-- 结论：已写入总结结论、研究意义、限制与未来方向。
-- 联系字段：农户手机号仅作为自愿后续联系字段，不进入分析。
-
----
-
-## 依据来源（仓库内）
-
-- `spec.md` — 研究问题、假设、MVP 描述
-- `research/summary.md` — 背景、争论、研究空白
-- `midterm/midterm-pre.txt` / `midterm/midterm-draft.md` — 方法与设计
-- `index.html` — 前后测问卷、行为日志、模拟指标、知情同意、Supabase 同步
-- `api/chat.js` — DeepSeek API 与系统提示词
-- `algori_spec.md` — 模拟算法与常数口径
-- `templates/indexChinese.html` — 目标样本与反馈设计说明
-- `paper/defense-slides/indexxx.html` — 答辩叙事、研究问题与文献缺口
