@@ -8,13 +8,13 @@
 
 ## 中文（学术、一段）
 
-保定等北方农村在煤改气/煤改电推进中显著减污，但补贴退坡后不少农户仍面临「改得起、用不起」的取暖负担，而公共讨论常简化为「清洁取暖好不好」，忽视村级路径选择与户级收入、房屋与取暖费差异的匹配。既有研究多停留在区域统计或宏观政策评估，缺少基于真实户级数据、可交互比较不同煤改X路线（天然气/热泵等）并纳入合规与补贴冲击的村级决策工具。本研究构建了一个保定村级清洁取暖转型模拟沙盘：用户输入整户年收入、住房面积与年取暖费用，在五个回合中体验技术路线、补贴退坡与合规压力，并获智能分析反馈。研究采用试玩前后简短问卷与行为日志的 pre/post 设计，目标招募 **[TODO: 最终样本量，计划 20+]** 名参与者（含同学及 **[TODO: 具体村庄/招募渠道]** 农村用户），因变量包括煤改气/取暖花费认知、路径偏好、策略调整意向、模型真实感，以及模拟中的能耗负担率、合规度与排放达标度等指标。我们预期，户级交互模拟能提升对「环保—成本—合规」权衡的理解，并有助于识别 **[TODO: 目标村庄名]** 多数家庭更可行的煤改X路径。
+华北农村在煤改气/煤改电推进中显著减污，但补贴退坡后不少农户仍面临「改得起、用不起」的取暖负担，而公共讨论常简化为「清洁取暖好不好」，忽视村级路径选择与户级收入、房屋与取暖费差异的匹配。既有研究多停留在区域统计或宏观政策评估，缺少基于真实户级数据、可交互比较不同煤改X路线（天然气/热泵等）并纳入合规与补贴冲击的村级决策工具。本研究构建了一个华北村级清洁取暖转型模拟沙盘：用户输入整户年收入、住房面积与年取暖费用，在五个回合中体验技术路线、补贴退坡与合规压力，并获智能分析反馈。研究采用试玩前后简短问卷与行为日志的 pre/post 设计，于 2026 年 6 月 28 日至 7 月 5 日通过课程同学与公开链接招募，共纳入 **21** 名全部完成样本（7 名学生、7 名其他关注者、4 名已煤改农户、3 名未煤改农户）；农村参与者主要来自**河北省**（张家口、石家庄、保定清苑、元氏、威县等地）及**北京市**延庆区（珠窝村）。因变量包括煤改气/取暖花费认知、路径偏好、策略调整意向、模型真实感，以及模拟中的能耗负担率、合规度与排放达标度等指标。我们预期，户级交互模拟能提升对「环保—成本—合规」权衡的理解，并有助于识别华北农村（以河北省为主）多数家庭更可行的煤改X路径。
 
 ---
 
 ## English（≤120 words, one paragraph)
 
-Northern China's coal-to-X transition cuts pollution, yet many Baoding households still struggle with winter heating costs as subsidies taper—while public debate often asks only whether clean heating is good. Prior work stays largely regional or policy-level and rarely offers household-data tools for village pathway choice. We built a Baoding village clean-heating transition simulation sandbox where users enter income, housing area, and heating costs, then compare coal-to-X routes across five rounds with AI debrief. In a pre/post study targeting [TODO: final N, planned 20+] participants (students and rural users via [TODO: recruitment channel/village]), we measure understanding of heating costs and subsidies, pathway preferences, perceived realism, and logged choices alongside energy burden, compliance, and emission indicators. We expect the sandbox to sharpen trade-off awareness and clarify which pathway best fits most households in one village.
+Northern China's coal-to-X transition cuts pollution, yet many rural North China households still struggle with winter heating costs as subsidies taper—while public debate often asks only whether clean heating is good. Prior work stays largely regional or policy-level and rarely offers household-data tools for village pathway choice. We built a village-level clean-heating transition simulation sandbox where users enter income, housing area, and heating costs, then compare coal-to-X routes across five rounds with AI debrief. In a pre/post study, 21 participants completed simulation and post-survey (June 28–July 5, 2026): classmates and rural users from Hebei Province and Beijing municipalities, recruited via course outreach and a public URL. We measure understanding of heating costs and subsidies, pathway preferences, perceived realism, and logged choices alongside energy burden, compliance, and emission indicators. We expect the sandbox to sharpen trade-off awareness and clarify which pathway best fits most households across North China villages.
 
 ---
 
@@ -113,15 +113,15 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 | 1 Hook | 减污 vs 用不起；误解＝只问「清洁取暖好不好」 |
 | 2 Gap | 宏观/政策层研究多，缺户级可交互村级选路工具 |
 | 3 Artifact | 保定村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
-| 4 Method | pre/post 问卷 + 行为日志；N≈20+；认知/偏好/真实感 + 负担率/合规/排放 |
+| 4 Method | pre/post 问卷 + 行为日志；N=21（2026-06-28—07-05）；认知/偏好/真实感 + 负担率/合规/排放 |
 | 5 Expected | *We expect…*（无数字） |
 
 ---
 
 ## 待补 `[TODO]`（Abstract + Methods 共用）
 
-1. **最终样本量与招募时段**（目前只有「20+」目标）
-2. **具体村庄名**与村干部协助招募是否已落实
+~~1. **最终样本量与招募时段**~~（Abstract 已写入：N=21，2026-06-28—07-05，河北省/北京市）
+~~2. **具体村庄/招募渠道**~~（Abstract 已写入：课程同学 + 公开链接；农村样本以河北省为主、含北京市延庆）
 3. **Pre/post 配对检验**与分类变量检验的具体选择
 4. **开放题 codebook** 与编码流程（单人/双人、一致性检验）
 5. **村级多户汇总分析**是否已实施
