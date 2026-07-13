@@ -1,8 +1,8 @@
-# 论文草稿（Abstract + Introduction + Literature Review + Methodology）
+# 论文草稿（Abstract + Introduction + Literature Review + Methodology + Results）
 
 > 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
 > Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
-> Methodology 已按最新 Supabase 数据与 post-survey 结构更新。Results / Discussion 尚未写入。
+> Methodology 与 Results 已按最新 Supabase 数据与 post-survey 结构更新。Discussion 尚未写入。
 
 ---
 
@@ -30,7 +30,7 @@ Rural North China's coal-to-X transition has reduced coal pollution, but many ho
 
 本研究针对上述空白，设计、部署并评估了一款**华北村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com）。参与者代入一户农家，输入整户年收入、盈余、住房面积与煤改前年取暖费，在五个回合中做出是否转型、技术路线、增收或节能、应对补贴退坡等选择，并实时查看年取暖费、能耗负担率、法律合规度与排放达标度；终局后可请求基于操作日志的智能分析（真实大语言模型 API，非预设脚本文本）。模拟引擎本身为确定性算法，参数来自文献与公开统计校准。研究问题为：**户级交互模拟能否帮助不同身份用户（学生、已改/未改农户、政策与媒体关注者）更具体地理解清洁取暖在环保、成本与合规之间的权衡，并为村级路径比较提供可汇总的行为与态度证据？** 我们假设：（H1）农户用户能借助模拟识别与自身条件更匹配的煤改X路径；（H2）学生与其他非农户用户的取暖花费认知在试玩后有所提升。2026 年 6 月 28 日至 7 月 5 日，我们通过课程同学与公开链接招募 21 名全部完成样本（含河北省多地及北京市延庆农村用户），采用 pre/post 问卷与 Supabase 行为日志评估上述问题。
 
-本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果与讨论将报告问卷、日志与模拟结局的发现及其对村级清洁取暖决策的启示（待写入）。
+本文结构如下：引言阐述问题背景与研究意义；文献综述整理清洁取暖的环境收益、经济负担、技术路线与政策模拟研究；方法描述已上线作品、研究设计、知情同意与招募分析计划；结果部分报告问卷、日志与模拟结局数据；讨论部分将说明这些结果对村级清洁取暖决策的启示（待写入）。
 
 ### English · Introduction
 
@@ -42,7 +42,7 @@ This study addresses that gap by designing, deploying, and evaluating a **villag
 
 Our research question is: *Can household-level interactive simulation help users with different identities—students, converted and unconverted farmers, and other stakeholders—understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?* We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs stored in Supabase.
 
-The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions (to be written).
+The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. The Results section reports survey, log, and simulated-outcome data; the Discussion section will address implications for village clean-heating decisions (to be written).
 
 ---
 
@@ -164,6 +164,218 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 
 ---
 
+## Results · 结果
+
+### 中文
+
+本节只报告数据与表格，不解释结果成因。问卷主分析使用 A 类全部完成样本（n=21）；路线、终局与流失相关结果使用 A+B 有效模拟样本池（n=28）。
+
+#### 4.1 样本清洗与身份分布
+
+| 数据组 | 定义 | n | 用途 |
+|---|---|---:|---|
+| 原始 Supabase 记录 | 2026-06-28 至 2026-07-05 全部 `simulation_sessions` | 53 | 清洗前总体 |
+| A_全部完成 | 已结束模拟并提交 post-survey；学生/其他还需 Q1/Q2 齐全 | 21 | 问卷主分析 |
+| B_有效未完成 | ≥30 秒且已结束模拟，但缺 post-survey 或非农户 Q1/Q2 不完整 | 7 | 路线、终局、流失补充 |
+| C_需清洗 | 短时/未结束记录或测试项 | 25 | 排除正式分析 |
+
+| 身份 | 原始记录 | A_全部完成 | B_有效未完成 | C_需清洗 |
+|---|---:|---:|---:|---:|
+| 学生 | 19 | 7 | 0 | 12 |
+| 其他关注者 | 11 | 7 | 0 | 4 |
+| 已煤改农户 | 15 | 4 | 5 | 6 |
+| 未煤改农户 | 8 | 3 | 2 | 3 |
+| 合计 | 53 | 21 | 7 | 25 |
+
+#### 4.2 H2 相关结果：非农户 pre/post 理解分数
+
+学生与其他关注者的 Q1/Q2 使用 1–5 点 Likert 分数；A 类非农户样本中共有 14 条可配对记录。
+
+| 组别 | n | pre 均值 | post 均值 | 平均变化 | 提高 | 不变 | 下降 | pre 中位数 | post 中位数 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 非农户合计 | 14 | 2.07 | 3.57 | +1.50 | 11 | 3 | 0 | 2 | 4 |
+| 学生 | 7 | 1.71 | 3.86 | +2.14 | 6 | 1 | 0 | 1 | 4 |
+| 其他关注者 | 7 | 2.43 | 3.29 | +0.86 | 5 | 2 | 0 | 2 | 4 |
+
+Wilcoxon signed-rank 口径下，去除 3 个零差值后，11 个非零差值均为正，正秩和 W+ = 66，负秩和 W- = 0。
+
+#### 4.3 Post-survey 频数结果
+
+| 指标 | 样本 | 结果 |
+|---|---:|---|
+| 推荐意愿 | 21 | 非常愿意 8；比较愿意 8；很愿意 1；一般 2；不太愿意/较不愿意 2 |
+| AI 分析有用性 | 21 | 帮助较大 17；帮助较小 2；完全没帮助 2 |
+| 学生认为模拟器相对文章/讲解的帮助 | 7 | 非常有帮助 2；比较有帮助 5 |
+| 其他关注者认为“同一方案在不同家庭中差异”的帮助 | 7 | 非常有帮助 2；比较有帮助 4；几乎没帮助 1 |
+
+| “最大影响因素”选项 | n |
+|---|---:|
+| 取暖费用突然上涨（如补贴退坡） | 8 |
+| 不同技术路线的一次性投入差异 | 5 |
+| 入户了解 / 执法合规压力 | 5 |
+| 改气/改电要先掏一大笔钱 | 2 |
+| 年盈余变负、家庭现金流紧张 | 1 |
+
+| 学生认为最难承受的负担（多选，n=7） | 提及次数 |
+|---|---:|
+| 补贴减少后的气价/电价 | 6 |
+| 每年取暖运行费 | 5 |
+| 改造设备一次性费用 | 4 |
+| 不敢开暖气、室温不够 | 3 |
+| 房屋保温差导致用能高 | 3 |
+
+#### 4.4 H1 相关结果：农户样本、路线与终局
+
+A+B 有效样本池中共有 14 条农户记录，其中 9 条到达第 3 回合技术路线选择，5 条未到达技术路线选择并进入执法/处罚类终局。
+
+| 农户有效样本池 | n |
+|---|---:|
+| 已煤改农户 | 9 |
+| 未煤改农户 | 5 |
+| 合计 | 14 |
+
+| 第 3 回合技术路线（农户 A+B，n=9） | n |
+|---|---:|
+| 天然气 | 4 |
+| 地源热泵 | 3 |
+| 空气源热泵 | 2 |
+
+| 农户终局类型（农户 A+B，n=14） | n |
+|---|---:|
+| 成功转型 | 5 |
+| 被处罚 / 执法命中 | 5 |
+| 资金紧张 | 4 |
+
+| 农户 post-survey 指标（A 类农户，n=7） | 结果 |
+|---|---|
+| 已煤改农户是否减少取暖支出（n=4） | 有 3；没有 1 |
+| 已煤改农户模型取暖费真实感（n=4） | 大体接近但细节有差别 2；偏差较大 1；差不多 1 |
+| 未煤改农户改造顾虑（多选，n=3） | 改造要掏太多钱 3；以后每年取暖费太高 3；设备坏了没人修 1；希望按自家节奏自愿决定 1 |
+| 未煤改农户模拟后态度（n=3） | 更愿意尽快改造 2；更犹豫、担心每年花费太高 1 |
+| 未煤改农户优先路径（n=3） | 先观望 1；先观望并听建议做保暖 1；wait 1 |
+
+#### 4.5 路线、终局与模拟指标
+
+下表使用 A+B 有效模拟样本池。技术路线表仅统计到达第 3 回合的 20 条记录；终局表统计全部 28 条有效模拟。
+
+| 技术路线（A+B，到达第 3 回合） | n | 终局分布 | 终局能耗负担率中位数 | 终局取暖费中位数 | 合规度中位数 | 排放达标度中位数 | CO₂ 中位数 |
+|---|---:|---|---:|---:|---:|---:|---:|
+| 天然气 | 11 | 成功转型 11 | 2.4% | 2388 元 | 100 | 94 | 1.2 吨 |
+| 空气源热泵 | 6 | 成功转型 4；资金紧张 2 | 3.5% | 2461 元 | 100 | 83 | 2.6 吨 |
+| 地源热泵 | 3 | 成功转型 1；资金紧张 2 | 4.9% | 2867 元 | 100 | 92 | 3.1 吨 |
+
+| 终局类型（A+B，n=28） | n | 路线分布 | 终局能耗负担率中位数 | 终局取暖费中位数 | 排放达标度中位数 | CO₂ 中位数 |
+|---|---:|---|---:|---:|---:|---:|
+| 成功转型 | 16 | 天然气 11；空气源热泵 4；地源热泵 1 | 2.5% | 2420 元 | 93 | 1.5 吨 |
+| 被处罚 / 执法命中 | 8 | 未到达第 3 回合 8 | 4.8% | 2300 元 | 63 | 4.7 吨 |
+| 资金紧张 | 4 | 空气源热泵 2；地源热泵 2 | 8.3% | 2952 元 | 85.5 | 3.3 吨 |
+
+### English · Results
+
+This section reports data and tables only. The main questionnaire analysis uses fully complete A records (n=21). Route, terminal-outcome, and dropout-related results use the A+B valid simulation pool (n=28).
+
+#### 4.1 Sample cleaning and identity distribution
+
+| Data group | Definition | n | Use |
+|---|---|---:|---|
+| Raw Supabase records | All `simulation_sessions` from June 28 to July 5, 2026 | 53 | Pre-cleaning dataset |
+| A_fully complete | Ended simulation and submitted post-survey; student/other records also required Q1/Q2 | 21 | Main questionnaire analysis |
+| B_valid incomplete | At least 30 seconds and ended simulation, but missing post-survey or non-farmer Q1/Q2 | 7 | Route, terminal-outcome, and dropout supplement |
+| C_cleaning/excluded | Short/unfinished records or test entries | 25 | Excluded from formal analysis |
+
+| Identity | Raw records | A_fully complete | B_valid incomplete | C_excluded |
+|---|---:|---:|---:|---:|
+| Student | 19 | 7 | 0 | 12 |
+| Other stakeholder | 11 | 7 | 0 | 4 |
+| Converted farmer | 15 | 4 | 5 | 6 |
+| Unconverted farmer | 8 | 3 | 2 | 3 |
+| Total | 53 | 21 | 7 | 25 |
+
+#### 4.2 H2-related result: non-farmer pre/post understanding
+
+Q1/Q2 used a 1–5 Likert scale. The A-record non-farmer sample contained 14 paired observations.
+
+| Group | n | Pre mean | Post mean | Mean change | Improved | Same | Decreased | Pre median | Post median |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Non-farmers total | 14 | 2.07 | 3.57 | +1.50 | 11 | 3 | 0 | 2 | 4 |
+| Students | 7 | 1.71 | 3.86 | +2.14 | 6 | 1 | 0 | 1 | 4 |
+| Other stakeholders | 7 | 2.43 | 3.29 | +0.86 | 5 | 2 | 0 | 2 | 4 |
+
+Under the Wilcoxon signed-rank setup, after removing three zero differences, all 11 nonzero paired differences were positive; W+ = 66 and W- = 0.
+
+#### 4.3 Post-survey frequency results
+
+| Measure | Sample | Result |
+|---|---:|---|
+| Recommendation intent | 21 | Very willing 8; fairly willing 8; willing 1; neutral 2; less/not willing 2 |
+| AI debrief helpfulness | 21 | Helpful 17; slightly helpful 2; not helpful 2 |
+| Student-rated simulator helpfulness versus articles/explanations | 7 | Very helpful 2; fairly helpful 5 |
+| Other stakeholders: help understanding household variation under the same policy | 7 | Very helpful 2; fairly helpful 4; almost not helpful 1 |
+
+| “Biggest impact” option | n |
+|---|---:|
+| Sudden heating-cost increase, such as subsidy phase-out | 8 |
+| Upfront-cost differences across technology routes | 5 |
+| Home visits / enforcement and compliance pressure | 5 |
+| Coal-to-gas/electricity requires a large upfront payment | 2 |
+| Annual surplus turns negative / household cash-flow strain | 1 |
+
+| Student-reported hardest burden (multiple choice, n=7) | Mentions |
+|---|---:|
+| Gas/electricity price after subsidy reduction | 6 |
+| Annual operating heating cost | 5 |
+| One-time equipment retrofit cost | 4 |
+| Not daring to turn on heat / insufficient indoor temperature | 3 |
+| Poor insulation raising energy use | 3 |
+
+#### 4.4 H1-related result: farmer routes and outcomes
+
+The A+B valid pool included 14 farmer records. Nine reached turn-3 technology-route selection; five did not reach turn 3 and ended in enforcement/seizure outcomes.
+
+| Farmer valid pool | n |
+|---|---:|
+| Converted farmers | 9 |
+| Unconverted farmers | 5 |
+| Total | 14 |
+
+| Turn-3 route choice among farmers (A+B, n=9) | n |
+|---|---:|
+| Natural gas | 4 |
+| Ground-source heat pump | 3 |
+| Air-source heat pump | 2 |
+
+| Farmer terminal outcome (A+B, n=14) | n |
+|---|---:|
+| Successful transition | 5 |
+| Enforcement/seizure | 5 |
+| Financial strain | 4 |
+
+| Farmer post-survey measure (A-record farmers, n=7) | Result |
+|---|---|
+| Converted farmers: reduced heating spending (n=4) | Yes 3; no 1 |
+| Converted farmers: cost realism (n=4) | Mostly close with detail differences 2; large deviation 1; about the same 1 |
+| Unconverted farmers: retrofit concerns (multiple choice, n=3) | Upfront cost 3; annual heating cost 3; equipment repair 1; voluntary household pace 1 |
+| Unconverted farmers: attitude after simulation (n=3) | More willing to retrofit soon 2; more hesitant due annual cost 1 |
+| Unconverted farmers: preferred path (n=3) | Wait and see 1; wait and improve insulation after advice 1; “wait” 1 |
+
+#### 4.5 Routes, terminal outcomes, and simulated metrics
+
+The route table uses the 20 A+B records that reached turn 3. The terminal-outcome table uses all 28 valid completed simulations.
+
+| Technology route (A+B, reached turn 3) | n | Terminal outcomes | Median final burden | Median final heating cost | Median compliance | Median emission score | Median CO₂ |
+|---|---:|---|---:|---:|---:|---:|---:|
+| Natural gas | 11 | Successful transition 11 | 2.4% | 2388 yuan | 100 | 94 | 1.2 tons |
+| Air-source heat pump | 6 | Successful transition 4; financial strain 2 | 3.5% | 2461 yuan | 100 | 83 | 2.6 tons |
+| Ground-source heat pump | 3 | Successful transition 1; financial strain 2 | 4.9% | 2867 yuan | 100 | 92 | 3.1 tons |
+
+| Terminal outcome (A+B, n=28) | n | Route distribution | Median final burden | Median final heating cost | Median emission score | Median CO₂ |
+|---|---:|---|---:|---:|---:|---:|
+| Successful transition | 16 | Natural gas 11; air-source heat pump 4; ground-source heat pump 1 | 2.5% | 2420 yuan | 93 | 1.5 tons |
+| Enforcement/seizure | 8 | Did not reach turn 3: 8 | 4.8% | 2300 yuan | 63 | 4.7 tons |
+| Financial strain | 4 | Air-source heat pump 2; ground-source heat pump 2 | 8.3% | 2952 yuan | 85.5 | 3.3 tons |
+
+---
+
 ### 材料边界说明（Simulation vs. AI）
 
 | 组件 | 性质 | 说明 |
@@ -186,12 +398,12 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 
 ---
 
-## 数据与 Methodology 完成状态
+## 数据、Methodology 与 Results 完成状态
 
 - 招募与清洗：已写入 53 条原始记录、A/B/C 分类、2026-06-28—07-05 时间范围。
 - 主分析：A 类 21 条全部完成样本；B 类 7 条仅用于路线/流失分析；C 类 25 条排除。
 - 问卷：已按最新 post-survey 结构更新，不再设置强制开放题编码。
-- 统计：已写入 pre/post 描述、Wilcoxon signed-rank 敏感性检验、频数/百分比、Fisher exact 探索性比较。
+- 结果：已写入 pre/post 描述、Wilcoxon signed-rank 秩和口径、频数/百分比、路线与终局指标表。
 - 联系字段：农户手机号仅作为自愿后续联系字段，不进入分析。
 
 ---
