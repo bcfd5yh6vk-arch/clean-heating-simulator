@@ -168,7 +168,7 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 
 ### 中文
 
-本节只报告数据与表格，不解释结果成因。问卷主分析使用 A 类全部完成样本（n=21）；路线、终局与流失相关结果使用 A+B 有效模拟样本池（n=28）。
+本节报告数据、表格与描述性结果结论，不解释结果成因。问卷主分析使用 A 类全部完成样本（n=21）；路线、终局与流失相关结果使用 A+B 有效模拟样本池（n=28）。
 
 #### 4.1 样本清洗与身份分布
 
@@ -187,6 +187,8 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 | 未煤改农户 | 8 | 3 | 2 | 3 |
 | 合计 | 53 | 21 | 7 | 25 |
 
+描述性结果结论：清洗后的数据同时保留了非农户 pre/post 样本（用于 H2）和农户有效模拟样本（用于 H1 路线与终局观察），但两类证据的样本池不同，后续表格分别报告。
+
 #### 4.2 H2 相关结果：非农户 pre/post 理解分数
 
 学生与其他关注者的 Q1/Q2 使用 1–5 点 Likert 分数；A 类非农户样本中共有 14 条可配对记录。
@@ -198,6 +200,8 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 | 其他关注者 | 7 | 2.43 | 3.29 | +0.86 | 5 | 2 | 0 | 2 | 4 |
 
 Wilcoxon signed-rank 口径下，去除 3 个零差值后，11 个非零差值均为正，正秩和 W+ = 66，负秩和 W- = 0。
+
+描述性结果结论：与 H2 相对应，学生与其他非农户用户的理解分数在试玩后整体上移；14 个可配对样本中没有下降记录，学生组的平均变化幅度高于其他关注者组。
 
 #### 4.3 Post-survey 频数结果
 
@@ -223,6 +227,8 @@ Wilcoxon signed-rank 口径下，去除 3 个零差值后，11 个非零差值�
 | 改造设备一次性费用 | 4 |
 | 不敢开暖气、室温不够 | 3 |
 | 房屋保温差导致用能高 | 3 |
+
+描述性结果结论：post-survey 显示，多数完成用户愿意推荐模拟器并认为 AI 分析有帮助；学生与其他关注者的反馈集中在补贴退坡、运行费、一次性投入和家庭差异这些与 H2 所说“取暖花费认知”相关的项目上。
 
 #### 4.4 H1 相关结果：农户样本、路线与终局
 
@@ -254,6 +260,8 @@ A+B 有效样本池中共有 14 条农户记录，其中 9 条到达第 3 回合
 | 未煤改农户模拟后态度（n=3） | 更愿意尽快改造 2；更犹豫、担心每年花费太高 1 |
 | 未煤改农户优先路径（n=3） | 先观望 1；先观望并听建议做保暖 1；wait 1 |
 
+描述性结果结论：与 H1 相对应，农户有效样本中出现了天然气、地源热泵和空气源热泵三类路线选择，也出现了成功转型、被处罚和资金紧张三类终局；农户 post-survey 同时记录了取暖费真实感、改造顾虑和模拟后的路径态度。
+
 #### 4.5 路线、终局与模拟指标
 
 下表使用 A+B 有效模拟样本池。技术路线表仅统计到达第 3 回合的 20 条记录；终局表统计全部 28 条有效模拟。
@@ -270,9 +278,11 @@ A+B 有效样本池中共有 14 条农户记录，其中 9 条到达第 3 回合
 | 被处罚 / 执法命中 | 8 | 未到达第 3 回合 8 | 4.8% | 2300 元 | 63 | 4.7 吨 |
 | 资金紧张 | 4 | 空气源热泵 2；地源热泵 2 | 8.3% | 2952 元 | 85.5 | 3.3 吨 |
 
+描述性结果结论：A+B 有效模拟池把不同路线与终局下的能耗负担率、取暖费、合规度、排放达标度和 CO₂ 指标并列呈现，形成了研究问题所需的户级路线比较数据。
+
 ### English · Results
 
-This section reports data and tables only. The main questionnaire analysis uses fully complete A records (n=21). Route, terminal-outcome, and dropout-related results use the A+B valid simulation pool (n=28).
+This section reports data, tables, and descriptive result conclusions only. The main questionnaire analysis uses fully complete A records (n=21). Route, terminal-outcome, and dropout-related results use the A+B valid simulation pool (n=28).
 
 #### 4.1 Sample cleaning and identity distribution
 
@@ -291,6 +301,8 @@ This section reports data and tables only. The main questionnaire analysis uses 
 | Unconverted farmer | 8 | 3 | 2 | 3 |
 | Total | 53 | 21 | 7 | 25 |
 
+Descriptive result conclusion: after cleaning, the dataset contains a non-farmer paired pre/post sample for H2 and a valid farmer simulation pool for H1, but these two forms of evidence come from different analytic pools and are therefore reported separately below.
+
 #### 4.2 H2-related result: non-farmer pre/post understanding
 
 Q1/Q2 used a 1–5 Likert scale. The A-record non-farmer sample contained 14 paired observations.
@@ -302,6 +314,8 @@ Q1/Q2 used a 1–5 Likert scale. The A-record non-farmer sample contained 14 pai
 | Other stakeholders | 7 | 2.43 | 3.29 | +0.86 | 5 | 2 | 0 | 2 | 4 |
 
 Under the Wilcoxon signed-rank setup, after removing three zero differences, all 11 nonzero paired differences were positive; W+ = 66 and W- = 0.
+
+Descriptive result conclusion: in relation to H2, student and other non-farmer understanding scores moved upward after the sandbox session; none of the 14 paired records decreased, and the mean change was larger among students than among other stakeholders.
 
 #### 4.3 Post-survey frequency results
 
@@ -327,6 +341,8 @@ Under the Wilcoxon signed-rank setup, after removing three zero differences, all
 | One-time equipment retrofit cost | 4 |
 | Not daring to turn on heat / insufficient indoor temperature | 3 |
 | Poor insulation raising energy use | 3 |
+
+Descriptive result conclusion: post-survey responses show that most completed users would recommend the simulator and rated the AI debrief as helpful; student and other-stakeholder responses clustered around subsidy phase-out, operating cost, upfront cost, and household variation, which are the cost-understanding items named in H2.
 
 #### 4.4 H1-related result: farmer routes and outcomes
 
@@ -358,6 +374,8 @@ The A+B valid pool included 14 farmer records. Nine reached turn-3 technology-ro
 | Unconverted farmers: attitude after simulation (n=3) | More willing to retrofit soon 2; more hesitant due annual cost 1 |
 | Unconverted farmers: preferred path (n=3) | Wait and see 1; wait and improve insulation after advice 1; “wait” 1 |
 
+Descriptive result conclusion: in relation to H1, the valid farmer pool recorded three route choices (natural gas, ground-source heat pump, and air-source heat pump) and three terminal outcomes (successful transition, enforcement/seizure, and financial strain); farmer post-surveys also recorded cost realism, retrofit concerns, and post-simulation route attitudes.
+
 #### 4.5 Routes, terminal outcomes, and simulated metrics
 
 The route table uses the 20 A+B records that reached turn 3. The terminal-outcome table uses all 28 valid completed simulations.
@@ -373,6 +391,8 @@ The route table uses the 20 A+B records that reached turn 3. The terminal-outcom
 | Successful transition | 16 | Natural gas 11; air-source heat pump 4; ground-source heat pump 1 | 2.5% | 2420 yuan | 93 | 1.5 tons |
 | Enforcement/seizure | 8 | Did not reach turn 3: 8 | 4.8% | 2300 yuan | 63 | 4.7 tons |
 | Financial strain | 4 | Air-source heat pump 2; ground-source heat pump 2 | 8.3% | 2952 yuan | 85.5 | 3.3 tons |
+
+Descriptive result conclusion: the A+B valid simulation pool places burden rate, heating cost, compliance, emission score, and CO₂ side by side across routes and terminal outcomes, giving the household-level pathway-comparison data required by the research question.
 
 ---
 
