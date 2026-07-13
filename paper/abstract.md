@@ -1,8 +1,8 @@
-# 论文草稿（Abstract + Introduction + Literature Review + Methods）
+# 论文草稿（Abstract + Introduction + Literature Review + Methodology）
 
 > 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
 > Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
-> Methods 已按最新 Supabase 数据与 post-survey 结构更新。Results / Discussion 尚未写入。
+> Methodology 已按最新 Supabase 数据与 post-survey 结构更新。Results / Discussion 尚未写入。
 
 ---
 
@@ -40,7 +40,7 @@ This study addresses that gap by designing, deploying, and evaluating a **villag
 
 Our research question is: *Can household-level interactive simulation help users with different identities—students, converted and unconverted farmers, and other stakeholders—understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?* We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs stored in Supabase.
 
-The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Method section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions (to be written).
+The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions (to be written).
 
 ---
 
@@ -84,7 +84,7 @@ A fourth body of literature informs this study's method. Wang and Gao's review o
 
 ---
 
-## Methods · 研究方法
+## Methodology · 研究方法
 
 ### 中文
 
@@ -184,7 +184,7 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 
 ---
 
-## 数据与 Methods 完成状态
+## 数据与 Methodology 完成状态
 
 - 招募与清洗：已写入 53 条原始记录、A/B/C 分类、2026-06-28—07-05 时间范围。
 - 主分析：A 类 21 条全部完成样本；B 类 7 条仅用于路线/流失分析；C 类 25 条排除。
