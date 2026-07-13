@@ -2,7 +2,7 @@
 
 > 华北村级清洁取暖转型模拟沙盘 · CTB 研究论文  
 > Abstract 已按 RQ / 方法 / 关键结果 / 结论更新。  
-> Methods 中仍有 `[TODO: …]` 待补。Results / Discussion 尚未写入。
+> Methods 已按最新 Supabase 数据与 post-survey 结构更新。Results / Discussion 尚未写入。
 
 ---
 
@@ -50,7 +50,7 @@ The remainder of the paper is organized as follows. The Method section describes
 
 #### 2.1 研究作品（Artifact）
 
-本研究部署并上线了一款面向保定煤改X语境的**村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com；静态单页 `index.html`，托管于 Vercel）。参与者无需注册账号：在首屏选择身份（学生、已煤改农户、未煤改农户或其他关心者）并填写基本背景后，进入华北农户家庭建档界面，输入**整户**年收入、年盈余、住房面积、常住人口与煤改前年取暖费用；固定设定为农民家庭、华北地区、初始取暖方式为散煤。
+本研究部署并上线了一款面向华北农村煤改X语境的**村级清洁取暖转型模拟沙盘**（https://www.clean-heating-simulator.com；静态单页 `index.html`，托管于 Vercel）。参与者无需注册账号：在首屏选择身份（学生、已煤改农户、未煤改农户或其他关心者）并填写基本背景后，进入华北农户家庭建档界面，输入**整户**年收入、年盈余、住房面积、常住人口与煤改前年取暖费用；固定设定为农民家庭、华北地区、初始取暖方式为散煤。
 
 模拟共五个回合：（1）现状抉择（继续散煤或准备转型）；（2）合规压力（若继续散煤则触发基于住房面积与连续违规次数的概率性入户了解）；（3）技术路线（天然气、地源热泵或空气源热泵，改造成本与运行费按 100㎡ 基准线性缩放）；（4）增收或节能（提高收入、节约取暖或保暖修缮三选一）；（5）补贴退坡（由初始散煤费用换算等价气量并按固定退坡幅度增加年取暖费，随后终局判定）。界面实时显示六项指标——年取暖费、年收入、年盈余、法律合规度（0–100）、排放达标度（0–100）与能耗负担率（%）——以及回合叙事日志；终局分为成功转型、资金紧张或被处罚三类。
 
@@ -64,11 +64,11 @@ The remainder of the paper is organized as follows. The Method section describes
 
 **自变量（IV）**：（a）干预暴露——是否完成上线模拟器的一局体验（含所走路径：技术路线、合规分支、增收/节能选择等，由参与者自行决策，非实验者分配）；（b）参与者身份——学生、已煤改农户、未煤改农户或其他（组间因素）；（c）农户子样本中，已改/未改身份进一步区分问卷题项。
 
-**因变量（DV）**分三层：（1）**认知与态度（问卷）**——非农户/学生：pre 测 Q1（5 点 Likert，煤改气/取暖花费了解程度）与 post 测 Q2（同维度了解程度）、Q4（若重来是否改变策略）、S1（模拟器相对文章的帮助程度）、推荐意愿与智能分析有用性；已煤改农户：取暖费变化真实感（F4）、最像/最不像环节（F6–F7）、补贴应对方式等；未煤改农户：改气顾虑（N2）、改气态度变化（N3）、优先路径（N4）。（2）**行为与路径（日志）**——五回合选项、终局类型、各阶段指标轨迹。（3）**模拟结局指标**——终局能耗负担率、年取暖费、年盈余、合规度、排放达标度与 CO₂ 吨数。
+**因变量（DV）**分三层：（1）**认知与态度（问卷）**——学生与其他非农户用户：pre 测 Q1（5 点 Likert，煤改气/取暖花费了解程度）与 post 测 Q2（同维度了解程度）、Q4（若重来是否改变策略）、学生专属 S1（模拟器相对文章/讲解的帮助程度）、其他关注者 O2（理解同一方案在不同家庭中差异的帮助程度）、推荐意愿与智能分析有用性；已煤改农户：当前取暖方式、改后年取暖费区间、是否减少取暖支出、模型取暖费变化真实感（F4）、最像/最不像环节（F6–F7）、补贴变少后的应对方式等；未煤改农户：当前取暖方式、改造顾虑（N2）、模拟后的改造态度（N3）、自家优先路径（N4）。（2）**行为与路径（日志）**——五回合选项、是否到达技术路线回合、天然气/地源热泵/空气源热泵选择、终局类型、各阶段指标轨迹。（3）**模拟结局指标**——终局能耗负担率、年取暖费、年盈余、合规度、排放达标度与 CO₂ 吨数。
 
-**Pre/post 结构**：学生与其他非农户在点击「开始模拟」前完成 **pre-survey 单题**（Q1）；模拟与智能分析结束后填写 **post-survey**（约 2 分钟，身份定制题 + 共用结尾题）。**已煤改/未煤改农户流程跳过 pre-survey**，仅保留 post-survey（含开放反馈与可选访谈意向；手机号仅在自愿接受访谈时选填）。
+**Pre/post 结构**：学生与其他非农户在点击「开始模拟」前完成 **pre-survey 单题**（Q1）；模拟与智能分析结束后填写 **post-survey**（约 2 分钟，身份定制题 + 共用结尾题）。**已煤改/未煤改农户流程跳过 pre-survey**，仅保留 post-survey。最新 post-survey 以单选、多选和 Likert 题为主；开放文本不作为强制核心量表，仅在选择「其他」时补充说明，或在农户自愿同意后续联系时填写手机号。手机号仅用于联系意向记录，不进入统计分析。
 
-**比较指标**：同一参与者 pre/post 认知差值（Q2−Q1，限非农户）；不同技术路线与终局类型下的负担率/合规/排放分布；同一村庄（`village_name` 字段）内多户输入的路径汇总对比 **[TODO: 村级汇总分析是否已实施]**。
+**比较指标**：同一参与者 pre/post 认知差值（Q2−Q1，限非农户）；post-survey 中推荐意愿、智能分析帮助程度、学生帮助程度、农户真实感/改造态度等比例；不同技术路线与终局类型下的负担率、合规度、排放分布；以及 A+B 有效样本池中完成模拟但未提交 post-survey 的路线选择与终局分布，用于分析行为路径和流失，而不混入问卷主分析。
 
 #### 2.3 知情同意（Consent）
 
@@ -76,11 +76,11 @@ The remainder of the paper is organized as follows. The Method section describes
 
 #### 2.4 招募、编码与统计分析（Recruitment, coding & analysis）
 
-**招募**：目标样本 **20 人以上**（`templates/indexChinese.html`），包括课程同学与 **[TODO: 是否已通过村干部协助招募]** 的农村参与者；同时通过公开 URL 自然访问收集会话。**[TODO: 实际招募起止日期、最终 N、目标村庄名]**。模拟器参数另以保定、张家口、石家庄等地前期访谈与文献校准 **[TODO: 访谈样本量与是否单独写入 Methods]**。
+**招募与样本构成**：实际 Supabase 原始记录共 **53** 条，时间为 **2026 年 6 月 28 日至 7 月 5 日**。参与者包括学生、华北地区农民（已煤改农户与未煤改农户）以及其他关注农村清洁取暖议题的人士，主要通过课程同学、公开链接和线上转发自然招募；本研究仅分析网页会话、问卷与行为日志数据。53 条记录中，身份分布为学生 19 条、已煤改农户 15 条、未煤改农户 8 条、其他人士 11 条。
 
-**开放题编码**：post-survey 中的开放文本（如学生 S3 反思、其他用户 O4–O5、非农户 Q_end2 改进建议、Q3「其他」补充、智能分析负面反馈等）计划采用 **[TODO: 编码方案，如双人 thematic coding / codebook 条目]** 归纳主题，用于解释定量结果与模型迭代，**尚未在仓库中固定 codebook**。
+**数据清洗与分组**：研究使用 `export_simulation_sessions.py` 对 Supabase 导出的 `simulation_sessions` 进行标注。清洗规则为：（a）`identity_detail` 为「测试」或 `Lawted 村` 的记录标记为测试项并排除；（b）会话时长不足 30 秒或没有 `ended_at` 的记录视为未形成有效体验，进入 C 类清洗组；（c）会话时长 ≥30 秒且已结束模拟、但缺少 post-survey 或非农户 Q1/Q2 不完整的记录进入 B 类「有效未完成」；（d）已结束模拟并提交 post-survey 的农户记录，或已结束模拟、提交 post-survey 且 Q1/Q2 齐全的学生/其他用户记录，进入 A 类「全部完成」。最终得到 **A 类 21 条**（主分析样本：学生 7、其他 7、已煤改农户 4、未煤改农户 3）、**B 类 7 条**（均为农户，完成模拟但未提交 post-survey，用于路线/终局/流失分析）、**C 类 25 条**（23 条短时或未结束记录、2 条测试记录，排除出正式分析）。
 
-**统计分析**：定量数据自 Supabase 导出后，对 Likert 题计算 **[TODO: pre/post 配对检验，如 Wilcoxon signed-rank 或配对 t 检验，需说明正态性检验]**；分类变量（路径选择、终局类型、态度变化）采用 **[TODO: 描述性频数 / Fisher 精确检验 / χ² 等]**；模拟指标（负担率、合规度、排放分）按技术路线与身份分组报告 **[TODO: 具体分组与检验]**。开放题编码结果以主题频次辅助讨论，**不进入 [TODO: 是否计划] 正式 inferential 模型**。
+**统计与分析口径**：A 类 21 条作为问卷主分析样本；B 类 7 条仅作为「完成模拟但未提交 post-survey」的路线与流失补充，不用于满意度、认知变化或 AI 帮助度比例。非农户 A 类样本中有 14 条可配对 Q1/Q2，报告 pre/post 理解分数的平均变化、提高人数比例，并使用 Wilcoxon signed-rank test 作为小样本、有序量表的敏感性检验。Post-survey 分类题以频数与百分比报告：包括智能分析帮助程度、推荐意愿、学生对模拟器帮助程度、已煤改农户真实感、未煤改农户态度变化与优先路径。行为日志按 A+B 有效样本池报告：技术路线选择在到达回合 3 的样本中合并同义标签后统计（天然气、空气源热泵、地源热泵），终局类型在全部有效模拟中统计（成功转型 / 被处罚 / 资金紧张），并按身份和路线报告能耗负担率、合规度、排放达标度的中位数或均值。由于样本量小且自选进入，分类变量不做强因果推断；如需比较身份组或路线组，仅使用 Fisher exact test 或描述性差异作为探索性结果。开放文本不做正式主题编码，仅在选择「其他」的补充说明中摘录少量匿名例子；电话号码字段只用于联系意向，不导入分析表。
 
 ---
 
@@ -88,7 +88,7 @@ The remainder of the paper is organized as follows. The Method section describes
 
 #### 2.1 Artifact
 
-We deployed a **village-level clean-heating transition simulation sandbox** for Baoding coal-to-X contexts (https://www.clean-heating-simulator.com; single-page `index.html` on Vercel). Participants need no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they create a North China farm household profile: **whole-household** annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) are fixed.
+We deployed a **village-level clean-heating transition simulation sandbox** for rural North China coal-to-X contexts (https://www.clean-heating-simulator.com; single-page `index.html` on Vercel). Participants need no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they create a North China farm household profile: **whole-household** annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) are fixed.
 
 The simulation runs five turns: (1) status quo choice (continue coal or prepare transition); (2) compliance pressure (probabilistic home visit if coal continues, scaled by floor area and consecutive non-compliance); (3) technology route (natural gas, ground-source heat pump, or air-source heat pump; retrofit and operating costs linearly scaled from a 100 m² baseline); (4) income boost or energy saving (one of three options); (5) subsidy phase-out (equivalent gas volume derived from initial coal spending, then a fixed per-m³ cost increase, followed by terminal adjudication). The interface displays six live indicators—annual heating cost, income, surplus, legal compliance (0–100), emission score (0–100), and energy burden rate (%—plus a turn-by-turn narrative log. Terminal outcomes are successful transition, financial strain, or enforcement-related seizure.
 
@@ -102,11 +102,11 @@ We used a **single-session exposure design** combining pre/post questionnaires a
 
 **Independent variables (IVs):** (a) exposure to the live sandbox and self-selected pathway (technology, compliance branch, income/energy choices—not experimenter-assigned); (b) participant identity (student, converted farmer, unconverted farmer, other) as a between-subjects factor.
 
-**Dependent variables (DVs):** (1) **Survey cognition/attitudes**—for students and other non-farmers: pre Q1 and post Q2 (5-point Likert on understanding of coal-to-gas and heating costs), Q4 (strategy change if replayed), S1 (simulator helpfulness vs. text), recommendation intent, and AI helpfulness; for converted farmers: cost realism (F4), best/worst-matching stages (F6–F7), subsidy coping; for unconverted farmers: concerns (N2), attitude shift (N3), preferred route (N4). (2) **Behavioral logs**—five-turn choices and terminal type. (3) **Simulated outcomes**—terminal energy burden, heating cost, surplus, compliance, emission score, and CO₂ tons.
+**Dependent variables (DVs):** (1) **Survey cognition/attitudes**—for students and other non-farmers: pre Q1 and post Q2 (5-point Likert understanding of coal-to-gas and heating costs), Q4 (strategy change if replayed), S1 (student-rated simulator helpfulness), O2 (other-audience understanding of household variation), recommendation intent, and AI helpfulness; for converted farmers: current heating method, post-transition cost band, cost-saving behavior, cost realism (F4), best/worst-matching stages (F6–F7), and subsidy coping; for unconverted farmers: current heating method, concerns (N2), attitude shift (N3), and preferred route (N4). (2) **Behavioral logs**—five-turn choices, whether the user reached technology-route selection, gas/ground-source heat-pump/air-source heat-pump selection, and terminal type. (3) **Simulated outcomes**—terminal energy burden, heating cost, surplus, compliance, emission score, and CO₂ tons.
 
-**Pre/post structure:** Non-farmers completed a **one-item pre-survey** (Q1) before simulation and a **~2-minute post-survey** after AI debrief. **Converted and unconverted farmers skipped the pre-survey** and only completed the post-survey (optional interview willingness; phone number collected only if interview is accepted).
+**Pre/post structure:** Non-farmers completed a **one-item pre-survey** (Q1) before simulation and a **~2-minute post-survey** after AI debrief. **Converted and unconverted farmers skipped the pre-survey** and only completed the post-survey. The latest post-survey mainly uses radio buttons, checkboxes, and Likert items. Open text is not a required core measure; it appears only when a participant selects an “other” option or, for farmers, voluntarily agrees to leave a phone number for possible follow-up. Phone numbers are not included in statistical analysis.
 
-**Comparison targets:** within-person pre/post deltas (Q2−Q1, non-farmers only); distributions of burden/compliance/emission by route and terminal type; cross-household comparison within the same village (`village_name`) **[TODO: whether village-level aggregation is implemented]**.
+**Comparison targets:** within-person pre/post deltas (Q2−Q1, non-farmers only); post-survey rates for recommendation intent, AI helpfulness, student helpfulness, farmer realism, and farmer attitude shift; distributions of burden/compliance/emission by route and terminal type; and behavior logs from completed simulations that lacked post-survey, reported separately as route/dropout evidence rather than as survey evidence.
 
 #### 2.3 Consent
 
@@ -114,11 +114,11 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 
 #### 2.4 Recruitment, coding & analysis
 
-**Recruitment:** We targeted **20+ participants** (`templates/indexChinese.html`), including classmates and rural users **[TODO: confirm village-cadre-assisted recruitment]**, plus organic traffic via the public URL. **[TODO: recruitment period, final N, target village name.]** Simulator constants were additionally calibrated from prior field conversations in Baoding, Zhangjiakou, and Shijiazhuang and from literature **[TODO: interview N and whether reported separately]**.
+**Recruitment and sample:** Supabase contained **53 raw session records** collected from **June 28 to July 5, 2026**. Participants included students, rural North China farmers (converted and unconverted), and other public users interested in rural clean heating, recruited through course outreach, a public URL, and online sharing. The raw identity distribution was 19 students, 15 converted farmers, 8 unconverted farmers, and 11 other users. The study analyzes only web sessions, survey responses, and behavioral logs.
 
-**Open-ended coding:** Post-survey free text (e.g., student S3 reflection, other-audience O4–O5, non-farmer Q_end2 suggestions, Q3 “other,” negative AI feedback) will be analyzed via **[TODO: coding scheme, e.g., dual-coder thematic analysis / codebook]**; **no codebook is fixed in the repository yet**.
+**Data cleaning and grouping:** Supabase records were exported and annotated with `export_simulation_sessions.py`. Test entries were defined as records whose `identity_detail` was “测试” or “Lawted 村” and were excluded. Records with session duration under 30 seconds or no `ended_at` were also excluded from formal analysis. Records lasting at least 30 seconds and reaching an ending, but missing post-survey or missing Q1/Q2 for non-farmers, were labeled **B_有效未完成**. Records that ended and submitted post-survey were labeled **A_全部完成**; for student/other users, A status also required both Q1 and Q2. This produced **21 A records** for the main survey analysis (7 students, 7 other users, 4 converted farmers, 3 unconverted farmers), **7 B records** for route/dropout analysis only (all farmers), and **25 C records** excluded from formal analysis (23 short or unfinished sessions and 2 test entries).
 
-**Statistical analysis:** Exported Supabase records will be analyzed with **[TODO: paired pre/post test, e.g., Wilcoxon signed-rank or paired t-test with normality check]** for Likert items; categorical outcomes (route, terminal type, attitude shift) via **[TODO: descriptive frequencies / Fisher’s exact / χ²]**; simulated metrics compared across routes and identities **[TODO: specific grouping and tests]**. Thematic coding will supplement quantitative findings **[TODO: whether themes enter formal inferential models]**.
+**Statistical analysis:** A records are the main questionnaire sample; B records are used only to describe route choice, terminal outcome, and post-survey dropout. For the 14 non-farmer A records with paired Q1/Q2, we report the mean pre/post change, the proportion that improved, and a Wilcoxon signed-rank test as a small-sample ordinal sensitivity check. Post-survey categorical items are reported as counts and percentages, including recommendation intent, AI helpfulness, student-rated helpfulness, converted-farmer realism, unconverted-farmer attitude shift, and preferred path. Behavioral route analysis uses the A+B valid pool: technology choices are counted among sessions that reached turn 3, with legacy labels normalized into natural gas, ground-source heat pump, and air-source heat pump. Terminal outcomes are reported for all valid completed simulations. Simulated metrics (energy burden, compliance, emission score, and heating cost) are summarized by identity, route, and terminal type using medians or means. Because the sample is small and self-selected, group comparisons are exploratory; Fisher exact tests may be used for simple categorical contrasts, but the paper does not claim causal effects. Optional “other” text is used only as anonymized illustrative context, not as a formal coded qualitative dataset; phone numbers are excluded from analysis.
 
 ---
 
@@ -138,20 +138,19 @@ Participation began with three first-screen layers: **welcome** (identity/backgr
 |---|---|
 | 1 Hook | 减污 vs 用不起；误解＝只问「清洁取暖好不好」 |
 | 2 Gap | 宏观/政策层研究多，缺户级可交互村级选路工具 |
-| 3 Artifact | 保定村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
-| 4 Method | pre/post 问卷 + 行为日志；N=21（2026-06-28—07-05）；认知/偏好/真实感 + 负担率/合规/排放 |
-| 5 Expected | *We expect…*（无数字） |
+| 3 Artifact | 华北村级 5 回合清洁取暖转型模拟沙盘 + 智能分析 |
+| 4 Method | Supabase 53 条原始记录；A=21 主分析、B=7 路线/流失补充、C=25 排除 |
+| 5 Results / Conclusion | 14 个可配对非农户样本中 11 个理解提升；17/21 认为 AI 分析帮助较大；结论强调户级可负担性比较 |
 
 ---
 
-## 待补 `[TODO]`（Abstract + Methods 共用）
+## 数据与 Methods 完成状态
 
-~~1. **最终样本量与招募时段**~~（Abstract 已写入：N=21，2026-06-28—07-05，河北省/北京市）
-~~2. **具体村庄/招募渠道**~~（Abstract 已写入：课程同学 + 公开链接；农村样本以河北省为主、含北京市延庆）
-3. **Pre/post 配对检验**与分类变量检验的具体选择
-4. **开放题 codebook** 与编码流程（单人/双人、一致性检验）
-5. **村级多户汇总分析**是否已实施
-6. **前期实地访谈**是否单独写入 Methods、样本量多少
+- 招募与清洗：已写入 53 条原始记录、A/B/C 分类、2026-06-28—07-05 时间范围。
+- 主分析：A 类 21 条全部完成样本；B 类 7 条仅用于路线/流失分析；C 类 25 条排除。
+- 问卷：已按最新 post-survey 结构更新，不再设置强制开放题编码。
+- 统计：已写入 pre/post 描述、Wilcoxon signed-rank 敏感性检验、频数/百分比、Fisher exact 探索性比较。
+- 联系字段：农户手机号仅作为自愿后续联系字段，不进入分析。
 
 ---
 
