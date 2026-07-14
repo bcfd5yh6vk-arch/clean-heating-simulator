@@ -17,14 +17,30 @@
 \title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
 \author{Guo Hang}
 
+% Bottom-center page numbers on title page and all later pages; no running header.
+\fancypagestyle{titlepage}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+\fancypagestyle{otherpage}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\thepage}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0pt}%
+}
+
 \begin{document}
 \maketitle
-
-% Bottom-center page numbers; no running header or top-right page number.
-\pagestyle{plain}
-\fancyhead{}
-\renewcommand{\headrulewidth}{0pt}
-\fancyfoot[C]{\thepage}
+\pagestyle{otherpage}
+\thispagestyle{otherpage}
 
 \begin{abstract}
 Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.
@@ -92,7 +108,7 @@ Participation began with three first-screen layers: \textbf{welcome} (identity/b
 
 \textbf{Recruitment and sample:} Supabase contained \textbf{53 raw session records} collected from \textbf{June 28 to July 5, 2026}. Participants included students, rural North China farmers (converted and unconverted), and other public users interested in rural clean heating, recruited through course outreach, a public URL, and online sharing. The raw identity distribution was 19 students, 15 converted farmers, 8 unconverted farmers, and 11 other users. The study analyzes only web sessions, survey responses, and behavioral logs.
 
-\textbf{Data cleaning and grouping:} Supabase records were exported and annotated with \texttt{export\_simulation\_sessions.py}. Test entries were defined as records whose \texttt{identity\_detail} was ``测试'' or ``Lawted 村'' and were excluded. Records with session duration under 30 seconds or no \texttt{ended\_at} were also excluded from formal analysis. Records lasting at least 30 seconds and reaching an ending, but missing post-survey or missing Q1/Q2 for non-farmers, were labeled \textbf{B\_有效未完成}. Records that ended and submitted post-survey were labeled \textbf{A\_全部完成}; for student/other users, A status also required both Q1 and Q2. This produced \textbf{21 A records} for the main survey analysis (7 students, 7 other users, 4 converted farmers, 3 unconverted farmers), \textbf{7 B records} for route/dropout analysis only (all farmers), and \textbf{25 C records} excluded from formal analysis (23 short or unfinished sessions and 2 test entries).
+\textbf{Data cleaning and grouping:} Supabase records were exported and annotated with \texttt{export\_simulation\_sessions.py}. Test entries were defined as records whose \texttt{identity\_detail} matched predefined test labels and were excluded. Records with session duration under 30 seconds or no \texttt{ended\_at} were also excluded from formal analysis. Records lasting at least 30 seconds and reaching an ending, but missing post-survey or missing Q1/Q2 for non-farmers, were labeled \textbf{B\_valid incomplete}. Records that ended and submitted post-survey were labeled \textbf{A\_fully complete}; for student/other users, A status also required both Q1 and Q2. This produced \textbf{21 A records} for the main survey analysis (7 students, 7 other users, 4 converted farmers, 3 unconverted farmers), \textbf{7 B records} for route/dropout analysis only (all farmers), and \textbf{25 C records} excluded from formal analysis (23 short or unfinished sessions and 2 test entries).
 
 \textbf{Statistical analysis:} A records are the main questionnaire sample; B records are used only to describe route choice, terminal outcome, and post-survey dropout. For the 14 non-farmer A records with paired Q1/Q2, we report the mean pre/post change, the proportion that improved, and a Wilcoxon signed-rank test as a small-sample ordinal sensitivity check. Post-survey categorical items are reported as counts and percentages, including recommendation intent, AI helpfulness, student-rated helpfulness, converted-farmer realism, unconverted-farmer attitude shift, and preferred path. Behavioral route analysis uses the A+B valid pool: technology choices are counted among sessions that reached turn 3, with legacy labels normalized into natural gas, ground-source heat pump, and air-source heat pump. Terminal outcomes are reported for all valid completed simulations. Simulated metrics (energy burden, compliance, emission score, and heating cost) are summarized by identity, route, and terminal type using medians or means. Because the sample is small and self-selected, group comparisons are exploratory; Fisher exact tests may be used for simple categorical contrasts, but the paper does not claim causal effects. Optional ``other'' text is used only as anonymized illustrative context, not as a formal coded qualitative dataset; phone numbers are excluded from analysis.
 
