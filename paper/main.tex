@@ -13,6 +13,9 @@
 \usepackage{fancyhdr}
 \usepackage{graphicx}
 \usepackage{array}
+\usepackage{tabularx}
+
+\newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 % Table titles: one line ("Table 1. Title"), centered below each table.
 \captionsetup[table]{%
@@ -140,7 +143,8 @@ This section reports data, tables, and qualitative results only. The main questi
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{@{}llrl@{}}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{0.20\textwidth}XrP{0.22\textwidth}@{}}
 \toprule
 Data group & Definition & n & Use \\
 \midrule
@@ -149,7 +153,7 @@ A\_fully complete & Ended simulation and submitted post-survey; student/other re
 B\_valid incomplete & At least 30 seconds and ended simulation, but missing post-survey or non-farmer Q1/Q2 & 7 & Route, terminal-outcome, and dropout supplement \\
 C\_cleaning/excluded & Short/unfinished records or test entries & 25 & Excluded from formal analysis \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Sample Cleaning Definitions and Analytic Uses}
 \label{tab:sample-cleaning}
 \end{table}
@@ -202,7 +206,8 @@ Qualitative result: in relation to H2, student and other non-farmer understandin
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{@{}lrl@{}}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{0.34\textwidth}rX@{}}
 \toprule
 Measure & Sample & Result \\
 \midrule
@@ -211,7 +216,7 @@ AI debrief helpfulness & 21 & Helpful 17; slightly helpful 2; not helpful 2 \\
 Student-rated simulator helpfulness versus articles/explanations & 7 & Very helpful 2; fairly helpful 5 \\
 Other stakeholders: help understanding household variation under the same policy & 7 & Very helpful 2; fairly helpful 4; almost not helpful 1 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Post-Survey Recommendation and Helpfulness Frequencies}
 \label{tab:postsurvey-helpfulness}
 \end{table}
@@ -303,7 +308,8 @@ Financial strain & 4 \\
 
 \begin{table}[htbp]
 \centering
-\begin{tabular}{@{}ll@{}}
+\footnotesize
+\begin{tabularx}{\textwidth}{@{}P{0.42\textwidth}X@{}}
 \toprule
 Farmer post-survey measure (A-record farmers, n=7) & Result \\
 \midrule
@@ -313,7 +319,7 @@ Unconverted farmers: retrofit concerns (multiple choice, n=3) & Upfront cost 3; 
 Unconverted farmers: attitude after simulation (n=3) & More willing to retrofit soon 2; more hesitant due annual cost 1 \\
 Unconverted farmers: preferred path (n=3) & Wait and see 1; wait and improve insulation after advice 1; ``wait'' 1 \\
 \bottomrule
-\end{tabular}
+\end{tabularx}
 \caption{Farmer Post-Survey Measures}
 \label{tab:farmer-postsurvey}
 \end{table}
@@ -326,8 +332,9 @@ The route table uses the 20 A+B records that reached turn 3. The terminal-outcom
 
 \begin{table}[htbp]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lrlrrrrr@{}}
 \toprule
 Technology route (A+B, reached turn 3) & n & Terminal outcomes & Median final burden & Median final heating cost & Median compliance & Median emission score & Median CO\textsubscript{2} \\
@@ -337,14 +344,16 @@ Air-source heat pump & 6 & Successful transition 4; financial strain 2 & 3.5\% &
 Ground-source heat pump & 3 & Successful transition 1; financial strain 2 & 4.9\% & 2867 yuan & 100 & 92 & 3.1 tons \\
 \bottomrule
 \end{tabular}
+}
 \caption{Simulated Metrics by Technology Route}
 \label{tab:metrics-by-route}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lrlrrrr@{}}
 \toprule
 Terminal outcome (A+B, n=28) & n & Route distribution & Median final burden & Median final heating cost & Median emission score & Median CO\textsubscript{2} \\
@@ -354,6 +363,7 @@ Enforcement/seizure & 8 & Did not reach turn 3: 8 & 4.8\% & 2300 yuan & 63 & 4.7
 Financial strain & 4 & Air-source heat pump 2; ground-source heat pump 2 & 8.3\% & 2952 yuan & 85.5 & 3.3 tons \\
 \bottomrule
 \end{tabular}
+}
 \caption{Simulated Metrics by Terminal Outcome}
 \label{tab:metrics-by-terminal}
 \end{table}
