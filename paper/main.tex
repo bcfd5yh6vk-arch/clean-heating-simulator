@@ -104,10 +104,9 @@
 \title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
 \author{Guo Hang}
 
-% apa7: \abstract/\keywords are preamble macros (NOT \begin{abstract}).
-% Using \begin{abstract}Rural... swallows the first letter R into #1 -> "ural".
-\abstract{Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.}
-\keywords{rural clean heating, coal-to-X, household energy burden, interactive policy simulation, affordability, North China}
+% Store front-matter text outside apa7 \abstract/\keywords (custom title page).
+\newcommand{\paperabstract}{Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.}
+\newcommand{\paperkeywords}{rural clean heating, coal-to-X, household energy burden, interactive policy simulation, affordability, North China}
 
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
@@ -157,13 +156,36 @@
 }
 
 \begin{document}
-% Abstract/Keywords: template wants 12 pt Times + double spacing (apa7 default).
-\maketitle
+% Page 1: title and author only (no running head, course line, or other apa7 extras).
+\pagestyle{empty}
+\makeatletter
+\begin{titlepage}
+  \centering
+  \vspace*{\fill}
+  {\Huge\bfseries \@title\par}
+  \vspace{2em}
+  {\Large\bfseries \@author\par}
+  \vspace*{\fill}
+\end{titlepage}
+\makeatother
+
+% Page 2: centered Abstract heading; bottom-center page number.
+\newpage
+\thispagestyle{otherpage}
 \pagestyle{otherpage}
+\begin{center}
+  {\Sanhao\bfseries Abstract}
+\end{center}
+\vspace{\baselineskip}
+\begin{doublespacing}
+\noindent\paperabstract\par
+\vspace{\baselineskip}
+\noindent\textbf{Keywords:} \paperkeywords\par
+\end{doublespacing}
+
+\newpage
 % Body text: 12 pt Times New Roman + 1.5 line spacing (template).
 \onehalfspacing
-% Number body sections after maketitle so Abstract stays unnumbered and alone on its page.
-% Reset counters: maketitle still steps the section counter for Abstract (and title).
 \setcounter{secnumdepth}{3}
 \setcounter{section}{0}
 
