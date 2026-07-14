@@ -376,52 +376,61 @@ Qualitative result: post-survey responses show that most completed users would r
 
 \subsection{H1-related result: farmer routes and outcomes}
 
-The A+B valid pool included 14 farmer records. Nine reached turn-3 technology-route selection; five did not reach turn 3 and ended in enforcement/seizure outcomes.
+The A+B valid pool included 14 farmer records (9 converted, 5 unconverted). Nine reached turn-3 technology-route selection; five did not reach turn 3 and ended in enforcement/seizure outcomes.
 
-\begin{table}[htbp]
+\begin{figure}[H]
 \centering
-\begin{tabular}{@{}lr@{}}
-\toprule
-Farmer valid pool & n \\
-\midrule
-Converted farmers & 9 \\
-Unconverted farmers & 5 \\
-Total & 14 \\
-\bottomrule
-\end{tabular}
-\caption{Farmer Valid Simulation Pool by Conversion Status}
-\label{tab:farmer-pool}
-\end{table}
+\begin{tikzpicture}
+% Farmer turn-3 routes (n = 9): 4 gas, 3 GSHP, 2 ASHP.
+\def\R{2.35cm}
+\pieslice{90}{250}{black!78}{}% 4/9 * 360 = 160
+\pieslice{250}{370}{black!45}{north east lines}% 3/9 * 360 = 120 -> 370 = 10
+\pieslice{10}{90}{white}{dots}% 2/9 * 360 = 80
 
-\begin{table}[htbp]
-\centering
-\begin{tabular}{@{}lr@{}}
-\toprule
-Turn-3 route choice among farmers (A+B, n=9) & n \\
-\midrule
-Natural gas & 4 \\
-Ground-source heat pump & 3 \\
-Air-source heat pump & 2 \\
-\bottomrule
-\end{tabular}
-\caption{Farmer Turn-3 Technology Route Choices}
-\label{tab:farmer-routes}
-\end{table}
+\begin{scope}[shift={(3.5cm,0.55cm)}, every node/.style={font=\scriptsize, anchor=west}]
+  \fill[black!78] (0,0) rectangle (0.35,0.28);
+  \draw (0,0) rectangle (0.35,0.28);
+  \node at (0.45,0.14) {Natural gas ($n$=4)};
+  \fill[black!45] (0,-0.55) rectangle (0.35,-0.27);
+  \fill[pattern=north east lines, pattern color=black] (0,-0.55) rectangle (0.35,-0.27);
+  \draw (0,-0.55) rectangle (0.35,-0.27);
+  \node at (0.45,-0.41) {Ground-source heat pump ($n$=3)};
+  \fill[white] (0,-1.10) rectangle (0.35,-0.82);
+  \fill[pattern=dots, pattern color=black] (0,-1.10) rectangle (0.35,-0.82);
+  \draw (0,-1.10) rectangle (0.35,-0.82);
+  \node at (0.45,-0.96) {Air-source heat pump ($n$=2)};
+\end{scope}
+\end{tikzpicture}
+\caption{Farmer Turn-3 Technology Route Choices (A+B, $n$=9)}
+\label{fig:farmer-routes}
+\end{figure}
 
-\begin{table}[htbp]
+\begin{figure}[H]
 \centering
-\begin{tabular}{@{}lr@{}}
-\toprule
-Farmer terminal outcome (A+B, n=14) & n \\
-\midrule
-Successful transition & 5 \\
-Enforcement/seizure & 5 \\
-Financial strain & 4 \\
-\bottomrule
-\end{tabular}
-\caption{Farmer Terminal Outcomes}
-\label{tab:farmer-terminals}
-\end{table}
+\begin{tikzpicture}
+% Farmer terminal outcomes (n = 14): 5 / 5 / 4.
+\def\R{2.35cm}
+\pieslice{90}{218.57}{black!78}{}% 5/14 * 360 ≈ 128.57
+\pieslice{218.57}{347.14}{black!45}{north east lines}% 5/14
+\pieslice{347.14}{450}{white}{crosshatch}% 4/14 * 360 ≈ 102.86 -> 450 = 90
+
+\begin{scope}[shift={(3.5cm,0.55cm)}, every node/.style={font=\scriptsize, anchor=west}]
+  \fill[black!78] (0,0) rectangle (0.35,0.28);
+  \draw (0,0) rectangle (0.35,0.28);
+  \node at (0.45,0.14) {Successful transition ($n$=5)};
+  \fill[black!45] (0,-0.55) rectangle (0.35,-0.27);
+  \fill[pattern=north east lines, pattern color=black] (0,-0.55) rectangle (0.35,-0.27);
+  \draw (0,-0.55) rectangle (0.35,-0.27);
+  \node at (0.45,-0.41) {Enforcement/seizure ($n$=5)};
+  \fill[white] (0,-1.10) rectangle (0.35,-0.82);
+  \fill[pattern=crosshatch, pattern color=black] (0,-1.10) rectangle (0.35,-0.82);
+  \draw (0,-1.10) rectangle (0.35,-0.82);
+  \node at (0.45,-0.96) {Financial strain ($n$=4)};
+\end{scope}
+\end{tikzpicture}
+\caption{Farmer Terminal Outcomes (A+B, $n$=14)}
+\label{fig:farmer-terminals}
+\end{figure}
 
 \begin{table}[htbp]
 \centering
