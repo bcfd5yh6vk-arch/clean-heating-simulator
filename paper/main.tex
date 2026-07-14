@@ -6,7 +6,7 @@
 \addbibresource{bibliography.bib}
 
 \usepackage[T1]{fontenc}
-\usepackage{mathptmx}
+\usepackage{mathptmx} % Times New Roman-compatible body font (12 pt)
 \usepackage{amsmath}
 \usepackage{booktabs}
 \usepackage{url}
@@ -17,6 +17,21 @@
 \usepackage{float}
 \usepackage{tikz}
 \usetikzlibrary{patterns,calc}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage[
+  a4paper,
+  top=2.54cm,
+  bottom=2.54cm,
+  left=3.17cm,
+  right=3.17cm
+]{geometry}
+
+% Generation-AI Thesis Template size helpers (English paper = Times New Roman bold):
+% 三号≈16pt, 四号≈14pt, 小四≈12pt
+\newcommand{\Sanhao}{\fontsize{16pt}{20pt}\selectfont}
+\newcommand{\Sihao}{\fontsize{14pt}{18pt}\selectfont}
+\newcommand{\Xiaosi}{\fontsize{12pt}{18pt}\selectfont}
 
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -88,16 +103,32 @@
 
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\arabic{subsubsection}}
 
-% Level-1 headings flush left with body text (apa7 defaults to centered).
+% Template headings (English uses Times bold in place of 黑体):
+% 一级：三号加粗，单倍行距感，段前段后约 1 行，顶格左对齐
+% 二级：四号加粗，段前段后约 1 行
+% 三级：小四号加粗
 \makeatletter
 \renewcommand{\section}{\@startsection{section}{1}{\z@}%
-  {\b@level@one@skip}{\e@level@one@skip}%
-  {\normalfont\normalsize\bfseries\raggedright}}
+  {2\baselineskip}{1\baselineskip}%
+  {\normalfont\Sanhao\bfseries\raggedright}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{\z@}%
+  {1.5\baselineskip}{1\baselineskip}%
+  {\normalfont\Sihao\bfseries\raggedright}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{\z@}%
+  {1\baselineskip}{0.5\baselineskip}%
+  {\normalfont\Xiaosi\bfseries\raggedright}}
 \renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\quad}
+
+% Title ≈ 三号加粗居中；作者名 ≈ 四号加粗居中（覆盖 apa7 默认字号）
+% Scope these to title-page macros only if possible; apa7 uses Huge/LARGE for title/author.
+\renewcommand{\Huge}{\Sanhao}
+\renewcommand{\LARGE}{\Sihao}
+\renewcommand{\Large}{\Sihao}
 \makeatother
 
-% Bottom-center page numbers on title page and all later pages; no running header.
+% Bottom-center Arabic page numbers; no running header (template).
 \fancypagestyle{titlepage}{%
   \fancyhf{}%
   \fancyfoot[C]{\thepage}%
@@ -118,11 +149,14 @@
 }
 
 \begin{document}
+% Abstract/Keywords: template wants 12 pt Times + double spacing (apa7 default).
 \maketitle
 \pagestyle{otherpage}
+% Body text: 12 pt Times New Roman + 1.5 line spacing (template).
+\onehalfspacing
 % Number body sections after maketitle so Abstract stays unnumbered and alone on its page.
 % Reset counters: maketitle still steps the section counter for Abstract (and title).
-\setcounter{secnumdepth}{2}
+\setcounter{secnumdepth}{3}
 \setcounter{section}{0}
 
 \section{Introduction}
@@ -671,8 +705,13 @@ Future research can move in five directions. First, it should expand the sample,
 In the longer term, this project can develop into a participatory policy-simulation tool. Farmers would enter their household conditions, villages would aggregate simulated results, and policymakers could compare affordability and environmental outcomes across coal-to-X combinations. Clean-heating decisions would then become less about completing a top-down retrofit task and more about using household-level evidence to find fairer, more stable, and more durable village transition pathways. On that basis, the same interactive sandbox framework can also be adapted to other environmental issues, allowing government, firms, and residents to explore trade-offs and cooperation within one shared simulation setting.
 
 \newpage
-\noindent{\Large\bfseries Reference\par}
-\vspace{1em}
+% Reference heading: 黑体三号加粗 → Times 16 pt bold; 段前段后 1 行
+\vspace{\baselineskip}
+\noindent{\Sanhao\bfseries Reference\par}
+\vspace{\baselineskip}
+% Reference list: 12 pt Times New Roman
+\begin{singlespace}
 \printbibliography[heading=none]
+\end{singlespace}
 
 \end{document}
