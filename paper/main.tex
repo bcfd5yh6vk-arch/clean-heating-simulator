@@ -14,6 +14,19 @@
 \usepackage{graphicx}
 \usepackage{array}
 
+% Table titles: one line ("Table 1. Title"), centered below each table.
+\captionsetup[table]{%
+  position=below,%
+  skip=6pt,%
+  justification=centering,%
+  singlelinecheck=true,%
+  labelformat=simple,%
+  labelsep=period,%
+  textformat=simple,%
+  labelfont=bf,%
+  textfont=normalfont%
+}
+
 \title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
 \author{Guo Hang}
 
@@ -127,8 +140,6 @@ This section reports data, tables, and qualitative results only. The main questi
 
 \begin{table}[htbp]
 \centering
-\caption{Sample Cleaning Definitions and Analytic Uses}
-\label{tab:sample-cleaning}
 \begin{tabular}{@{}llrl@{}}
 \toprule
 Data group & Definition & n & Use \\
@@ -139,12 +150,12 @@ B\_valid incomplete & At least 30 seconds and ended simulation, but missing post
 C\_cleaning/excluded & Short/unfinished records or test entries & 25 & Excluded from formal analysis \\
 \bottomrule
 \end{tabular}
+\caption{Sample Cleaning Definitions and Analytic Uses}
+\label{tab:sample-cleaning}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Identity Distribution Across Cleaning Groups}
-\label{tab:identity-distribution}
 \begin{tabular}{@{}lrrrr@{}}
 \toprule
 Identity & Raw records & A\_fully complete & B\_valid incomplete & C\_excluded \\
@@ -156,6 +167,8 @@ Unconverted farmer & 8 & 3 & 2 & 3 \\
 Total & 53 & 21 & 7 & 25 \\
 \bottomrule
 \end{tabular}
+\caption{Identity Distribution Across Cleaning Groups}
+\label{tab:identity-distribution}
 \end{table}
 
 Qualitative result: after cleaning, the dataset contains a non-farmer paired pre/post sample for H2 and a valid farmer simulation pool for H1, but these two forms of evidence come from different analytic pools and are therefore reported separately below.
@@ -166,8 +179,6 @@ Q1/Q2 used a 1--5 Likert scale. The A-record non-farmer sample contained 14 pair
 
 \begin{table}[htbp]
 \centering
-\caption{Non-Farmer Pre/Post Understanding Scores}
-\label{tab:prepost-understanding}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lrrrrrrrrr@{}}
@@ -179,6 +190,8 @@ Students & 7 & 1.71 & 3.86 & +2.14 & 6 & 1 & 0 & 1 & 4 \\
 Other stakeholders & 7 & 2.43 & 3.29 & +0.86 & 5 & 2 & 0 & 2 & 4 \\
 \bottomrule
 \end{tabular}
+\caption{Non-Farmer Pre/Post Understanding Scores}
+\label{tab:prepost-understanding}
 \end{table}
 
 Under the Wilcoxon signed-rank setup, after removing three zero differences, all 11 nonzero paired differences were positive; W+ = 66 and W- = 0.
@@ -189,8 +202,6 @@ Qualitative result: in relation to H2, student and other non-farmer understandin
 
 \begin{table}[htbp]
 \centering
-\caption{Post-Survey Recommendation and Helpfulness Frequencies}
-\label{tab:postsurvey-helpfulness}
 \begin{tabular}{@{}lrl@{}}
 \toprule
 Measure & Sample & Result \\
@@ -201,12 +212,12 @@ Student-rated simulator helpfulness versus articles/explanations & 7 & Very help
 Other stakeholders: help understanding household variation under the same policy & 7 & Very helpful 2; fairly helpful 4; almost not helpful 1 \\
 \bottomrule
 \end{tabular}
+\caption{Post-Survey Recommendation and Helpfulness Frequencies}
+\label{tab:postsurvey-helpfulness}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Biggest-Impact Factors Selected by Completed Users}
-\label{tab:biggest-impact}
 \begin{tabular}{@{}lr@{}}
 \toprule
 ``Biggest impact'' option & n \\
@@ -218,12 +229,12 @@ Coal-to-gas/electricity requires a large upfront payment & 2 \\
 Annual surplus turns negative / household cash-flow strain & 1 \\
 \bottomrule
 \end{tabular}
+\caption{Biggest-Impact Factors Selected by Completed Users}
+\label{tab:biggest-impact}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Student-Reported Hardest Heating Burdens}
-\label{tab:student-burdens}
 \begin{tabular}{@{}lr@{}}
 \toprule
 Student-reported hardest burden (multiple choice, n=7) & Mentions \\
@@ -235,6 +246,8 @@ Not daring to turn on heat / insufficient indoor temperature & 3 \\
 Poor insulation raising energy use & 3 \\
 \bottomrule
 \end{tabular}
+\caption{Student-Reported Hardest Heating Burdens}
+\label{tab:student-burdens}
 \end{table}
 
 Qualitative result: post-survey responses show that most completed users would recommend the simulator and rated the AI debrief as helpful; student and other-stakeholder responses clustered around subsidy phase-out, operating cost, upfront cost, and household variation, which are the cost-understanding items named in H2. The simulator delivered stronger science-communication effects, and the AI debrief was helpful.
@@ -245,8 +258,6 @@ The A+B valid pool included 14 farmer records. Nine reached turn-3 technology-ro
 
 \begin{table}[htbp]
 \centering
-\caption{Farmer Valid Simulation Pool by Conversion Status}
-\label{tab:farmer-pool}
 \begin{tabular}{@{}lr@{}}
 \toprule
 Farmer valid pool & n \\
@@ -256,12 +267,12 @@ Unconverted farmers & 5 \\
 Total & 14 \\
 \bottomrule
 \end{tabular}
+\caption{Farmer Valid Simulation Pool by Conversion Status}
+\label{tab:farmer-pool}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Farmer Turn-3 Technology Route Choices}
-\label{tab:farmer-routes}
 \begin{tabular}{@{}lr@{}}
 \toprule
 Turn-3 route choice among farmers (A+B, n=9) & n \\
@@ -271,12 +282,12 @@ Ground-source heat pump & 3 \\
 Air-source heat pump & 2 \\
 \bottomrule
 \end{tabular}
+\caption{Farmer Turn-3 Technology Route Choices}
+\label{tab:farmer-routes}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Farmer Terminal Outcomes}
-\label{tab:farmer-terminals}
 \begin{tabular}{@{}lr@{}}
 \toprule
 Farmer terminal outcome (A+B, n=14) & n \\
@@ -286,12 +297,12 @@ Enforcement/seizure & 5 \\
 Financial strain & 4 \\
 \bottomrule
 \end{tabular}
+\caption{Farmer Terminal Outcomes}
+\label{tab:farmer-terminals}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Farmer Post-Survey Measures}
-\label{tab:farmer-postsurvey}
 \begin{tabular}{@{}ll@{}}
 \toprule
 Farmer post-survey measure (A-record farmers, n=7) & Result \\
@@ -303,6 +314,8 @@ Unconverted farmers: attitude after simulation (n=3) & More willing to retrofit 
 Unconverted farmers: preferred path (n=3) & Wait and see 1; wait and improve insulation after advice 1; ``wait'' 1 \\
 \bottomrule
 \end{tabular}
+\caption{Farmer Post-Survey Measures}
+\label{tab:farmer-postsurvey}
 \end{table}
 
 Qualitative result: in relation to H1, the valid farmer pool recorded three route choices (natural gas, ground-source heat pump, and air-source heat pump) and three terminal outcomes (successful transition, enforcement/seizure, and financial strain); farmer post-surveys also recorded cost realism, retrofit concerns, and post-simulation route attitudes. The simulator collected real farmer data and let farmers compare simulated outcomes across different coal-to-X pathways.
@@ -313,8 +326,6 @@ The route table uses the 20 A+B records that reached turn 3. The terminal-outcom
 
 \begin{table}[htbp]
 \centering
-\caption{Simulated Metrics by Technology Route}
-\label{tab:metrics-by-route}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lrlrrrrr@{}}
@@ -326,12 +337,12 @@ Air-source heat pump & 6 & Successful transition 4; financial strain 2 & 3.5\% &
 Ground-source heat pump & 3 & Successful transition 1; financial strain 2 & 4.9\% & 2867 yuan & 100 & 92 & 3.1 tons \\
 \bottomrule
 \end{tabular}
+\caption{Simulated Metrics by Technology Route}
+\label{tab:metrics-by-route}
 \end{table}
 
 \begin{table}[htbp]
 \centering
-\caption{Simulated Metrics by Terminal Outcome}
-\label{tab:metrics-by-terminal}
 \footnotesize
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{@{}lrlrrrr@{}}
@@ -343,6 +354,8 @@ Enforcement/seizure & 8 & Did not reach turn 3: 8 & 4.8\% & 2300 yuan & 63 & 4.7
 Financial strain & 4 & Air-source heat pump 2; ground-source heat pump 2 & 8.3\% & 2952 yuan & 85.5 & 3.3 tons \\
 \bottomrule
 \end{tabular}
+\caption{Simulated Metrics by Terminal Outcome}
+\label{tab:metrics-by-terminal}
 \end{table}
 
 Qualitative result: the A+B valid simulation pool places burden rate, heating cost, compliance, emission score, and CO\textsubscript{2} side by side across routes and terminal outcomes, giving the household-level pathway-comparison data required by the research question. These data also show that coal-to-X routes can reduce CO\textsubscript{2} emissions and improve air-quality indicators; terminal metrics and outcome distributions differ across routes, indicating that the simulator successfully displayed how different households and pathway choices lead to different final outcomes.
