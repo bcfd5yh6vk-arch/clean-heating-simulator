@@ -1,3 +1,10 @@
+\PassOptionsToPackage{%
+  a4paper,%
+  top=2.54cm,%
+  bottom=2.54cm,%
+  left=3.17cm,%
+  right=3.17cm%
+}{geometry}
 \documentclass[stu,12pt,floatsintext,donotrepeattitle]{apa7}
 
 \usepackage[american]{babel}
@@ -19,13 +26,14 @@
 \usetikzlibrary{patterns,calc}
 \usepackage{setspace}
 \usepackage{caption}
-\usepackage[
-  a4paper,
-  top=2.54cm,
-  bottom=2.54cm,
-  left=3.17cm,
-  right=3.17cm
-]{geometry}
+% apa7 already loads geometry; set margins without reloading the package.
+\geometry{%
+  a4paper,%
+  top=2.54cm,%
+  bottom=2.54cm,%
+  left=3.17cm,%
+  right=3.17cm%
+}
 
 % Generation-AI Thesis Template size helpers (English paper = Times New Roman bold):
 % 三号≈16pt, 四号≈14pt, 小四≈12pt
