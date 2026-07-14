@@ -16,9 +16,19 @@
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{tikz}
-\usetikzlibrary{patterns}
+\usetikzlibrary{patterns,calc}
 
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+% Black-and-white pie slice: (#1) start (#2) end (#3) solid fill (#4) pattern name or empty.
+\newcommand{\pieslice}[4]{%
+  \fill[#3] (0,0) -- (#1:\R) arc (#1:#2:\R) -- cycle;%
+  \def\piepat{#4}%
+  \ifx\piepat\empty\else
+    \fill[pattern=#4, pattern color=black] (0,0) -- (#1:\R) arc (#1:#2:\R) -- cycle;%
+  \fi
+  \draw[black, line width=0.4pt] (0,0) -- (#1:\R) arc (#1:#2:\R) -- cycle;%
+}
 
 % Draw one PRE/POST pair for the black-and-white understanding figure.
 % (#1) x-origin (#2) group title (#3) pre (#4) post (#5) post fill pattern
@@ -288,39 +298,79 @@ Other stakeholders: help understanding household variation under the same policy
 \label{tab:postsurvey-helpfulness}
 \end{table}
 
-\begin{table}[htbp]
+\begin{figure}[H]
 \centering
-\begin{tabular}{@{}lr@{}}
-\toprule
-``Biggest impact'' option & n \\
-\midrule
-Sudden heating-cost increase, such as subsidy phase-out & 8 \\
-Upfront-cost differences across technology routes & 5 \\
-Home visits / enforcement and compliance pressure & 5 \\
-Coal-to-gas/electricity requires a large upfront payment & 2 \\
-Annual surplus turns negative / household cash-flow strain & 1 \\
-\bottomrule
-\end{tabular}
-\caption{Biggest-Impact Factors Selected by Completed Users}
-\label{tab:biggest-impact}
-\end{table}
+\begin{tikzpicture}
+% Biggest-impact factors (n = 21). Angles: 8/21, 5/21, 5/21, 2/21, 1/21.
+\def\R{2.35cm}
+\pieslice{90}{227.14}{black!78}{}% 8
+\pieslice{227.14}{312.86}{black!55}{north east lines}% 5
+\pieslice{312.86}{398.57}{black!35}{dots}% 5
+\pieslice{38.57}{72.86}{white}{crosshatch}% 2
+\pieslice{72.86}{90}{black!18}{horizontal lines}% 1
 
-\begin{table}[htbp]
+\begin{scope}[shift={(3.5cm,0.9cm)}, every node/.style={font=\scriptsize, anchor=west}]
+  \fill[black!78] (0,0) rectangle (0.35,0.28);
+  \draw (0,0) rectangle (0.35,0.28);
+  \node at (0.45,0.14) {Subsidy phase-out / cost spike ($n$=8)};
+  \fill[black!55] (0,-0.55) rectangle (0.35,-0.27);
+  \fill[pattern=north east lines, pattern color=black] (0,-0.55) rectangle (0.35,-0.27);
+  \draw (0,-0.55) rectangle (0.35,-0.27);
+  \node at (0.45,-0.41) {Upfront route-cost differences ($n$=5)};
+  \fill[black!35] (0,-1.10) rectangle (0.35,-0.82);
+  \fill[pattern=dots, pattern color=black] (0,-1.10) rectangle (0.35,-0.82);
+  \draw (0,-1.10) rectangle (0.35,-0.82);
+  \node at (0.45,-0.96) {Home visits / compliance pressure ($n$=5)};
+  \fill[white] (0,-1.65) rectangle (0.35,-1.37);
+  \fill[pattern=crosshatch, pattern color=black] (0,-1.65) rectangle (0.35,-1.37);
+  \draw (0,-1.65) rectangle (0.35,-1.37);
+  \node at (0.45,-1.51) {Large upfront payment ($n$=2)};
+  \fill[black!18] (0,-2.20) rectangle (0.35,-1.92);
+  \fill[pattern=horizontal lines, pattern color=black] (0,-2.20) rectangle (0.35,-1.92);
+  \draw (0,-2.20) rectangle (0.35,-1.92);
+  \node at (0.45,-2.06) {Cash-flow strain ($n$=1)};
+\end{scope}
+\end{tikzpicture}
+\caption{Biggest-Impact Factors Selected by Completed Users}
+\label{fig:biggest-impact}
+\end{figure}
+
+\begin{figure}[H]
 \centering
-\begin{tabular}{@{}lr@{}}
-\toprule
-Student-reported hardest burden (multiple choice, n=7) & Mentions \\
-\midrule
-Gas/electricity price after subsidy reduction & 6 \\
-Annual operating heating cost & 5 \\
-One-time equipment retrofit cost & 4 \\
-Not daring to turn on heat / insufficient indoor temperature & 3 \\
-Poor insulation raising energy use & 3 \\
-\bottomrule
-\end{tabular}
-\caption{Student-Reported Hardest Heating Burdens}
-\label{tab:student-burdens}
-\end{table}
+\begin{tikzpicture}
+% Student hardest burdens (mentions totaling 21).
+\def\R{2.35cm}
+\pieslice{90}{192.86}{black!78}{}% 6
+\pieslice{192.86}{278.57}{black!55}{north east lines}% 5
+\pieslice{278.57}{347.14}{black!35}{dots}% 4
+\pieslice{347.14}{398.57}{white}{crosshatch}% 3
+\pieslice{38.57}{90}{black!18}{horizontal lines}% 3
+
+\begin{scope}[shift={(3.5cm,0.9cm)}, every node/.style={font=\scriptsize, anchor=west}]
+  \fill[black!78] (0,0) rectangle (0.35,0.28);
+  \draw (0,0) rectangle (0.35,0.28);
+  \node at (0.45,0.14) {Gas/electricity price after subsidy cut (6)};
+  \fill[black!55] (0,-0.55) rectangle (0.35,-0.27);
+  \fill[pattern=north east lines, pattern color=black] (0,-0.55) rectangle (0.35,-0.27);
+  \draw (0,-0.55) rectangle (0.35,-0.27);
+  \node at (0.45,-0.41) {Annual operating heating cost (5)};
+  \fill[black!35] (0,-1.10) rectangle (0.35,-0.82);
+  \fill[pattern=dots, pattern color=black] (0,-1.10) rectangle (0.35,-0.82);
+  \draw (0,-1.10) rectangle (0.35,-0.82);
+  \node at (0.45,-0.96) {One-time equipment retrofit cost (4)};
+  \fill[white] (0,-1.65) rectangle (0.35,-1.37);
+  \fill[pattern=crosshatch, pattern color=black] (0,-1.65) rectangle (0.35,-1.37);
+  \draw (0,-1.65) rectangle (0.35,-1.37);
+  \node at (0.45,-1.51) {Not daring to heat / low indoor temp.\ (3)};
+  \fill[black!18] (0,-2.20) rectangle (0.35,-1.92);
+  \fill[pattern=horizontal lines, pattern color=black] (0,-2.20) rectangle (0.35,-1.92);
+  \draw (0,-2.20) rectangle (0.35,-1.92);
+  \node at (0.45,-2.06) {Poor insulation raising energy use (3)};
+\end{scope}
+\end{tikzpicture}
+\caption{Student-Reported Hardest Heating Burdens (Multiple Choice, $n$=7)}
+\label{fig:student-burdens}
+\end{figure}
 
 Qualitative result: post-survey responses show that most completed users would recommend the simulator and rated the AI debrief as helpful; student and other-stakeholder responses clustered around subsidy phase-out, operating cost, upfront cost, and household variation, which are the cost-understanding items named in H2. The simulator delivered stronger science-communication effects, and the AI debrief was helpful.
 
