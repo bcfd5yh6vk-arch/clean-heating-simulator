@@ -10,86 +10,351 @@
 \usepackage{mathptmx}
 \usepackage{booktabs}
 \usepackage{url}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{array}
 
 \title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
-\shorttitle{Coal-to-X Simulator}
 \author{Guo Hang}
-\duedate{[TODO: submission date]}
-\affiliation{PKUHS Stanford}
-\course{CTB 2025--26}
-\professor{[TODO: instructor name]}
-
-\abstract{%
-Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.%
-}
 
 \begin{document}
 \maketitle
 
+% Bottom-center page numbers; no running header or top-right page number.
+\pagestyle{plain}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+
+\begin{abstract}
+Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.
+\end{abstract}
+
 \section{Introduction}
 
-Winter heating is a basic livelihood need in rural North China. Since the national push for clean winter heating in the mid-2010s, tens of millions of farm households have shifted from scattered coal to coal-to-X routes such as natural gas, electricity, or heat pumps. Regional air quality has improved and winter coal use has fallen sharply \parencite{ndrc2017plan,yuan2025carbon}. Environmental gains, however, do not automatically translate into sustainable energy use for every family. Upfront retrofit costs and recurring winter bills are largely borne by households; as equipment and operating subsidies phase down by cohort, many face a familiar tension: households can afford the switch but not everyday use. Heating bills rise as a share of annual income, indoor temperatures drop, and some households return to coal or maintain dual fuel sources \parencite{he2021decoalizing,zhai2023review}. Public debate often still asks only whether clean heating is ``good,'' rather than which coal-to-X pathway fits diverse household budgets, housing conditions, and compliance constraints.
+Winter heating is a basic livelihood need in rural North China. Since the national push for clean winter heating in the mid-2010s, tens of millions of farm households have shifted from scattered coal to coal-to-X routes such as natural gas, electricity, or heat pumps. Regional air quality has improved and winter coal use has fallen sharply. Environmental gains, however, do not automatically translate into sustainable energy use for every family. Upfront retrofit costs and recurring winter bills are largely borne by households; as equipment and operating subsidies phase down by cohort, many face a familiar tension: households can afford the switch but not everyday use. Heating bills rise as a share of annual income, indoor temperatures drop, and some households return to coal or maintain dual fuel sources. Public debate often still asks only whether clean heating is ``good,'' rather than which coal-to-X pathway fits diverse household budgets, housing conditions, and compliance constraints.
 
-The policy stakes are concrete. In much of North China, village- or township-level campaigns coordinate technology choice and installation. If the chosen route does not match most households' cash flow and energy burden, transitions that look successful on paper may prove unstable in operation. Prior work documents this tension from multiple angles. Environmental and health studies show that clean heating reduces particulate exposure and carbon emissions. Energy-economics and energy-poverty research finds that gas spending above roughly 5\% of disposable income materially changes behavior, and that subsidy withdrawal raises winter costs and the share of households under affordability stress \parencite{zhao2024sustainable}. Regional cost--benefit analyses further show that health gains and economic costs are unevenly distributed across cities \parencite{zhang2024uneven}. Agent-based and regional policy models link household actions to village- or city-scale outcomes \parencite{wang2023abm,liu2020costs}, yet few public-facing tools let users enter household income, floor area, and heating costs, compare gas, heat-pump, and insulation routes interactively, and experience subsidy phase-out and compliance pressure in one session.
+The policy stakes are concrete. In much of North China, village- or township-level campaigns coordinate technology choice and installation. If the chosen route does not match most households' cash flow and energy burden, transitions that look successful on paper may prove unstable in operation. Prior work documents this tension from multiple angles. Environmental and health studies show that clean heating reduces PM\textsubscript{2.5} exposure and carbon emissions \parencite{yuan2025carbon}. Energy-economics and energy-poverty research finds that gas spending above roughly 5\% of disposable income materially changes behavior, and that subsidy withdrawal raises winter costs and the share of households under affordability stress \parencite{zhao2024sustainable}. Field evidence reports county-level subsidy variation, tariff pass-through, equipment replacement cycles, and coal rebound \parencite{he2021decoalizing,zhai2023review}. Agent-based and regional policy models link household actions to village- or city-scale outcomes \parencite{wang2023abm}, yet few public-facing tools let users enter household income, floor area, and heating costs, compare gas, heat-pump, and insulation routes interactively, and experience subsidy phase-out and compliance pressure in one session.
 
-This study addresses that gap by designing, deploying, and evaluating a \textit{village-level clean-heating transition simulation sandbox} (\url{https://www.clean-heating-simulator.com}). Participants role-play a farm household, enter whole-household income, surplus, floor area, and pre-transition heating cost, then make choices across five turns---whether to transition, which technology to adopt, how to boost income or save energy, and how to cope with subsidy withdrawal---while viewing live indicators for heating cost, energy burden rate, legal compliance, and emission score. After the terminal state, they may request an AI debrief generated from session logs via a live language-model API; no curated mock script is served if the API fails. The simulation engine is deterministic and calibrated from literature and public statistics.
+This study addresses that gap by designing, deploying, and evaluating a \textbf{village-level clean-heating transition simulation sandbox} (\url{https://www.clean-heating-simulator.com}). Participants role-play a farm household, enter whole-household income, surplus, floor area, and pre-transition heating cost, then make choices across five turns---whether to transition, which technology to adopt, how to boost income or save energy, and how to cope with subsidy withdrawal---while viewing live indicators for heating cost, energy burden rate, legal compliance, and emission score. After the terminal state, they may request an AI debrief generated from session logs via a live language-model API (not a curated mock script). The simulation engine is deterministic and calibrated from literature and public statistics.
 
-Our research question is: \textit{Can household-level interactive simulation help users with different identities---students, converted and unconverted farmers, and other stakeholders---understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?} We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs.
+Our research question is: \textit{Can household-level interactive simulation help users with different identities---students, converted and unconverted farmers, and other stakeholders---understand trade-offs among environmental goals, heating affordability, and compliance, and supply aggregatable evidence for village pathway comparison?} We hypothesize that (H1) farmer users can identify coal-to-X paths better matched to their own household conditions, and (H2) students and other non-farmers show improved understanding of heating-cost dynamics after one session. From June 28 to July 5, 2026, we recruited 21 fully completed cases (including rural users from Hebei Province and Beijing municipalities) through course outreach and a public URL, using pre/post surveys and behavioral logs stored in Supabase.
 
-The remainder of the paper is organized as follows. The Method section describes the deployed artifact, design, consent, and analysis plan. Results and Discussion sections will report survey, log, and simulated-outcome findings and their implications for village clean-heating decisions.
+The remainder of the paper is organized as follows. The Literature Review summarizes evidence on environmental benefits, affordability pressure, technology choice, and policy simulation. The Methodology section describes the deployed artifact, design, consent, and analysis plan. The Results section reports survey, log, and simulated-outcome data; the Discussion section explains how these results answer the research question and H1/H2, and identifies limitations; the Conclusion summarizes contributions, implications, limitations, and future directions.
 
-\section{Method}
+\section{Literature Review}
 
-\subsection{Participants}
+\subsection{Environmental benefits of clean heating}
 
-We targeted 20+ participants, including classmates and rural users [TODO: confirm village-cadre-assisted recruitment], plus organic traffic via the public deployment URL. [TODO: recruitment period, final $N$, target village name.] Simulator constants were additionally calibrated from prior field conversations in rural North China and from published literature [TODO: interview $N$ and whether reported separately].
+Prior research first establishes the environmental importance of coal-to-X heating. National clean-heating policy framed rural scattered-coal replacement as a key route for reducing winter air pollution and raising clean-heating coverage in northern China. Empirical studies on rural clean heating also show that replacing coal can reduce PM\textsubscript{2.5}, PAH, and carbon-emission pressure. Yuan et al.'s work on carbon-emission reduction methods for rural clean heating in Hebei further shows why household heating choices need to be translated into measurable emission indicators. Clean heating is therefore not only a household technology change; it is also part of air-pollution control, carbon reduction, and rural energy transition.
 
-\subsection{Materials}
+\subsection{Affordability, energy poverty, and coal rebound}
 
-We deployed a village-level clean-heating transition simulation sandbox for rural North China coal-to-X contexts (\url{https://www.clean-heating-simulator.com}; single-page web application hosted on Vercel). Participants needed no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they created a North China farm household profile: whole-household annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) were fixed.
+A second body of work shows that environmental benefits are accompanied by household-level cost pressure. Zhai and Li's review of clean-heating renovation in northern rural China identifies high operating costs, weak infrastructure, and coal rebound as key barriers. Liu and Mauzerall's research on clean-heating costs suggests that gas and electric routes can be much more expensive than coal without subsidies. Zhao et al. further show that subsidy withdrawal increases winter heating expenses and expands the share of households under affordability stress. He et al.'s study of the 2+26 region also documents coal rebound and subsidy dependence. Together, these studies show that a transition is not sustainable simply because equipment has been installed; households must also be able to afford daily winter use.
 
-The simulation ran five turns: (1)~status quo choice (continue coal or prepare transition); (2)~compliance pressure (probabilistic home visit if coal continues, scaled by floor area and consecutive non-compliance); (3)~technology route (natural gas, ground-source heat pump, or air-source heat pump; retrofit and operating costs linearly scaled from a 100\,m\textsuperscript{2} baseline); (4)~income boost or energy saving (one of three options); (5)~subsidy phase-out (equivalent gas volume derived from initial coal spending, then a fixed per-m\textsuperscript{3} cost increase, followed by terminal adjudication). The interface displayed six live indicators---annual heating cost, income, surplus, legal compliance (0--100), emission score (0--100), and energy burden rate (\%)---plus a turn-by-turn narrative log. Terminal outcomes were successful transition, financial strain, or enforcement-related seizure.
+\subsection{Technology routes and village-level choice}
 
-After the terminal state, participants could request an AI debrief: the browser submitted initial inputs, stepwise logs, and final state to a server endpoint; the server called the DeepSeek Chat Completions API (\texttt{deepseek-v4-flash}) with one of three human-authored structured system prompts (converted-farmer comparison, unconverted-farmer retrofit advice, or default analysis). The model was instructed to use only logged numbers and return three Markdown sections. If the API key was missing or the call failed, the interface showed an error---no curated mock script was served as fallback. The simulation engine itself was deterministic; economic, compliance, and emission constants were literature-calibrated, with some thresholds simplified as noted in-app.
+A third set of studies focuses on differences among coal-to-X routes. Natural gas, electric heating, air-source heat pumps, ground-source heat pumps, and insulation retrofits differ in upfront cost, operating cost, comfort, infrastructure dependence, and maintenance. Qin and Qiu's discussion of future heating pathways after the coal-to-gas controversy suggests that coal-to-gas is not always the best long-term route. Zhai and Li similarly argue that clean-heating renovation should match local resources, household income, building conditions, and operating costs. Because many rural heating transitions are organized at village or township scale, a single route that does not fit most households can create a gap between policy completion and household affordability.
 
-Each session was stored anonymously (UUID) in a Supabase database table (\texttt{simulation\_sessions}), including baseline inputs, turn-choice IDs and labels, event logs, terminal type and summary, final metrics, AI analysis text (if generated), and post-survey fields. Table~\ref{tab:material-boundaries} summarizes component boundaries.
+\subsection{Policy simulation, AI methods, and this study's gap}
 
-\begin{table}[htbp]
-    \centering
-    \caption{Material Boundaries: Simulation Engine, AI Debrief, and Empirical Logging}
-    \label{tab:material-boundaries}
-    \begin{tabular}{@{}p{0.22\linewidth}p{0.28\linewidth}p{0.42\linewidth}@{}}
-        \toprule
-        Component & Nature & Note \\
-        \midrule
-        Five-turn engine & Deterministic algorithm with literature constants & Outcomes computed by rules and probability models, not by an LLM \\
-        AI debrief & Live DeepSeek API & Human-curated system prompts; output varies by session log; no mock fallback on failure \\
-        Questionnaires and logs & Empirical capture & Stored in Supabase for pre/post and pathway analysis \\
-        \bottomrule
-    \end{tabular}
-\end{table}
+A fourth body of literature informs this study's method. Wang and Gao's review of agent-based modeling in public policy simulation shows how individual behavior can be linked to group or regional outcomes. Ma, Wang, and Wang's work on AGI+MAS suggests that AI and multi-agent simulation can support public-policy reasoning and complex decision-making. Existing studies can demonstrate environmental benefits, identify affordability risks, and compare technology routes, but few public-facing tools let farmers and other users enter household income, housing area, and heating costs, then compare gas, heat-pump, insulation, subsidy phase-out, and compliance pressure in one interface. This study fills that gap by turning a regional policy problem into a household-level, turn-based, data-recording village decision sandbox.
 
-\subsection{Measures}
+\section{Methodology}
 
-Dependent variables fell into three layers. \textit{Survey cognition and attitudes:} for students and other non-farmers, pre Q1 and post Q2 (5-point Likert on understanding of coal-to-gas and heating costs), Q4 (strategy change if replayed), S1 (simulator helpfulness vs.\ text), recommendation intent, and AI helpfulness; for converted farmers, cost realism (F4), best- and worst-matching stages (F6--F7), and subsidy coping; for unconverted farmers, concerns (N2), attitude shift (N3), and preferred route (N4). \textit{Behavioral logs:} five-turn choices and terminal type. \textit{Simulated outcomes:} terminal energy burden, heating cost, surplus, compliance, emission score, and CO\textsubscript{2} tons.
+\subsection{Artifact}
 
-Open-ended post-survey text (e.g., student reflection, policy conflict detail, improvement suggestions, and negative AI feedback) will be analyzed via [TODO: coding scheme, e.g., dual-coder thematic analysis / codebook]; no codebook is fixed yet.
+We deployed a \textbf{village-level clean-heating transition simulation sandbox} for rural North China coal-to-X contexts (\url{https://www.clean-heating-simulator.com}; single-page \texttt{index.html} on Vercel). Participants need no account. After selecting an identity on the welcome screen (student, converted farmer, unconverted farmer, or other stakeholder) and entering basic background, they create a North China farm household profile: \textbf{whole-household} annual income, annual surplus, floor area, resident population, and pre-transition winter heating cost. Role (farm household), region (North China), and initial heating mode (scattered coal) are fixed.
+
+The simulation runs five turns: (1) status quo choice (continue coal or prepare transition); (2) compliance pressure (probabilistic home visit if coal continues, scaled by floor area and consecutive non-compliance); (3) technology route (natural gas, ground-source heat pump, or air-source heat pump; retrofit and operating costs linearly scaled from a 100 m\textsuperscript{2} baseline); (4) income boost or energy saving (one of three options); (5) subsidy phase-out (equivalent gas volume derived from initial coal spending, then a fixed per-m\textsuperscript{3} cost increase, followed by terminal adjudication). The interface displays six live indicators---annual heating cost, income, surplus, legal compliance (0--100), emission score (0--100), and energy burden rate (\%)---plus a turn-by-turn narrative log. Terminal outcomes are successful transition, financial strain, or enforcement-related seizure.
+
+After the terminal state, participants may request \textbf{AI debrief}: the browser POSTs initial inputs, stepwise logs, and final state to \texttt{/api/chat}; the server calls the \textbf{DeepSeek Chat Completions API} (\texttt{deepseek-v4-flash}) with one of three \textbf{human-authored structured system prompts} (converted-farmer comparison / unconverted-farmer retrofit advice / default analysis). The model must use only logged numbers and return three Markdown sections. If the API key is missing or the call fails, the UI shows an error---\textbf{no curated mock script is served as fallback}. The simulation engine itself is deterministic; economic, compliance, and emission constants are literature-calibrated (\texttt{algori\_spec.md}, \texttt{research/data/calibration\_defaults.json}), with some thresholds simplified as noted in-app.
+
+Each session is stored anonymously (UUID) in Supabase \texttt{simulation\_sessions}, including baseline inputs, turn-choice IDs/labels, \texttt{event\_log}, terminal type/summary, final metrics, AI analysis text (if generated), and post-survey fields.
 
 \subsection{Design}
 
-We used a single-session exposure design combining pre/post questionnaires and behavioral logging. The intervention was completing one full sandbox run (optional AI debrief and post-survey).
+We used a \textbf{single-session exposure design} combining pre/post questionnaires and behavioral logging. The intervention was completing one full sandbox run (optional AI debrief and post-survey).
 
-Independent variables were (a)~exposure to the live sandbox and self-selected pathway (technology, compliance branch, income/energy choices---not experimenter-assigned) and (b)~participant identity (student, converted farmer, unconverted farmer, other) as a between-subjects factor.
+\textbf{Independent variables (IVs):} (a) exposure to the live sandbox and self-selected pathway (technology, compliance branch, income/energy choices---not experimenter-assigned); (b) participant identity (student, converted farmer, unconverted farmer, other) as a between-subjects factor.
 
-Non-farmers completed a one-item pre-survey (Q1) before simulation and a approximately 2-minute post-survey after AI debrief. Converted and unconverted farmers skipped the pre-survey and only completed the post-survey (optional interview willingness; phone number collected only if interview was accepted).
+\textbf{Dependent variables (DVs):} (1) \textbf{Survey cognition/attitudes}---for students and other non-farmers: pre Q1 and post Q2 (5-point Likert understanding of coal-to-gas and heating costs), Q4 (strategy change if replayed), S1 (student-rated simulator helpfulness), O2 (other-audience understanding of household variation), recommendation intent, and AI helpfulness; for converted farmers: current heating method, post-transition cost band, cost-saving behavior, cost realism (F4), best/worst-matching stages (F6--F7), and subsidy coping; for unconverted farmers: current heating method, concerns (N2), attitude shift (N3), and preferred route (N4). (2) \textbf{Behavioral logs}---five-turn choices, whether the user reached technology-route selection, gas/ground-source heat-pump/air-source heat-pump selection, and terminal type. (3) \textbf{Simulated outcomes}---terminal energy burden, heating cost, surplus, compliance, emission score, and CO\textsubscript{2} tons.
 
-Comparison targets included within-person pre/post deltas (Q2$-$Q1, non-farmers only); distributions of burden, compliance, and emission by route and terminal type; and cross-household comparison within the same village (\texttt{village\_name}) [TODO: whether village-level aggregation is implemented]. Exported Supabase records will be analyzed with [TODO: paired pre/post test, e.g., Wilcoxon signed-rank or paired $t$-test with normality check] for Likert items; categorical outcomes (route, terminal type, attitude shift) via [TODO: descriptive frequencies / Fisher's exact / $\chi^2$]; and simulated metrics compared across routes and identities [TODO: specific grouping and tests]. Thematic coding will supplement quantitative findings [TODO: whether themes enter formal inferential models].
+\textbf{Pre/post structure:} Non-farmers completed a \textbf{one-item pre-survey} (Q1) before simulation and a \textbf{\textasciitilde{}2-minute post-survey} after AI debrief. \textbf{Converted and unconverted farmers skipped the pre-survey} and only completed the post-survey. The latest post-survey mainly uses radio buttons, checkboxes, and Likert items. Open text is not a required core measure; it appears only when a participant selects an ``other'' option or, for farmers, voluntarily agrees to leave a phone number for possible follow-up. Phone numbers are not included in statistical analysis.
 
-\subsection{Procedure}
+\textbf{Comparison targets:} within-person pre/post deltas (Q2--Q1, non-farmers only); post-survey rates for recommendation intent, AI helpfulness, student helpfulness, farmer realism, and farmer attitude shift; distributions of burden/compliance/emission by route and terminal type; and behavior logs from completed simulations that lacked post-survey, reported separately as route/dropout evidence rather than as survey evidence.
 
-Participation began with three first-screen layers: welcome (identity and background), context briefing, and informed consent. The consent screen stated that data were anonymous (no name; phone not collected by default), participation was voluntary, users could exit at any time, and data were used only to improve the simulator and for academic research (not advertising). The main application unlocked only after clicking Agree. The tool was a policy and livelihood decision simulation for public education, not a clinical, diagnostic, or therapeutic intervention.
+\subsection{Consent}
 
-After consent, participants entered household data, completed the pre-survey when applicable, played through five simulation turns while viewing live indicators and logs, optionally requested AI debrief, and then completed the identity-tailored post-survey.
+Participation began with three first-screen layers: \textbf{welcome} (identity/background), \textbf{context briefing}, and \textbf{informed consent} (\texttt{consentOverlay}). The consent screen stated that data are \textbf{anonymous} (no name; phone not collected by default), participation is \textbf{voluntary}, users may \textbf{exit anytime}, and data are used \textbf{only to improve the simulator and for academic research} (not advertising). The main app unlocked only after clicking ``Agree.'' The tool is a \textbf{policy/livelihood decision simulation for public education}, not a clinical, diagnostic, or therapeutic intervention.
+
+\subsection{Recruitment, coding \& analysis}
+
+\textbf{Recruitment and sample:} Supabase contained \textbf{53 raw session records} collected from \textbf{June 28 to July 5, 2026}. Participants included students, rural North China farmers (converted and unconverted), and other public users interested in rural clean heating, recruited through course outreach, a public URL, and online sharing. The raw identity distribution was 19 students, 15 converted farmers, 8 unconverted farmers, and 11 other users. The study analyzes only web sessions, survey responses, and behavioral logs.
+
+\textbf{Data cleaning and grouping:} Supabase records were exported and annotated with \texttt{export\_simulation\_sessions.py}. Test entries were defined as records whose \texttt{identity\_detail} was ``测试'' or ``Lawted 村'' and were excluded. Records with session duration under 30 seconds or no \texttt{ended\_at} were also excluded from formal analysis. Records lasting at least 30 seconds and reaching an ending, but missing post-survey or missing Q1/Q2 for non-farmers, were labeled \textbf{B\_有效未完成}. Records that ended and submitted post-survey were labeled \textbf{A\_全部完成}; for student/other users, A status also required both Q1 and Q2. This produced \textbf{21 A records} for the main survey analysis (7 students, 7 other users, 4 converted farmers, 3 unconverted farmers), \textbf{7 B records} for route/dropout analysis only (all farmers), and \textbf{25 C records} excluded from formal analysis (23 short or unfinished sessions and 2 test entries).
+
+\textbf{Statistical analysis:} A records are the main questionnaire sample; B records are used only to describe route choice, terminal outcome, and post-survey dropout. For the 14 non-farmer A records with paired Q1/Q2, we report the mean pre/post change, the proportion that improved, and a Wilcoxon signed-rank test as a small-sample ordinal sensitivity check. Post-survey categorical items are reported as counts and percentages, including recommendation intent, AI helpfulness, student-rated helpfulness, converted-farmer realism, unconverted-farmer attitude shift, and preferred path. Behavioral route analysis uses the A+B valid pool: technology choices are counted among sessions that reached turn 3, with legacy labels normalized into natural gas, ground-source heat pump, and air-source heat pump. Terminal outcomes are reported for all valid completed simulations. Simulated metrics (energy burden, compliance, emission score, and heating cost) are summarized by identity, route, and terminal type using medians or means. Because the sample is small and self-selected, group comparisons are exploratory; Fisher exact tests may be used for simple categorical contrasts, but the paper does not claim causal effects. Optional ``other'' text is used only as anonymized illustrative context, not as a formal coded qualitative dataset; phone numbers are excluded from analysis.
+
+\section{Results}
+
+This section reports data, tables, and qualitative results only. The main questionnaire analysis uses fully complete A records (n=21). Route, terminal-outcome, and dropout-related results use the A+B valid simulation pool (n=28).
+
+\subsection{Sample cleaning and identity distribution}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}llrl@{}}
+\toprule
+Data group & Definition & n & Use \\
+\midrule
+Raw Supabase records & All \texttt{simulation\_sessions} from June 28 to July 5, 2026 & 53 & Pre-cleaning dataset \\
+A\_fully complete & Ended simulation and submitted post-survey; student/other records also required Q1/Q2 & 21 & Main questionnaire analysis \\
+B\_valid incomplete & At least 30 seconds and ended simulation, but missing post-survey or non-farmer Q1/Q2 & 7 & Route, terminal-outcome, and dropout supplement \\
+C\_cleaning/excluded & Short/unfinished records or test entries & 25 & Excluded from formal analysis \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Identity & Raw records & A\_fully complete & B\_valid incomplete & C\_excluded \\
+\midrule
+Student & 19 & 7 & 0 & 12 \\
+Other stakeholder & 11 & 7 & 0 & 4 \\
+Converted farmer & 15 & 4 & 5 & 6 \\
+Unconverted farmer & 8 & 3 & 2 & 3 \\
+Total & 53 & 21 & 7 & 25 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qualitative result: after cleaning, the dataset contains a non-farmer paired pre/post sample for H2 and a valid farmer simulation pool for H1, but these two forms of evidence come from different analytic pools and are therefore reported separately below.
+
+\subsection{H2-related result: non-farmer pre/post understanding}
+
+Q1/Q2 used a 1--5 Likert scale. The A-record non-farmer sample contained 14 paired observations.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lrrrrrrrrr@{}}
+\toprule
+Group & n & Pre mean & Post mean & Mean change & Improved & Same & Decreased & Pre median & Post median \\
+\midrule
+Non-farmers total & 14 & 2.07 & 3.57 & +1.50 & 11 & 3 & 0 & 2 & 4 \\
+Students & 7 & 1.71 & 3.86 & +2.14 & 6 & 1 & 0 & 1 & 4 \\
+Other stakeholders & 7 & 2.43 & 3.29 & +0.86 & 5 & 2 & 0 & 2 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under the Wilcoxon signed-rank setup, after removing three zero differences, all 11 nonzero paired differences were positive; W+ = 66 and W- = 0.
+
+Qualitative result: in relation to H2, student and other non-farmer understanding scores moved upward after the sandbox session; none of the 14 paired records decreased, and the mean change was larger among students than among other stakeholders. The interactive simulator effectively improved students' and other stakeholders' understanding of the issue, consistent with H2.
+
+\subsection{Post-survey frequency results}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Measure & Sample & Result \\
+\midrule
+Recommendation intent & 21 & Very willing 8; fairly willing 8; willing 1; neutral 2; less/not willing 2 \\
+AI debrief helpfulness & 21 & Helpful 17; slightly helpful 2; not helpful 2 \\
+Student-rated simulator helpfulness versus articles/explanations & 7 & Very helpful 2; fairly helpful 5 \\
+Other stakeholders: help understanding household variation under the same policy & 7 & Very helpful 2; fairly helpful 4; almost not helpful 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+``Biggest impact'' option & n \\
+\midrule
+Sudden heating-cost increase, such as subsidy phase-out & 8 \\
+Upfront-cost differences across technology routes & 5 \\
+Home visits / enforcement and compliance pressure & 5 \\
+Coal-to-gas/electricity requires a large upfront payment & 2 \\
+Annual surplus turns negative / household cash-flow strain & 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Student-reported hardest burden (multiple choice, n=7) & Mentions \\
+\midrule
+Gas/electricity price after subsidy reduction & 6 \\
+Annual operating heating cost & 5 \\
+One-time equipment retrofit cost & 4 \\
+Not daring to turn on heat / insufficient indoor temperature & 3 \\
+Poor insulation raising energy use & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qualitative result: post-survey responses show that most completed users would recommend the simulator and rated the AI debrief as helpful; student and other-stakeholder responses clustered around subsidy phase-out, operating cost, upfront cost, and household variation, which are the cost-understanding items named in H2. The simulator delivered stronger science-communication effects, and the AI debrief was helpful.
+
+\subsection{H1-related result: farmer routes and outcomes}
+
+The A+B valid pool included 14 farmer records. Nine reached turn-3 technology-route selection; five did not reach turn 3 and ended in enforcement/seizure outcomes.
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Farmer valid pool & n \\
+\midrule
+Converted farmers & 9 \\
+Unconverted farmers & 5 \\
+Total & 14 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Turn-3 route choice among farmers (A+B, n=9) & n \\
+\midrule
+Natural gas & 4 \\
+Ground-source heat pump & 3 \\
+Air-source heat pump & 2 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}lr@{}}
+\toprule
+Farmer terminal outcome (A+B, n=14) & n \\
+\midrule
+Successful transition & 5 \\
+Enforcement/seizure & 5 \\
+Financial strain & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+Farmer post-survey measure (A-record farmers, n=7) & Result \\
+\midrule
+Converted farmers: reduced heating spending (n=4) & Yes 3; no 1 \\
+Converted farmers: cost realism (n=4) & Mostly close with detail differences 2; large deviation 1; about the same 1 \\
+Unconverted farmers: retrofit concerns (multiple choice, n=3) & Upfront cost 3; annual heating cost 3; equipment repair 1; voluntary household pace 1 \\
+Unconverted farmers: attitude after simulation (n=3) & More willing to retrofit soon 2; more hesitant due annual cost 1 \\
+Unconverted farmers: preferred path (n=3) & Wait and see 1; wait and improve insulation after advice 1; ``wait'' 1 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qualitative result: in relation to H1, the valid farmer pool recorded three route choices (natural gas, ground-source heat pump, and air-source heat pump) and three terminal outcomes (successful transition, enforcement/seizure, and financial strain); farmer post-surveys also recorded cost realism, retrofit concerns, and post-simulation route attitudes. The simulator collected real farmer data and let farmers compare simulated outcomes across different coal-to-X pathways.
+
+\subsection{Routes, terminal outcomes, and simulated metrics}
+
+The route table uses the 20 A+B records that reached turn 3. The terminal-outcome table uses all 28 valid completed simulations.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lrlrrrrr@{}}
+\toprule
+Technology route (A+B, reached turn 3) & n & Terminal outcomes & Median final burden & Median final heating cost & Median compliance & Median emission score & Median CO\textsubscript{2} \\
+\midrule
+Natural gas & 11 & Successful transition 11 & 2.4\% & 2388 yuan & 100 & 94 & 1.2 tons \\
+Air-source heat pump & 6 & Successful transition 4; financial strain 2 & 3.5\% & 2461 yuan & 100 & 83 & 2.6 tons \\
+Ground-source heat pump & 3 & Successful transition 1; financial strain 2 & 4.9\% & 2867 yuan & 100 & 92 & 3.1 tons \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{@{}lrlrrrr@{}}
+\toprule
+Terminal outcome (A+B, n=28) & n & Route distribution & Median final burden & Median final heating cost & Median emission score & Median CO\textsubscript{2} \\
+\midrule
+Successful transition & 16 & Natural gas 11; air-source heat pump 4; ground-source heat pump 1 & 2.5\% & 2420 yuan & 93 & 1.5 tons \\
+Enforcement/seizure & 8 & Did not reach turn 3: 8 & 4.8\% & 2300 yuan & 63 & 4.7 tons \\
+Financial strain & 4 & Air-source heat pump 2; ground-source heat pump 2 & 8.3\% & 2952 yuan & 85.5 & 3.3 tons \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Qualitative result: the A+B valid simulation pool places burden rate, heating cost, compliance, emission score, and CO\textsubscript{2} side by side across routes and terminal outcomes, giving the household-level pathway-comparison data required by the research question. These data also show that coal-to-X routes can reduce CO\textsubscript{2} emissions and improve air-quality indicators; terminal metrics and outcome distributions differ across routes, indicating that the simulator successfully displayed how different households and pathway choices lead to different final outcomes.
+
+\section{Discussion}
+
+\subsection{What the results mean}
+
+The results show that the main value of this study is not to prove that one coal-to-X route is universally best, but to break the broad question of whether clean heating is ``good'' into household budgets, technology routes, compliance pressure, and terminal outcomes. In the A+B valid pool, users moved toward natural gas, air-source heat pumps, ground-source heat pumps, or enforcement outcomes before reaching route selection. Under the same simulation rules, terminal outcomes also diverged into successful transition, financial strain, and enforcement/seizure. This means the sandbox turns the village pathway-choice problem raised in the Introduction into recordable and comparable household-level data, rather than a single universal answer.
+
+The results also show that the interactive format has a practical educational effect. Non-farmer pre/post understanding scores increased overall, with positive movement among both students and other stakeholders. In the post-survey, most participants were willing to recommend the simulator, and 17/21 rated the AI debrief as helpful. Users did not only finish a game flow; after the session, they could identify concrete variables behind clean-heating decisions, such as subsidy phase-out, operating cost, upfront retrofit cost, and household variation.
+
+\subsection{Fit with the research question and hypotheses}
+
+The Introduction asked whether household-level interactive simulation can help different users understand trade-offs among environmental goals, affordability, and compliance, while producing aggregatable evidence for village pathway comparison. The results give an overall affirmative answer. For non-farmers, pre/post data and survey feedback show improved understanding of coal-to-X cost structure and household variation. For farmers, the simulator recorded real farmer inputs, route choices, terminal outcomes, and post-survey feedback, creating raw material for later village-level aggregation.
+
+H1 predicted that farmer users could use the simulation to identify coal-to-X paths better matched to their own household conditions. The current results support H1 as formative evidence: farmer records include multiple route choices, and different routes were associated with different terminal outcomes and metrics; farmer post-surveys also recorded cost realism, retrofit concerns, and preferred paths. However, H1 should not be read as proving that a specific route is truly optimal for a real household, because this study did not track actual post-retrofit spending or heating behavior over time.
+
+H2 predicted that students and other non-farmer users would improve their understanding of heating-cost dynamics after one session. The current results support H2 more directly: among 14 paired non-farmer records, 11 increased, 3 stayed the same, and none decreased; the mean score rose from 2.07 to 3.57. Together with student-rated helpfulness and other stakeholders' ratings of household-variation understanding, this suggests that interactive simulation made it easier for users to see why the same policy can produce different household outcomes.
+
+\subsection{Implications for village clean-heating decisions}
+
+These results speak to the central tension in the Introduction: clean heating can reduce coal burning and CO\textsubscript{2} emissions, but transition stability depends on household-level affordability. In the results, successful-transition outcomes had lower median CO\textsubscript{2} and higher emission scores, while financial-strain outcomes could still occur after technical conversion. Village decisions therefore cannot stop at whether coal-to-X equipment is installed; they also need to compare energy burden, annual heating cost, and surplus changes across household types and routes.
+
+The simulator should therefore be understood as a low-cost trial environment, not as a replacement for government or household decision-making. A village could first collect household inputs and simulated route choices, then observe which households are more likely to face financial strain under each route and which can maintain lower burden after subsidy phase-out. Such aggregated household-level data can help village pathway choice move from one-size-fits-all implementation toward comparison across household differences.
+
+\subsection{Limitations and boundaries}
+
+First, the sample is small and self-selected through course outreach, a public link, and online sharing, so it cannot represent rural North China as a whole. The main A-record survey sample has only 21 cases, and the farmer A+B valid pool has 14 cases. The findings are therefore best read as evidence of feasibility and formative effect, not as strong causal or regionally representative conclusions.
+
+Second, pre/post understanding was measured only for students and other non-farmers; farmer users did not complete the same pre-survey. As a result, H2 has more direct evidence than H1. H1 currently relies on behavioral logs, route choices, terminal outcomes, and post-survey feedback. A stronger future test of H1 would require a larger farmer sample and pre/post measurement of farmers' route preferences.
+
+Third, the simulator uses a deterministic algorithm, literature constants, and simplified thresholds. It cannot fully replace real household accounts, equipment efficiency, building insulation, local gas/electricity prices, or county subsidy rules. The AI debrief is also an explanation generated from session logs, not an independent prediction model. The results should therefore be understood as an initial evaluation of an interactive policy-education and data-collection tool, not as a final estimate of real coal-to-X project benefits.
+
+\section{Conclusion}
+
+\subsection{Summary of conclusions}
+
+This study concludes that rural North China's clean-heating transition should not be framed as a single question of whether clean heating is worthwhile. It should be treated as a comparative question: which coal-to-X pathway is affordable, maintainable, compliant, and emission-reducing under specific household conditions? Through a five-turn interactive simulator, this study placed income, floor area, initial heating cost, technology route, subsidy phase-out, compliance pressure, and terminal metrics into one usable scenario. The results show improved understanding among non-farmer users after the session, and farmer records produced different route choices and terminal outcomes. The simulator is therefore not only a policy-display website; it can also serve as a research tool for collecting household-level data, showing pathway differences, and supporting village comparison.
+
+This conclusion is not a simple repetition of the numerical results. It synthesizes them into a more specific claim: interactive simulation can translate macro-level policy debate into household-level trade-offs among cost, emissions, and compliance. It cannot replace real policy evaluation, but it lets users preview the consequences of different choices in a low-risk setting, moving the question from ``Is coal-to-X good?'' to ``Which combination fits this household and this village?''
+
+\subsection{Implications}
+
+Theoretically, this study adds a form of household-level interactive evidence that is still uncommon in clean-heating research. Existing studies have shown environmental benefits and identified risks from subsidy withdrawal, operating cost, and coal rebound. This project shows how those variables can be integrated into a village decision sandbox that ordinary users can operate, and whose outputs can be recorded and aggregated. It moves policy simulation one step from expert models and regional statistics toward public-facing, experiential, and data-generating tools.
+
+Practically, the simulator can support early-stage trial calculation for village- or township-level pathway choice. Villages do not need to rely only on one technology route or average household data; they can collect household inputs and compare energy burden, annual heating cost, emission score, and financial-strain risk across routes. For farmers, the simulator can make subsidy phase-out, upfront retrofit cost, and long-term operating cost visible before formal retrofit decisions. For students and the wider public, it turns abstract energy policy into a concrete household budget and improves public understanding.
+
+\subsection{Limitations}
+
+This study has three main limitations. First, the sample is small and self-selected. The A-record main survey sample has 21 cases, and the farmer A+B valid pool has 14 cases, so the findings cannot represent all rural North China and should not be treated as strong causal evidence. Second, farmer users did not complete the same pre-survey as non-farmer users. As a result, H1 relies mainly on behavioral logs, route choices, and post-survey feedback, while H2 has more direct pre/post evidence. Third, the simulator uses literature constants and simplified rules, so it cannot fully capture local gas prices, electricity prices, subsidy rules, building insulation, equipment efficiency, or household labor differences.
+
+In addition, although most users rated the AI debrief as helpful, it remains an explanatory text generated from session logs, not an independent policy prediction model. Its role is closer to helping users interpret their own simulated pathway than to replacing expert assessment or real engineering calculation.
+
+\subsection{Future directions}
+
+Future research can move in five directions. First, it should expand the sample, especially farmer participants from different counties, income levels, housing conditions, and heating histories, and combine online simulation with offline interviews. Second, it should add a pre/post structure for farmer users, measuring whether their preferences among natural gas, air-source heat pumps, ground-source heat pumps, and insulation change after simulation; this would provide a stronger test of H1. Third, the model should improve parameter flexibility by allowing local gas prices, electricity prices, subsidy rules, insulation levels, and maintenance costs to be adjusted for specific villages. Fourth, multi-household results could be aggregated into a village dashboard showing burden distribution, emission outcomes, and financial-strain risk under different routes. Fifth, the same website demo can be extended to other environmental problems, with government and enterprise viewpoints added, so that interactions, conflicts, and relations among different groups can be simulated and the tool can serve a larger role in public education and policy simulation.
+
+In the longer term, this project can develop into a participatory policy-simulation tool. Farmers would enter their household conditions, villages would aggregate simulated results, and policymakers could compare affordability and environmental outcomes across coal-to-X combinations. Clean-heating decisions would then become less about completing a top-down retrofit task and more about using household-level evidence to find fairer, more stable, and more durable village transition pathways. On that basis, the same interactive sandbox framework can also be adapted to other environmental issues, allowing government, firms, and residents to explore trade-offs and cooperation within one shared simulation setting.
 
 \printbibliography
 
