@@ -15,11 +15,48 @@
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
 
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
+% Draw one PRE/POST pair for the black-and-white understanding figure.
+% (#1) x-origin (#2) group title (#3) pre (#4) post (#5) post fill pattern
+\newcommand{\prepostpair}[5]{%
+  \begin{scope}[shift={(#1,0)}]
+    \node[font=\footnotesize\bfseries, anchor=south]
+      at ({(1.15cm+0.22cm+1.15cm)/2},3.95cm) {#2};
+    \fill[draw=black!25, fill=black!4, line width=0.4pt]
+      (0,0) rectangle (1.15cm,3.6cm);
+    \fill[draw=black!25, fill=black!4, line width=0.4pt]
+      (1.37cm,0) rectangle (2.52cm,3.6cm);
+    \fill[black!75] (0,0) rectangle (1.15cm,{#3/5*3.6cm});
+    \draw[black, line width=0.5pt] (0,0) rectangle (1.15cm,{#3/5*3.6cm});
+    \fill[white] (1.37cm,0) rectangle (2.52cm,{#4/5*3.6cm});
+    \fill[pattern=#5, pattern color=black]
+      (1.37cm,0) rectangle (2.52cm,{#4/5*3.6cm});
+    \draw[black, line width=0.5pt]
+      (1.37cm,0) rectangle (2.52cm,{#4/5*3.6cm});
+    \node[font=\scriptsize\ttfamily, anchor=north, align=center]
+      at (0.575cm,-0.12cm) {PRE\\#3};
+    \node[font=\scriptsize\ttfamily, anchor=north, align=center]
+      at (1.945cm,-0.12cm) {POST\\#4};
+  \end{scope}%
+}
+
 % Table titles: one line ("Table 1. Title"), centered below each table.
 \captionsetup[table]{%
+  position=below,%
+  skip=6pt,%
+  justification=centering,%
+  singlelinecheck=true,%
+  labelformat=simple,%
+  labelsep=period,%
+  textformat=simple,%
+  labelfont=bf,%
+  textfont=normalfont%
+}
+\captionsetup[figure]{%
   position=below,%
   skip=6pt,%
   justification=centering,%
@@ -200,6 +237,33 @@ Other stakeholders & 7 & 2.43 & 3.29 & +0.86 & 5 & 2 & 0 & 2 & 4 \\
 \caption{Non-Farmer Pre/Post Understanding Scores}
 \label{tab:prepost-understanding}
 \end{table}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+\prepostpair{0cm}{Non-farmers ($n$=14)}{2.07}{3.57}{north east lines}
+\prepostpair{4.0cm}{Students ($n$=7)}{1.71}{3.86}{dots}
+\prepostpair{8.0cm}{Other stakeholders ($n$=7)}{2.43}{3.29}{crosshatch}
+
+\begin{scope}[shift={(0.0cm,-1.55cm)}]
+  \node[font=\scriptsize, anchor=west] at (0,0.18) {Post pattern by group:};
+  \fill[white] (2.55,0) rectangle (2.95,0.35);
+  \fill[pattern=north east lines, pattern color=black] (2.55,0) rectangle (2.95,0.35);
+  \draw (2.55,0) rectangle (2.95,0.35);
+  \node[font=\scriptsize, anchor=west] at (3.05,0.18) {Non-farmers};
+  \fill[white] (5.55,0) rectangle (5.95,0.35);
+  \fill[pattern=dots, pattern color=black] (5.55,0) rectangle (5.95,0.35);
+  \draw (5.55,0) rectangle (5.95,0.35);
+  \node[font=\scriptsize, anchor=west] at (6.05,0.18) {Students};
+  \fill[white] (7.95,0) rectangle (8.35,0.35);
+  \fill[pattern=crosshatch, pattern color=black] (7.95,0) rectangle (8.35,0.35);
+  \draw (7.95,0) rectangle (8.35,0.35);
+  \node[font=\scriptsize, anchor=west] at (8.45,0.18) {Other};
+\end{scope}
+\end{tikzpicture}
+\caption{Pre/Post Understanding Score Changes by Group}
+\label{fig:prepost-understanding}
+\end{figure}
 
 Under the Wilcoxon signed-rank setup, after removing three zero differences, all 11 nonzero paired differences were positive; W+ = 66 and W- = 0.
 
