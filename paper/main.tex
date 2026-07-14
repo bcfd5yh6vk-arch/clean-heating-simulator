@@ -103,6 +103,9 @@
 
 \title{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
 \author{Guo Hang}
+% apa7 rewrites \author/\@author; keep plain strings for the custom title page.
+\newcommand{\papertitle}{Coal-to-X House-hold Level Clean Heating Transition Simulation Sandbox}
+\newcommand{\paperauthor}{Guo Hang}
 
 % Store front-matter text outside apa7 \abstract/\keywords (custom title page).
 \newcommand{\paperabstract}{Rural North China's coal-to-X transition has reduced coal pollution, but many households still struggle with winter heating costs as subsidies taper. This study asked whether a household-level interactive simulation could help users understand trade-offs among clean air, affordability, and compliance, while producing evidence for village pathway choice. We built and deployed a five-turn clean-heating sandbox in which users entered household income, housing area, and heating costs, compared gas and heat-pump routes, and viewed energy burden, compliance, and emission indicators. From June 28 to July 5, 2026, 21 participants completed the simulation and post-survey; 14 non-farmer users also had paired pre/post understanding scores. Understanding improved for 11 of those 14 users, 17 participants rated the AI debrief as helpful, and farmer logs showed that route choices and outcomes differed by household conditions. The sandbox made policy trade-offs concrete and suggests that village clean-heating decisions should compare household-level affordability rather than assume one universal route.}
@@ -158,16 +161,14 @@
 \begin{document}
 % Page 1: title and author only (no running head, course line, or other apa7 extras).
 \pagestyle{empty}
-\makeatletter
 \begin{titlepage}
   \centering
   \vspace*{\fill}
-  {\Huge\bfseries \@title\par}
+  {\Sanhao\bfseries \papertitle\par}
   \vspace{2em}
-  {\Large\bfseries \@author\par}
+  {\Sihao\bfseries \paperauthor\par}
   \vspace*{\fill}
 \end{titlepage}
-\makeatother
 
 % Page 2: centered Abstract heading; bottom-center page number.
 \newpage
