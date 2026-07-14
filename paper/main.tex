@@ -89,6 +89,14 @@
 \renewcommand{\thesection}{\arabic{section}}
 \renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
 
+% Level-1 headings flush left with body text (apa7 defaults to centered).
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{\z@}%
+  {\b@level@one@skip}{\e@level@one@skip}%
+  {\normalfont\normalsize\bfseries\raggedright}}
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\quad}
+\makeatother
+
 % Bottom-center page numbers on title page and all later pages; no running header.
 \fancypagestyle{titlepage}{%
   \fancyhf{}%
