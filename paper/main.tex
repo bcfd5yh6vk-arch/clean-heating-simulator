@@ -26,6 +26,7 @@
 \usetikzlibrary{patterns,calc}
 \usepackage{setspace}
 \usepackage{caption}
+\usepackage{indentfirst} % indent first paragraph after section headings
 % apa7 already loads geometry; set margins without reloading the package.
 \geometry{%
   a4paper,%
@@ -40,6 +41,13 @@
 \newcommand{\Sanhao}{\fontsize{16pt}{20pt}\selectfont}
 \newcommand{\Sihao}{\fontsize{14pt}{18pt}\selectfont}
 \newcommand{\Xiaosi}{\fontsize{12pt}{18pt}\selectfont}
+
+% Body first-line indent ≈ width of four English letters.
+\newlength{\FourLetterIndent}
+\AtBeginDocument{%
+  \settowidth{\FourLetterIndent}{abcd}%
+  \setlength{\parindent}{\FourLetterIndent}%
+}
 
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -187,6 +195,8 @@
 \newpage
 % Body text: 12 pt Times New Roman + 1.5 line spacing (template).
 \onehalfspacing
+\settowidth{\FourLetterIndent}{abcd}
+\setlength{\parindent}{\FourLetterIndent}
 \setcounter{secnumdepth}{3}
 \setcounter{section}{0}
 
