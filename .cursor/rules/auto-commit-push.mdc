@@ -1,0 +1,16 @@
+---
+description: After every file edit the user requests, automatically commit and push
+alwaysApply: true
+---
+
+# Auto commit and push
+
+Whenever the user asks you to change files, after finishing those edits:
+
+1. Stage only the files you changed for that request (not unrelated dirty files).
+2. Commit with a concise message focused on why.
+3. Push to the tracked remote branch (`git push`).
+
+Do this automatically every time unless the user explicitly says not to commit or not to push.
+Use a HEREDOC for the commit message. Never update git config. Never use `--no-verify` or force push unless the user asks.
+If HTTPS auth fails, try the local `./.tools/gh_*/bin/gh auth setup-git` path used previously in this repo.
