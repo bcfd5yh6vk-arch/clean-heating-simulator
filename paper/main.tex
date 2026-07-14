@@ -14,6 +14,7 @@
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage{tabularx}
+\usepackage{float}
 
 \newcolumntype{P}[1]{>{\raggedright\arraybackslash}p{#1}}
 
@@ -181,10 +182,11 @@ Qualitative result: after cleaning, the dataset contains a non-farmer paired pre
 
 Q1/Q2 used a 1--5 Likert scale. The A-record non-farmer sample contained 14 paired observations.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lrrrrrrrrr@{}}
 \toprule
 Group & n & Pre mean & Post mean & Mean change & Improved & Same & Decreased & Pre median & Post median \\
@@ -193,7 +195,8 @@ Non-farmers total & 14 & 2.07 & 3.57 & +1.50 & 11 & 3 & 0 & 2 & 4 \\
 Students & 7 & 1.71 & 3.86 & +2.14 & 6 & 1 & 0 & 1 & 4 \\
 Other stakeholders & 7 & 2.43 & 3.29 & +0.86 & 5 & 2 & 0 & 2 & 4 \\
 \bottomrule
-\end{tabular}
+\end{tabular}%
+}
 \caption{Non-Farmer Pre/Post Understanding Scores}
 \label{tab:prepost-understanding}
 \end{table}
