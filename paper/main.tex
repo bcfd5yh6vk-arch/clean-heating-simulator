@@ -2,9 +2,12 @@
 
 \usepackage[american]{babel}
 \usepackage{csquotes}
-\usepackage[style=apa,sortcites=true,sorting=nyt,backend=biber]{biblatex}
-\DeclareLanguageMapping{american}{american-apa}
+\usepackage[style=numeric,sorting=none,backend=biber]{biblatex}
 \addbibresource{bibliography.bib}
+% Fixed [1]--[15] numbering: keys must stay in this order (see bibliography.bib).
+\newcommand{\fixbibnumbers}{%
+  \nocite{li2025scatteredcoal,liu2025pahs,ma2024agi,qin2026heating,wang2023abm,yuan2025carbon,zhai2023review,mee2011ghg,mee2020grid,cabr2025rural,hu2021decoalizing,zhao2024sustainable,zhang2024uneven,liu2020costs,ndrc2017plan}%
+}
 
 \usepackage[T1]{fontenc}
 \usepackage{mathptmx}
@@ -16,7 +19,6 @@
 \usepackage{array}
 \usepackage{tabularx}
 \usepackage{float}
-\usepackage{enumitem}
 \usepackage{tikz}
 \usetikzlibrary{patterns,calc}
 
@@ -126,12 +128,13 @@
 % Reset counters: maketitle still steps the section counter for Abstract (and title).
 \setcounter{secnumdepth}{2}
 \setcounter{section}{0}
+\fixbibnumbers
 
 \section{Introduction}
 
-Winter heating is a basic livelihood need in rural North China. Since the national push for clean winter heating in the mid-2010s, tens of millions of farm households have shifted from scattered coal to coal-to-X routes such as natural gas, electricity, or heat pumps. Regional air quality has improved and winter coal use has fallen sharply. Environmental gains, however, do not automatically translate into sustainable energy use for every family. Upfront retrofit costs and recurring winter bills are largely borne by households; as equipment and operating subsidies phase down by cohort, many face a familiar tension: households can afford the switch but not everyday use. Heating bills rise as a share of annual income, indoor temperatures drop, and some households return to coal or maintain dual fuel sources. Public debate often still asks only whether clean heating is ``good,'' rather than which coal-to-X pathway fits diverse household budgets, housing conditions, and compliance constraints.
+Winter heating is a basic livelihood need in rural North China. Since the national push for clean winter heating in the mid-2010s, tens of millions of farm households have shifted from scattered coal to coal-to-X routes such as natural gas, electricity, or heat pumps \cite{li2025scatteredcoal,ndrc2017plan}. Regional air quality has improved and winter coal use has fallen sharply. Environmental gains, however, do not automatically translate into sustainable energy use for every family. Upfront retrofit costs and recurring winter bills are largely borne by households; as equipment and operating subsidies phase down by cohort, many face a familiar tension: households can afford the switch but not everyday use. Heating bills rise as a share of annual income, indoor temperatures drop, and some households return to coal or maintain dual fuel sources. Public debate often still asks only whether clean heating is ``good,'' rather than which coal-to-X pathway fits diverse household budgets, housing conditions, and compliance constraints.
 
-The policy stakes are concrete. In much of North China, village- or township-level campaigns coordinate technology choice and installation. If the chosen route does not match most households' cash flow and energy burden, transitions that look successful on paper may prove unstable in operation. Prior work documents this tension from multiple angles. Environmental and health studies show that clean heating reduces PM\textsubscript{2.5} exposure and carbon emissions, though benefits and costs are unevenly distributed across households \parencite{zhang2024uneven}. Energy-economics and energy-poverty research finds that gas spending above roughly 5\% of disposable income materially changes behavior, and that subsidy withdrawal raises winter costs and the share of households under affordability stress \parencite{zhao2024sustainable,liu2020costs}. Field evidence reports county-level subsidy variation, tariff pass-through, equipment replacement cycles, and coal rebound \parencite{hu2021decoalizing}. Regional policy and household-choice research links household actions to village- or city-scale outcomes, yet few public-facing tools let users enter household income, floor area, and heating costs, compare gas, heat-pump, and insulation routes interactively, and experience subsidy phase-out and compliance pressure in one session.
+The policy stakes are concrete. In much of North China, village- or township-level campaigns coordinate technology choice and installation. If the chosen route does not match most households' cash flow and energy burden, transitions that look successful on paper may prove unstable in operation. Prior work documents this tension from multiple angles. Environmental and health studies show that clean heating reduces PM\textsubscript{2.5} exposure, PAH pollution, and carbon emissions, though benefits and costs are unevenly distributed across households \cite{liu2025pahs,yuan2025carbon,zhang2024uneven}. Energy-economics and energy-poverty research finds that gas spending above roughly 5\% of disposable income materially changes behavior, and that subsidy withdrawal raises winter costs and the share of households under affordability stress \cite{zhao2024sustainable,liu2020costs,zhai2023review}. Field evidence reports county-level subsidy variation, tariff pass-through, equipment replacement cycles, and coal rebound \cite{hu2021decoalizing}. Regional policy and household-choice research links household actions to village- or city-scale outcomes, yet few public-facing tools let users enter household income, floor area, and heating costs, compare gas, heat-pump, and insulation routes interactively, and experience subsidy phase-out and compliance pressure in one session.
 
 This study addresses that gap by designing, deploying, and evaluating a \textbf{village-level clean-heating transition simulation sandbox} (\url{https://www.clean-heating-simulator.com}). Participants role-play a farm household, enter whole-household income, surplus, floor area, and pre-transition heating cost, then make choices across five turns---whether to transition, which technology to adopt, how to boost income or save energy, and how to cope with subsidy withdrawal---while viewing live indicators for heating cost, energy burden rate, legal compliance, and emission score. After the terminal state, they may request an AI debrief generated from session logs via a live language-model API (not a curated mock script). The simulation engine is deterministic and calibrated from literature and public statistics.
 
@@ -143,19 +146,19 @@ The remainder of the paper is organized as follows. The Literature Review summar
 
 \subsection{Environmental benefits of clean heating}
 
-Prior research first establishes the environmental importance of coal-to-X heating. National clean-heating policy framed rural scattered-coal replacement as a key route for reducing winter air pollution and raising clean-heating coverage in northern China \parencite{ndrc2017plan}. Empirical studies on rural clean heating also show that replacing coal can reduce PM\textsubscript{2.5}, PAH, and carbon-emission pressure, though health benefits and economic costs are unevenly distributed across households \parencite{zhang2024uneven}. Clean heating is therefore not only a household technology change; it is also part of air-pollution control, carbon reduction, and rural energy transition.
+Prior research first establishes the environmental importance of coal-to-X heating. National clean-heating policy framed rural scattered-coal replacement as a key route for reducing winter air pollution and raising clean-heating coverage in northern China \cite{ndrc2017plan,li2025scatteredcoal}. Empirical studies on rural clean heating also show that replacing coal can reduce PM\textsubscript{2.5}, PAH, and carbon-emission pressure \cite{liu2025pahs,yuan2025carbon}, though health benefits and economic costs are unevenly distributed across households \cite{zhang2024uneven}. Clean heating is therefore not only a household technology change; it is also part of air-pollution control, carbon reduction, and rural energy transition.
 
 \subsection{Affordability, energy poverty, and coal rebound}
 
-A second body of work shows that environmental benefits are accompanied by household-level cost pressure. Liu and Mauzerall's research on clean-heating costs suggests that gas and electric routes can be much more expensive than coal without subsidies \parencite{liu2020costs}. Wang et al. further show that subsidy withdrawal increases winter heating expenses and expands the share of households under affordability stress \parencite{zhao2024sustainable}. Hu's study of the 2+26 region also documents coal rebound and subsidy dependence \parencite{hu2021decoalizing}. Together, these studies show that a transition is not sustainable simply because equipment has been installed; households must also be able to afford daily winter use.
+A second body of work shows that environmental benefits are accompanied by household-level cost pressure. Reviews of northern rural clean-heating renovation identify high operating costs, weak infrastructure, and coal rebound as key barriers \cite{zhai2023review}. Liu and Mauzerall's research on clean-heating costs suggests that gas and electric routes can be much more expensive than coal without subsidies \cite{liu2020costs}. Wang et al. further show that subsidy withdrawal increases winter heating expenses and expands the share of households under affordability stress \cite{zhao2024sustainable}. Hu's study of the 2+26 region also documents coal rebound and subsidy dependence \cite{hu2021decoalizing}. Together, these studies show that a transition is not sustainable simply because equipment has been installed; households must also be able to afford daily winter use.
 
 \subsection{Technology routes and village-level choice}
 
-A third set of studies focuses on differences among coal-to-X routes. Natural gas, electric heating, air-source heat pumps, ground-source heat pumps, and insulation retrofits differ in upfront cost, operating cost, comfort, infrastructure dependence, and maintenance. Prior cost and policy studies suggest that clean-heating renovation should match local resources, household income, building conditions, and operating costs \parencite{liu2020costs,zhao2024sustainable}. Because many rural heating transitions are organized at village or township scale, a single route that does not fit most households can create a gap between policy completion and household affordability.
+A third set of studies focuses on differences among coal-to-X routes. Natural gas, electric heating, air-source heat pumps, ground-source heat pumps, and insulation retrofits differ in upfront cost, operating cost, comfort, infrastructure dependence, and maintenance. Prior cost and policy studies suggest that clean-heating renovation should match local resources, household income, building conditions, and operating costs \cite{liu2020costs,zhao2024sustainable,zhai2023review,qin2026heating}. Because many rural heating transitions are organized at village or township scale, a single route that does not fit most households can create a gap between policy completion and household affordability.
 
 \subsection{Policy simulation, AI methods, and this study's gap}
 
-A fourth body of literature informs this study's method. Prior policy and household-choice research shows how individual heating decisions interact with regional clean-heating outcomes \parencite{hu2021decoalizing,zhang2024uneven}. Existing studies can demonstrate environmental benefits, identify affordability risks, and compare technology routes, but few public-facing tools let farmers and other users enter household income, housing area, and heating costs, then compare gas, heat-pump, insulation, subsidy phase-out, and compliance pressure in one interface. This study fills that gap by turning a regional policy problem into a household-level, turn-based, data-recording village decision sandbox.
+A fourth body of literature informs this study's method. Agent-based and multi-agent simulation methods can link individual behavior to group or regional policy outcomes \cite{wang2023abm,ma2024agi}. Prior policy and household-choice research shows how individual heating decisions interact with regional clean-heating outcomes \cite{hu2021decoalizing,zhang2024uneven}. Existing studies can demonstrate environmental benefits, identify affordability risks, and compare technology routes, but few public-facing tools let farmers and other users enter household income, housing area, and heating costs, then compare gas, heat-pump, insulation, subsidy phase-out, and compliance pressure in one interface. This study fills that gap by turning a regional policy problem into a household-level, turn-based, data-recording village decision sandbox.
 
 \section{Methodology}
 
@@ -183,7 +186,7 @@ We used a \textbf{single-session exposure design} combining pre/post questionnai
 
 \subsection{Simulation algorithm and scoring formulas}
 
-The sandbox uses deterministic scoring formulas implemented in \texttt{index.html}. Its emission factors draw on the official 2023 electricity CO\textsubscript{2} emission-factor table and the village-building carbon-emission evaluation standard \parencite{mee2023electricityfactor,cabeeVillageCarbonStandard}. Let \(I\) be annual household income, \(S_t\) annual surplus after turn \(t\), \(A\) housing area in m\textsuperscript{2}, \(N\) household population, \(C_t\) annual heating cost, and \(C_0\) pre-transition coal heating cost. The displayed energy-burden rate is recalculated after each cost or income update:
+The sandbox uses deterministic scoring formulas implemented in \texttt{index.html}. Its emission factors draw on official regional electricity emission-factor tables and the rural-building operational carbon-emission grading standard \cite{mee2020grid,cabr2025rural,mee2011ghg}. Let \(I\) be annual household income, \(S_t\) annual surplus after turn \(t\), \(A\) housing area in m\textsuperscript{2}, \(N\) household population, \(C_t\) annual heating cost, and \(C_0\) pre-transition coal heating cost. The displayed energy-burden rate is recalculated after each cost or income update:
 
 \begin{equation}
 B_t = 100 \times \frac{C_t}{\max(1,I_t)} .
@@ -199,7 +202,7 @@ G_{\mathrm{coal}} &= Q_{\mathrm{coal}} \times e_{\mathrm{coal}}, \\
 E_0 &= \frac{G_{\mathrm{coal}}}{1000} \times \gamma_{\mathrm{coal}} .
 \end{align}
 
-In these equations, \(p_{\mathrm{coal}}=1000\) yuan/ton is the scattered-coal price calibrated from public/media accounts of rural coal heating costs, \(e_{\mathrm{coal}}=23.2\) GJ/ton is the coal input-energy constant used by the sandbox, and \(\gamma_{\mathrm{coal}}=89.0\) tCO\textsubscript{2}/TJ is the coal CO\textsubscript{2} factor listed for general coal in the village-building carbon standard's fossil-fuel appendix \parencite{cabeeVillageCarbonStandard}. Dividing by 1000 converts GJ to TJ.
+In these equations, \(p_{\mathrm{coal}}=1000\) yuan/ton is the scattered-coal price calibrated from public/media accounts of rural coal heating costs, \(e_{\mathrm{coal}}=23.2\) GJ/ton is the coal input-energy constant used by the sandbox, and \(\gamma_{\mathrm{coal}}=89.0\) tCO\textsubscript{2}/TJ is the coal CO\textsubscript{2} factor listed for general coal in the village-building carbon standard's fossil-fuel appendix \cite{cabr2025rural}. Dividing by 1000 converts GJ to TJ.
 
 In the technology-route turn, all one-time retrofit costs scale linearly from a 100 m\textsuperscript{2} baseline:
 
@@ -246,13 +249,13 @@ E_{\mathrm{ground}} &= \frac{G_{\mathrm{coal}} f}{h_{\mathrm{ground}}} \times \g
 E_{\mathrm{air}} &= \frac{G_{\mathrm{coal}} f}{h_{\mathrm{air}}} \times \gamma_{\mathrm{grid}} \times 0.001.
 \end{align}
 
-The constants are \(e_{\mathrm{gas}}=0.036\) GJ/m\textsuperscript{3}, \(\gamma_{\mathrm{gas}}=55.54\) tCO\textsubscript{2}/TJ, and \(\gamma_{\mathrm{grid}}=0.6361\) kgCO\textsubscript{2}/kWh. The natural-gas CO\textsubscript{2} factor is from the village-building carbon standard's fossil-fuel appendix, and the grid factor is the 2023 North China regional electricity average factor \parencite{mee2023electricityfactor,cabeeVillageCarbonStandard}. The heat-pump formulas multiply by 0.001 to convert kg to tons. The displayed emission score is a clipped 0--100 score based on per-capita annual heating emissions:
+The constants are \(e_{\mathrm{gas}}=0.036\) GJ/m\textsuperscript{3}, \(\gamma_{\mathrm{gas}}=55.54\) tCO\textsubscript{2}/TJ, and \(\gamma_{\mathrm{grid}}=0.6361\) kgCO\textsubscript{2}/kWh. The natural-gas CO\textsubscript{2} factor is from the village-building carbon standard's fossil-fuel appendix, and the grid factor is the 2023 North China regional electricity average factor \cite{mee2020grid,cabr2025rural}. The heat-pump formulas multiply by 0.001 to convert kg to tons. The displayed emission score is a clipped 0--100 score based on per-capita annual heating emissions:
 
 \begin{equation}
 M_t = \min\left(100,\max\left(0,\operatorname{round}\left(100 - 20 \times \frac{E_t/N}{1.0}\right)\right)\right).
 \end{equation}
 
-The score denominator, 1.0 tCO\textsubscript{2} per capita, follows the cold-region low-carbon village limit for per-capita building carbon emissions in the village-building carbon standard; the score slope of 20 converts this standard-style threshold into a 0--100 in-game indicator rather than a formal certification grade \parencite{cabeeVillageCarbonStandard}. Thus higher per-capita heating emissions lower the score, while clean-heating routes or reduced operation can raise it.
+The score denominator, 1.0 tCO\textsubscript{2} per capita, follows the cold-region low-carbon village limit for per-capita building carbon emissions in the village-building carbon standard; the score slope of 20 converts this standard-style threshold into a 0--100 in-game indicator rather than a formal certification grade \cite{cabr2025rural}. Thus higher per-capita heating emissions lower the score, while clean-heating routes or reduced operation can raise it.
 
 Turn 4 contains three household-strategy algorithms. Income boosting increases both income and surplus by 20\% of current income:
 
@@ -675,46 +678,6 @@ In the longer term, this project can develop into a participatory policy-simulat
 \newpage
 \noindent{\Large\bfseries Reference\par}
 \vspace{1em}
-\begin{enumerate}[
-  label={[\arabic*]},
-  leftmargin=2.5em,
-  labelwidth=2.5em,
-  labelsep=0pt,
-  itemindent=0pt,
-  align=left,
-  itemsep=0.75\baselineskip,
-  parsep=0pt,
-  topsep=0pt
-]
-\item Li, X., Yang, F., \& Zhou, X. (2025). Research on the current situation and strategies of scattered coal governance in China. \textit{China Coal}, \textit{51}(02), 149--157. \url{https://doi.org/10.19880/j.cnki.ccm.2025.02.017}
-
-\item Liu, J., Li, Z., Zhu, Y., Ma, X., Wang, G., Ning, Z., \ldots\ \& Han, B. (2025). Temporal variations and sources of PM\textsubscript{2.5}-bound PAHs in rural Baoding during coal-to-gas conversion. \textit{Research of Environmental Sciences}, \textit{38}(09), 1929--1938. \url{https://doi.org/10.13198/j.issn.1001-6929.2025.07.13}
-
-\item Ma, X., Wang, Z., \& Wang, J. Artificial intelligence plus public policy research: A multi-agent simulation method driven by artificial general intelligence (AGI+MAS). \textit{E-Government}, 1--12.
-
-\item Qin, Q., \& Qiu, C. (2026). Future heating pathway choices from the coal-to-gas controversy. \textit{Energy}, (03), 34--36.
-
-\item Wang, G., \& Gao, D. (2023). Research progress and methodological implications of agent-based modeling in public policy simulation. \textit{Journal of Public Management}, \textit{20}(02), 116--127+173. \url{https://doi.org/10.16149/j.cnki.23-1523.20230314.003}
-
-\item Yuan, X., Liu, W., Li, R., \& Li, P. (2025). Research on carbon emission reduction methodology for clean heating in rural areas of Hebei Province. \textit{Energy Conservation}, \textit{44}(04), 111--114.
-
-\item Zhai, Y., \& Li, S. (2023). Review and prospect of clean heating renovation in northern rural areas of China. \textit{China Energy and Environmental Protection}, \textit{45}(10), 194--200. \url{https://doi.org/10.19389/j.cnki.1003-0506.2023.10.029}
-
-\item Ministry of Ecology and Environment of the People's Republic of China. (2011). \textit{Guidelines for the preparation of provincial greenhouse gas inventories (Trial)}. Department of Climate Change, National Development and Reform Commission.
-
-\item Department of Climate Change, Ministry of Ecology and Environment of the People's Republic of China. (2020). \textit{2019 baseline emission factors for regional power grids in China}. Ministry of Ecology and Environment.
-
-\item China Academy of Building Research. (2025). \textit{Grading standard for operational carbon emissions of rural buildings} (Standard No. T/CECS XXX-2025). China Architecture \& Building Press.
-
-\item Hu, Z. (2021). De-coalizing rural China: A critical examination of the coal to clean heating project from a policy process perspective. \textit{Frontiers in Energy Research}, \textit{9}, Article 707492. \url{https://doi.org/10.3389/fenrg.2021.707492}
-
-\item Wang, F., Shang, Y., Zhang, P., Zhang, W., \& Li, J. (2024). Exploring economically sustainable solutions for clean heating in rural Northern China. \textit{Fundamental Research}. \url{https://doi.org/10.1016/j.fmre.2024.11.020}
-
-\item Zhang, W., Zhang, P., Zhao, J., Wang, F., Shang, Y., Pei, F., et al. (2024). The uneven distribution of health benefits and economic costs from clean heating in rural Northern China. \textit{Science Bulletin}, \textit{69}(12), 1852--1856. \url{https://doi.org/10.1016/j.scib.2024.04.035}
-
-\item Liu, H., \& Mauzerall, D. L. (2020). Costs of clean heating in China: Evidence from rural households in the Beijing-Tianjin-Hebei region. \textit{Energy Economics}, \textit{90}, 104844. \url{https://doi.org/10.1016/j.eneco.2020.104844}
-
-\item National Development and Reform Commission, National Energy Administration, \& others. (2017). \textit{Northern Region Winter Clean Heating Plan (2017--2021)}. \url{https://www.ndrc.gov.cn/xxgk/zcfb/tz/201712/t20171220_962623.html}
-\end{enumerate}
+\printbibliography[heading=none]
 
 \end{document}
