@@ -35,6 +35,7 @@ BASE_URL = "https://www.kaoshixiansheng.top/server"
 SUBJECT = "ReadingWriting"
 TARGET_BANKS = ["历年真题", "Educator Question Bank"]
 DIFFICULTIES = ["简单", "中等", "复杂"]
+DOC_TITLE = "SAT 阅读与写作 · 知识点练习题库"
 
 DEFAULT_OUTPUT = (
     Path(__file__).resolve().parents[1]
@@ -146,6 +147,7 @@ def strip_html(raw: str | None) -> str:
     text = re.sub(r"<[^>]+>", "", text)
     text = html.unescape(text)
     text = text.replace("\xa0", " ")
+    text = re.sub(r"[\x00-\x08\x0B\x0C\x0E-\x1F]", "", text)
     text = re.sub(r"[ \t]+\n", "\n", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
@@ -445,7 +447,7 @@ def write_docx(items: list[QuestionItem], output: Path) -> None:
     style._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
     style.font.size = Pt(11)
 
-    add_heading_line(doc, "SAT 阅读与写作 · 知识点练习题库", size=18)
+    add_heading_line(doc, DOC_TITLE, size=18)
     p = doc.add_paragraph()
     run = p.add_run(
         f"题库范围：{'、'.join(TARGET_BANKS)}　共 {len(items)} 题\n"
