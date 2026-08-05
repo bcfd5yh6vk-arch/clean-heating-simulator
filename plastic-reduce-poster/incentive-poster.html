@@ -1,0 +1,782 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>减塑行动组 · 阳光积分激励机制</title>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <style>
+      :root {
+        --soil: #1c2e1f;
+        --leaf: #2f6b3a;
+        --leaf-deep: #1a4a28;
+        --sprout: #6fad5a;
+        --corn: #e9b12a;
+        --corn-soft: #f7e3a0;
+        --gourd: #5c7a2e;
+        --gourd-soft: #d8e4b8;
+        --paper: #f2f6ef;
+        --paper-warm: #e8efe3;
+        --ink: #1a261c;
+        --muted: #4a5c4e;
+        --danger: #b54a2e;
+        --gain: #1f6b3a;
+        --plastic: #7a8a92;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        padding: 28px 16px 56px;
+        background:
+          radial-gradient(ellipse at 20% 0%, #dce8d4 0%, transparent 50%),
+          radial-gradient(ellipse at 90% 100%, #cfdcc8 0%, transparent 45%),
+          #c5d4c0;
+        font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        color: var(--ink);
+      }
+
+      .page-bar {
+        max-width: 720px;
+        margin: 0 auto 20px;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .page-bar h1 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--leaf-deep);
+      }
+
+      .page-bar p {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+
+      .export-btn {
+        appearance: none;
+        border: none;
+        background: var(--leaf-deep);
+        color: #f5faf3;
+        font: inherit;
+        font-size: 0.88rem;
+        font-weight: 600;
+        padding: 10px 18px;
+        border-radius: 999px;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(26, 74, 40, 0.25);
+      }
+
+      .export-btn:hover {
+        background: var(--leaf);
+      }
+
+      .export-btn:disabled {
+        opacity: 0.65;
+        cursor: wait;
+      }
+
+      .stage {
+        max-width: 720px;
+        margin: 0 auto;
+        filter: drop-shadow(0 18px 40px rgba(28, 46, 31, 0.18));
+      }
+
+      /* —— Poster canvas: Xiaohongshu-friendly 3:4 —— */
+      .poster {
+        position: relative;
+        width: 720px;
+        max-width: 100%;
+        aspect-ratio: 3 / 4;
+        margin: 0 auto;
+        overflow: hidden;
+        background:
+          linear-gradient(165deg, #f7faf4 0%, var(--paper) 42%, var(--paper-warm) 100%);
+        color: var(--ink);
+      }
+
+      .poster::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          radial-gradient(circle at 1px 1px, rgba(47, 107, 58, 0.07) 1px, transparent 0);
+        background-size: 18px 18px;
+        pointer-events: none;
+        opacity: 0.9;
+      }
+
+      .poster::after {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border: 1.5px solid rgba(47, 107, 58, 0.28);
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .poster-inner {
+        position: relative;
+        z-index: 1;
+        height: 100%;
+        padding: 28px 30px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* Hero */
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        align-items: end;
+        padding-bottom: 12px;
+        border-bottom: 2px solid rgba(47, 107, 58, 0.2);
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--leaf);
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+
+      .eyebrow .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--corn);
+        box-shadow: 0 0 0 3px rgba(233, 177, 42, 0.28);
+      }
+
+      .brand {
+        font-family: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", serif;
+        font-size: clamp(28px, 5.2vw, 38px);
+        line-height: 1.15;
+        font-weight: 700;
+        color: var(--soil);
+        letter-spacing: 0.02em;
+      }
+
+      .brand em {
+        font-style: normal;
+        color: var(--leaf);
+      }
+
+      .tagline {
+        margin-top: 8px;
+        font-size: 13px;
+        line-height: 1.45;
+        color: var(--muted);
+        max-width: 28em;
+      }
+
+      .hero-badge {
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle at 35% 30%, #ffe9a8 0%, var(--corn) 45%, #c98912 100%);
+        display: grid;
+        place-items: center;
+        box-shadow:
+          0 8px 20px rgba(201, 137, 18, 0.35),
+          inset 0 -6px 12px rgba(140, 90, 0, 0.2);
+        flex-shrink: 0;
+      }
+
+      .hero-badge svg {
+        width: 58px;
+        height: 58px;
+      }
+
+      /* Sections */
+      .sections {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        min-height: 0;
+      }
+
+      .block {
+        position: relative;
+        border-radius: 14px;
+        padding: 12px 14px 13px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(47, 107, 58, 0.14);
+        backdrop-filter: blur(2px);
+      }
+
+      .block.earn {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(216, 232, 210, 0.55));
+      }
+
+      .block.spend {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(247, 227, 160, 0.35));
+      }
+
+      .block.blind {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.88), rgba(216, 228, 184, 0.5));
+      }
+
+      .block-head {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .block-num {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: #fff;
+        background: var(--leaf-deep);
+        padding: 3px 7px;
+        border-radius: 4px;
+      }
+
+      .block.spend .block-num {
+        background: #b8860b;
+      }
+
+      .block.blind .block-num {
+        background: var(--gourd);
+      }
+
+      .block-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--soil);
+      }
+
+      .block-sub {
+        margin-left: auto;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .rules {
+        list-style: none;
+        display: grid;
+        gap: 5px;
+      }
+
+      .rules.two-col {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px 10px;
+      }
+
+      .rule {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 7px;
+        align-items: start;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .rule .icon {
+        width: 18px;
+        height: 18px;
+        border-radius: 5px;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+
+      .rule .icon.plus {
+        background: rgba(31, 107, 58, 0.12);
+        color: var(--gain);
+      }
+
+      .rule .icon.minus {
+        background: rgba(181, 74, 46, 0.12);
+        color: var(--danger);
+      }
+
+      .rule .icon.coin {
+        background: rgba(233, 177, 42, 0.22);
+        color: #8a6408;
+      }
+
+      .rule .icon.box {
+        background: rgba(92, 122, 46, 0.15);
+        color: var(--gourd);
+      }
+
+      .rule .txt {
+        color: var(--ink);
+      }
+
+      .rule .pts {
+        font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        font-size: 12px;
+      }
+
+      .rule .pts.up {
+        color: var(--gain);
+      }
+
+      .rule .pts.down {
+        color: var(--danger);
+      }
+
+      .rule .pts.cost {
+        color: #8a6408;
+      }
+
+      .rule .note {
+        grid-column: 2 / -1;
+        font-size: 10.5px;
+        color: var(--muted);
+        margin-top: -2px;
+      }
+
+      .specials {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .special {
+        border-radius: 10px;
+        padding: 8px 10px;
+        border: 1px dashed rgba(47, 107, 58, 0.3);
+        background: rgba(255, 255, 255, 0.55);
+      }
+
+      .special.corn-king {
+        border-color: rgba(233, 177, 42, 0.55);
+        background: linear-gradient(135deg, rgba(255, 248, 220, 0.9), rgba(247, 227, 160, 0.45));
+      }
+
+      .special.holiday {
+        border-color: rgba(47, 107, 58, 0.4);
+        background: linear-gradient(135deg, rgba(232, 245, 228, 0.95), rgba(184, 214, 170, 0.35));
+      }
+
+      .special strong {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 3px;
+        color: var(--soil);
+      }
+
+      .special p {
+        font-size: 11px;
+        line-height: 1.4;
+        color: var(--muted);
+      }
+
+      .odds {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .odd {
+        border-radius: 10px;
+        padding: 8px 10px;
+        display: grid;
+        gap: 3px;
+      }
+
+      .odd.win {
+        background: linear-gradient(160deg, #fff8dc, #f0d878);
+      }
+
+      .odd.challenge {
+        background: linear-gradient(160deg, #eef5d8, #c5d89a);
+      }
+
+      .odd .pct {
+        font-size: 20px;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--soil);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .odd .label {
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .odd .desc {
+        font-size: 10.5px;
+        line-height: 1.35;
+        color: var(--muted);
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-top: 4px;
+        border-top: 1.5px solid rgba(47, 107, 58, 0.18);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        color: var(--leaf-deep);
+      }
+
+      .footer-brand .mark {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        background: var(--leaf-deep);
+        display: grid;
+        place-items: center;
+      }
+
+      .footer-brand .mark svg {
+        width: 14px;
+        height: 14px;
+      }
+
+      .legend {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .legend i {
+        font-style: normal;
+        font-size: 13px;
+      }
+
+      /* Decorative plastic slash mark */
+      .deco-plastic {
+        position: absolute;
+        top: 22px;
+        right: 128px;
+        width: 54px;
+        height: 54px;
+        opacity: 0.14;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      @media (max-width: 760px) {
+        .poster {
+          aspect-ratio: auto;
+          min-height: auto;
+        }
+
+        .poster-inner {
+          padding: 22px 18px 18px;
+        }
+
+        .rules.two-col,
+        .specials,
+        .odds {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-badge {
+          width: 72px;
+          height: 72px;
+        }
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .hero-badge {
+          animation: bob 4.5s ease-in-out infinite;
+        }
+
+        @keyframes bob {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-4px);
+          }
+        }
+      }
+
+      body.exporting .page-bar,
+      body.exporting .deco-note {
+        display: none !important;
+      }
+
+      body.exporting {
+        padding: 0;
+        background: transparent;
+      }
+
+      body.exporting .stage {
+        filter: none;
+        max-width: none;
+      }
+
+      .deco-note {
+        max-width: 720px;
+        margin: 14px auto 0;
+        font-size: 0.8rem;
+        color: var(--muted);
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-bar">
+      <div>
+        <h1>减塑行动组 · 激励机制海报</h1>
+        <p>农产品塑料包装减塑 · 阳光积分玩法一览</p>
+      </div>
+      <button class="export-btn" id="exportBtn" type="button">导出 PNG</button>
+    </div>
+
+    <div class="stage">
+      <article class="poster" id="poster" aria-label="激励机制海报">
+        <svg class="deco-plastic" viewBox="0 0 64 64" aria-hidden="true">
+          <rect x="14" y="8" width="36" height="48" rx="4" fill="none" stroke="#7a8a92" stroke-width="3" />
+          <line x1="10" y1="54" x2="54" y2="10" stroke="#b54a2e" stroke-width="4" stroke-linecap="round" />
+        </svg>
+
+        <div class="poster-inner">
+          <header class="hero">
+            <div>
+              <div class="eyebrow"><span class="dot"></span> 农产品包装减塑行动组</div>
+              <h2 class="brand">阳光积分 · <em>激励机制</em></h2>
+              <p class="tagline">
+                少用一层塑料，多攒一点阳光。用「玉米护体」激励协作，用「苦瓜挑战」推动行动。
+              </p>
+            </div>
+            <div class="hero-badge" aria-hidden="true" title="玉米大王">
+              <svg viewBox="0 0 64 64" fill="none">
+                <ellipse cx="32" cy="34" rx="14" ry="22" fill="#f6d35a" stroke="#c98912" stroke-width="2" />
+                <path
+                  d="M22 18c4-8 16-8 20 0"
+                  stroke="#2f6b3a"
+                  stroke-width="3"
+                  stroke-linecap="round"
+                  fill="none"
+                />
+                <path d="M32 8v8" stroke="#2f6b3a" stroke-width="3" stroke-linecap="round" />
+                <circle cx="27" cy="28" r="1.6" fill="#c98912" />
+                <circle cx="37" cy="28" r="1.6" fill="#c98912" />
+                <circle cx="32" cy="34" r="1.6" fill="#c98912" />
+                <circle cx="27" cy="40" r="1.6" fill="#c98912" />
+                <circle cx="37" cy="40" r="1.6" fill="#c98912" />
+                <circle cx="32" cy="46" r="1.6" fill="#c98912" />
+              </svg>
+            </div>
+          </header>
+
+          <div class="sections">
+            <!-- 积分规则 -->
+            <section class="block earn">
+              <div class="block-head">
+                <span class="block-num">RULE</span>
+                <h3 class="block-title">积分规则</h3>
+                <span class="block-sub">多做减塑行动 · 多攒阳光</span>
+              </div>
+              <ul class="rules two-col">
+                <li class="rule">
+                  <span class="icon plus">＋</span>
+                  <span class="txt">分享项目想法</span>
+                  <span class="pts up">+10</span>
+                  <span class="note">一天最多加 20</span>
+                </li>
+                <li class="rule">
+                  <span class="icon plus">＋</span>
+                  <span class="txt">评论其他小伙伴的案例</span>
+                  <span class="pts up">+3 /条</span>
+                  <span class="note">两条 +6，以此类推</span>
+                </li>
+                <li class="rule">
+                  <span class="icon plus">＋</span>
+                  <span class="txt">主动当会议主持人</span>
+                  <span class="pts up">+10</span>
+                </li>
+                <li class="rule">
+                  <span class="icon plus">＋</span>
+                  <span class="txt">任务周完成任务</span>
+                  <span class="pts up">+20</span>
+                </li>
+                <li class="rule">
+                  <span class="icon minus">−</span>
+                  <span class="txt">会议迟到</span>
+                  <span class="pts down">−10</span>
+                </li>
+                <li class="rule">
+                  <span class="icon minus">−</span>
+                  <span class="txt">任务周未能按时完成</span>
+                  <span class="pts down">−10</span>
+                </li>
+              </ul>
+            </section>
+
+            <!-- 阳光积分兑换 -->
+            <section class="block spend">
+              <div class="block-head">
+                <span class="block-num">①</span>
+                <h3 class="block-title">阳光积分兑换</h3>
+                <span class="block-sub">花积分 · 兑权益</span>
+              </div>
+              <ul class="rules two-col">
+                <li class="rule">
+                  <span class="icon coin">苦</span>
+                  <span class="txt">指定苦瓜惩罚</span>
+                  <span class="pts cost">10</span>
+                </li>
+                <li class="rule">
+                  <span class="icon coin">免</span>
+                  <span class="txt">免会议一次</span>
+                  <span class="pts cost">50</span>
+                </li>
+                <li class="rule">
+                  <span class="icon coin">帮</span>
+                  <span class="txt">指定一人帮你完成作业</span>
+                  <span class="pts cost">66</span>
+                  <span class="note">接任务者 +20</span>
+                </li>
+                <li class="rule">
+                  <span class="icon coin">顶</span>
+                  <span class="txt">指定一人顶替你一周角色</span>
+                  <span class="pts cost">88</span>
+                  <span class="note">不指定则当月积分最低者顶替；接任务者 +20</span>
+                </li>
+              </ul>
+              <div class="specials">
+                <div class="special corn-king">
+                  <strong>🌽 玉米大王 · 自动触发</strong>
+                  <p>无需兑换。积分累计达到 <b>50</b>，自动赠送玉米。</p>
+                </div>
+                <div class="special holiday">
+                  <strong>🌿 放假一周 · 全组目标</strong>
+                  <p>截止 <b>9.5</b>，全组累计积分达 <b>260</b>，全员放假一周。</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- 玉米护体盲盒 -->
+            <section class="block blind">
+              <div class="block-head">
+                <span class="block-num">②</span>
+                <h3 class="block-title">玉米护体 · 盲盒抽签</h3>
+                <span class="block-sub">消耗 8 积分 / 次</span>
+              </div>
+              <ul class="rules">
+                <li class="rule">
+                  <span class="icon box">🛡</span>
+                  <span class="txt">获得「玉米护体」可免除一次惩罚（如迟到），且可转让给队友</span>
+                  <span class="pts cost">−8</span>
+                </li>
+              </ul>
+              <div class="odds">
+                <div class="odd win">
+                  <div class="pct">10%</div>
+                  <div class="label">🌽 抽到玉米</div>
+                  <div class="desc">直接获得玉米护体，立刻生效。</div>
+                </div>
+                <div class="odd challenge">
+                  <div class="pct">90%</div>
+                  <div class="label">🥒 抽到苦瓜</div>
+                  <div class="desc">完成当场指定任务/惩罚后获得护体，并返还 8 积分。</div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <footer class="footer">
+            <div class="footer-brand">
+              <span class="mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 3c2 4 6 5 6 9a6 6 0 1 1-12 0c0-4 4-5 6-9z"
+                    fill="#f5faf3"
+                  />
+                </svg>
+              </span>
+              减塑行动 · 从包装开始
+            </div>
+            <div class="legend">
+              <span><i>🌽</i> 奖励 / 护体</span>
+              <span><i>🥒</i> 挑战 / 惩罚</span>
+              <span><i>🚫</i> 少用塑料袋</span>
+            </div>
+          </footer>
+        </div>
+      </article>
+    </div>
+
+    <p class="deco-note">打开本页后点「导出 PNG」，可分享到微信群 / 打印张贴。</p>
+
+    <script>
+      const btn = document.getElementById("exportBtn");
+      const poster = document.getElementById("poster");
+
+      btn.addEventListener("click", async () => {
+        if (!window.html2canvas) {
+          alert("html2canvas 未加载，请检查网络后重试。");
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = "导出中…";
+        document.body.classList.add("exporting");
+        try {
+          const canvas = await html2canvas(poster, {
+            scale: 2,
+            backgroundColor: "#f2f6ef",
+            useCORS: true,
+            logging: false,
+          });
+          const link = document.createElement("a");
+          link.download = "减塑行动组-阳光积分激励机制.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        } catch (err) {
+          console.error(err);
+          alert("导出失败，请重试。");
+        } finally {
+          document.body.classList.remove("exporting");
+          btn.disabled = false;
+          btn.textContent = "导出 PNG";
+        }
+      });
+    </script>
+  </body>
+</html>
