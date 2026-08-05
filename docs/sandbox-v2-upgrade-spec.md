@@ -1,4 +1,4 @@
-# Clean Heating & Cooling Pathfinder — COP31 Global Upgrade Spec
+# Climate Adaptation Energy Advisor — Global Upgrade Spec
 
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
@@ -9,18 +9,19 @@
 
 ## 0. 一句话目标
 
-把现有「华北村级煤改 X 五回合沙盘」升级为 **COP31 导向的全球家庭取暖/制冷路径适配工具**——用户选国家/地区 + 填家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
+把现有「华北村级煤改 X 五回合沙盘」升级为 **Climate Adaptation Energy Advisor（气候适应家庭能源选择助手）**——用户在全球地图上点击自家位置 → 系统识别国家/省级地区/气候区 → 读取当地或气候区的月均温、月降水 → 用户补充家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
 
 **核心原则**：
 - **分数由算法给，不由 AI 编造**（AI 只解释、翻译、对照，不凭空写补贴金额或 COP）。
 - **Global-first**：COP 项目不能局限于中国北方农村；中国北方是第一个实证试点和故事起点，不是产品边界。
 - **保留 V1** 作为 China pilot / evidence mode，用来展示已完成研究、用户数据和青年主导行动的真实性。
 - **默认静态、低门槛**：无需注册即可试用；研究数据仍匿名入库（Supabase）。
-- **申报友好**：网站必须能直接支撑 COP31 案例材料：中英双语简介、青年主导说明、数据影响力、可下载材料、视频/截图证据。
+- **公开页面不写 COP31**：网站面对普通用户时只呈现为气候适应与家庭能源选择工具，避免让人感觉是专门为某个征集项目包装出来的。COP31 只作为内部申报背景和材料准备目标。
+- **申报友好**：网站必须能支撑案例材料：中英双语简介、青年主导说明、数据影响力、可下载材料、视频/截图证据。
 
 ### 0.1 COP31 申报定位
 
-本项目要申报《青年驱动绿色未来 COP31 气候行动案例报告》的 **轨道 B：青年主导行动**。网站升级不只是做新功能，还要让评审在 30 秒内看懂：
+本项目要申报《青年驱动绿色未来 COP31 气候行动案例报告》的 **轨道 B：青年主导行动**。这是**内部申报定位**，不要直接写在 G0 用户首页。网站升级不只是做新功能，还要让评审和普通用户在 30 秒内看懂：
 
 | 评审维度 | 网站上必须证明什么 |
 |----------|--------------------|
@@ -70,7 +71,7 @@ MVP 产品说明见：`spec.md`。
 
 | 用户 | 场景 | 语言 |
 |------|------|------|
-| 全球个体家庭 / 农户 / 郊区房主 | V2「Global Pathfinder」：输入地区与家庭数据，比较取暖/制冷路径 | **英文 UI 为主**，关键术语可双语 |
+| 全球个体家庭 / 农户 / 郊区房主 | V2「Climate Adaptation Energy Advisor」：点击地图定位，输入家庭数据，比较取暖/制冷路径 | **英文 UI 为主**，关键术语可双语 |
 | 中国华北农户 / 学生 / 公众 | 「China Pilot」：继续体验现有五回合沙盘，作为实证试点与中文入口 | 中文为主 |
 | COP31 评审 / 媒体 / 合作方 | 查看青年主导故事、影响力数据、演示视频、one-pager、案例摘要 | 中英双语 |
 | 政策/研究访客 | 对比多方案分数、下载匿名数据摘要、了解算法与 AI 边界 | 英文 + 中文摘要 |
@@ -82,28 +83,28 @@ MVP 产品说明见：`spec.md`。
 
 ## 3. 产品形态：Global-first 入口 + China pilot 证据
 
-首页改成 **Global-first landing**。第一屏主 CTA 必须进入 Global Pathfinder；China Pilot 作为「已有试点证据」入口放在第二 CTA 或导航里，不再与 Global 平级抢主叙事。
+首页改成 **Global-first landing**。第一屏主 CTA 必须进入 Climate Adaptation Energy Advisor；China Pilot 作为「已有试点证据」入口放在第二 CTA 或导航里，不再与全球工具平级抢主叙事。
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  Clean Heating & Cooling Pathfinder                      │
-│  Youth-led climate action for homes in different places. │
-│  Find a path that fits your home, your climate,           │
-│  and your budget.                                        │
+│  Climate Adaptation Energy Advisor                        │
+│  气候适应家庭能源选择助手                                  │
+│  Find a heating and cooling path that fits your home,      │
+│  your local climate, and your budget.                     │
 │                                                          │
-│  [ Start Global Pathfinder ]   [ View China Pilot ]       │
+│  [ Start from map ]   [ View China pilot ]                │
 │                                                          │
 │  Impact: 28 valid sessions · +1.50 understanding gain    │
-│  COP31 Youth-led Action · China pilot → global tool       │
+│  China pilot → global household energy advisor            │
 └──────────────────────────────────────────────────────────┘
 ```
 
 | 页面/模式 | 路由建议 | 说明 |
 |-----------|----------|------|
-| Global Pathfinder | `/` 或 `/global` | **主入口**：面向 COP31 和国际用户的全球取暖/制冷适配工具 |
+| Climate Adaptation Energy Advisor | `/` 或 `/global` | **主入口**：面向国际用户的全球取暖/制冷适配工具 |
 | China Pilot Sandbox | `/china` | 现有 `index.html` 流程，作为中文试点和已验证案例 |
 | Impact & Evidence | `/impact` | 匿名数据、前后测、推荐率、用户反馈、截图/视频 |
-| Youth-led Story | `/about` | 青年主导、项目时间线、团队角色、COP31 叙事 |
+| Youth-led Story | `/about` | 青年主导、项目时间线、团队角色、项目愿景（公开页面不写 COP31） |
 | Media Kit | `/media` | 中英 one-pager、logo、演示视频、案例材料下载 |
 
 ---
@@ -111,19 +112,19 @@ MVP 产品说明见：`spec.md`。
 ## 4. Global mode 用户流程（逐步）
 
 ```
-Global Landing → Region & climate → Household form → Optional cooling need
+Global Landing → Click home location on climate map → Household form → Optional cooling need
     → [Run scoring] → Results table + radar → AI explanation panel
     → Shareable action summary → [Optional] Mini-sandbox (3 turns)
     → Survey / thanks
 
 Parallel evidence pages:
-Impact dashboard → Youth-led story → Media kit / COP31 case materials
+Impact dashboard → Youth-led story → Media kit / case materials
 ```
 
 | 步骤 | 页面 ID | 目的 |
 |------|---------|------|
-| G0 | `global-landing` | 全球价值主张 + COP31 youth-led action 定位 + 免责声明 |
-| G1 | `global-region` | 国家/区域/邮编（可选）→ 载入地区参数 |
+| G0 | `global-landing` | 全球价值主张 + 气候适应家庭能源选择定位 + 免责声明（公开文案不写 COP31） |
+| G1 | `global-climate-map` | 用户在可缩放全球气候地图上点击自家位置 → 识别国家/省级地区/气候区 → 载入气候参数 |
 | G2 | `global-household` | 家庭与建筑、现有系统、账单 |
 | G3 | `global-priorities` | 用户权重：省钱 / 低碳 / 舒适 / 少折腾 |
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
@@ -149,17 +150,18 @@ Impact dashboard → Youth-led story → Media kit / COP31 case materials
 
 **Layout**
 - 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit`
-- Hero：COP31 youth-led action 标识 + 标题 + 副标题 + 主按钮
+- Hero：公开品牌名 + 中文副名 + 副标题 + 主按钮
 - 三列价值点 + 影响力数字条 + 底部 disclaimer
 
 **Copy**
 
 | 元素 | 英文文案 |
 |------|----------|
-| Title | **Heating & Cooling Pathfinder** |
-| Eyebrow | **Youth-led climate action · China pilot to global tool** |
-| Subtitle | Compare heating and cooling paths for *your* home and *your* climate—not one global “best” technology. |
-| Primary CTA | **Start Global Pathfinder — about 3 minutes** |
+| Title | **Climate Adaptation Energy Advisor** |
+| Chinese title | **气候适应家庭能源选择助手** |
+| Eyebrow | **Household energy choices for a changing climate** |
+| Subtitle | Click your home on the climate map, compare heating and cooling paths, and see what fits your local climate and budget. |
+| Primary CTA | **Start from the map — about 3 minutes** |
 | Secondary CTA | **View China Pilot Evidence** |
 | Bullet 1 title | Household-first |
 | Bullet 1 body | Enter income, home size, and energy bills. See what fits you. |
@@ -171,30 +173,72 @@ Impact dashboard → Youth-led story → Media kit / COP31 case materials
 | Disclaimer | *Decision support only. Not engineering design, installation quote, or legal advice. Local installers must confirm sizing and safety.* |
 | Footer | Anonymous · No account required · ~3 min |
 
+**禁止出现在 G0 的公开文案**
+- `COP31`
+- `case collection`
+- `application`
+- `申报`
+- `征集`
+- 任何让用户觉得“这个网站是为了某个活动临时包装”的表述
+
 ---
 
-### G1 · Region & climate
+### G1 · Climate map location picker
 
 **Layout**
-- Step indicator: `1 of 4 · Your place`
-- Country `<select>` → Region `<select>`（级联）
-- 可选：Postal code / ZIP（用于未来精确气候带，V2.0 可只做 select）
-- 右侧卡片：**Climate snapshot**（HDD/CDD、典型冬季低温、能源价格区间——来自 region JSON，只读）
+- Step indicator: `1 of 4 · Your climate`
+- 主体为可缩放全球地图：用户**不填写国家/地区**，而是在地图上点击自家大致位置。
+- 地图底图使用已下载资源：`docs/global-climate-zones-koppen-source.svg`。该图来自 Wikimedia Commons / Köppen-Geiger global climate classification，可作为设计参考和静态 fallback。
+- 交互实现优先级：
+  1. **推荐方案**：Mapbox GL JS / Leaflet + OpenStreetMap 底图 + Köppen-Geiger 气候区 raster/vector overlay。
+  2. **可选方案**：Google Maps JavaScript API + 自定义气候区 overlay。注意 Google Maps 商用/配额/Key 管理。
+  3. **离线 fallback**：静态 SVG 地图 + 简单点击经纬度近似（只用于 demo，不作为正式版）。
+- 地图缩放要求：
+  - 世界级：显示 12 类气候大区颜色。
+  - 国家级：显示国界、省/州界。
+  - 省/州级：显示主要城市点位；中国至少显示**地级市及以上**城市，其他国家显示同等规模城市或人口阈值城市。
+- 用户点击后，右侧卡片必须显示：
+  - `Country`
+  - `Province / State / Admin-1`
+  - `Nearest city`（可选）
+  - `Climate zone`
+  - `Data resolution`：Exact admin-1 data / National fallback / Climate-zone fallback
+- 右侧卡片同时显示气候图：
+  - **柱状图**：Monthly precipitation (mm)
+  - **折线图**：Monthly mean temperature (°C)
+- 点击确认后进入 G2。
 
 **Copy**
 
 | 元素 | 英文文案 |
 |------|----------|
-| Heading | **Where is this home?** |
-| Hint | Prices and climate defaults come from public ranges for your region. You can adjust bills on the next step. |
-| Label country | Country |
-| Label region | Region or state |
-| Label postal | Postal code (optional) |
-| Climate card title | Climate snapshot |
-| Fields | Heating degree days · Cooling degree days · Typical coldest week · Grid CO₂ intensity (range) |
+| Heading | **Click your home area on the climate map** |
+| Hint | We use your location to identify the climate zone and load monthly temperature and rainfall data. You only need to click an approximate location. |
+| Map helper | Zoom in for provinces, states, and major cities. |
+| Climate card title | Local climate snapshot |
+| Fields | Country · Province/State · Climate zone · Monthly precipitation · Monthly mean temperature |
 | Button | **Continue** |
 
-**首发地区（MVP 至少 3 个，建议 5 个）**
+**地图与地理识别要求**
+
+| 需求 | 实现建议 |
+|------|----------|
+| 点击识别国家 | Natural Earth Admin 0 或 geoBoundaries / GADM Admin 0 |
+| 点击识别省/州 | Natural Earth Admin 1（轻量）或 geoBoundaries / GADM Admin 1（更精细） |
+| 城市显示 | Natural Earth Populated Places；中国可单独补地级市点表 |
+| 气候区识别 | Köppen-Geiger 1991–2020 GeoTIFF / raster tile；MVP 可先把气候区 polygon 简化成 12 类 |
+| 月均温/月降水 | 优先 WorldClim 2.1 月尺度 tavg + prec，按 admin-1 聚合 |
+| 缺省 fallback | 若没有省/州数据，用该气候区的标准月均温/月降水 profile |
+
+**已放入仓库的地图素材**
+
+| 文件 | 用途 | 来源 |
+|------|------|------|
+| `docs/global-climate-zones-koppen-source.svg` | 设计参考、静态 fallback、legend 参考 | Wikimedia Commons, World Köppen Classification (with authors).svg |
+
+> 注意：正式交互地图不要只靠这张 SVG。SVG 用于设计参考和无 API fallback；正式版应使用地图底图 + 气候区数据 layer。
+
+**首发地区（MVP 至少 5 个）**
 
 | region_id | Country | Region label | 备注 |
 |-----------|---------|--------------|------|
@@ -205,6 +249,61 @@ Impact dashboard → Youth-led story → Media kit / COP31 case materials
 | `fr_rural` | France | Rural | 扩展用 |
 
 数据文件建议：`data/regions/{region_id}.json`（见 §8）。
+
+**12 类产品用气候类型（前端颜色 legend）**
+
+Köppen-Geiger 细分类很多，产品 UI 不需要全部展示。正式交互层把细分类合并成以下 12 类，颜色可沿用 Köppen 色系但简化 legend：
+
+| climate_12_id | Display name | Köppen examples | 对能源选择的意义 |
+|---------------|--------------|-----------------|------------------|
+| `tropical_rainforest` | Tropical rainforest | Af | 制冷/除湿重要，取暖很弱 |
+| `tropical_monsoon_savanna` | Tropical monsoon / savanna | Am, Aw, As | 制冷强，雨季湿热 |
+| `hot_desert` | Hot desert | BWh | 昼夜温差大，制冷与保温都重要 |
+| `cold_desert_steppe` | Cold desert / steppe | BWk, BSk | 冬冷夏热，热泵需看低温表现 |
+| `mediterranean` | Mediterranean | Csa, Csb, Csc | 夏季干热，冬季温和湿润 |
+| `humid_subtropical` | Humid subtropical | Cfa, Cwa | 夏季制冷强，冬季中等取暖 |
+| `oceanic` | Oceanic / marine | Cfb, Cfc | 温和湿润，热泵适配度通常高 |
+| `subtropical_highland` | Subtropical highland | Cwb, Cwc | 海拔影响明显，需要本地化 |
+| `humid_continental` | Humid continental | Dfa, Dfb, Dwa, Dwb | 冬季取暖强，低温热泵/备份重要 |
+| `subarctic` | Subarctic | Dfc, Dfd, Dwc, Dwd | 极寒，需强保温和备份热源 |
+| `tundra_alpine` | Tundra / alpine | ET | 取暖极强，施工与维护困难 |
+| `ice_cap` | Ice cap | EF | 不作为普通家庭目标市场，仅显示 |
+
+**12 类 fallback 气候 profile 数据**
+
+如果无法拿到用户点击省/州的精确月均温和月降水，系统使用该 `climate_12_id` 的标准 profile。数据应放在 `data/climate_profiles_12.json`。
+
+数据来源建议：WorldClim 2.1 monthly `tavg` 与 `prec`；每类选择 3–5 个代表点取平均，或用 GloH2O/Köppen-Geiger 栅格按类型抽样求均值。MVP 可先手工录入下列代表城市/区域的月尺度数据，后续再自动化。
+
+| climate_12_id | Representative fallback source area | 数据获取建议 |
+|---------------|-------------------------------------|--------------|
+| `tropical_rainforest` | Singapore / Manaus | WorldClim city point 或 admin-1 average |
+| `tropical_monsoon_savanna` | Bangkok / Lagos / Darwin | WorldClim point average |
+| `hot_desert` | Cairo / Riyadh / Phoenix | WorldClim point average |
+| `cold_desert_steppe` | Ulaanbaatar / Denver dry plains / Central Asia steppe | WorldClim point average |
+| `mediterranean` | Athens / Los Angeles / Perth | WorldClim point average |
+| `humid_subtropical` | Shanghai / Atlanta / Buenos Aires | WorldClim point average |
+| `oceanic` | London / Seattle / Wellington | WorldClim point average |
+| `subtropical_highland` | Kunming / Mexico City / Addis Ababa | WorldClim point average |
+| `humid_continental` | Beijing / Chicago / Warsaw | WorldClim point average |
+| `subarctic` | Fairbanks / Yakutsk / northern Scandinavia | WorldClim point average |
+| `tundra_alpine` | Reykjavik outskirts / Tibetan Plateau / alpine settlement | WorldClim point average |
+| `ice_cap` | Greenland interior / Antarctica edge | 显示用，不作为普通推荐对象 |
+
+**`data/climate_profiles_12.json` schema**
+
+```json
+{
+  "humid_continental": {
+    "display_name_en": "Humid continental",
+    "display_name_zh": "湿润大陆性气候",
+    "source": "WorldClim 2.1 representative points; MVP fallback",
+    "temperature_c_monthly": [-4, -1, 5, 12, 18, 23, 26, 25, 20, 13, 6, -1],
+    "precipitation_mm_monthly": [8, 10, 20, 35, 55, 80, 160, 140, 55, 30, 18, 8],
+    "notes": "Fallback only; replace with admin-1 data when available."
+  }
+}
+```
 
 ---
 
@@ -446,7 +545,7 @@ Cross-region technology notes (only from retrieved tech cards).
 |------|----------|
 | Why I started | 从中国北方「蓝天变好、过冬账变难」出发 |
 | Youth leadership | Guo Hang 发起、设计、部署、招募、分析；CS 同学作为技术协作 |
-| Timeline | Research → China pilot → COP31 global upgrade |
+| Timeline | Research → China pilot → global household advisor |
 | Climate justice | 关注低收入、农村、偏远地区家庭的能源负担 |
 | Global vision | 从 China pilot 扩展到多国取暖/制冷决策支持 |
 
@@ -619,6 +718,14 @@ fitness = Σ_d w[d] * score[d]
 
 ```
 data/
+  maps/
+    global-climate-zones-koppen-source.svg
+    climate-zones-12.mbtiles        # optional, generated for web map
+    admin1-boundaries.geojson       # simplified province/state boundaries
+    populated-places.geojson        # major cities
+  climate/
+    climate_profiles_12.json        # fallback monthly temp/precip by 12 climate types
+    admin1_climate_summaries.json   # province/state monthly temp/precip when available
   regions/
     cn_north_china.json
     us_midwest.json
@@ -652,17 +759,26 @@ api/
 
 ### 8.2 `region` JSON schema（示例）
 
+`region` 在 V2 中不再由用户手动选择，而是由 G1 地图点击结果自动生成或匹配。点击地图后，系统先得到 `country_iso3`、`admin1_name`、`climate_12_id`，再查找最接近的 `region_id`。
+
 ```json
 {
   "region_id": "us_midwest",
   "country": "United States",
+  "country_iso3": "USA",
   "label_en": "Midwest",
+  "admin1_names": ["Illinois", "Indiana", "Iowa", "Michigan", "Minnesota", "Ohio", "Wisconsin"],
+  "climate_12_ids": ["humid_continental", "cold_desert_steppe"],
   "currency": "USD",
   "climate": {
     "hdd18": 4200,
     "cdd18": 900,
     "design_temp_c": -23,
-    "typical_winter_low_c": -15
+    "typical_winter_low_c": -15,
+    "temperature_c_monthly": [-6, -3, 3, 10, 16, 22, 25, 24, 19, 12, 5, -2],
+    "precipitation_mm_monthly": [45, 40, 65, 85, 95, 100, 95, 90, 80, 70, 60, 50],
+    "data_resolution": "admin1_or_region_average",
+    "fallback_allowed": true
   },
   "energy": {
     "electricity_usd_per_kwh": { "low": 0.12, "mid": 0.15, "high": 0.18 },
