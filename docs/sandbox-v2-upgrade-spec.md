@@ -1,20 +1,35 @@
-# Clean Heating Sandbox V2 — 保姆级升级需求文档
+# Clean Heating & Cooling Pathfinder — COP31 Global Upgrade Spec
 
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-04 · Draft for implementation kickoff
+> **本文档版本**：2026-08-05 · COP31 youth-led action edition
 
 ---
 
 ## 0. 一句话目标
 
-把现有「华北村级煤改 X 五回合沙盘」升级为 **V2：全球家庭取暖/制冷路径适配工具**——用户选地区 + 填家庭数据 → **规则引擎算出各方案适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 可选进入「短版沙盘」体验某一两条路径的后果。
+把现有「华北村级煤改 X 五回合沙盘」升级为 **COP31 导向的全球家庭取暖/制冷路径适配工具**——用户选国家/地区 + 填家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
 
 **核心原则**：
 - **分数由算法给，不由 AI 编造**（AI 只解释、翻译、对照，不凭空写补贴金额或 COP）。
-- **保留 V1** 作为中国/村级场景的可选模式，不要一次性删光现有功能。
+- **Global-first**：COP 项目不能局限于中国北方农村；中国北方是第一个实证试点和故事起点，不是产品边界。
+- **保留 V1** 作为 China pilot / evidence mode，用来展示已完成研究、用户数据和青年主导行动的真实性。
 - **默认静态、低门槛**：无需注册即可试用；研究数据仍匿名入库（Supabase）。
+- **申报友好**：网站必须能直接支撑 COP31 案例材料：中英双语简介、青年主导说明、数据影响力、可下载材料、视频/截图证据。
+
+### 0.1 COP31 申报定位
+
+本项目要申报《青年驱动绿色未来 COP31 气候行动案例报告》的 **轨道 B：青年主导行动**。网站升级不只是做新功能，还要让评审在 30 秒内看懂：
+
+| 评审维度 | 网站上必须证明什么 |
+|----------|--------------------|
+| 青年领导力 | 由青年独立发起、设计、部署、招募用户、分析数据；CS 同学是协作开发，不改变青年主导属性 |
+| 创新性 | 不是普通宣传页，而是「可交互政策沙盘 + 户级数据 + 算法评分 + AI 解释」 |
+| 气候适应度 | 帮助家庭应对取暖/制冷成本、极端冷热、能源价格和技术选择风险 |
+| 社群影响力 | 覆盖中国农户、学生、公众，并扩展到全球个体家庭；提供匿名数据看板 |
+| 故事感染力 | 从中国北方清洁取暖真实问题出发，讲到全球公正转型和家庭气候行动 |
+| 附加分 | 国际视野（多地区）、跨领域融合（环境×AI×教育×金融算账）、弱势群体包容（农村、低收入、偏远地区） |
 
 ---
 
@@ -35,10 +50,12 @@ MVP 产品说明见：`spec.md`。
 
 ### 1.2 V2 要解决的问题（论文 Future directions + 讨论结论）
 
-1. **从「村统筹」到「个体决策」**：欧美等地农户往往自己选系统，不像中国常见「一村推一条路」。
-2. **从「只取暖」到「取暖 + 制冷」**：气候区不同，有的地区制冷负荷同样重要。
-3. **跨国技术信息差**：国外用户可能不知道某条在中国已验证的路线其实适配其气候与预算；反之亦然。
-4. **从「是否清洁取暖好」到「哪条路 fit 这个家庭、这个地方」**：与答辩结论 *No single best route; fit depends on the household* 一致。
+1. **从「中国试点」到「全球可迁移」**：现有数据来自华北农村，但 COP31 项目必须回答全球家庭如何面对取暖/制冷转型。
+2. **从「村统筹」到「个体决策」**：欧美等地农户往往自己选系统，不像中国常见「一村推一条路」。
+3. **从「只取暖」到「取暖 + 制冷」**：气候区不同，有的地区制冷负荷同样重要。
+4. **跨国技术信息差**：国外用户可能不知道某条在中国已验证的路线其实适配其气候与预算；反之亦然。
+5. **从「是否清洁取暖好」到「哪条路 fit 这个家庭、这个地方」**：与答辩结论 *No single best route; fit depends on the household* 一致。
+6. **从「研究 demo」到「青年气候行动案例」**：网站要能展示行动过程、数据影响力、跨地区扩展计划和可传播故事。
 
 ### 1.3 V2 不做什么（第一版明确排除）
 
@@ -53,55 +70,74 @@ MVP 产品说明见：`spec.md`。
 
 | 用户 | 场景 | 语言 |
 |------|------|------|
-| 中国华北农户 / 学生 / 公众 | 继续用 V1 或 V2 里的「China · Village mode」 | 中文为主 |
-| 欧美/其他地区个体农户、郊区房主 | V2「Global · Household mode」 | **英文 UI 为主**，关键术语可双语 |
-| 政策/研究访客 | 对比多方案分数、导出摘要 | 英文 |
+| 全球个体家庭 / 农户 / 郊区房主 | V2「Global Pathfinder」：输入地区与家庭数据，比较取暖/制冷路径 | **英文 UI 为主**，关键术语可双语 |
+| 中国华北农户 / 学生 / 公众 | 「China Pilot」：继续体验现有五回合沙盘，作为实证试点与中文入口 | 中文为主 |
+| COP31 评审 / 媒体 / 合作方 | 查看青年主导故事、影响力数据、演示视频、one-pager、案例摘要 | 中英双语 |
+| 政策/研究访客 | 对比多方案分数、下载匿名数据摘要、了解算法与 AI 边界 | 英文 + 中文摘要 |
 
 **典型用户故事（Global mode）**  
 > Maria 在美国中西部有一栋 120 m² 的农舍，冬季用丙烷、夏季 window AC。她听说热泵在中国北方用得很多，但不知道是否适合本地 −20°C。她打开网站，选 United States → Midwest，输入收入与账单，得到 6 条路径的适配分排序，并看到 AI 解释「为何 air-source HP 分数中等、为何 geothermal 分数高但 upfront 高」。
 
 ---
 
-## 3. 产品形态：双模式入口
+## 3. 产品形态：Global-first 入口 + China pilot 证据
 
-首页增加**模式选择**（不要隐藏 V1）：
+首页改成 **Global-first landing**。第一屏主 CTA 必须进入 Global Pathfinder；China Pilot 作为「已有试点证据」入口放在第二 CTA 或导航里，不再与 Global 平级抢主叙事。
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  Clean Heating & Cooling Pathfinder                     │
-│  Find a path that fits your home and your place.        │
-├──────────────────────────┬──────────────────────────────┤
-│  🇨🇳 China · Village      │  🌍 Global · Household       │
-│  5-turn sandbox (current) │  Score all paths · AI guide  │
-│  [ Enter China mode ]     │  [ Enter Global mode ]       │
-└──────────────────────────┴──────────────────────────────┘
+│  Clean Heating & Cooling Pathfinder                      │
+│  Youth-led climate action for homes in different places. │
+│  Find a path that fits your home, your climate,           │
+│  and your budget.                                        │
+│                                                          │
+│  [ Start Global Pathfinder ]   [ View China Pilot ]       │
+│                                                          │
+│  Impact: 28 valid sessions · +1.50 understanding gain    │
+│  COP31 Youth-led Action · China pilot → global tool       │
+└──────────────────────────────────────────────────────────┘
 ```
 
-| 模式 | 路由建议 | 说明 |
-|------|----------|------|
-| China · Village | `/` 或 `/china` | 现有 `index.html` 流程，最小改动 |
-| Global · Household | `/global` 或 `/pathfinder` | **V2 新流程**（本文档重点） |
+| 页面/模式 | 路由建议 | 说明 |
+|-----------|----------|------|
+| Global Pathfinder | `/` 或 `/global` | **主入口**：面向 COP31 和国际用户的全球取暖/制冷适配工具 |
+| China Pilot Sandbox | `/china` | 现有 `index.html` 流程，作为中文试点和已验证案例 |
+| Impact & Evidence | `/impact` | 匿名数据、前后测、推荐率、用户反馈、截图/视频 |
+| Youth-led Story | `/about` | 青年主导、项目时间线、团队角色、COP31 叙事 |
+| Media Kit | `/media` | 中英 one-pager、logo、演示视频、案例材料下载 |
 
 ---
 
 ## 4. Global mode 用户流程（逐步）
 
 ```
-Landing → Region & climate → Household form → Optional cooling need
+Global Landing → Region & climate → Household form → Optional cooling need
     → [Run scoring] → Results table + radar → AI explanation panel
-    → [Optional] Mini-sandbox (3 turns) for top-1 path → Survey / thanks
+    → Shareable action summary → [Optional] Mini-sandbox (3 turns)
+    → Survey / thanks
+
+Parallel evidence pages:
+Impact dashboard → Youth-led story → Media kit / COP31 case materials
 ```
 
 | 步骤 | 页面 ID | 目的 |
 |------|---------|------|
-| G0 | `global-landing` | 价值主张 + 免责声明 |
+| G0 | `global-landing` | 全球价值主张 + COP31 youth-led action 定位 + 免责声明 |
 | G1 | `global-region` | 国家/区域/邮编（可选）→ 载入地区参数 |
 | G2 | `global-household` | 家庭与建筑、现有系统、账单 |
 | G3 | `global-priorities` | 用户权重：省钱 / 低碳 / 舒适 / 少折腾 |
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
 | G5 | `global-ai` | AI 解读（RAG，引用分数卡） |
-| G6 | `global-mini-sandbox` | 可选，3 回合简化推演 top 路径 |
-| G7 | `global-feedback` | 短问卷 + 是否愿意推荐 |
+| G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
+| G7 | `global-mini-sandbox` | 可选，3 回合简化推演 top 路径 |
+| G8 | `global-feedback` | 短问卷 + 是否愿意推荐 |
+
+| 申报/传播页面 | 页面 ID | 目的 |
+|----------------|---------|------|
+| Impact Dashboard | `impact` | 展示匿名使用数据、理解提升、推荐率、地区覆盖、媒体/活动记录 |
+| Youth-led Story | `about` | 讲清青年主导、项目缘起、时间线、团队角色、行动愿景 |
+| Media Kit | `media` | 下载中英 one-pager、申报摘要、demo 视频、截图、数据报告 |
+| China Pilot | `china` | 保留现有中国北方五回合沙盘，作为已验证的第一阶段案例 |
 
 ---
 
@@ -112,23 +148,26 @@ Landing → Region & climate → Household form → Optional cooling need
 ### G0 · Landing
 
 **Layout**
-- 顶栏：Logo + `China mode` link
-- Hero：标题 + 副标题 + 主按钮
-- 三列价值点 + 底部 disclaimer
+- 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit`
+- Hero：COP31 youth-led action 标识 + 标题 + 副标题 + 主按钮
+- 三列价值点 + 影响力数字条 + 底部 disclaimer
 
 **Copy**
 
 | 元素 | 英文文案 |
 |------|----------|
 | Title | **Heating & Cooling Pathfinder** |
-| Subtitle | Compare paths for *your* home and *your* climate—not one global “best” technology. |
-| Primary CTA | **Start — it takes about 3 minutes** |
+| Eyebrow | **Youth-led climate action · China pilot to global tool** |
+| Subtitle | Compare heating and cooling paths for *your* home and *your* climate—not one global “best” technology. |
+| Primary CTA | **Start Global Pathfinder — about 3 minutes** |
+| Secondary CTA | **View China Pilot Evidence** |
 | Bullet 1 title | Household-first |
 | Bullet 1 body | Enter income, home size, and energy bills. See what fits you. |
 | Bullet 2 title | Scores you can trace |
 | Bullet 2 body | Each path gets a fitness score from clear rules—not AI guesswork. |
 | Bullet 3 title | Plain-language guide |
 | Bullet 3 body | AI explains trade-offs and technologies you may not know in your country. |
+| Impact strip | China pilot: 28 valid sessions · 21 completed surveys · +1.50 understanding gain |
 | Disclaimer | *Decision support only. Not engineering design, installation quote, or legal advice. Local installers must confirm sizing and safety.* |
 | Footer | Anonymous · No account required · ~3 min |
 
@@ -324,7 +363,39 @@ Cross-region technology notes (only from retrieved tech cards).
 
 ---
 
-### G6 · Mini-sandbox（可选）
+### G6 · Action summary（可分享）
+
+**目的**：COP31 项目需要可传播、可截图、可作为「行动证据」的输出。用户完成评分和 AI 解释后，生成一张个人行动摘要卡片。
+
+**Layout**
+- 左侧：摘要卡片预览（适合手机截图）
+- 右侧：按钮 `Download PNG` / `Download PDF` / `Copy summary text`
+- 底部：匿名免责声明
+
+**Card fields**
+
+| 字段 | 英文文案 |
+|------|----------|
+| Title | **My home energy path summary** |
+| Region | Region: `{region_label}` |
+| Top path | Best-fit path: `{path_name}` |
+| Fitness | Fitness score: `{score}/100` |
+| Why | Why it fits: `{one_sentence_reason}` |
+| Climate action | Potential benefit: lower burden / lower emissions / better comfort |
+| Footer | Generated by Clean Heating & Cooling Pathfinder · Youth-led climate action |
+
+**Copy**
+
+| 元素 | 英文文案 |
+|------|----------|
+| Heading | **Save your action summary** |
+| Hint | This summary helps you discuss options with family, community groups, or local installers. |
+| CTA PNG | **Download share card** |
+| CTA Text | **Copy plain text summary** |
+
+---
+
+### G7 · Mini-sandbox（可选）
 
 简化 V1：**3 turns**，不做合规执法概率。
 
@@ -343,7 +414,7 @@ Cross-region technology notes (only from retrieved tech cards).
 
 ---
 
-### G7 · Feedback
+### G8 · Feedback
 
 | 元素 | 英文文案 |
 |------|----------|
@@ -351,6 +422,43 @@ Cross-region technology notes (only from retrieved tech cards).
 | Q2 | Would you recommend this tool? (Yes / Maybe / No) |
 | Q3 | What was missing? (optional text) |
 | Submit | **Submit & finish** |
+
+---
+
+### Evidence pages · Impact / About / Media Kit
+
+这些页面不属于个人评分流程，但对 COP31 申报非常关键，必须和 Global Pathfinder 同期上线。
+
+#### `/impact` Impact Dashboard
+
+| 模块 | 必放内容 |
+|------|----------|
+| Headline metrics | Valid sessions, completed surveys, understanding gain, recommendation rate, AI helpful rate |
+| Region coverage | 已覆盖 China pilot + Global MVP regions |
+| User groups | Farmers / students / public users / global household users |
+| Anonymous testimonials | 2–4 条匿名短反馈 |
+| Download | `Download data snapshot PDF` |
+| Caution | Small-sample, exploratory, anonymous data |
+
+#### `/about` Youth-led Story
+
+| 模块 | 必放内容 |
+|------|----------|
+| Why I started | 从中国北方「蓝天变好、过冬账变难」出发 |
+| Youth leadership | Guo Hang 发起、设计、部署、招募、分析；CS 同学作为技术协作 |
+| Timeline | Research → China pilot → COP31 global upgrade |
+| Climate justice | 关注低收入、农村、偏远地区家庭的能源负担 |
+| Global vision | 从 China pilot 扩展到多国取暖/制冷决策支持 |
+
+#### `/media` Media Kit
+
+| 下载项 | 格式 |
+|--------|------|
+| One-page project brief | Chinese PDF + English PDF |
+| 2-minute demo video | MP4 / hosted link |
+| Screenshots | PNG |
+| Logo / project title card | PNG |
+| Case report draft | DOCX / PDF |
 
 ---
 
@@ -377,7 +485,10 @@ Cross-region technology notes (only from retrieved tech cards).
 | `ScoreBreakdownBars` | 五维分项 |
 | `ExcludedPathsList` | 硬约束剔除 |
 | `AIExplanationPanel` | 流式 Markdown 渲染 |
+| `ActionSummaryCard` | 生成可下载/可分享的个人行动摘要 |
 | `DisclaimerBanner` | 全局免责 |
+| `ImpactMetricWall` | COP31 影响力数字墙 |
+| `MediaDownloadGrid` | one-pager、视频、截图下载 |
 
 ### 6.3 响应式
 
@@ -714,7 +825,11 @@ Note any technology used in China that may be relevant for this region.
 {
   "rewrites": [
     { "source": "/global", "destination": "/global/index.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/china", "destination": "/index.html" },
+    { "source": "/impact", "destination": "/impact/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/media", "destination": "/media/index.html" },
+    { "source": "/", "destination": "/global/index.html" }
   ]
 }
 ```
@@ -723,51 +838,59 @@ Note any technology used in China that may be relevant for this region.
 
 ## 11. 分阶段交付（请 CS 同学按 Phase 排期）
 
-### Phase 0 · 1 周 — 脚手架
+### Phase 0 · 1 周 — COP31 Global-first 脚手架
 
+- [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
 - [ ] 新建 `/global` 入口与 G0–G2 静态页（无打分）
-- [ ] `data/regions` + `data/technologies` 各 2 条样例 JSON
-- [ ] 双模式首页入口
+- [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
+- [ ] `data/regions` + `data/technologies` 各 3 条样例 JSON，必须含 China + 2 个海外地区
+- [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
 
-**验收**：能选 region、填表、数据写入 console。
+**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能选 region、填表、数据写入 console；China pilot 仍可进入。
 
-### Phase 1 · 2–3 周 — 打分 MVP
+### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
 - [ ] 实现 `hardFilter` + 五维分 + `fitness` 排序
 - [ ] G3 权重 + G4 结果表 + 雷达图
+- [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
+- [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
 - [ ] 单元测试 ≥10 cases
-- [ ] 3 个 region × 8 tech
+- [ ] **至少 5 个 region × 8 tech**：China North China + US Midwest + Germany rural + UK off-gas + France rural
 
-**验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason。
+**验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；能生成一张可用于 COP31 材料和社媒传播的行动摘要卡。
 
-### Phase 2 · 1–2 周 — AI 解释
+### Phase 2 · 1–2 周 — AI 解释 + 国际传播
 
 - [ ] `POST /api/explain` + RAG（JSON 注入）
 - [ ] G5 流式展示 + 错误降级
+- [ ] AI 输出必须包含 “Cross-region technology note”，解释不同国家之间的信息差
+- [ ] `/media` 放入中英 one-pager、2 分钟 demo 视频入口、截图包
 - [ ] Supabase `pathfinder_sessions`（可选）
 
-**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变。
+**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；媒体页可直接作为 COP31 申报附件入口。
 
-### Phase 3 · 2 周 — Mini-sandbox +  polish
+### Phase 3 · 2 周 — Mini-sandbox + COP polish
 
-- [ ] G6 三回合预览（复用 simulation engine）
-- [ ] G7 问卷
+- [ ] G7 三回合预览（复用 simulation engine）
+- [ ] G8 问卷
+- [ ] `/about` 补充青年主导时间线、活动照片、匿名用户反馈
 - [ ] Mobile 适配 + 免责声明法务审阅
 
 ### Phase 4 · 未来
 
-- 政府/企业多角色；村庄 aggregate dashboard；更多国家；制冷负荷详细模型。
+- 政府/企业多角色；村庄 aggregate dashboard；更多国家；制冷负荷详细模型；国际合作数据源。
 
 ---
 
 ## 12. 验收标准（Definition of Done）
 
-1. **功能**：Global 全流程 G0→G5 无 dead end；China V1 仍可独立进入并完成一局。
+1. **功能**：Global 全流程 G0→G8 无 dead end；China pilot 仍可独立进入并完成一局。
 2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
 3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
 4. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
 5. **隐私**：无 PII 强制；Supabase 仅存匿名 session。
-6. **文档**：README 增加 Global mode 与环境变量说明。
+6. **COP31 传播**：`/impact`、`/about`、`/media` 可公开访问；有中英项目简介、影响力数字、行动摘要卡、demo 视频入口。
+7. **文档**：README 增加 Global mode、China pilot、COP31 media kit 与环境变量说明。
 
 ---
 
@@ -780,7 +903,7 @@ A: **分数 = TypeScript 算法**；AI 只解释。
 A: 不必。可新建 `global/index.html` + 共享 `lib/scoring.js`。
 
 **Q: 中国用户还会用旧版吗？**  
-A: 会。首页保留 China mode。
+A: 会，但它是 **China Pilot**。主入口必须是 Global Pathfinder，因为 COP31 项目不能只局限于中国北方农村。
 
 **Q: 价格数据从哪来？**  
 A: MVP 用 `research/data/calibration_defaults.json` + 手工 `regions/*.json`；UI 标明 “approximate range”。
@@ -789,7 +912,7 @@ A: MVP 用 `research/data/calibration_defaults.json` + 手工 `regions/*.json`�
 A: 能，新增 `/api/explain` 即可。
 
 **Q: 论文/答辩要截图什么？**  
-A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段。
+A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；COP31 申报还要截图 `/impact` 数字墙、`/about` 青年主导故事、G6 行动摘要卡。
 
 ---
 
@@ -809,8 +932,11 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段。
 
 ## 15. 产品负责人待办（非开发）
 
-- [ ] 确认 Phase 1 首发 3 个海外 region 的具体参数来源（文献链接）
-- [ ] 确认 Global UI 是否要中英切换（建议 V2.0 先纯 EN）
+- [ ] 确认 Phase 1 首发 5 个 region 的具体参数来源（China + US + Germany + UK + France）
+- [ ] 准备中英双语项目简介：100 字、500 字、2000 字三个版本
+- [ ] 准备 COP31 申报所需 supporting materials：demo 视频、截图、数据报告、活动照片
+- [ ] 明确弱势群体包容叙事：农村、低收入、偏远地区、能源负担高家庭如何受益
+- [ ] 确认 Global UI 是否要中英切换（建议首页/impact/about/media 中英双语，工具流程先 EN）
 - [ ] 准备 5 组「典型家庭」fixture 供测试与 demo
 - [ ] 免责声明给导师/课程过目
 
