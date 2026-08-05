@@ -188,13 +188,14 @@ Impact dashboard → Youth-led story → Media kit / case materials
 **Layout**
 - Step indicator: `1 of 4 · Your climate`
 - 主体为可缩放全球地图：用户**不填写国家/地区**，而是在地图上点击自家大致位置。
-- 地图底图使用已下载资源：`docs/global-climate-zones-koppen-source.svg`。该图来自 Wikimedia Commons / Köppen-Geiger global climate classification，可作为设计参考和静态 fallback。
+- **前台地图不要染色**：用户看到的是普通地图（地形/行政区/城市），不要把整张地图铺成彩色气候区，否则视觉太学术，也会影响用户找位置。
+- 已下载资源 `docs/global-climate-zones-koppen-source.svg` 只作为资料参考、后台数据理解和开发对照，不作为前台主地图视觉。
 - 交互实现优先级：
-  1. **推荐方案**：Mapbox GL JS / Leaflet + OpenStreetMap 底图 + Köppen-Geiger 气候区 raster/vector overlay。
-  2. **可选方案**：Google Maps JavaScript API + 自定义气候区 overlay。注意 Google Maps 商用/配额/Key 管理。
-  3. **离线 fallback**：静态 SVG 地图 + 简单点击经纬度近似（只用于 demo，不作为正式版）。
+  1. **推荐方案**：Mapbox GL JS / Leaflet + OpenStreetMap 普通底图；后台通过点击经纬度查询气候区 raster / admin-1 climate summary。
+  2. **可选方案**：Google Maps JavaScript API 普通底图 + 后台气候查询。注意 Google Maps 商用/配额/Key 管理。
+  3. **离线 fallback**：普通世界地图 + 简单点击经纬度近似（只用于 demo，不作为正式版）。
 - 地图缩放要求：
-  - 世界级：显示 12 类气候大区颜色。
+  - 世界级：显示国家边界和大城市，不显示气候区染色。
   - 国家级：显示国界、省/州界。
   - 省/州级：显示主要城市点位；中国至少显示**地级市及以上**城市，其他国家显示同等规模城市或人口阈值城市。
 - 用户点击后，右侧卡片必须显示：
@@ -226,17 +227,17 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | 点击识别国家 | Natural Earth Admin 0 或 geoBoundaries / GADM Admin 0 |
 | 点击识别省/州 | Natural Earth Admin 1（轻量）或 geoBoundaries / GADM Admin 1（更精细） |
 | 城市显示 | Natural Earth Populated Places；中国可单独补地级市点表 |
-| 气候区识别 | Köppen-Geiger 1991–2020 GeoTIFF / raster tile；MVP 可先把气候区 polygon 简化成 12 类 |
+| 气候区识别 | 后台使用 Köppen-Geiger 1991–2020 GeoTIFF / raster tile；前台只显示点击结果，不强制把气候区画在地图上 |
 | 月均温/月降水 | 优先 WorldClim 2.1 月尺度 tavg + prec，按 admin-1 聚合 |
-| 缺省 fallback | 若没有省/州数据，用该气候区的标准月均温/月降水 profile |
+| 缺省 fallback | 若没有省/州数据，用对应 Köppen 细分类或主类的标准月均温/月降水 profile |
 
 **已放入仓库的地图素材**
 
 | 文件 | 用途 | 来源 |
 |------|------|------|
-| `docs/global-climate-zones-koppen-source.svg` | 设计参考、静态 fallback、legend 参考 | Wikimedia Commons, World Köppen Classification (with authors).svg |
+| `docs/global-climate-zones-koppen-source.svg` | 气候区资料参考、后台分类对照、开发参考；**不作为前台染色底图** | Wikimedia Commons, World Köppen Classification (with authors).svg |
 
-> 注意：正式交互地图不要只靠这张 SVG。SVG 用于设计参考和无 API fallback；正式版应使用地图底图 + 气候区数据 layer。
+> 注意：正式交互地图不要只靠这张 SVG。前台应使用普通地图底图；气候区判断在后台完成，只把点击结果、气温曲线和降水柱状图展示给用户。
 
 **首发地区（MVP 至少 5 个）**
 
@@ -250,53 +251,28 @@ Impact dashboard → Youth-led story → Media kit / case materials
 
 数据文件建议：`data/regions/{region_id}.json`（见 §8）。
 
-**12 类产品用气候类型（前端颜色 legend）**
+**气候 profile fallback 数据**
 
-Köppen-Geiger 细分类很多，产品 UI 不需要全部展示。正式交互层把细分类合并成以下 12 类，颜色可沿用 Köppen 色系但简化 legend：
+不再限制只能 12 类气候。系统可以保留 Köppen-Geiger 的细分类（如 `Cfa`, `Dwb`, `BSh` 等），也可以在解释层合并为更好懂的名称。关键目标不是给用户看多少类颜色，而是：**用户点击后，系统能拿到可靠的月均温和月降水数据**。
 
-| climate_12_id | Display name | Köppen examples | 对能源选择的意义 |
-|---------------|--------------|-----------------|------------------|
-| `tropical_rainforest` | Tropical rainforest | Af | 制冷/除湿重要，取暖很弱 |
-| `tropical_monsoon_savanna` | Tropical monsoon / savanna | Am, Aw, As | 制冷强，雨季湿热 |
-| `hot_desert` | Hot desert | BWh | 昼夜温差大，制冷与保温都重要 |
-| `cold_desert_steppe` | Cold desert / steppe | BWk, BSk | 冬冷夏热，热泵需看低温表现 |
-| `mediterranean` | Mediterranean | Csa, Csb, Csc | 夏季干热，冬季温和湿润 |
-| `humid_subtropical` | Humid subtropical | Cfa, Cwa | 夏季制冷强，冬季中等取暖 |
-| `oceanic` | Oceanic / marine | Cfb, Cfc | 温和湿润，热泵适配度通常高 |
-| `subtropical_highland` | Subtropical highland | Cwb, Cwc | 海拔影响明显，需要本地化 |
-| `humid_continental` | Humid continental | Dfa, Dfb, Dwa, Dwb | 冬季取暖强，低温热泵/备份重要 |
-| `subarctic` | Subarctic | Dfc, Dfd, Dwc, Dwd | 极寒，需强保温和备份热源 |
-| `tundra_alpine` | Tundra / alpine | ET | 取暖极强，施工与维护困难 |
-| `ice_cap` | Ice cap | EF | 不作为普通家庭目标市场，仅显示 |
+数据优先级：
 
-**12 类 fallback 气候 profile 数据**
+1. **Admin-1 exact**：若有省/州级聚合数据，用 `admin1_climate_summaries.json`。
+2. **Point sample**：若有 WorldClim / ERA5 / NASA POWER 经纬度点查询能力，用点击点附近数据。
+3. **Köppen subtype fallback**：若无具体位置数据，用该 Köppen 细分类的标准 profile。
+4. **Köppen main-group fallback**：若细分类也缺失，用 A/B/C/D/E 主类 profile。
 
-如果无法拿到用户点击省/州的精确月均温和月降水，系统使用该 `climate_12_id` 的标准 profile。数据应放在 `data/climate_profiles_12.json`。
+数据来源建议：WorldClim 2.1 monthly `tavg` 与 `prec`；GloH2O / Köppen-Geiger 用于识别气候分类；Natural Earth / GADM / geoBoundaries 用于行政区识别。MVP 可先手工录入常见 Köppen 细分类的代表 profile，后续再自动化生成。
 
-数据来源建议：WorldClim 2.1 monthly `tavg` 与 `prec`；每类选择 3–5 个代表点取平均，或用 GloH2O/Köppen-Geiger 栅格按类型抽样求均值。MVP 可先手工录入下列代表城市/区域的月尺度数据，后续再自动化。
-
-| climate_12_id | Representative fallback source area | 数据获取建议 |
-|---------------|-------------------------------------|--------------|
-| `tropical_rainforest` | Singapore / Manaus | WorldClim city point 或 admin-1 average |
-| `tropical_monsoon_savanna` | Bangkok / Lagos / Darwin | WorldClim point average |
-| `hot_desert` | Cairo / Riyadh / Phoenix | WorldClim point average |
-| `cold_desert_steppe` | Ulaanbaatar / Denver dry plains / Central Asia steppe | WorldClim point average |
-| `mediterranean` | Athens / Los Angeles / Perth | WorldClim point average |
-| `humid_subtropical` | Shanghai / Atlanta / Buenos Aires | WorldClim point average |
-| `oceanic` | London / Seattle / Wellington | WorldClim point average |
-| `subtropical_highland` | Kunming / Mexico City / Addis Ababa | WorldClim point average |
-| `humid_continental` | Beijing / Chicago / Warsaw | WorldClim point average |
-| `subarctic` | Fairbanks / Yakutsk / northern Scandinavia | WorldClim point average |
-| `tundra_alpine` | Reykjavik outskirts / Tibetan Plateau / alpine settlement | WorldClim point average |
-| `ice_cap` | Greenland interior / Antarctica edge | 显示用，不作为普通推荐对象 |
-
-**`data/climate_profiles_12.json` schema**
+**`data/climate_profiles.json` schema**
 
 ```json
 {
-  "humid_continental": {
-    "display_name_en": "Humid continental",
-    "display_name_zh": "湿润大陆性气候",
+  "Dwa": {
+    "display_name_en": "Monsoon-influenced hot-summer humid continental climate",
+    "display_name_zh": "季风影响的夏热湿润大陆性气候",
+    "koppen_code": "Dwa",
+    "fallback_level": "koppen_subtype",
     "source": "WorldClim 2.1 representative points; MVP fallback",
     "temperature_c_monthly": [-4, -1, 5, 12, 18, 23, 26, 25, 20, 13, 6, -1],
     "precipitation_mm_monthly": [8, 10, 20, 35, 55, 80, 160, 140, 55, 30, 18, 8],
@@ -481,7 +457,7 @@ Cross-region technology notes (only from retrieved tech cards).
 | Fitness | Fitness score: `{score}/100` |
 | Why | Why it fits: `{one_sentence_reason}` |
 | Climate action | Potential benefit: lower burden / lower emissions / better comfort |
-| Footer | Generated by Clean Heating & Cooling Pathfinder · Youth-led climate action |
+| Footer | Generated by Climate Adaptation Energy Advisor |
 
 **Copy**
 
@@ -526,7 +502,7 @@ Cross-region technology notes (only from retrieved tech cards).
 
 ### Evidence pages · Impact / About / Media Kit
 
-这些页面不属于个人评分流程，但对 COP31 申报非常关键，必须和 Global Pathfinder 同期上线。
+这些页面不属于个人评分流程，但对内部申报与外部传播非常关键，必须和 Climate Adaptation Energy Advisor 同期上线。
 
 #### `/impact` Impact Dashboard
 
@@ -720,11 +696,11 @@ fitness = Σ_d w[d] * score[d]
 data/
   maps/
     global-climate-zones-koppen-source.svg
-    climate-zones-12.mbtiles        # optional, generated for web map
+    climate-zones-koppen.mbtiles    # optional, for backend/hidden lookup, not public colored basemap
     admin1-boundaries.geojson       # simplified province/state boundaries
     populated-places.geojson        # major cities
   climate/
-    climate_profiles_12.json        # fallback monthly temp/precip by 12 climate types
+    climate_profiles.json           # fallback monthly temp/precip by Koppen subtype or main group
     admin1_climate_summaries.json   # province/state monthly temp/precip when available
   regions/
     cn_north_china.json
@@ -759,7 +735,7 @@ api/
 
 ### 8.2 `region` JSON schema（示例）
 
-`region` 在 V2 中不再由用户手动选择，而是由 G1 地图点击结果自动生成或匹配。点击地图后，系统先得到 `country_iso3`、`admin1_name`、`climate_12_id`，再查找最接近的 `region_id`。
+`region` 在 V2 中不再由用户手动选择，而是由 G1 地图点击结果自动生成或匹配。点击地图后，系统先得到 `country_iso3`、`admin1_name`、`koppen_code` 和月尺度气候数据，再查找最接近的 `region_id`。
 
 ```json
 {
@@ -768,7 +744,7 @@ api/
   "country_iso3": "USA",
   "label_en": "Midwest",
   "admin1_names": ["Illinois", "Indiana", "Iowa", "Michigan", "Minnesota", "Ohio", "Wisconsin"],
-  "climate_12_ids": ["humid_continental", "cold_desert_steppe"],
+  "koppen_codes": ["Dfa", "Dfb", "BSk"],
   "currency": "USD",
   "climate": {
     "hdd18": 4200,
@@ -1019,7 +995,7 @@ A: **分数 = TypeScript 算法**；AI 只解释。
 A: 不必。可新建 `global/index.html` + 共享 `lib/scoring.js`。
 
 **Q: 中国用户还会用旧版吗？**  
-A: 会，但它是 **China Pilot**。主入口必须是 Global Pathfinder，因为 COP31 项目不能只局限于中国北方农村。
+A: 会，但它是 **China Pilot**。主入口必须是 Climate Adaptation Energy Advisor，因为内部申报项目不能只局限于中国北方农村。
 
 **Q: 价格数据从哪来？**  
 A: MVP 用 `research/data/calibration_defaults.json` + 手工 `regions/*.json`；UI 标明 “approximate range”。
