@@ -253,16 +253,116 @@ Impact dashboard → Youth-led story → Media kit / case materials
 
 **气候 profile fallback 数据**
 
-不再限制只能 12 类气候。系统可以保留 Köppen-Geiger 的细分类（如 `Cfa`, `Dwb`, `BSh` 等），也可以在解释层合并为更好懂的名称。关键目标不是给用户看多少类颜色，而是：**用户点击后，系统能拿到可靠的月均温和月降水数据**。
+不再限制只能 12 类气候。系统应保留 SVG / Köppen-Geiger 图中的约 **30 个细分类**（如 `Cfa`, `Dwb`, `BSh` 等）。关键目标不是给用户看多少类颜色，而是：**用户点击后，系统能拿到可靠的月均温和月降水数据**。
 
-数据优先级：
+### G1 气候数据收集与判断流程（必须写进开发任务）
 
-1. **Admin-1 exact**：若有省/州级聚合数据，用 `admin1_climate_summaries.json`。
-2. **Point sample**：若有 WorldClim / ERA5 / NASA POWER 经纬度点查询能力，用点击点附近数据。
-3. **Köppen subtype fallback**：若无具体位置数据，用该 Köppen 细分类的标准 profile。
-4. **Köppen main-group fallback**：若细分类也缺失，用 A/B/C/D/E 主类 profile。
+#### Step 1 · 先上网收集省/州级气候数据（最细到国家 Admin-1）
 
-数据来源建议：WorldClim 2.1 monthly `tavg` 与 `prec`；GloH2O / Köppen-Geiger 用于识别气候分类；Natural Earth / GADM / geoBoundaries 用于行政区识别。MVP 可先手工录入常见 Köppen 细分类的代表 profile，后续再自动化生成。
+目标：对每个首发国家/地区，尽量做到 **国家的省级/州级/Admin-1** 数据。不要一开始追求城市街区级，省/州级已经够用。
+
+每个 `admin1` 至少要有：
+
+| 字段 | 说明 |
+|------|------|
+| `country_iso3` | 国家 ISO3，如 `CHN`, `USA`, `DEU` |
+| `admin1_name` | 省/州/一级行政区名称 |
+| `admin1_code` | 可选，GADM / geoBoundaries / Natural Earth 的编码 |
+| `temperature_c_monthly` | 12 个数，1–12 月月均温，单位 °C |
+| `precipitation_mm_monthly` | 12 个数，1–12 月月降水，单位 mm |
+| `koppen_code_majority` | 该省/州面积或人口加权最多的 Köppen 细分类 |
+| `data_source` | 数据来源 URL / 文件名 / 处理方法 |
+
+推荐做法：
+
+1. 下载行政区边界：优先 `geoBoundaries` 或 `GADM` Admin-1；轻量 demo 可用 `Natural Earth Admin 1`。
+2. 下载气候栅格：优先 `WorldClim 2.1` monthly `tavg` 和 `prec`。
+3. 用 GIS / Python / R 把 WorldClim 栅格按 Admin-1 polygon 做 zonal mean，得到每个省/州 12 个月的平均温度和降水。
+4. 输出为 `data/climate/admin1_climate_summaries.json`。
+
+#### Step 2 · 点击地图后如何确定用户气候信息
+
+用户在 G1 地图上点击一个点 `(lat, lon)` 后，前端或后端按以下顺序判断：
+
+```text
+click(lat, lon)
+  → spatial join Admin-0 polygon → country_iso3
+  → spatial join Admin-1 polygon → admin1_name
+  → query Köppen-Geiger raster at (lat, lon) → koppen_code
+  → lookup admin1_climate_summaries[country_iso3][admin1_name]
+      if found:
+        use admin1 monthly temperature + precipitation
+        data_resolution = "admin1"
+      else:
+        lookup climate_profiles[koppen_code]
+        data_resolution = "koppen_subtype_fallback"
+      if koppen_code profile missing:
+        use climate_profiles[koppen_main_group]  // A/B/C/D/E
+        data_resolution = "koppen_main_group_fallback"
+  → render climate chart:
+      bar = monthly precipitation
+      line = monthly mean temperature
+```
+
+页面展示时要写清楚数据精度：
+
+- `Data source: Province/state average`
+- `Data source: Köppen climate-type fallback`
+- `Data source: Major climate-group fallback`
+
+#### Step 3 · 给约 30 个 Köppen 细分类准备标准 fallback profile
+
+如果找不到某个省/州的具体数据，就用该地点的 Köppen 细分类 profile。SVG 图和 Köppen-Geiger 常见细分类约 30 个，开发时至少覆盖以下代码：
+
+```text
+Af, Am, Aw,
+BWh, BWk, BSh, BSk,
+Csa, Csb, Csc, Cwa, Cwb, Cwc, Cfa, Cfb, Cfc,
+Dsa, Dsb, Dsc, Dsd, Dwa, Dwb, Dwc, Dwd, Dfa, Dfb, Dfc, Dfd,
+ET, EF
+```
+
+每个代码都要在 `data/climate/climate_profiles.json` 里有一个标准 profile。标准 profile 只需要两项核心气候数据：
+
+- `temperature_c_monthly`: 12 个月每月月均温
+- `precipitation_mm_monthly`: 12 个月每月月降水
+
+如何给每个 Köppen 细分类找标准数据：
+
+1. 对每个 Köppen code 选择 3–5 个代表城市或代表区域。
+2. 用 WorldClim / Climate-Data.org / Meteostat / NASA POWER 查询这些代表点的月均温和月降水。
+3. 对代表点取平均，得到该 Köppen code 的 fallback profile。
+4. 在 JSON 中保留 `representative_locations` 和 `source_urls`，方便以后检查。
+
+示例：
+
+| Köppen code | 气候说明 | 代表点示例 | 数据来源建议 |
+|-------------|----------|------------|--------------|
+| `Af` | Tropical rainforest | Singapore, Manaus, Kisangani | WorldClim point average |
+| `BWh` | Hot desert | Cairo, Riyadh, Phoenix | WorldClim / Climate-Data.org |
+| `Cfa` | Humid subtropical | Shanghai, Atlanta, Buenos Aires | WorldClim / Meteostat |
+| `Cfb` | Oceanic | London, Seattle, Wellington | WorldClim / Meteostat |
+| `Dwa` | Monsoon-influenced humid continental | Beijing, Seoul, Shenyang | WorldClim / Meteostat |
+| `Dfb` | Warm-summer humid continental | Warsaw, Minneapolis, Moscow | WorldClim / Meteostat |
+| `ET` | Tundra | Nuuk edge, northern Iceland, alpine settlements | WorldClim |
+
+
+总之，用户点后，如果在有具体数据的省/州，就直接采用；如果没有，就用这个点所在气候区的标准profile气候数据
+
+#### 推荐数据网址 / 方法
+
+| 用途 | 推荐来源 | URL / 方法 |
+|------|----------|------------|
+| 月均温、月降水栅格 | WorldClim 2.1 Historical monthly data | https://worldclim.org/data/worldclim21.html |
+| 在线栅格分析 | Google Earth Engine WorldClim monthly | https://developers.google.com/earth-engine/datasets/catalog/WORLDCLIM_V1_MONTHLY |
+| Köppen-Geiger 1991–2020 分类 | GloH2O Köppen-Geiger data | https://www.gloh2o.org/koppen |
+| Köppen-Geiger GeoTIFF / legend | Figshare / Beck et al. data | https://doi.org/10.6084/m9.figshare.21789074.v2 |
+| 行政区边界 | geoBoundaries | https://www.geoboundaries.org/ |
+| 行政区边界 | GADM | https://gadm.org/download_world.html |
+| 轻量地图边界和城市点 | Natural Earth Admin 1 + Populated Places | https://www.naturalearthdata.com/downloads/10m-cultural-vectors/ |
+| 按经纬度查气候 | NASA POWER API | https://power.larc.nasa.gov/docs/services/api/ |
+| Python 处理 | `geopandas` + `rasterio` + `rasterstats.zonal_stats` | Admin-1 polygon × WorldClim rasters |
+| R 处理 | `geodata` + `terra` | `gadm()`, `worldclim_global()`, `extract()` |
 
 **`data/climate_profiles.json` schema**
 
@@ -274,6 +374,8 @@ Impact dashboard → Youth-led story → Media kit / case materials
     "koppen_code": "Dwa",
     "fallback_level": "koppen_subtype",
     "source": "WorldClim 2.1 representative points; MVP fallback",
+    "representative_locations": ["Beijing", "Seoul", "Shenyang"],
+    "source_urls": ["https://worldclim.org/data/worldclim21.html"],
     "temperature_c_monthly": [-4, -1, 5, 12, 18, 23, 26, 25, 20, 13, 6, -1],
     "precipitation_mm_monthly": [8, 10, 20, 35, 55, 80, 160, 140, 55, 30, 18, 8],
     "notes": "Fallback only; replace with admin-1 data when available."
@@ -294,26 +396,29 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | field_key | UI label (EN) | Type | Required | 说明 |
 |-----------|---------------|------|----------|------|
 | `household_size` | People in home | number | yes | 默认 4 |
-| `annual_income` | Annual household income (local currency) | number | yes | 整户收入 |
-| `annual_surplus` | Money left after basic expenses | number | no | 可估算 |
-| `floor_area_m2` | Heated floor area (m²) | number | yes | |
+| `annual_income` | Annual household income (local currency) | number | yes | 整户收入；用它判断收入水平与负担率，不再单独收集 surplus |
+| `floor_area_m2` | Total floor area (m²) | number | yes | 整屋总建筑面积 |
 | `building_age` | Building age | select: `<1970`, `1970–1990`, `1990–2010`, `2010+` | no | 影响保温假设 |
 | `insulation_level` | Insulation | select: Poor / Average / Good | no | 默认 Average |
-| `current_heating` | Current heating | select | yes | 见下表 |
-| `heating_spend_annual` | Last winter heating spend | number | yes | 本地货币 |
+| `needs_heating` | Need winter heating? | yes/no | yes | 若选 yes，再显示 heating spend |
+| `heating_spend_annual` | Last winter heating spend | number | if heating=yes | 本地货币；仅当 `needs_heating=yes` 时出现 |
 | `needs_cooling` | Need summer cooling? | yes/no | yes | |
-| `cooling_spend_annual` | Last summer cooling spend | number | if cooling=yes | |
+| `cooling_spend_annual` | Last summer cooling spend | number | if cooling=yes | 仅当 `needs_cooling=yes` 时出现 |
 
-**current_heating 选项（EN）**
+**条件显示逻辑**
 
-- Scattered coal / solid fuel  
-- Natural gas boiler  
-- LPG / propane  
-- Electric resistance  
-- Heat pump (existing)  
-- District heating  
-- Wood / biomass  
-- Other  
+```text
+if needs_heating == yes:
+  show heating_spend_annual (required)
+else:
+  hide heating_spend_annual
+  treat heating demand as low / none for scoring
+
+if needs_cooling == yes:
+  show cooling_spend_annual (required)
+else:
+  hide cooling_spend_annual
+```
 
 **Copy**
 
@@ -321,7 +426,8 @@ Impact dashboard → Youth-led story → Media kit / case materials
 |------|----------|
 | Heading | **Tell us about this household** |
 | Hint | Use whole-house numbers. Approximate bills are OK. |
-| Income help | Count all earners in the home for one year—not per person unless we ask. |
+| Income help | Count all earners in the home for one year—not per person unless we ask. Income is used to estimate affordability. |
+| Floor area help | Enter the total floor area of the home in square meters. |
 | Button back | Back |
 | Button next | **Continue** |
 
@@ -393,7 +499,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | Heading | **Paths ranked for your home** |
 | Subheading | Higher fitness = better match *for you*, not “best in the world.” |
 | Excluded section title | Not feasible for your place |
-| Excluded reason examples | No gas grid in region · Below minimum temperature for air-source without backup · Upfront above surplus threshold |
+| Excluded reason examples | No gas grid in region · Below minimum temperature for air-source without backup · Upfront too high vs income |
 | Empty state | No path passed hard checks. Try adjusting income or insulation. |
 | CTA AI | **Explain these results** |
 | CTA sandbox | **Try a 3-step preview of #1** |
