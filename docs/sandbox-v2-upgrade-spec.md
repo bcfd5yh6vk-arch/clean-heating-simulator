@@ -417,9 +417,9 @@ ET, EF
 | `floor_area_m2` | Total floor area (m²) | number | yes | 整屋总建筑面积 |
 | `building_age` | Building age | select: `<1970`, `1970–1990`, `1990–2010`, `2010+` | no | 影响保温假设 |
 | `insulation_level` | Insulation | select: Poor / Average / Good | no | 默认 Average |
-| `needs_heating` | Need winter heating? | yes/no | yes | 若选 yes，再显示 heating spend |
+| `needs_heating` | Need winter heating? | yes/no | yes | 控制 G3 是否出现 **Heating options**；若选 yes，再显示 heating spend |
 | `heating_spend_annual` | Last winter heating spend | number + currency | if heating=yes | 仅当 `needs_heating=yes`；单位 = 共用 `currency` |
-| `needs_cooling` | Need summer cooling? | yes/no | yes | |
+| `needs_cooling` | Need summer cooling? | yes/no | yes | 控制 G3 是否出现 **Cooling options**；若选 yes，再显示 cooling spend |
 | `cooling_spend_annual` | Last summer cooling spend | number + currency | if cooling=yes | 仅当 `needs_cooling=yes`；单位 = 共用 `currency` |
 
 **条件显示逻辑**
@@ -435,6 +435,17 @@ if needs_cooling == yes:
   show cooling_spend_annual (required) + shared currency selector
 else:
   hide cooling_spend_annual
+
+# G2 → G3 联动（必须实现）
+if needs_heating == yes:
+  show G3 Heating options group
+else:
+  hide G3 Heating options group entirely
+
+if needs_cooling == yes:
+  show G3 Cooling options group
+else:
+  hide G3 Cooling options group entirely
 ```
 
 **Copy**
@@ -456,18 +467,41 @@ else:
 
 **目的**
 
-让用户根据当地法律法规、物业/社区限制、实际可安装条件，先勾选“可选用 / 不被禁止”的家用取暖与制冷方式。G4 只对勾选的方式进行排序；未勾选方式进入 `Excluded`，理由显示为 `Not allowed or not available locally`。
+让用户根据当地法律法规、物业/社区限制、实际可安装条件，先勾选“可选用 / 不被禁止”的家用取暖与制冷方式。**G4 的 path ranking 只展示 G3 已勾选的路径**；G3 未勾选的路径不出现在 ranking 中。
 
 > 注意：这里是**用户确认当地允许性**，不是系统替用户判断法律。系统可以根据 `region` 给默认建议，但必须允许用户按当地实际情况修改。
 
+**与 G2 联动（是否出现两组 options）**
+
+| G2 字段 | G2 值 | G3 表现 |
+|---------|-------|---------|
+| `needs_heating` | yes | 显示 **Heating options** 整组（含全选） |
+| `needs_heating` | no | **不显示** Heating options；只展示 skipped 提示 |
+| `needs_cooling` | yes | 显示 **Cooling options** 整组（含全选） |
+| `needs_cooling` | no | **不显示** Cooling options；只展示 skipped 提示 |
+
+```text
+if G2.needs_heating == yes:
+  render Heating options
+  require >= 1 heating option checked before Continue
+else:
+  do not render Heating options
+  set allowed_heating_options = []
+
+if G2.needs_cooling == yes:
+  render Cooling options
+  require >= 1 cooling option checked before Continue
+else:
+  do not render Cooling options
+  set allowed_cooling_options = []
+```
+
 **Layout**
 - Step: `3 of 4 · Allowed options`
-- 两个独立分组：**Heating options** 与 **Cooling options**。
+- 页面最多两个分组：**Heating options**、**Cooling options**；是否渲染取决于 G2。
 - 每个选项左侧为小方框 checkbox，可多选。
 - 每组顶部提供一个全选 checkbox：`Select all heating options` / `Select all cooling options`。
-- 若 G2 中 `needs_heating=no`，Heating options 折叠为只读提示，不要求选择。
-- 若 G2 中 `needs_cooling=no`，Cooling options 折叠为只读提示，不要求选择。
-- 至少选择一个与用户需求相关的选项后，才允许进入 G4 结果页。
+- 至少在一个**已显示的分组**里勾选至少 1 项后，才允许进入 G4。
 
 **Heating options（取暖）**
 
@@ -540,6 +574,20 @@ else:
 
 ### G4 · Results（核心页）
 
+**候选路径范围（与 G3 联动）**
+
+- **Path ranking 主表只包含 G3 已勾选的路径**；G3 未勾选的路径不进入候选集，也不出现在 ranking 中。
+- 若 G2 `needs_heating=no`，所有取暖路径不参与 ranking。
+- 若 G2 `needs_cooling=no`，所有制冷路径不参与 ranking。
+- 在 G3 已勾选的路径中，若仍被 hard filter 剔除（如无气网、初装过高），进入下方 **Excluded** 区块，**不进入主 ranking**。
+
+```text
+candidate_paths = map(G3.checked_options → tech paths)
+ranked_paths = score_and_sort(candidate_paths passing hardFilter)
+excluded_paths = candidate_paths failing hardFilter
+# 不在 G3.checked_options 里的路径：完全不展示
+```
+
 **Layout（桌面）**
 
 ```
@@ -564,7 +612,7 @@ else:
 
 | Column | 说明 |
 |--------|------|
-| Rank | 1…N |
+| Rank | 1…N；**仅对 G3 已勾选且通过 hard filter 的路径编号** |
 | Path | 技术路径显示名 |
 | Fitness | 0–100 综合分（一位小数） |
 | Upfront | 初装成本区间 |
@@ -578,10 +626,10 @@ else:
 | 元素 | 英文文案 |
 |------|----------|
 | Heading | **Paths ranked for your home** |
-| Subheading | Higher fitness = better match *for you*, not “best in the world.” |
-| Excluded section title | Not feasible for your place |
+| Subheading | Only the options you checked as allowed are ranked here. |
+| Excluded section title | Checked, but not feasible for your place |
 | Excluded reason examples | No gas grid in region · Below minimum temperature for air-source without backup · Upfront too high vs income |
-| Empty state | No path passed hard checks. Try adjusting income or insulation. |
+| Empty state | No checked path passed hard checks. Go back and adjust allowed options, income, or insulation. |
 | CTA AI | **Explain these results** |
 | CTA sandbox | **Try a 3-step preview of #1** |
 
@@ -768,7 +816,9 @@ Cross-region technology notes (only from retrieved tech cards).
 ### 7.1 架构总览
 
 ```
-inputs: region_profile, household_profile, allowed_options
+inputs: region_profile, household_profile, allowed_options (from G3)
+        ↓
+candidate_paths = only paths mapped from G3 checked options
         ↓
 hard_filter(path, region, household, allowed_options) → feasible set
         ↓
@@ -814,6 +864,7 @@ MVP 至少包含 **8 条**（取暖/制冷组合可拆成子路径）：
 
 ```text
 function hardFilter(path, region, household, allowed_options):
+  // 仅对 G3 已勾选映射出的 candidate path 调用；未勾选路径不会进入此函数
   if path.heating_option_key and path.heating_option_key not in allowed_options.allowed_heating_options: exclude "Not allowed or not available locally"
   if path.cooling_option_key and path.cooling_option_key not in allowed_options.allowed_cooling_options: exclude "Not allowed or not available locally"
   if path.requires_gas_grid and not region.has_gas_grid: exclude "No gas grid"
