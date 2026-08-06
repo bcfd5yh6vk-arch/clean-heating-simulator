@@ -669,6 +669,51 @@ const rankedPaths = scoreAndSort(candidatePaths, baseline, household, region, cl
 - G4 可显示 `Your current setup`，例如 `Current heating: Delivered-fuel heating`、`Current cooling: Room air conditioner + fans`。
 - baseline 不自动作为推荐路径；只有算法生成“保留现有系统 + 改善措施”时才进入正式排名。
 
+**CS 同学：取暖/制冷「选项」都在哪？（G4 必读）**
+
+G4 页面上看到的 Path / Excluded，**不是**写死在前端的勾选列表，而是从下面这些文件算出来的。改技术、加技术、改筛选规则时按此表找：
+
+| 你要找的内容 | 文件路径 | 说明 |
+|--------------|----------|------|
+| **全部取暖/制冷/辅助技术选项（唯一运行时目录）** | `docs/data/technologies/technology_catalog.json` | 35 条；含 `tech_id`、中英名、`role`、`services`、筛选条件、G4 默认分档。**改选项先改这个文件。** |
+| 目录字段 schema | `docs/data/technologies/technology_catalog.schema.json` | 校验 JSON 结构；新增字段时同步改 |
+| 目录 TypeScript 类型 | `docs/src/technologies/types.ts` | `TechnologyCatalogEntry` 等 |
+| 目录加载 / MVP 筛选集 | `docs/src/technologies/loadTechnologyCatalog.ts` | `getMvpScreeningCatalog()`：把 catalog 转成 screening 用的 profile；`phase2` / `baseline_only` 不会进 G4 候选池 |
+| **G4 硬筛选 + 候选路径生成 + 五维打分** | `docs/src/global/screening.ts` | `screenTechnologies` / `generateCandidatePaths` / `scoreAndSort` |
+| Global 类型（Household / Climate / Path） | `docs/src/global/types.ts` | `CandidatePath`、`RankedPath`、`ScreeningResult` 等 |
+| 模块出口 | `docs/src/global/index.ts` | 统一 re-export |
+| G3「当前家里怎么取暖/制冷」（**不是** G4 白名单） | `docs/src/global/homeFeasibility.ts` + 规格 §G3 Q6/Q7 | 只建 baseline；`current_heating_methods` / `current_cooling_methods` |
+| G4 原型 UI（摘要页） | `docs/global/index.html`、`docs/global/app.js` | 当前只展示筛选摘要，不渲染完整目录 |
+| 自动化测试 | `docs/tests/global/global-flow.test.js`、`docs/tests/global/technology-catalog.test.js` | 筛选联动、目录完整性、公开页不得暴露完整 catalog |
+| 人工审计总表（与 JSON 对照） | 本文档末尾 **Internal Appendix · Household technology catalog** | 开发对照用；**禁止**做成公开网站栏目 |
+
+数据流（方便对照代码）：
+
+```text
+technology_catalog.json
+        │  loadTechnologyCatalog.ts → getMvpScreeningCatalog()
+        ▼
+screenTechnologies(...)     ← 还吃 G1 climate / G2 household / G3 homeFeasibility
+        ▼
+generateCandidatePaths(...)
+        ▼
+scoreAndSort(...)           ← G4 五维 Fitness
+        ▼
+G4 UI：Ranked table + Excluded reasons
+        （公开页只显示通过筛选的路径，不展示完整 35 项目录）
+```
+
+**不要搞混的两套「选项」**
+
+| | G3 Q6/Q7「当前方式」 | G4 技术目录选项 |
+|--|----------------------|-----------------|
+| 给谁看 | 用户填表 | 后台 + G4 结果（筛完才展示） |
+| 粒度 | 粗分类（如 `piped_gas_heating`） | 具体技术（如 `gas_boiler`、`ashp_ductless`） |
+| 作用 | baseline / 能耗负担对照 | 未来候选路径与排除原因 |
+| 能否当白名单 | **否** | 是筛选输入全集 |
+
+跑测试：`npm test`（会 `tsc` 编译到 `docs/dist/` 再跑 `docs/tests/global/*.test.js`）。
+
 **Layout（桌面）**
 
 ```
@@ -1477,6 +1522,8 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 > Internal development and scoring reference only.  
 > Do not render this catalog as a public website section.  
 > G3 collects household information without showing future technology options.
+
+**给 CS**：本表是 `docs/data/technologies/technology_catalog.json` 的审计对照；G4 如何引用这些文件见上文 **§G4 · Results →「CS 同学：取暖/制冷选项都在哪」**。
 
 如果本文档未来被构建成公开网页，必须排除此内部附录，或在构建流程中隐藏本节。运行时唯一数据源是 `docs/data/technologies/technology_catalog.json`；下表只用于开发审计。
 
