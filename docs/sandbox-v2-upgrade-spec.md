@@ -142,21 +142,25 @@ Impact dashboard → Youth-led story → Media kit / case materials
 
 ---
 
-## 5. 界面说明与界面文案（English UI copy）
+## 5. 界面说明与界面文案（Bilingual UI copy）
 
-> 以下文案可直接进前端；中文注释供产品负责人核对。
+> 以下英文/中文文案可直接进前端；正式实现必须由 i18n 字典驱动。
 
 ### G0 · Landing
 
 **Layout**
-- 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit`
+- 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit` + **Language selector（English / 中文）**
 - Hero：公开品牌名 + 中文副名 + 副标题 + 主按钮
 - 三列价值点 + 影响力数字条 + 底部 disclaimer
+- 用户在首页选择语言后，后续 G1–G8 以及 `/impact`、`/about`、`/media` 的所有文字信息都使用对应语言。
 
 **Copy**
 
 | 元素 | 英文文案 |
 |------|----------|
+| Language label | Language |
+| Language option EN | English |
+| Language option ZH | 中文 |
 | Title | **Climate Adaptation Energy Advisor** |
 | Chinese title | **气候适应家庭能源选择助手** |
 | Eyebrow | **Household energy choices for a changing climate** |
@@ -172,6 +176,37 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | Impact strip | China pilot: 28 valid sessions · 21 completed surveys · +1.50 understanding gain |
 | Disclaimer | *Decision support only. Not engineering design, installation quote, or legal advice. Local installers must confirm sizing and safety.* |
 | Footer | Anonymous · No account required · ~3 min |
+
+**中文 Copy（G0 必须提供）**
+
+| 元素 | 中文文案 |
+|------|----------|
+| Language label | 语言 |
+| Language option EN | English |
+| Language option ZH | 中文 |
+| Title | **气候适应家庭能源选择助手** |
+| English title | **Climate Adaptation Energy Advisor** |
+| Eyebrow | **面向气候变化的家庭能源选择** |
+| Subtitle | 在气候地图上点击你家的大致位置，比较取暖和制冷方案，看看哪些更适合当地气候和家庭预算。 |
+| Primary CTA | **从地图开始，约 3 分钟** |
+| Secondary CTA | **查看中国试点证据** |
+| Bullet 1 title | 以家庭为中心 |
+| Bullet 1 body | 输入收入、住房面积和能源账单，查看适合你的方案。 |
+| Bullet 2 title | 分数可追溯 |
+| Bullet 2 body | 每条路径都由清晰规则打分，不是 AI 猜测。 |
+| Bullet 3 title | 通俗解释 |
+| Bullet 3 body | AI 会用易懂语言解释取舍，也补充你所在国家可能不熟悉的技术信息。 |
+| Impact strip | 中国试点：28 个有效会话 · 21 份完成问卷 · 理解提升 +1.50 |
+| Disclaimer | *本工具仅作决策参考，不是工程设计、安装报价或法律建议。设备选型、安全与合规需由当地安装人员确认。* |
+| Footer | 匿名 · 无需账号 · 约 3 分钟 |
+
+**Language behavior（必须实现）**
+
+- 首页右上角提供语言选项：`English` / `中文`。
+- 语言选择写入 `localStorage.locale`，并可同步到 URL query（如 `?lang=zh` / `?lang=en`）方便分享。
+- 默认语言：若浏览器语言以 `zh` 开头则默认中文，否则默认英文；用户手动选择后以用户选择为准。
+- 语言选择后，全流程所有 UI 文案、按钮、表单提示、验证错误、结果页说明、AI explanation 请求的 `locale` 都使用对应语言。
+- 文案来源必须走 i18n 字典：`i18n/en.json` 与 `i18n/zh.json`。不要在组件里硬编码英文或中文。
 
 **禁止出现在 G0 的公开文案**
 - `COP31`
@@ -964,6 +999,7 @@ src/
     buildScoreCard.ts
     prompts/
       globalExplain.en.md
+      globalExplain.zh.md
 pages/  (或 routes/)
   global/
     landing.html
@@ -1081,6 +1117,8 @@ api/
 
 ### 9.3 `/api/explain` 请求体
 
+`locale` 必须来自首页语言选择，取值为 `en` 或 `zh`。
+
 ```json
 {
   "locale": "en",
@@ -1110,7 +1148,7 @@ api/
 **Phase 1**：把 top-5 + excluded 的 tech JSON 全文塞进 system prompt（<8k tokens）。  
 **Phase 2**：向量库（Supabase pgvector / 本地 JSON index）按 `tech_id` + 关键词检索。
 
-System prompt 要点（英文）：
+System prompt 要点（按 `locale` 选择英文或中文版本）：
 
 ```text
 You are a plain-language home energy guide.
@@ -1128,10 +1166,12 @@ Compare #1 and #2 on cost and climate.
 Note any technology used in China that may be relevant for this region.
 ```
 
+`locale=zh` 时使用等价中文 prompt，输出标题与正文都用中文；`locale=en` 时使用英文 prompt。不得出现“界面是中文但 AI 解释仍为英文”的混用。
+
 ### 9.5 与 V1 prompt 的关系
 
 - V1：`api/chat.js` 三套中文 farmer/student prompt → **保留**。
-- V2：新建 `api/explain.js` + `prompts/globalExplain.en.md` → **不要混在一个 handler 里**。
+- V2：新建 `api/explain.js` + `prompts/globalExplain.en.md` + `prompts/globalExplain.zh.md` → **不要混在 V1 handler 里**。
 
 ---
 
@@ -1153,7 +1193,7 @@ Note any technology used in China that may be relevant for this region.
 | 打分 | **优先前端完成**（零额外延迟） | MVP 简单 |
 | AI | Vercel serverless | 与现网一致 |
 | 测试 | Vitest 对 `scoring/*` 快照测试 | 可答辩复现 |
-| i18n | `en.json` / `zh.json` | Global 先 EN |
+| i18n | `en.json` / `zh.json` | 首页可切换 English / 中文；G1–G8 与 AI explanation 跟随同一 `locale` |
 
 ### 10.3 路由部署（Vercel）
 
@@ -1181,8 +1221,9 @@ Note any technology used in China that may be relevant for this region.
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
 - [ ] `data/regions` + `data/technologies` 各 3 条样例 JSON，必须含 China + 2 个海外地区
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
+- [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G8、Impact/About/Media、AI explanation 全部跟随同一语言
 
-**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能选 region、填表、数据写入 console；China pilot 仍可进入。
+**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能切换 English / 中文；切换后后续页面文字跟随语言；能选 region、填表、数据写入 console；China pilot 仍可进入。
 
 ### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
@@ -1220,13 +1261,13 @@ Note any technology used in China that may be relevant for this region.
 
 ## 12. 验收标准（Definition of Done）
 
-1. **功能**：Global 全流程 G0→G8 无 dead end；China pilot 仍可独立进入并完成一局。
+1. **功能**：Global 全流程 G0→G8 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；China pilot 仍可独立进入并完成一局。
 2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
 3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
 4. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
 5. **隐私**：无 PII 强制；Supabase 仅存匿名 session。
 6. **COP31 传播**：`/impact`、`/about`、`/media` 可公开访问；有中英项目简介、影响力数字、行动摘要卡、demo 视频入口。
-7. **文档**：README 增加 Global mode、China pilot、COP31 media kit 与环境变量说明。
+7. **文档**：README 增加 Global mode、China pilot、COP31 media kit、语言切换与环境变量说明。
 
 ---
 
@@ -1272,7 +1313,7 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 - [ ] 准备中英双语项目简介：100 字、500 字、2000 字三个版本
 - [ ] 准备 COP31 申报所需 supporting materials：demo 视频、截图、数据报告、活动照片
 - [ ] 明确弱势群体包容叙事：农村、低收入、偏远地区、能源负担高家庭如何受益
-- [ ] 确认 Global UI 是否要中英切换（建议首页/impact/about/media 中英双语，工具流程先 EN）
+- [ ] 确认中英文术语表：技术路径名、免责声明、AI explanation 固定标题、错误提示
 - [ ] 准备 5 组「典型家庭」fixture 供测试与 demo
 - [ ] 免责声明给导师/课程过目
 
