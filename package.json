@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build && node --test tests/global/*.test.js"
+    "test": "npm run build && node --test docs/tests/global/*.test.js"
   },
   "repository": {
     "type": "git",

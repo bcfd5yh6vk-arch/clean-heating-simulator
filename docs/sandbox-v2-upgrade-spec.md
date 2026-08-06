@@ -872,8 +872,8 @@ AI: read-only explanation (no score mutation)
 运行时唯一技术目录：
 
 ```text
-data/technologies/technology_catalog.json
-data/technologies/technology_catalog.schema.json
+docs/data/technologies/technology_catalog.json
+docs/data/technologies/technology_catalog.schema.json
 ```
 
 - 该目录包含取暖、制冷、取暖+制冷、辅助措施与 baseline-only 技术。
@@ -1035,47 +1035,44 @@ fitness = Σ_d default_w[d] * score[d]
 
 ### 8.1 建议新增目录
 
+Global V2 相关源码、数据、测试与原型页面统一放在 `docs/` 下，与 China Pilot（根目录 `index.html`）隔离：
+
 ```
-data/
-  maps/
-    global-climate-zones-koppen-source.svg
-    climate-zones-koppen.mbtiles    # optional, for backend/hidden lookup, not public colored basemap
-    admin1-boundaries.geojson       # simplified province/state boundaries
-    populated-places.geojson        # major cities
-  climate/
-    climate_profiles.json           # fallback monthly temp/precip by Koppen subtype or main group
-    admin1_climate_summaries.json   # province/state monthly temp/precip when available
-  regions/
-    cn_north_china.json
-    us_midwest.json
-    ...
-  technologies/
-    technology_catalog.json          # one runtime source of truth; internal only
-    technology_catalog.schema.json
-  i18n/
-    en.json
-    zh.json
-src/
-  technologies/
-    types.ts
-    loadTechnologyCatalog.ts
-  scoring/
-    screenTechnologies.ts
-    buildBaselineProfile.ts
-    generateCandidatePaths.ts
-  ai/
-    buildScoreCard.ts
-    prompts/
-      globalExplain.en.md
-      globalExplain.zh.md
-pages/  (或 routes/)
-  global/
-    landing.html
-    ...
-api/
-  score.js          # POST 纯打分（可选，也可全前端）
-  explain.js        # POST AI 解释（RAG）
-  chat.js           # 保留 V1
+docs/
+  sandbox-v2-upgrade-spec.md
+  global/                          # Global mode 原型 UI（/global 路由入口）
+    index.html
+    app.js
+  data/
+    maps/
+      global-climate-zones-koppen-source.svg
+      climate-zones-koppen.mbtiles    # optional, for backend/hidden lookup, not public colored basemap
+      admin1-boundaries.geojson       # simplified province/state boundaries
+      populated-places.geojson        # major cities
+    climate/
+      climate_profiles.json           # fallback monthly temp/precip by Koppen subtype or main group
+      admin1_climate_summaries.json   # province/state monthly temp/precip when available
+    regions/
+      cn_north_china.json
+      us_midwest.json
+      ...
+    technologies/
+      technology_catalog.json          # one runtime source of truth; internal only
+      technology_catalog.schema.json
+  src/
+    global/
+      homeFeasibility.ts
+      screening.ts
+      types.ts
+      index.ts
+    technologies/
+      types.ts
+      loadTechnologyCatalog.ts
+  tests/
+    global/
+      global-flow.test.js
+      technology-catalog.test.js
+  dist/                              # TypeScript 编译输出（gitignore）
 ```
 
 ### 8.2 `region` JSON schema（示例）
@@ -1123,7 +1120,7 @@ api/
 
 ### 8.3 `TechnologyCatalogEntry` schema
 
-`data/technologies/technology_catalog.json` 是运行时单一技术目录。`data/technologies/technology_catalog.schema.json` 用于校验关键结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
+`docs/data/technologies/technology_catalog.json` 是运行时单一技术目录。`docs/data/technologies/technology_catalog.schema.json` 用于校验关键结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
 
 字段原则：
 - 主目录描述技术本身：服务类型、安装要求、基础设施要求、气候规则、G4 fallback tier、路径组合规则。
@@ -1294,7 +1291,7 @@ Note any technology used in China that may be relevant for this region.
 ```json
 {
   "rewrites": [
-    { "source": "/global", "destination": "/global/index.html" },
+    { "source": "/global", "destination": "/docs/global/index.html" },
     { "source": "/china", "destination": "/index.html" },
     { "source": "/impact", "destination": "/impact/index.html" },
     { "source": "/about", "destination": "/about/index.html" },
@@ -1313,7 +1310,7 @@ Note any technology used in China that may be relevant for this region.
 - [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
 - [ ] 新建 `/global` 入口与 G0–G3 静态页（无打分）
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
-- [ ] `data/regions` 至少 3 条样例 JSON（China + 2 个海外地区）；`data/technologies/technology_catalog.json` 作为完整内部技术目录
+- [ ] `docs/data/regions` 至少 3 条样例 JSON（China + 2 个海外地区）；`docs/data/technologies/technology_catalog.json` 作为完整内部技术目录
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
 - [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G8、Impact/About/Media、AI explanation 全部跟随同一语言
 
@@ -1371,7 +1368,7 @@ Note any technology used in China that may be relevant for this region.
 A: **分数 = TypeScript 算法**；AI 只解释。
 
 **Q: 必须先重写整个 index.html 吗？**  
-A: 不必。可新建 `global/index.html` + 共享 `lib/scoring.js`。
+A: 不必。可新建 `docs/global/index.html` + 共享 `lib/scoring.js`。
 
 **Q: 中国用户还会用旧版吗？**  
 A: 会，但它是 **China Pilot**。主入口必须是 Climate Adaptation Energy Advisor，因为内部申报项目不能只局限于中国北方农村。
@@ -1407,7 +1404,7 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 > Do not render this catalog as a public website section.  
 > G3 collects household information without showing future technology options.
 
-如果本文档未来被构建成公开网页，必须排除此内部附录，或在构建流程中隐藏本节。运行时唯一数据源是 `data/technologies/technology_catalog.json`；下表只用于开发审计。
+如果本文档未来被构建成公开网页，必须排除此内部附录，或在构建流程中隐藏本节。运行时唯一数据源是 `docs/data/technologies/technology_catalog.json`；下表只用于开发审计。
 
 | tech_id | EN display name | 中文名称 | 角色/服务 | 状态 | 安装 | 空间 | 必要基础设施 | 气候/环境规则 | 排名方式 | Capex | Comfort | Simple | 运行费模型 | 碳模型 |
 |---|---|---|---|---|---:|---|---|---|---|---:|---:|---:|---|---|

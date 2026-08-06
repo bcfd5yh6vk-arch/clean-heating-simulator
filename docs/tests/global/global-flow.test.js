@@ -325,7 +325,7 @@ test("39. AI is not referenced by screening or scoring source", () => {
 });
 
 test("40. China Pilot entry point is not replaced by /global", () => {
-  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"));
+  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../../vercel.json"), "utf8"));
   const root = vercel.rewrites.find((rewrite) => rewrite.source === "/");
   assert.equal(root.destination, "/index.html");
 });

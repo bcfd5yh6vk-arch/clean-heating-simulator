@@ -8,7 +8,7 @@
     }
   ],
   "rewrites": [
-    { "source": "/global", "destination": "/global/index.html" },
+    { "source": "/global", "destination": "/docs/global/index.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }

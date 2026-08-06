@@ -15,7 +15,7 @@ const schema = require("../../data/technologies/technology_catalog.schema.json")
 const PUBLIC_FILES = [
   "../../global/index.html",
   "../../global/app.js",
-  "../../vercel.json",
+  "../../../vercel.json",
 ];
 
 function publicText() {
@@ -170,7 +170,7 @@ test("visibility 29. G3 page does not include full technology catalog JSON", () 
 });
 
 test("visibility 30. website has no Technology Catalog route", () => {
-  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"));
+  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../../vercel.json"), "utf8"));
   assert.equal(vercel.rewrites.some((rewrite) => /technolog/i.test(rewrite.source)), false);
 });
 
@@ -194,7 +194,7 @@ test("visibility 34. phase2 technology ids do not appear in public prototype fil
 });
 
 test("visibility 35. China Pilot remains root route", () => {
-  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"));
+  const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../../vercel.json"), "utf8"));
   const root = vercel.rewrites.find((rewrite) => rewrite.source === "/");
   assert.equal(root.destination, "/index.html");
 });
