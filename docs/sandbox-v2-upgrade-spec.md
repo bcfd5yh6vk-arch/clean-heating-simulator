@@ -112,8 +112,8 @@ MVP 产品说明见：`spec.md`。
 ## 4. Global mode 用户流程（逐步）
 
 ```
-Global Landing → Click home location on climate map → Household form → Optional cooling need
-    → [Run scoring] → Results table + radar → AI explanation panel
+Global Landing → Click home location on climate map → Household form
+    → Technology availability checklist → [Run scoring] → Results table + radar → AI explanation panel
     → Shareable action summary → [Optional] Mini-sandbox (3 turns)
     → Survey / thanks
 
@@ -125,8 +125,8 @@ Impact dashboard → Youth-led story → Media kit / case materials
 |------|---------|------|
 | G0 | `global-landing` | 全球价值主张 + 气候适应家庭能源选择定位 + 免责声明（公开文案不写 COP31） |
 | G1 | `global-climate-map` | 用户在可缩放全球气候地图上点击自家位置 → 识别国家/省级地区/气候区 → 载入气候参数 |
-| G2 | `global-household` | 家庭与建筑、现有系统、账单 |
-| G3 | `global-priorities` | 用户权重：省钱 / 低碳 / 舒适 / 少折腾 |
+| G2 | `global-household` | 家庭与建筑、账单 |
+| G3 | `global-technology-availability` | 根据当地法律法规选择可用/未被禁止的家用取暖与制冷方式 |
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
 | G5 | `global-ai` | AI 解读（RAG，引用分数卡） |
 | G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
@@ -452,27 +452,89 @@ else:
 
 ---
 
-### G3 · Priorities（权重）
+### G3 · Technology availability（可用方式筛选）
+
+**目的**
+
+让用户根据当地法律法规、物业/社区限制、实际可安装条件，先勾选“可选用 / 不被禁止”的家用取暖与制冷方式。G4 只对勾选的方式进行排序；未勾选方式进入 `Excluded`，理由显示为 `Not allowed or not available locally`。
+
+> 注意：这里是**用户确认当地允许性**，不是系统替用户判断法律。系统可以根据 `region` 给默认建议，但必须允许用户按当地实际情况修改。
 
 **Layout**
-- Step: `3 of 4 · What matters most?`
-- 4 个 slider，0–100，总和不必为 100（内部归一化）
-- 预设按钮：`Save money` / `Cut carbon` / `Stay comfortable` / `Low hassle`
+- Step: `3 of 4 · Allowed options`
+- 两个独立分组：**Heating options** 与 **Cooling options**。
+- 每个选项左侧为小方框 checkbox，可多选。
+- 每组顶部提供一个全选 checkbox：`Select all heating options` / `Select all cooling options`。
+- 若 G2 中 `needs_heating=no`，Heating options 折叠为只读提示，不要求选择。
+- 若 G2 中 `needs_cooling=no`，Cooling options 折叠为只读提示，不要求选择。
+- 至少选择一个与用户需求相关的选项后，才允许进入 G4 结果页。
+
+**Heating options（取暖）**
+
+主列表应覆盖全球常见家用取暖方式；MVP 暂无完整经济参数的方式也要出现在 G3，用于“当地允许/禁止”记录，G4 可标记为 `Needs local quote` 或暂不参与精细估算。
+
+| option_key | UI label (EN) | 对应 tech_id / 说明 |
+|------------|---------------|---------------------|
+| `gas_boiler` | Natural gas boiler | `gas_boiler` |
+| `lpg_boiler` | LPG / propane boiler | `lpg_boiler` |
+| `oil_boiler` | Heating oil boiler | 可扩展 tech |
+| `electric_boiler` | Electric boiler | 可扩展 tech |
+| `ashp_heating` | Air-source heat pump | `ashp` |
+| `mini_split_heat_pump` | Ductless mini-split heat pump | 可与 `ashp` 合并或拆分 |
+| `gshp_heating` | Ground-source heat pump | `gshp` |
+| `electric_resistance` | Electric resistance heater | `resist_electric` |
+| `infrared_heater` | Infrared electric heater | 可扩展 tech |
+| `district_heat` | District heating | `district_heat` |
+| `biomass_pellet` | Biomass / pellet stove or boiler | `biomass` |
+| `wood_stove` | Wood stove | 可扩展 tech |
+| `solid_fuel_coal` | Solid fuel / coal stove | `coal_legacy`（仅作 baseline 或法规允许时显示） |
+| `solar_thermal_heating` | Solar thermal heating support | 可作为辅助路径或组合路径 |
+| `passive_solar_heating` | Passive solar heating / sunspace | 低成本辅助路径 |
+| `insulation_retrofit` | Insulation retrofit | `insulation_plus_ashp` 等组合路径的前置条件/组合项 |
+| `other_heating` | Other heating option allowed locally | 文本补充，防止遗漏本地特殊方式 |
+
+**Cooling options（制冷）**
+
+主列表应覆盖全球常见家用制冷方式；部分方式为辅助降温，不一定单独作为高舒适度路径。
+
+| option_key | UI label (EN) | 对应 tech_id / 说明 |
+|------------|---------------|---------------------|
+| `window_ac` | Window air conditioner | 可与 `room_ac` 合并 |
+| `portable_ac` | Portable air conditioner | 可与 `room_ac` 合并 |
+| `split_ac` | Split / ductless room air conditioner | `room_ac` |
+| `heat_pump_cooling` | Heat pump cooling | `ashp_cool` 或与 `ashp` 合并 |
+| `central_ac` | Central air conditioning | 可扩展 tech |
+| `evaporative_cooling` | Evaporative cooler | 干热地区适用；潮湿地区 climate fit 较低 |
+| `ceiling_fan` | Ceiling / portable fan | 低成本辅助制冷 |
+| `passive_cooling` | Passive shading / ventilation | 低成本辅助路径 |
+| `whole_house_fan` | Whole-house fan / night ventilation | 可扩展 tech |
+| `district_cooling` | District cooling | 依赖 region，可扩展 |
+| `other_cooling` | Other cooling option allowed locally | 文本补充，防止遗漏本地特殊方式 |
+
+**数据结构**
+
+```json
+{
+  "allowed_heating_options": ["gas_boiler", "ashp_heating", "insulation_retrofit"],
+  "allowed_cooling_options": ["split_ac", "heat_pump_cooling", "passive_cooling"]
+}
+```
 
 **Copy**
 
-| Slider | Label (EN) |
-|--------|------------|
-| w_cost | **Low running cost** — keep bills affordable |
-| w_carbon | **Lower emissions** — climate impact |
-| w_comfort | **Comfort** — stable warmth / cooling |
-| w_simple | **Simple & reliable** — easy to run and maintain |
-
 | 元素 | 英文文案 |
 |------|----------|
-| Heading | **What matters most to you?** |
-| Hint | Move the sliders. We use these to weight your personal fitness score. |
-| Button | **See my paths** |
+| Heading | **Which options are allowed where you live?** |
+| Hint | Check the home heating and cooling options that are legal, allowed by local rules, and realistically available to you. |
+| Heating title | Heating options |
+| Cooling title | Cooling options |
+| Heating select all | Select all heating options |
+| Cooling select all | Select all cooling options |
+| Heating skipped | You said this home does not need winter heating, so heating options are skipped. |
+| Cooling skipped | You said this home does not need summer cooling, so cooling options are skipped. |
+| Validation | Select at least one allowed option to continue. |
+| Button back | Back |
+| Button next | **See my paths** |
 
 ---
 
@@ -679,7 +741,7 @@ Cross-region technology notes (only from retrieved tech cards).
 | `RegionSelect` | 国/区域级联 |
 | `ClimateCard` | 地区只读摘要 |
 | `HouseholdForm` | G2 表单 |
-| `PrioritySliders` | G3 权重 |
+| `TechnologyAvailabilityChecklist` | G3 取暖/制冷可用方式勾选 |
 | `PathResultsTable` | 可排序表格 |
 | `PathRadarChart` | 前五路径雷达（Chart.js 或 ECharts） |
 | `ScoreBreakdownBars` | 五维分项 |
@@ -697,7 +759,7 @@ Cross-region technology notes (only from retrieved tech cards).
 
 ### 6.4 无障碍
 
-- 表单 label 关联；slider 有 aria-valuetext；颜色不作为唯一信息通道（分数同时显示数字）。
+- 表单 label 关联；checkbox group 有清晰 legend 与全选状态；颜色不作为唯一信息通道（分数同时显示数字）。
 
 ---
 
@@ -706,13 +768,13 @@ Cross-region technology notes (only from retrieved tech cards).
 ### 7.1 架构总览
 
 ```
-inputs: region_profile, household_profile, user_weights
+inputs: region_profile, household_profile, allowed_options
         ↓
-hard_filter(path, region, household) → feasible set
+hard_filter(path, region, household, allowed_options) → feasible set
         ↓
 for each path: dimension_scores[path][d] ∈ [0,100]
         ↓
-weighted_fitness = Σ (w_d · score_d) / Σ w_d
+fitness = Σ (default_w_d · score_d) / Σ default_w_d
         ↓
 output: ranked_paths[], excluded[], breakdown{}, estimates{}
         ↓
@@ -751,7 +813,9 @@ MVP 至少包含 **8 条**（取暖/制冷组合可拆成子路径）：
 伪代码：
 
 ```text
-function hardFilter(path, region, household):
+function hardFilter(path, region, household, allowed_options):
+  if path.heating_option_key and path.heating_option_key not in allowed_options.allowed_heating_options: exclude "Not allowed or not available locally"
+  if path.cooling_option_key and path.cooling_option_key not in allowed_options.allowed_cooling_options: exclude "Not allowed or not available locally"
   if path.requires_gas_grid and not region.has_gas_grid: exclude "No gas grid"
   if path is district_heat and not region.district_heat_available: exclude
   if path is ashp and region.design_temp_c < path.min_ambient_c without backup: exclude or flag backup
@@ -791,13 +855,14 @@ estimated_heating_energy = heating_spend / fuel_price  // 或 kWh/m³
 ### 7.5 综合适配分（Fitness）
 
 ```text
-w = normalize(user_weights)  // w_cost, w_carbon, w_comfort, w_climate, w_simple
-fitness = Σ_d w[d] * score[d]
+default_w = normalize({ cost: 35, carbon: 20, comfort: 20, climate: 15, simple: 10 })
+fitness = Σ_d default_w[d] * score[d]
 ```
 
 - 输出保留 **1 位小数**。
 - **同一输入必须 deterministic**（无 random）。
 - 单元测试：固定 fixture 输入 → 快照对比 `fitness` 与各维分。
+- MVP 不再让用户手动调权重；默认权重应写死在 scoring module，并在结果页用简短文案说明。
 
 ### 7.6 与 V1 五回合引擎的关系
 
@@ -937,7 +1002,7 @@ api/
 | id | uuid | |
 | region_id | text | |
 | household_json | jsonb | 脱敏 |
-| weights_json | jsonb | |
+| allowed_options_json | jsonb | G3 勾选的取暖/制冷可用方式 |
 | scores_json | jsonb | 完整打分输出 |
 | ai_explanation | text | |
 | created_at | timestamptz | |
@@ -970,7 +1035,10 @@ api/
   "locale": "en",
   "region_id": "us_midwest",
   "household": { "...": "..." },
-  "weights": { "w_cost": 40, "w_carbon": 30, "w_comfort": 20, "w_simple": 10 },
+  "allowed_options": {
+    "allowed_heating_options": ["ashp_heating", "lpg_boiler", "insulation_retrofit"],
+    "allowed_cooling_options": ["split_ac", "heat_pump_cooling", "passive_cooling"]
+  },
   "score_card": {
     "ranked": [
       {
@@ -1058,7 +1126,7 @@ Note any technology used in China that may be relevant for this region.
 ### Phase 0 · 1 周 — COP31 Global-first 脚手架
 
 - [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
-- [ ] 新建 `/global` 入口与 G0–G2 静态页（无打分）
+- [ ] 新建 `/global` 入口与 G0–G3 静态页（无打分）
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
 - [ ] `data/regions` + `data/technologies` 各 3 条样例 JSON，必须含 China + 2 个海外地区
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
@@ -1068,7 +1136,7 @@ Note any technology used in China that may be relevant for this region.
 ### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
 - [ ] 实现 `hardFilter` + 五维分 + `fitness` 排序
-- [ ] G3 权重 + G4 结果表 + 雷达图
+- [ ] G3 可用技术勾选 + G4 结果表 + 雷达图
 - [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
 - [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
 - [ ] 单元测试 ≥10 cases
