@@ -3,13 +3,13 @@
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-05 · COP31 youth-led action edition
+> **本文档版本**：2026-08-06 · COP31 youth-led action edition
 
 ---
 
 ## 0. 一句话目标
 
-把现有「华北村级煤改 X 五回合沙盘」升级为 **Climate Adaptation Energy Advisor（气候适应家庭能源选择助手）**——用户在全球地图上点击自家位置 → 系统识别国家/省级地区/气候区 → 读取当地或气候区的月均温、月降水 → 用户补充家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
+把现有「华北村级煤改 X 五回合沙盘」升级为 **Climate Adaptation Energy Advisor（气候适应家庭能源选择助手）**——用户在全球地图上点击自家位置 → 系统识别位置（**中国/美国精确到省或州**；**其余国家只识别到国家**）→ 载入对应气候数据（中美用省/州首府气候代表；其余国家用 Köppen 标准 profile）→ 用户补充家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
 
 **核心原则**：
 - **分数由算法给，不由 AI 编造**（AI 只解释、翻译、对照，不凭空写补贴金额或 COP）。
@@ -124,7 +124,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | 步骤 | 页面 ID | 目的 |
 |------|---------|------|
 | G0 | `global-landing` | 全球价值主张 + 气候适应家庭能源选择定位 + 免责声明（公开文案不写 COP31） |
-| G1 | `global-climate-map` | 用户在可缩放全球气候地图上点击自家位置 → 识别国家/省级地区/气候区 → 载入气候参数 |
+| G1 | `global-climate-map` | 用户在可缩放全球地图上点击自家位置 → **中国/美国识别到省或州并载入该省/州首府气候**；**其余国家只识别到国家并用 Köppen 标准 profile** |
 | G2 | `global-household` | 家庭与建筑、账单 |
 | G3 | `global-home-feasibility` | 不超过 8 个住宅可行性问题，供后台自动筛选候选路径 |
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
@@ -220,134 +220,155 @@ Impact dashboard → Youth-led story → Media kit / case materials
 
 ### G1 · Climate map location picker
 
+**产品规则（简化后，必须实现）**
+
+| 点击国家 | 地图识别精度 | 气候数据怎么取 |
+|----------|--------------|----------------|
+| **中国 `CHN`** | 精确到 **省 / 直辖市 / 自治区**（Admin-1） | 用该省/市/区的 **首府（省会）** 月均温、月降水代表全省 |
+| **美国 `USA`** | 精确到 **州**（Admin-1） | 用该州的 **首府（state capital）** 月均温、月降水代表全州 |
+| **其余各国** | 只识别到 **国家**（Admin-0），不识别省/州 | 查询点击点的 Köppen 代码，用对应 **标准 profile**；全国任意选点共用同一套 profile 逻辑 |
+
+> 不要再做「按省/州 polygon 对 WorldClim 做 zonal mean」这类复杂 GIS 聚合。中美只收 **首府点气候**；其余国家只走 **Köppen 标准 profile**。
+
 **Layout**
 - Step indicator: `1 of 4 · Your climate`
 - 主体为可缩放全球地图：用户**不填写国家/地区**，而是在地图上点击自家大致位置。
-- **前台地图不要染色**：用户看到的是普通地图（地形/行政区/城市），不要把整张地图铺成彩色气候区，否则视觉太学术，也会影响用户找位置。
-- 已下载资源 `docs/global-climate-zones-koppen-source.svg` 只作为资料参考、后台数据理解和开发对照，不作为前台主地图视觉。
+- **前台地图不要染色**：用户看到的是普通地图（地形/行政区/城市），不要把整张地图铺成彩色气候区。
+- 已下载资源 `docs/global-climate-zones-koppen-source.svg` 只作为资料参考、后台 Köppen 分类对照，不作为前台主地图视觉。
 - 交互实现优先级：
-  1. **推荐方案**：Mapbox GL JS / Leaflet + OpenStreetMap 普通底图；后台通过点击经纬度查询气候区 raster / admin-1 climate summary。
-  2. **可选方案**：Google Maps JavaScript API 普通底图 + 后台气候查询。注意 Google Maps 商用/配额/Key 管理。
-  3. **离线 fallback**：普通世界地图 + 简单点击经纬度近似（只用于 demo，不作为正式版）。
+  1. **推荐方案**：Mapbox GL JS / Leaflet + OpenStreetMap 普通底图；点击后按下方「两档识别」查气候。
+  2. **可选方案**：Google Maps JavaScript API 普通底图 + 后台气候查询。
+  3. **离线 fallback**：普通世界地图 + 经纬度近似（只用于 demo）。
 - 地图缩放要求：
   - 世界级：显示国家边界和大城市，不显示气候区染色。
-  - 国家级：显示国界、省/州界。
-  - 省/州级：显示主要城市点位；中国至少显示**地级市及以上**城市，其他国家显示同等规模城市或人口阈值城市。
-- 用户点击后，右侧卡片必须显示：
-  - `Country`
-  - `Province / State / Admin-1`
-  - `Nearest city`（可选）
-  - `Climate zone`
-  - `Data resolution`：Exact admin-1 data / National fallback / Climate-zone fallback
+  - 进入 **中国 / 美国**：显示国界 + **省/州界**，便于用户点到正确省/州。
+  - 进入 **其他国家**：只强调国界即可，**不必**加载该国省/州界做识别。
+  - 城市点位：中国可显示地级市及以上；美国可显示主要城市；其余国家可只显示首都/主要城市作定位辅助（不用于气候代表，除非该国走标准 profile）。
+- 用户点击后，右侧卡片显示：
+  - `Country`（必有）
+  - `Province / State`：**仅中国、美国显示**；其余国家隐藏或显示 `—`
+  - `Capital used for climate`：**仅中国、美国显示**（如「河北 · 石家庄」「Illinois · Springfield」）
+  - `Climate zone`（Köppen code + 短名）
+  - `Data resolution`：`Province/state capital` / `Köppen standard profile` / `Köppen main-group fallback`
 - 右侧卡片同时显示气候图：
   - **柱状图**：Monthly precipitation (mm)
   - **折线图**：Monthly mean temperature (°C)
-- 点击确认后进入 G2。
+- 确认后进入 G2。
 
 **Copy**
 
 | 元素 | 英文文案 |
 |------|----------|
 | Heading | **Click your home area on the climate map** |
-| Hint | We use your location to identify the climate zone and load monthly temperature and rainfall data. You only need to click an approximate location. |
-| Map helper | Zoom in for provinces, states, and major cities. |
+| Hint | In China and the US, we match your province or state and use the capital city’s climate. In other countries, we identify the country and use a standard climate-zone profile. |
+| Map helper | Zoom in on China or the US to pick a province or state. Elsewhere, a country-level click is enough. |
 | Climate card title | Local climate snapshot |
-| Fields | Country · Province/State · Climate zone · Monthly precipitation · Monthly mean temperature |
+| Fields (CN/US) | Country · Province/State · Capital used for climate · Climate zone · Monthly precipitation · Monthly mean temperature |
+| Fields (other) | Country · Climate zone · Monthly precipitation · Monthly mean temperature |
 | Button | **Continue** |
 
 **地图与地理识别要求**
 
 | 需求 | 实现建议 |
 |------|----------|
-| 点击识别国家 | Natural Earth Admin 0 或 geoBoundaries / GADM Admin 0 |
-| 点击识别省/州 | Natural Earth Admin 1（轻量）或 geoBoundaries / GADM Admin 1（更精细） |
-| 城市显示 | Natural Earth Populated Places；中国可单独补地级市点表 |
-| 气候区识别 | 后台使用 Köppen-Geiger 1991–2020 GeoTIFF / raster tile；前台只显示点击结果，不强制把气候区画在地图上 |
-| 月均温/月降水 | 优先 WorldClim 2.1 月尺度 tavg + prec，按 admin-1 聚合 |
-| 缺省 fallback | 若没有省/州数据，用对应 Köppen 细分类或主类的标准月均温/月降水 profile |
+| 所有国家：识别国家 | Natural Earth Admin 0 或 geoBoundaries / GADM Admin 0 |
+| **仅中国、美国**：识别省/州 | Natural Earth Admin 1 或 geoBoundaries / GADM Admin 1（**只加载 CHN + USA 的 Admin-1**） |
+| 其余国家：不识别省/州 | 点击后 `admin1_name = null`；UI 不展示 Province/State |
+| 气候区识别 | 后台用 Köppen-Geiger 1991–2020 GeoTIFF / raster 或点查 API；前台只显示结果 |
+| 中美月气候 | 查该省/州 **首府经纬度** 的月均温、月降水（点查即可，不做省域 zonal mean） |
+| 其余国家月气候 | 用点击点的 `koppen_code` 查 `climate_profiles.json` 标准 profile |
 
 **已放入仓库的地图素材**
 
 | 文件 | 用途 | 来源 |
 |------|------|------|
-| `docs/global-climate-zones-koppen-source.svg` | 气候区资料参考、后台分类对照、开发参考；**不作为前台染色底图** | Wikimedia Commons, World Köppen Classification (with authors).svg |
+| `docs/global-climate-zones-koppen-source.svg` | 气候区资料参考、标准 profile 分类对照；**不作为前台染色底图** | Wikimedia Commons, World Köppen Classification (with authors).svg |
 
-> 注意：正式交互地图不要只靠这张 SVG。前台应使用普通地图底图；气候区判断在后台完成，只把点击结果、气温曲线和降水柱状图展示给用户。
+> 正式交互地图不要只靠这张 SVG。前台用普通底图；识别与气候赋值在后台完成。
 
-**首发地区（MVP 至少 5 个）**
+**数据覆盖策略（替代旧「首发 5 个 region」）**
 
-| region_id | Country | Region label | 备注 |
-|-----------|---------|--------------|------|
-| `cn_north_china` | China | North China Plain | 对接现有 V1 参数 |
-| `us_midwest` | United States | Midwest | 个体决策、丙烷/电暖常见 |
-| `de_rural` | Germany | Rural / village | 热泵渗透高 |
-| `uk_rural` | United Kingdom | Rural off-gas | 气网外区域 |
-| `fr_rural` | France | Rural | 扩展用 |
-
-数据文件建议：`data/regions/{region_id}.json`（见 §8）。
-
-**气候 profile fallback 数据**
-
-不再限制只能 12 类气候。系统应保留 SVG / Köppen-Geiger 图中的约 **30 个细分类**（如 `Cfa`, `Dwb`, `BSh` 等）。关键目标不是给用户看多少类颜色，而是：**用户点击后，系统能拿到可靠的月均温和月降水数据**。
+| 层级 | 覆盖 | 气候数据文件 |
+|------|------|--------------|
+| 中国各省/直辖市/自治区 | 每个 Admin-1 一条 | `docs/data/climate/cn_us_admin1_capitals.json` |
+| 美国各州（含 DC 可选） | 每个 Admin-1 一条 | 同上 |
+| 全球其余国家 | 不按省建库 | `docs/data/climate/climate_profiles.json`（Köppen 标准 profile） |
+| 可选能源/政策样例 | 仍可用少量 `regions/*.json` 做价格与基础设施 override | `docs/data/regions/`（非 G1 必选气候源） |
 
 ### G1 气候数据收集与判断流程（必须写进开发任务）
 
-#### Step 1 · 先上网收集省/州级气候数据（最细到国家 Admin-1）
+#### Step 1 · 中国、美国：收集各省/州「首府点」气候
 
-目标：对每个首发国家/地区，尽量做到 **国家的省级/州级/Admin-1** 数据。不要一开始追求城市街区级，省/州级已经够用。
+目标：**只收首府城市的点气候**，用它代表该省/州。不要做全省/州栅格平均。
 
-每个 `admin1` 至少要有：
+每个中美 Admin-1 记录至少包含：
 
 | 字段 | 说明 |
 |------|------|
-| `country_iso3` | 国家 ISO3，如 `CHN`, `USA`, `DEU` |
-| `admin1_name` | 省/州/一级行政区名称 |
-| `admin1_code` | 可选，GADM / geoBoundaries / Natural Earth 的编码 |
-| `temperature_c_monthly` | 12 个数，1–12 月月均温，单位 °C |
-| `precipitation_mm_monthly` | 12 个数，1–12 月月降水，单位 mm |
-| `koppen_code_majority` | 该省/州面积或人口加权最多的 Köppen 细分类 |
-| `data_source` | 数据来源 URL / 文件名 / 处理方法 |
+| `country_iso3` | `CHN` 或 `USA` |
+| `admin1_name` | 省/州名称（中英可各存一份） |
+| `admin1_code` | 可选，Natural Earth / GADM 编码 |
+| `capital_name` | 首府名称，如 `Shijiazhuang`、`Springfield` |
+| `capital_lat` / `capital_lon` | 首府坐标 |
+| `temperature_c_monthly` | 首府 1–12 月月均温 (°C) |
+| `precipitation_mm_monthly` | 首府 1–12 月月降水 (mm) |
+| `koppen_code` | 首府点（或该省代表）的 Köppen 细分类 |
+| `data_resolution` | 固定为 `"admin1_capital"` |
+| `data_source` | URL / 方法说明 |
 
-推荐做法：
+推荐做法（简单版）：
 
-1. 下载行政区边界：优先 `geoBoundaries` 或 `GADM` Admin-1；轻量 demo 可用 `Natural Earth Admin 1`。
-2. 下载气候栅格：优先 `WorldClim 2.1` monthly `tavg` 和 `prec`。
-3. 用 GIS / Python / R 把 WorldClim 栅格按 Admin-1 polygon 做 zonal mean，得到每个省/州 12 个月的平均温度和降水。
-4. 输出为 `data/climate/admin1_climate_summaries.json`。
+1. 整理中国各省会 + 美国各州首府名单与经纬度（可来自 Natural Earth / 公开首都表）。
+2. 对每个首府点查月均温、月降水：优先 **Climate-Data.org / Meteostat / NASA POWER / WorldClim 点提取**（任选一种可复现方法）。
+3. 输出为 `docs/data/climate/cn_us_admin1_capitals.json`。
+4. **禁止**为 MVP 做 Admin-1 polygon × WorldClim zonal mean。
 
-#### Step 2 · 点击地图后如何确定用户气候信息
+#### Step 2 · 其余国家：只用 Köppen 标准 profile
 
-用户在 G1 地图上点击一个点 `(lat, lon)` 后，前端或后端按以下顺序判断：
+目标：全球其余国家点击后 **只认国家 + 气候区**，气候曲线来自标准 profile，不建该国省/州表。
+
+1. 维护约 30 个 Köppen 细分类的 `docs/data/climate/climate_profiles.json`（见 Step 3）。
+2. 用户在非中美国家点击时：识别 `country_iso3` → 查点击点 `koppen_code` → 取 profile。
+3. 同一国家内不同点击点：若 Köppen 不同，可用不同 profile（仍是标准 profile，不是省数据）；若查不到细分类，回退到主类 `A/B/C/D/E`。
+
+#### Step 3 · 点击地图后如何确定用户气候信息
 
 ```text
 click(lat, lon)
-  → spatial join Admin-0 polygon → country_iso3
-  → spatial join Admin-1 polygon → admin1_name
-  → query Köppen-Geiger raster at (lat, lon) → koppen_code
-  → lookup admin1_climate_summaries[country_iso3][admin1_name]
-      if found:
-        use admin1 monthly temperature + precipitation
-        data_resolution = "admin1"
-      else:
-        lookup climate_profiles[koppen_code]
-        data_resolution = "koppen_subtype_fallback"
-      if koppen_code profile missing:
-        use climate_profiles[koppen_main_group]  // A/B/C/D/E
-        data_resolution = "koppen_main_group_fallback"
+  → spatial join Admin-0 → country_iso3
+
+  if country_iso3 in {CHN, USA}:
+      spatial join Admin-1 (CN/US only) → admin1_name
+      lookup cn_us_admin1_capitals[country_iso3][admin1_name]
+      use capital monthly temperature + precipitation
+      data_resolution = "admin1_capital"
+      show Province/State + Capital used for climate
+
+  else:
+      admin1_name = null
+      query Köppen at (lat, lon) → koppen_code
+      lookup climate_profiles[koppen_code]
+          if found:
+            data_resolution = "koppen_standard_profile"
+          else:
+            use climate_profiles[koppen_main_group]  // A/B/C/D/E
+            data_resolution = "koppen_main_group_fallback"
+      hide Province/State (or show —)
+
   → render climate chart:
       bar = monthly precipitation
       line = monthly mean temperature
 ```
 
-页面展示时要写清楚数据精度：
+页面展示时写清楚数据精度：
 
-- `Data source: Province/state average`
-- `Data source: Köppen climate-type fallback`
-- `Data source: Major climate-group fallback`
+- 中国/美国：`Data source: Province/state capital climate (representative)`
+- 其余国家：`Data source: Köppen standard profile`
+- 缺细分类时：`Data source: Major climate-group fallback`
 
-#### Step 3 · 给约 30 个 Köppen 细分类准备标准 fallback profile
+#### Step 4 · 标准 Köppen profile 清单
 
-如果找不到某个省/州的具体数据，就用该地点的 Köppen 细分类 profile。SVG 图和 Köppen-Geiger 常见细分类约 30 个，开发时至少覆盖以下代码：
+SVG / Köppen-Geiger 常见细分类约 30 个，开发时至少覆盖：
 
 ```text
 Af, Am, Aw,
@@ -357,49 +378,78 @@ Dsa, Dsb, Dsc, Dsd, Dwa, Dwb, Dwc, Dwd, Dfa, Dfb, Dfc, Dfd,
 ET, EF
 ```
 
-每个代码都要在 `data/climate/climate_profiles.json` 里有一个标准 profile。标准 profile 只需要两项核心气候数据：
+每个代码在 `docs/data/climate/climate_profiles.json` 中提供：
 
-- `temperature_c_monthly`: 12 个月每月月均温
-- `precipitation_mm_monthly`: 12 个月每月月降水
+- `temperature_c_monthly`
+- `precipitation_mm_monthly`
+- `representative_locations` + `source_urls`（审计用）
 
-如何给每个 Köppen 细分类找标准数据：
+如何准备标准 profile（保持轻量）：
 
-1. 对每个 Köppen code 选择 3–5 个代表城市或代表区域。
-2. 用 WorldClim / Climate-Data.org / Meteostat / NASA POWER 查询这些代表点的月均温和月降水。
-3. 对代表点取平均，得到该 Köppen code 的 fallback profile。
-4. 在 JSON 中保留 `representative_locations` 和 `source_urls`，方便以后检查。
+1. 每个 Köppen code 选 1–3 个代表城市。
+2. 用 Climate-Data.org / Meteostat / NASA POWER / WorldClim 点查其月均温、月降水。
+3. 代表点取平均（或直接采用最典型一个城市）写入 JSON。
 
 示例：
 
 | Köppen code | 气候说明 | 代表点示例 | 数据来源建议 |
 |-------------|----------|------------|--------------|
-| `Af` | Tropical rainforest | Singapore, Manaus, Kisangani | WorldClim point average |
-| `BWh` | Hot desert | Cairo, Riyadh, Phoenix | WorldClim / Climate-Data.org |
-| `Cfa` | Humid subtropical | Shanghai, Atlanta, Buenos Aires | WorldClim / Meteostat |
-| `Cfb` | Oceanic | London, Seattle, Wellington | WorldClim / Meteostat |
-| `Dwa` | Monsoon-influenced humid continental | Beijing, Seoul, Shenyang | WorldClim / Meteostat |
-| `Dfb` | Warm-summer humid continental | Warsaw, Minneapolis, Moscow | WorldClim / Meteostat |
-| `ET` | Tundra | Nuuk edge, northern Iceland, alpine settlements | WorldClim |
+| `Af` | Tropical rainforest | Singapore, Manaus | Climate-Data.org / Meteostat |
+| `BWh` | Hot desert | Cairo, Riyadh | Climate-Data.org |
+| `Cfa` | Humid subtropical | Shanghai, Atlanta | Meteostat |
+| `Cfb` | Oceanic | London, Wellington | Meteostat |
+| `Dwa` | Monsoon-influenced humid continental | Beijing, Seoul | Meteostat |
+| `Dfb` | Warm-summer humid continental | Warsaw, Moscow | Meteostat |
+| `ET` | Tundra | Nuuk | NASA POWER / WorldClim point |
 
-
-总之，用户点后，如果在有具体数据的省/州，就直接采用；如果没有，就用这个点所在气候区的标准profile气候数据
+**一句话总结**：中美点到省/州 → 用该省/州**首府气候**；其他国家点到国 → 用该点 **Köppen 标准 profile**。
 
 #### 推荐数据网址 / 方法
 
 | 用途 | 推荐来源 | URL / 方法 |
 |------|----------|------------|
-| 月均温、月降水栅格 | WorldClim 2.1 Historical monthly data | https://worldclim.org/data/worldclim21.html |
-| 在线栅格分析 | Google Earth Engine WorldClim monthly | https://developers.google.com/earth-engine/datasets/catalog/WORLDCLIM_V1_MONTHLY |
-| Köppen-Geiger 1991–2020 分类 | GloH2O Köppen-Geiger data | https://www.gloh2o.org/koppen |
-| Köppen-Geiger GeoTIFF / legend | Figshare / Beck et al. data | https://doi.org/10.6084/m9.figshare.21789074.v2 |
-| 行政区边界 | geoBoundaries | https://www.geoboundaries.org/ |
-| 行政区边界 | GADM | https://gadm.org/download_world.html |
-| 轻量地图边界和城市点 | Natural Earth Admin 1 + Populated Places | https://www.naturalearthdata.com/downloads/10m-cultural-vectors/ |
-| 按经纬度查气候 | NASA POWER API | https://power.larc.nasa.gov/docs/services/api/ |
-| Python 处理 | `geopandas` + `rasterio` + `rasterstats.zonal_stats` | Admin-1 polygon × WorldClim rasters |
-| R 处理 | `geodata` + `terra` | `gadm()`, `worldclim_global()`, `extract()` |
+| 中美首府名单与坐标 | Natural Earth Populated Places / 公开省会表 | https://www.naturalearthdata.com/downloads/10m-cultural-vectors/ |
+| 首府 / 代表点月气候 | Meteostat / Climate-Data.org / NASA POWER | 按点查询，写入 JSON |
+| 可选：WorldClim 点提取 | WorldClim 2.1 | https://worldclim.org/data/worldclim21.html （仅点提取，不做 zonal mean） |
+| Köppen 分类 | GloH2O Köppen-Geiger / Beck et al. | https://www.gloh2o.org/koppen |
+| 国界 | Natural Earth Admin 0 / geoBoundaries | https://www.naturalearthdata.com/ |
+| 中美省/州界 | Natural Earth Admin 1（过滤 CHN、USA） | 同上 |
+| 其余国家省界 | **不加载、不识别** | — |
 
-**`data/climate_profiles.json` schema**
+**`docs/data/climate/cn_us_admin1_capitals.json` schema（示例）**
+
+```json
+{
+  "CHN": {
+    "Hebei": {
+      "admin1_name_zh": "河北",
+      "capital_name": "Shijiazhuang",
+      "capital_name_zh": "石家庄",
+      "capital_lat": 38.04,
+      "capital_lon": 114.51,
+      "koppen_code": "Dwa",
+      "data_resolution": "admin1_capital",
+      "temperature_c_monthly": [-2, 1, 8, 16, 22, 26, 28, 26, 22, 15, 7, 0],
+      "precipitation_mm_monthly": [3, 7, 11, 22, 38, 70, 140, 140, 55, 25, 12, 4],
+      "data_source": "Meteostat / Climate-Data.org; capital point representative"
+    }
+  },
+  "USA": {
+    "Illinois": {
+      "capital_name": "Springfield",
+      "capital_lat": 39.78,
+      "capital_lon": -89.65,
+      "koppen_code": "Dfa",
+      "data_resolution": "admin1_capital",
+      "temperature_c_monthly": [-3, 0, 6, 12, 18, 23, 25, 24, 20, 13, 6, -1],
+      "precipitation_mm_monthly": [45, 45, 70, 90, 110, 110, 95, 85, 80, 75, 70, 55],
+      "data_source": "Meteostat; state capital point representative"
+    }
+  }
+}
+```
+
+**`docs/data/climate/climate_profiles.json` schema（其余国家用）**
 
 ```json
 {
@@ -408,12 +458,12 @@ ET, EF
     "display_name_zh": "季风影响的夏热湿润大陆性气候",
     "koppen_code": "Dwa",
     "fallback_level": "koppen_subtype",
-    "source": "WorldClim 2.1 representative points; MVP fallback",
+    "source": "Representative city average for non-CN/US clicks",
     "representative_locations": ["Beijing", "Seoul", "Shenyang"],
-    "source_urls": ["https://worldclim.org/data/worldclim21.html"],
+    "source_urls": ["https://meteostat.net/"],
     "temperature_c_monthly": [-4, -1, 5, 12, 18, 23, 26, 25, 20, 13, 6, -1],
     "precipitation_mm_monthly": [8, 10, 20, 35, 55, 80, 160, 140, 55, 30, 18, 8],
-    "notes": "Fallback only; replace with admin-1 data when available."
+    "notes": "Used when country is not China or the United States."
   }
 }
 ```
@@ -1044,18 +1094,18 @@ docs/
     index.html
     app.js
   data/
+    climate/
+      cn_us_admin1_capitals.json      # China provinces + US states: capital-city climate
+      climate_profiles.json           # Köppen standard profiles for all other countries
+    regions/                          # optional energy/policy overrides (not required for G1 climate)
+      cn_example.json
+      us_example.json
+      ...
     maps/
       global-climate-zones-koppen-source.svg
-      climate-zones-koppen.mbtiles    # optional, for backend/hidden lookup, not public colored basemap
-      admin1-boundaries.geojson       # simplified province/state boundaries
-      populated-places.geojson        # major cities
-    climate/
-      climate_profiles.json           # fallback monthly temp/precip by Koppen subtype or main group
-      admin1_climate_summaries.json   # province/state monthly temp/precip when available
-    regions/
-      cn_north_china.json
-      us_midwest.json
-      ...
+      admin0-boundaries.geojson       # all countries
+      admin1-cn-us.geojson            # ONLY China + US province/state boundaries
+      populated-places.geojson        # optional city labels
     technologies/
       technology_catalog.json          # one runtime source of truth; internal only
       technology_catalog.schema.json
@@ -1077,26 +1127,28 @@ docs/
 
 ### 8.2 `region` JSON schema（示例）
 
-`region` 在 V2 中不再由用户手动选择，而是由 G1 地图点击结果自动生成或匹配。点击地图后，系统先得到 `country_iso3`、`admin1_name`、`koppen_code` 和月尺度气候数据，再查找最接近的 `region_id`。
+`region` 在 V2 中不再由用户手动选择。G1 地图点击后按两档规则赋值气候：
+
+- **中国 / 美国**：得到 `country_iso3` + `admin1_name`，气候取自该省/州 **首府**（`cn_us_admin1_capitals.json`）。
+- **其余国家**：只得到 `country_iso3`（`admin1_name` 为空），气候取自点击点 Köppen **标准 profile**（`climate_profiles.json`）。
+
+可选的 `docs/data/regions/*.json` 仍可用于电价、基础设施、政策备注等 override，但**不是** G1 气候数据的主来源。
 
 ```json
 {
-  "region_id": "us_midwest",
+  "region_id": "us_il_springfield_capital",
   "country": "United States",
   "country_iso3": "USA",
-  "label_en": "Midwest",
-  "admin1_names": ["Illinois", "Indiana", "Iowa", "Michigan", "Minnesota", "Ohio", "Wisconsin"],
-  "koppen_codes": ["Dfa", "Dfb", "BSk"],
+  "label_en": "Illinois (Springfield capital climate)",
+  "admin1_name": "Illinois",
   "currency": "USD",
   "climate": {
-    "hdd18": 4200,
-    "cdd18": 900,
-    "design_temp_c": -23,
-    "typical_winter_low_c": -15,
-    "temperature_c_monthly": [-6, -3, 3, 10, 16, 22, 25, 24, 19, 12, 5, -2],
-    "precipitation_mm_monthly": [45, 40, 65, 85, 95, 100, 95, 90, 80, 70, 60, 50],
-    "data_resolution": "admin1_or_region_average",
-    "fallback_allowed": true
+    "design_temp_c": -18,
+    "temperature_c_monthly": [-3, 0, 6, 12, 18, 23, 25, 24, 20, 13, 6, -1],
+    "precipitation_mm_monthly": [45, 45, 70, 90, 110, 110, 95, 85, 80, 75, 70, 55],
+    "data_resolution": "admin1_capital",
+    "capital_name": "Springfield",
+    "koppen_code": "Dfa"
   },
   "energy": {
     "electricity_usd_per_kwh": { "low": 0.12, "mid": 0.15, "high": 0.18 },
@@ -1118,6 +1170,21 @@ docs/
 }
 ```
 
+非中美国家点击后的气候对象示例（无 Admin-1）：
+
+```json
+{
+  "country_iso3": "DEU",
+  "admin1_name": null,
+  "climate": {
+    "koppen_code": "Cfb",
+    "temperature_c_monthly": [3, 4, 7, 10, 14, 17, 19, 19, 15, 11, 7, 4],
+    "precipitation_mm_monthly": [50, 40, 45, 45, 55, 65, 70, 65, 55, 50, 50, 55],
+    "data_resolution": "koppen_standard_profile"
+  }
+}
+```
+
 ### 8.3 `TechnologyCatalogEntry` schema
 
 `docs/data/technologies/technology_catalog.json` 是运行时单一技术目录。`docs/data/technologies/technology_catalog.schema.json` 用于校验关键结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
@@ -1132,8 +1199,8 @@ G4 数据优先级：
 
 ```text
 1. region technology override exact numeric data
-2. country or admin-1 data
-3. climate-zone technology profile
+2. China/US admin-1 capital climate + optional country/admin1 energy overrides
+3. Köppen standard climate profile (non-CN/US, or missing capital row)
 4. technology catalog default tiers
 5. Needs local quote / data uncertain
 ```
@@ -1207,7 +1274,10 @@ Region override 示例：
 ```json
 {
   "locale": "en",
-  "region_id": "us_midwest",
+  "region_id": "us_il_springfield_capital",
+  "country_iso3": "USA",
+  "admin1_name": "Illinois",
+  "climate_data_resolution": "admin1_capital",
   "household": { "...": "..." },
   "home_feasibility": {
     "housing_status": "owner",
@@ -1310,11 +1380,11 @@ Note any technology used in China that may be relevant for this region.
 - [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
 - [ ] 新建 `/global` 入口与 G0–G3 静态页（无打分）
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
-- [ ] `docs/data/regions` 至少 3 条样例 JSON（China + 2 个海外地区）；`docs/data/technologies/technology_catalog.json` 作为完整内部技术目录
+- [ ] `docs/data/climate/cn_us_admin1_capitals.json` 样例（至少各 2 个中美省/州首府气候）+ `docs/data/climate/climate_profiles.json` 若干 Köppen profile；`docs/data/technologies/technology_catalog.json` 作为完整内部技术目录
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
 - [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G8、Impact/About/Media、AI explanation 全部跟随同一语言
 
-**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能切换 English / 中文；切换后后续页面文字跟随语言；能选 region、填表、数据写入 console；China pilot 仍可进入。
+**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能切换 English / 中文；切换后后续页面文字跟随语言；能在地图上点选位置（中美到省/州，其他到国家）、填表、数据写入 console；China pilot 仍可进入。
 
 ### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
@@ -1323,7 +1393,8 @@ Note any technology used in China that may be relevant for this region.
 - [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
 - [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
 - [ ] 单元测试 ≥10 cases
-- [ ] **至少 5 个 region × 8 tech**：China North China + US Midwest + Germany rural + UK off-gas + France rural
+- [ ] **G1 气候两档落地**：中国/美国全省/州首府气候表 + 全球 Köppen 标准 profile；地图点击中美精确到省/州，其余国家只到国家
+- [ ] 用至少 3 个场景跑通筛选（如：河北首府气候、Illinois 首府气候、德国某点 Cfb profile）× 技术目录
 
 **验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；能生成一张可用于 COP31 材料和社媒传播的行动摘要卡。
 
@@ -1352,7 +1423,7 @@ Note any technology used in China that may be relevant for this region.
 
 ## 12. 验收标准（Definition of Done）
 
-1. **功能**：Global 全流程 G0→G8 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；China pilot 仍可独立进入并完成一局。
+1. **功能**：Global 全流程 G0→G8 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
 2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
 3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
 4. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
@@ -1448,7 +1519,7 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 
 ## 15. 产品负责人待办（非开发）
 
-- [ ] 确认 Phase 1 首发 5 个 region 的具体参数来源（China + US + Germany + UK + France）
+- [ ] 补齐中国各省/州首府 + 美国各州首府气候点数据；确认 Köppen 标准 profile 覆盖清单与代表城市
 - [ ] 准备中英双语项目简介：100 字、500 字、2000 字三个版本
 - [ ] 准备 COP31 申报所需 supporting materials：demo 视频、截图、数据报告、活动照片
 - [ ] 明确弱势群体包容叙事：农村、低收入、偏远地区、能源负担高家庭如何受益
