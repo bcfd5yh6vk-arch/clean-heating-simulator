@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Climate Adaptation Energy Advisor · Global</title>
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --card: #ffffff;
+        --text: #17251d;
+        --muted: #5a665f;
+        --accent: #2f6b4f;
+        --accent-soft: #dfeee5;
+        --border: #cfd8d1;
+        --warn: #8a651b;
+        --radius: 18px;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 28px 16px 56px;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 28px;
+      }
+      .brand { font-weight: 800; color: var(--accent); }
+      .lang { display: flex; align-items: center; gap: 8px; }
+      select, button {
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        background: var(--card);
+        color: var(--text);
+        padding: 0 14px;
+        font: inherit;
+      }
+      button {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+        cursor: pointer;
+        font-weight: 700;
+      }
+      button.secondary {
+        background: var(--card);
+        color: var(--accent);
+      }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 22px;
+        margin-bottom: 18px;
+        box-shadow: 0 12px 30px rgba(47, 107, 79, 0.08);
+      }
+      .step {
+        color: var(--accent);
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      h1, h2, h3 { margin: 8px 0 10px; line-height: 1.15; }
+      p { color: var(--muted); line-height: 1.65; }
+      fieldset {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        margin: 16px 0;
+      }
+      legend { padding: 0 8px; font-weight: 800; }
+      .help { margin: 4px 0 12px; font-size: 0.94rem; }
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 10px;
+      }
+      .card-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        min-height: 54px;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 12px;
+        background: #fbfaf7;
+      }
+      .card-option:focus-within {
+        outline: 3px solid rgba(47, 107, 79, 0.24);
+      }
+      .groups {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+      }
+      .summary {
+        background: var(--accent-soft);
+        border-color: #b8d9c5;
+      }
+      .warning {
+        color: var(--warn);
+        font-weight: 700;
+      }
+      .hidden { display: none; }
+      @media (max-width: 420px) {
+        .topbar { align-items: flex-start; flex-direction: column; }
+        .panel { padding: 16px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="topbar">
+        <div class="brand">Climate Adaptation Energy Advisor</div>
+        <label class="lang">
+          <span data-i18n="languageLabel">Language</span>
+          <select id="localeSelect" aria-label="Language">
+            <option value="en">English</option>
+            <option value="zh">中文</option>
+          </select>
+        </label>
+      </header>
+
+      <section class="panel">
+        <div class="step" data-i18n="g2Step">G2 context for this prototype</div>
+        <h1 data-i18n="g2Title">Household service needs</h1>
+        <p data-i18n="g2Hint">In the full flow these values come from G2. They control which G3 questions appear.</p>
+        <div class="cards">
+          <label class="card-option">
+            <input id="needsHeating" type="checkbox" checked />
+            <span data-i18n="needsHeating">This home needs winter heating</span>
+          </label>
+          <label class="card-option">
+            <input id="needsCooling" type="checkbox" checked />
+            <span data-i18n="needsCooling">This home needs summer cooling</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="g3Title">
+        <div class="step" data-i18n="g3Step">3 of 4 · About your home</div>
+        <h2 id="g3Title" data-i18n="g3Title">A few practical questions about your home</h2>
+        <p data-i18n="g3Intro">
+          Answer what you know. “Not sure” is always fine. We will use your answers, your current heating and cooling setup, local climate data, and regional information to screen possible paths.
+        </p>
+        <form id="feasibilityForm"></form>
+        <p id="validationError" class="warning hidden" role="alert" data-i18n="validationError">
+          Please answer each question. Choose “Not sure” whenever you do not know.
+        </p>
+        <div class="groups">
+          <button type="button" class="secondary" data-i18n="backButton">Back</button>
+          <button id="submitG3" type="button" data-i18n="findPathsButton">Find possible paths</button>
+        </div>
+      </section>
+
+      <section id="g4Panel" class="panel summary hidden" aria-live="polite">
+        <div class="step">G4 · Results</div>
+        <h2 data-i18n="g4Title">Paths screened for your home</h2>
+        <p id="checkingText" data-i18n="checkingText">Checking possible paths for your home…</p>
+        <h3 data-i18n="currentSetup">Your current setup</h3>
+        <p id="baselineSummary"></p>
+        <p data-i18n="g4Note">
+          Candidate paths are produced by deterministic screening from the full technology catalog. The G3 page does not show or whitelist future technologies.
+        </p>
+      </section>
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

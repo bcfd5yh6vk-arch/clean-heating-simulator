@@ -35,6 +35,10 @@
 ## 项目结构
 
 - `index.html`：单文件作品页，也是 Vercel 部署入口。
+- `global/`：Global mode 原型页面，当前包含 G3 Home feasibility 问卷与 G4 筛选结果摘要。
+- `src/global/`：Global mode 的 TypeScript 类型、G3 验证、baseline、技术筛选、候选路径生成和排序逻辑。
+- `data/global/technologies.json`：Global mode 后台技术目录；G3 不向用户展示该目录。
+- `tests/global/`：Global mode 的 Node 测试，覆盖 G3 条件显示、baseline、筛选算法、G4 联动和 China Pilot 隔离。
 - `app.py`：Flask 应用主文件。
 - `policysandbox.py`：政策沙盘与辅助逻辑。
 - `spec.md`：MVP 规格与研究问题。
@@ -46,6 +50,19 @@
 ## 本地查看静态作品页
 
 直接双击根目录的 `index.html`，或在浏览器中打开该文件。
+
+## Global mode 原型
+
+打开 `/global` 或本地打开 `global/index.html`。首页语言选项支持 English / 中文，并将选择保存到 `localStorage.locale`；Global 流程后续文案应跟随同一语言。
+
+G3 已改为 **Home feasibility**：只询问住宅状态、建筑类型、可接受改造程度、室外空间、当前能源服务、当前取暖/制冷方式和前期投入偏好。它不会显示未来候选技术，也不会让用户逐项勾选技术。G4 候选路径由 `src/global/screening.ts` 从完整技术目录确定性筛选和生成。
+
+## 测试
+
+```bash
+npm run typecheck
+npm test
+```
 
 ## 本地运行 Flask 后端
 

@@ -113,7 +113,7 @@ MVP 产品说明见：`spec.md`。
 
 ```
 Global Landing → Click home location on climate map → Household form
-    → Technology availability checklist → [Run scoring] → Results table + radar → AI explanation panel
+    → Home feasibility questionnaire → [Screen paths] → Results table + radar → AI explanation panel
     → Shareable action summary → [Optional] Mini-sandbox (3 turns)
     → Survey / thanks
 
@@ -126,7 +126,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | G0 | `global-landing` | 全球价值主张 + 气候适应家庭能源选择定位 + 免责声明（公开文案不写 COP31） |
 | G1 | `global-climate-map` | 用户在可缩放全球气候地图上点击自家位置 → 识别国家/省级地区/气候区 → 载入气候参数 |
 | G2 | `global-household` | 家庭与建筑、账单 |
-| G3 | `global-technology-availability` | 根据当地法律法规选择可用/未被禁止的家用取暖与制冷方式 |
+| G3 | `global-home-feasibility` | 不超过 8 个住宅可行性问题，供后台自动筛选候选路径 |
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
 | G5 | `global-ai` | AI 解读（RAG，引用分数卡） |
 | G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
@@ -498,112 +498,103 @@ else:
 
 ---
 
-### G3 · Technology availability（可用方式筛选）
+### G3 · Home feasibility（住宅可行性问卷）
 
 **目的**
 
-让用户根据当地法律法规、物业/社区限制、实际可安装条件，先勾选“可选用 / 不被禁止”的家用取暖与制冷方式。**G4 的 path ranking 只展示 G3 已勾选的路径**；G3 未勾选的路径不出现在 ranking 中。
-
-> 注意：这里是**用户确认当地允许性**，不是系统替用户判断法律。系统可以根据 `region` 给默认建议，但必须允许用户按当地实际情况修改。
-
-**与 G2 联动（是否出现两组 options）**
-
-| G2 字段 | G2 值 | G3 表现 |
-|---------|-------|---------|
-| `needs_heating` | yes | 显示 **Heating options** 整组（含全选） |
-| `needs_heating` | no | **不显示** Heating options；只展示 skipped 提示 |
-| `needs_cooling` | yes | 显示 **Cooling options** 整组（含全选） |
-| `needs_cooling` | no | **不显示** Cooling options；只展示 skipped 提示 |
+G3 不再展示未来候选技术列表，也不让用户判断技术是否合法或是否适合当地。它只收集普通住户容易回答、且能帮助后台确定性筛选的信息。
 
 ```text
-if G2.needs_heating == yes:
-  render Heating options
-  require >= 1 heating option checked before Continue
-else:
-  do not render Heating options
-  set allowed_heating_options = []
-
-if G2.needs_cooling == yes:
-  render Cooling options
-  require >= 1 cooling option checked before Continue
-else:
-  do not render Cooling options
-  set allowed_cooling_options = []
+G1 地区和气候数据
++ G2 家庭及住宅基础数据
++ G3 不超过 8 个简单问题
+→ 后台载入全部技术和路径
+→ 后台执行确定性可行性筛选
+→ 通过筛选的路径进入 G4
+→ G4 进行五维打分和排序
 ```
 
+G3 禁止出现：未来候选技术列表、推荐技术卡片、技术全选按钮、逐项允许/禁止状态、要求用户自己判断法律规定的文案。
+
 **Layout**
-- Step: `3 of 4 · Allowed options`
-- 页面最多两个分组：**Heating options**、**Cooling options**；是否渲染取决于 G2。
-- 每个选项左侧为小方框 checkbox，可多选。
-- 每组顶部提供一个全选 checkbox：`Select all heating options` / `Select all cooling options`。
-- 至少在一个**已显示的分组**里勾选至少 1 项后，才允许进入 G4。
+- Step: `3 of 4 · About your home`
+- 英文标题：**A few practical questions about your home**
+- 英文说明：Answer what you know. “Not sure” is always fine. We will use your answers, your current heating and cooling setup, local climate data, and regional information to screen possible paths.
+- 中文标题：**几个关于住宅实际情况的问题**
+- 中文说明：请根据你了解的情况回答；不确定时可以直接选择“不确定”。系统会结合住宅当前的取暖和制冷方式、当地气候及地区数据，自动筛选可能适用的路径。
+- 推荐分组：`Your home` / `Current setup` / `Practical preferences`
+- 基础问题始终显示：Q1、Q2、Q3、Q4、Q5、Q8。
+- `needs_heating=true` 时显示 Q6；`needs_cooling=true` 时显示 Q7。
+- 两者都不需要时，可跳过 G3 或显示确认信息。
+- 所有显示问题均必答；用户可选择 `Not sure`。
 
-**Heating options（取暖）**
+**问题数量**
 
-主列表应覆盖全球常见家用取暖方式；MVP 暂无完整经济参数的方式也要出现在 G3，用于“当地允许/禁止”记录，G4 可标记为 `Needs local quote` 或暂不参与精细估算。
+| G2 状态 | G3 问题数量 |
+|---------|------------:|
+| 只需要取暖 | 7 |
+| 只需要制冷 | 7 |
+| 同时需要取暖和制冷 | 8 |
+| 两者都不需要 | 可跳过 G3，或显示确认信息 |
 
-| option_key | UI label (EN) | 对应 tech_id / 说明 |
-|------------|---------------|---------------------|
-| `gas_boiler` | Natural gas boiler | `gas_boiler` |
-| `lpg_boiler` | LPG / propane boiler | `lpg_boiler` |
-| `oil_boiler` | Heating oil boiler | 可扩展 tech |
-| `electric_boiler` | Electric boiler | 可扩展 tech |
-| `ashp_heating` | Air-source heat pump | `ashp` |
-| `mini_split_heat_pump` | Ductless mini-split heat pump | 可与 `ashp` 合并或拆分 |
-| `gshp_heating` | Ground-source heat pump | `gshp` |
-| `electric_resistance` | Electric resistance heater | `resist_electric` |
-| `infrared_heater` | Infrared electric heater | 可扩展 tech |
-| `district_heat` | District heating | `district_heat` |
-| `biomass_pellet` | Biomass / pellet stove or boiler | `biomass` |
-| `wood_stove` | Wood stove | 可扩展 tech |
-| `solid_fuel_coal` | Solid fuel / coal stove | `coal_legacy`（仅作 baseline 或法规允许时显示） |
-| `solar_thermal_heating` | Solar thermal heating support | 可作为辅助路径或组合路径 |
-| `passive_solar_heating` | Passive solar heating / sunspace | 低成本辅助路径 |
-| `insulation_retrofit` | Insulation retrofit | `insulation_plus_ashp` 等组合路径的前置条件/组合项 |
-| `other_heating` | Other heating option allowed locally | 文本补充，防止遗漏本地特殊方式 |
+**问题清单**
 
-**Cooling options（制冷）**
+| # | field | EN question | 中文问题 | Type |
+|---|-------|-------------|----------|------|
+| Q1 | `housing_status` | What best describes your housing situation? | 以下哪项最符合你的居住情况？ | radio cards |
+| Q2 | `building_type` | What type of home is this? | 这是一套什么类型的住宅？ | radio cards |
+| Q3 | `renovation_tolerance` | How much installation work would you consider? | 你可以接受多大程度的安装或改造？ | radio cards |
+| Q4 | `outdoor_space` | What outdoor space is available around the home? | 住宅周围有多少可使用的室外空间？ | radio cards |
+| Q5 | `current_energy_services` | Which energy services or bills does this home currently have? | 这套住宅目前有哪些能源供应或能源账单？ | checkbox cards |
+| Q6 | `current_heating_methods` | How does this home currently stay warm? | 这套住宅目前主要使用哪些方式取暖？ | checkbox cards, only if `needs_heating` |
+| Q7 | `current_cooling_methods` | How does this home currently stay cool? | 这套住宅目前主要使用哪些方式降温？ | checkbox cards, only if `needs_cooling` |
+| Q8 | `upfront_cost_preference` | How would you approach upfront cost? | 你对前期投入的接受程度如何？ | radio cards |
 
-主列表应覆盖全球常见家用制冷方式；部分方式为辅助降温，不一定单独作为高舒适度路径。
+**关键选项与规则**
 
-| option_key | UI label (EN) | 对应 tech_id / 说明 |
-|------------|---------------|---------------------|
-| `window_ac` | Window air conditioner | 可与 `room_ac` 合并 |
-| `portable_ac` | Portable air conditioner | 可与 `room_ac` 合并 |
-| `split_ac` | Split / ductless room air conditioner | `room_ac` |
-| `heat_pump_cooling` | Heat pump cooling | `ashp_cool` 或与 `ashp` 合并 |
-| `central_ac` | Central air conditioning | 可扩展 tech |
-| `evaporative_cooling` | Evaporative cooler | 干热地区适用；潮湿地区 climate fit 较低 |
-| `ceiling_fan` | Ceiling / portable fan | 低成本辅助制冷 |
-| `passive_cooling` | Passive shading / ventilation | 低成本辅助路径 |
-| `whole_house_fan` | Whole-house fan / night ventilation | 可扩展 tech |
-| `district_cooling` | District cooling | 依赖 region，可扩展 |
-| `other_cooling` | Other cooling option allowed locally | 文本补充，防止遗漏本地特殊方式 |
+- Q1 `housing_status`: `owner`, `renter_permission`, `renter_no_permission`, `renter_not_sure`, `other`。`renter_no_permission` 可排除必须永久施工的路径；`renter_not_sure` 不硬排除，只添加确认提示。
+- Q2 `building_type`: `detached`, `semi_detached_or_row`, `apartment`, `mobile_or_temporary`, `other`, `not_sure`。`apartment` 不自动排除所有室外设备，必须结合 Q1、Q4 和地区数据判断。
+- Q3 `renovation_tolerance`: `none`, `minor`, `moderate`, `major`, `not_sure`。等级为 `none < minor < moderate < major`；`not_sure` 保留全部路径，并给 moderate/major 添加确认提示。
+- Q4 `outdoor_space`: `none`, `wall_or_balcony`, `small_yard_or_roof`, `large_private_land`, `not_sure`。明确空间不足时可以硬排除；`not_sure` 不硬排除。
+- Q5 `current_energy_services`: `electricity`, `piped_gas`, `delivered_fuel`, `solid_fuel`, `district_energy`, `none`, `not_sure`。`none` / `not_sure` 与其他选项互斥；当前能源服务不能直接决定未来候选路径。
+- Q6 `current_heating_methods`: `heat_pump`, `electric_heating`, `piped_gas_heating`, `delivered_fuel_heating`, `solid_fuel_heating`, `district_or_shared_heating`, `passive_or_solar_heating`, `no_current_heating`, `not_sure`。`no_current_heating` / `not_sure` 与其他选项互斥；只作为 baseline。
+- Q7 `current_cooling_methods`: `room_air_conditioning`, `central_air_conditioning`, `heat_pump_cooling`, `evaporative_or_water_cooling`, `fans`, `natural_or_passive_cooling`, `district_or_shared_cooling`, `no_current_cooling`, `not_sure`。`fans` 与 `natural_or_passive_cooling` 不可视为完整机械制冷能力。
+- Q8 `upfront_cost_preference`: `minimum_upfront`, `moderate_investment`, `higher_if_saves_later`, `not_sure`。不得作为 G3 硬排除，只影响 G4 affordability、初装成本 penalty、生命周期费用权重和融资/补贴提示。
 
 **数据结构**
 
-```json
-{
-  "allowed_heating_options": ["gas_boiler", "ashp_heating", "insulation_retrofit"],
-  "allowed_cooling_options": ["split_ac", "heat_pump_cooling", "passive_cooling"]
+```ts
+interface HomeFeasibilityProfile {
+  housing_status: "owner" | "renter_permission" | "renter_no_permission" | "renter_not_sure" | "other";
+  building_type: "detached" | "semi_detached_or_row" | "apartment" | "mobile_or_temporary" | "other" | "not_sure";
+  renovation_tolerance: "none" | "minor" | "moderate" | "major" | "not_sure";
+  outdoor_space: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land" | "not_sure";
+  current_energy_services: CurrentEnergyService[];
+  current_heating_methods: CurrentHeatingMethod[];
+  current_cooling_methods: CurrentCoolingMethod[];
+  upfront_cost_preference: "minimum_upfront" | "moderate_investment" | "higher_if_saves_later" | "not_sure";
 }
 ```
 
-**Copy**
+当不需要取暖时：`current_heating_methods = []`。当不需要制冷时：`current_cooling_methods = []`。
 
-| 元素 | 英文文案 |
-|------|----------|
-| Heading | **Which options are allowed where you live?** |
-| Hint | Check the home heating and cooling options that are legal, allowed by local rules, and realistically available to you. |
-| Heating title | Heating options |
-| Cooling title | Cooling options |
-| Heating select all | Select all heating options |
-| Cooling select all | Select all cooling options |
-| Heating skipped | You said this home does not need winter heating, so heating options are skipped. |
-| Cooling skipped | You said this home does not need summer cooling, so cooling options are skipped. |
-| Validation | Select at least one allowed option to continue. |
-| Button back | Back |
-| Button next | **See my paths** |
+新 Global session 保存 `home_feasibility_json`；停止写入 `allowed_options_json`、`allowed_heating_options`、`allowed_cooling_options`。历史 session 可保留旧字段读取能力，但新流程不得依赖旧字段。
+
+**验证与按钮**
+
+```ts
+validateHomeFeasibility(profile, needsHeating, needsCooling)
+```
+
+- Q1–Q5 和 Q8 必须有值。
+- `current_energy_services` 至少选择一项。
+- `needs_heating=true` 时 Q6 至少选择一项。
+- `needs_cooling=true` 时 Q7 至少选择一项。
+- `none`、`not_sure`、`no_current_heating`、`no_current_cooling` 等特殊选项保持互斥。
+- 英文错误：Please answer each question. Choose “Not sure” whenever you do not know.
+- 中文错误：请回答每个问题；不了解时可以选择“不确定”。
+- 按钮：`Back` / `Find possible paths`；中文：`返回` / `筛选可行路径`。
+- 提交后显示：`Checking possible paths for your home…`；中文：`正在筛选适合这套住宅的路径……`。
 
 ---
 
@@ -611,17 +602,22 @@ else:
 
 **候选路径范围（与 G3 联动）**
 
-- **Path ranking 主表只包含 G3 已勾选的路径**；G3 未勾选的路径不进入候选集，也不出现在 ranking 中。
-- 若 G2 `needs_heating=no`，所有取暖路径不参与 ranking。
-- 若 G2 `needs_cooling=no`，所有制冷路径不参与 ranking。
-- 在 G3 已勾选的路径中，若仍被 hard filter 剔除（如无气网、初装过高），进入下方 **Excluded** 区块，**不进入主 ranking**。
+G4 的候选路径来自后台完整技术目录筛选，而不是 G3 勾选列表。G3 当前取暖/制冷方式只用于 baseline，不得复制为未来候选路径白名单。
 
 ```text
-candidate_paths = map(G3.checked_options → tech paths)
-ranked_paths = score_and_sort(candidate_paths passing hardFilter)
-excluded_paths = candidate_paths failing hardFilter
-# 不在 G3.checked_options 里的路径：完全不展示
+const baseline = buildBaselineProfile(household, homeFeasibility, region)
+const screeningResult = screenTechnologies(region, climate, household, homeFeasibility, allTechnologies)
+const candidatePaths = generateCandidatePaths(screeningResult.passed, baseline, region, climate, household)
+const rankedPaths = scoreAndSort(candidatePaths, baseline, household, region, climate)
 ```
+
+- 后台默认载入全部技术目录，并按 G1/G2/G3 数据确定性筛选。
+- 通过筛选的技术生成完整候选路径进入 G4。
+- 明确不可能的技术进入 G4 `Excluded` 区块。
+- 信息不足时不得直接排除，应保留并标记 `Needs local confirmation`、`Preliminary result` 或 `Data uncertain`。
+- `eligible_with_warning` 路径仍进入 G4 ranking。
+- G4 可显示 `Your current setup`，例如 `Current heating: Delivered-fuel heating`、`Current cooling: Room air conditioner + fans`。
+- baseline 不自动作为推荐路径；只有算法生成“保留现有系统 + 改善措施”时才进入正式排名。
 
 **Layout（桌面）**
 
@@ -647,7 +643,7 @@ excluded_paths = candidate_paths failing hardFilter
 
 | Column | 说明 |
 |--------|------|
-| Rank | 1…N；**仅对 G3 已勾选且通过 hard filter 的路径编号** |
+| Rank | 1…N；通过后台筛选并完成五维打分的候选路径 |
 | Path | 技术路径显示名 |
 | Fitness | 0–100 综合分（一位小数） |
 | Upfront | 初装成本区间 |
@@ -661,10 +657,11 @@ excluded_paths = candidate_paths failing hardFilter
 | 元素 | 英文文案 |
 |------|----------|
 | Heading | **Paths ranked for your home** |
-| Subheading | Only the options you checked as allowed are ranked here. |
-| Excluded section title | Checked, but not feasible for your place |
-| Excluded reason examples | No gas grid in region · Below minimum temperature for air-source without backup · Upfront too high vs income |
-| Empty state | No checked path passed hard checks. Go back and adjust allowed options, income, or insulation. |
+| Subheading | We screened the full technology catalog using your home profile and local data. |
+| Current setup title | Your current setup |
+| Excluded section title | Not feasible for your place |
+| Excluded reason examples | No gas grid in region · Permanent work not allowed · Insufficient outdoor space |
+| Empty state | No path passed hard checks. Try adjusting household details or mark unknown answers as Not sure. |
 | CTA AI | **Explain these results** |
 | CTA sandbox | **Try a 3-step preview of #1** |
 
@@ -824,7 +821,7 @@ Cross-region technology notes (only from retrieved tech cards).
 | `RegionSelect` | 国/区域级联 |
 | `ClimateCard` | 地区只读摘要 |
 | `HouseholdForm` | G2 表单 |
-| `TechnologyAvailabilityChecklist` | G3 取暖/制冷可用方式勾选 |
+| `HomeFeasibilityQuestionnaire` | G3 住宅可行性问卷 |
 | `PathResultsTable` | 可排序表格 |
 | `PathRadarChart` | 前五路径雷达（Chart.js 或 ECharts） |
 | `ScoreBreakdownBars` | 五维分项 |
@@ -851,11 +848,13 @@ Cross-region technology notes (only from retrieved tech cards).
 ### 7.1 架构总览
 
 ```
-inputs: region_profile, household_profile, allowed_options (from G3)
+inputs: region_profile, climate_profile, household_profile, home_feasibility_profile, all_technologies
         ↓
-candidate_paths = only paths mapped from G3 checked options
+baseline = buildBaselineProfile(household, home_feasibility, region)
         ↓
-hard_filter(path, region, household, allowed_options) → feasible set
+screenTechnologies(region, climate, household, home_feasibility, all_technologies)
+        ↓
+generateCandidatePaths(screening.passed, baseline, region, climate, household)
         ↓
 for each path: dimension_scores[path][d] ∈ [0,100]
         ↓
@@ -898,19 +897,72 @@ MVP 至少包含 **8 条**（取暖/制冷组合可拆成子路径）：
 伪代码：
 
 ```text
-function hardFilter(path, region, household, allowed_options):
-  // 仅对 G3 已勾选映射出的 candidate path 调用；未勾选路径不会进入此函数
-  if path.heating_option_key and path.heating_option_key not in allowed_options.allowed_heating_options: exclude "Not allowed or not available locally"
-  if path.cooling_option_key and path.cooling_option_key not in allowed_options.allowed_cooling_options: exclude "Not allowed or not available locally"
-  if path.requires_gas_grid and not region.has_gas_grid: exclude "No gas grid"
-  if path is district_heat and not region.district_heat_available: exclude
-  if path is ashp and region.design_temp_c < path.min_ambient_c without backup: exclude or flag backup
-  if upfront_cost(path) > household.annual_income * 0.5: exclude "Upfront too high vs income"  // 可调
-  if path is coal_legacy and region.coal_banned: exclude
-  return pass
+function screenTechnologies(region, climate, household, feasibility, technologies):
+  candidates = technologies matching required services from household.needs_heating / needs_cooling
+  // 不得根据 current_heating_methods 或 current_cooling_methods 建立候选集
+  apply high-confidence region infrastructure hard constraints
+  apply explicit user installation constraints
+  use current energy services only for confidence/warnings unless region data proves impossible
+  use current heating/cooling methods only to build baseline
+  use climate as G4 climate score unless high-confidence unsafe case has no backup/fallback
+  never hard-exclude for upfront cost
+  return { passed, excluded, warnings }
 ```
 
-**MVP 规则宜少而清晰**；每条 exclude 必须有人类可读 `reason_en` 字符串。
+**MVP 规则宜少而清晰**；每条 exclude 必须有人类可读 `reason_en` 与 `reason_zh` 字符串。`not_sure` 不硬排除，只降低 confidence 并添加 warning。
+
+### 7.3.1 技术筛选元数据与路径生成
+
+后台继续保留完整技术目录。具体技术名称只在后台技术目录、G4 候选路径、G5 AI 解释、数据文件和开发调试工具中出现；G3 不显示这些技术名称。
+
+```ts
+interface TechnologyScreeningMeta {
+  tech_id: string;
+  services: ("heating" | "cooling" | "heating_and_cooling" | "supporting_measure")[];
+  installation_level: "none" | "minor" | "moderate" | "major";
+  outdoor_space_required: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land";
+  permanent_modification_required: boolean;
+  supported_building_types?: BuildingType[];
+  infrastructure_constraints?: {
+    requires_gas_grid?: boolean;
+    requires_district_network?: boolean;
+    requires_delivered_fuel_market?: boolean;
+    requires_reliable_electricity?: boolean;
+  };
+  climate_constraints?: {
+    min_design_temp_c?: number;
+    requires_dry_climate?: boolean;
+    humidity_sensitive?: boolean;
+  };
+  can_reuse_baseline_categories?: string[];
+  replaces_baseline_categories?: string[];
+  backup_option_supported?: boolean;
+  fallback_possible?: boolean;
+  data_confidence: "high" | "medium" | "low";
+}
+```
+
+新增纯函数：
+
+```ts
+buildBaselineProfile(household, homeFeasibility, region): BaselineProfile
+screenTechnologies(region, climate, household, homeFeasibility, technologies): ScreeningResult
+generateCandidatePaths(screening.passed, baseline, region, climate, household): CandidatePath[]
+scoreAndSort(candidatePaths, baseline, household, region, climate): RankedPath[]
+```
+
+`BaselineProfile` 规则：
+- `not_sure` → baseline confidence = `low`。
+- `no_current_heating` → `has_mechanical_heating = false`。
+- `no_current_cooling` → `has_mechanical_cooling = false`。
+- 仅使用 `fans` 或 `natural_or_passive_cooling` → `has_mechanical_cooling = false`。
+- 当前系统可用于 replacement cost 和 current setup 摘要，但不能作为未来技术白名单。
+
+`generateCandidatePaths` 规则：
+- 主要系统形成基础路径；辅助措施不能默认替代完整取暖/机械制冷系统。
+- 辅助措施可与主要系统组成组合路径；当前系统可形成“保留并改善”路径。
+- MVP 每个主要系统最多生成一个基础路径和一个高相关组合路径，最终 G4 路径控制在 3–12 条。
+- 路径生成不得使用 AI，必须 deterministic。
 
 ### 7.4 五维分项打分（0–100）
 
@@ -949,6 +1001,8 @@ fitness = Σ_d default_w[d] * score[d]
 - **同一输入必须 deterministic**（无 random）。
 - 单元测试：固定 fixture 输入 → 快照对比 `fitness` 与各维分。
 - MVP 不再让用户手动调权重；默认权重应写死在 scoring module，并在结果页用简短文案说明。
+- `upfront_cost_preference` 只影响 G4 affordability、初装成本 penalty、生命周期费用权重与补贴/融资提示。
+- 停止使用 `upfrontCost > annualIncome * 0.5` 作为硬约束；高初装路径只能降低 affordability 或显示成本压力。
 
 ### 7.6 与 V1 五回合引擎的关系
 
@@ -1089,7 +1143,7 @@ api/
 | id | uuid | |
 | region_id | text | |
 | household_json | jsonb | 脱敏 |
-| allowed_options_json | jsonb | G3 勾选的取暖/制冷可用方式 |
+| home_feasibility_json | jsonb | G3 住宅可行性问卷 |
 | scores_json | jsonb | 完整打分输出 |
 | ai_explanation | text | |
 | created_at | timestamptz | |
@@ -1124,9 +1178,15 @@ api/
   "locale": "en",
   "region_id": "us_midwest",
   "household": { "...": "..." },
-  "allowed_options": {
-    "allowed_heating_options": ["ashp_heating", "lpg_boiler", "insulation_retrofit"],
-    "allowed_cooling_options": ["split_ac", "heat_pump_cooling", "passive_cooling"]
+  "home_feasibility": {
+    "housing_status": "owner",
+    "building_type": "detached",
+    "renovation_tolerance": "moderate",
+    "outdoor_space": "small_yard_or_roof",
+    "current_energy_services": ["electricity", "delivered_fuel"],
+    "current_heating_methods": ["delivered_fuel_heating"],
+    "current_cooling_methods": ["room_air_conditioning", "fans"],
+    "upfront_cost_preference": "higher_if_saves_later"
   },
   "score_card": {
     "ranked": [
@@ -1228,7 +1288,7 @@ Note any technology used in China that may be relevant for this region.
 ### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
 - [ ] 实现 `hardFilter` + 五维分 + `fitness` 排序
-- [ ] G3 可用技术勾选 + G4 结果表 + 雷达图
+- [ ] G3 `HomeFeasibilityQuestionnaire` + 后台技术筛选 + G4 结果表 + 雷达图
 - [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
 - [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
 - [ ] 单元测试 ≥10 cases
