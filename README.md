@@ -37,7 +37,8 @@
 - `index.html`：单文件作品页，也是 Vercel 部署入口。
 - `global/`：Global mode 原型页面，当前包含 G3 Home feasibility 问卷与 G4 筛选结果摘要。
 - `src/global/`：Global mode 的 TypeScript 类型、G3 验证、baseline、技术筛选、候选路径生成和排序逻辑。
-- `data/global/technologies.json`：Global mode 后台技术目录；G3 不向用户展示该目录。
+- `data/technologies/technology_catalog.json`：Global mode 后台唯一运行时技术目录；G3 不向用户展示该目录。
+- `data/technologies/technology_catalog.schema.json`：内部技术目录 schema，用于测试和审计。
 - `tests/global/`：Global mode 的 Node 测试，覆盖 G3 条件显示、baseline、筛选算法、G4 联动和 China Pilot 隔离。
 - `app.py`：Flask 应用主文件。
 - `policysandbox.py`：政策沙盘与辅助逻辑。

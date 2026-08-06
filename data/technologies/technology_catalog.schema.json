@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Internal household technology catalog",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "type": "object",
+    "required": [
+      "tech_id",
+      "display_name_en",
+      "display_name_zh",
+      "visibility",
+      "role",
+      "services",
+      "catalog_status",
+      "ranking_mode",
+      "screening",
+      "baseline_mapping",
+      "g4_defaults",
+      "path_rules",
+      "explanation",
+      "evidence"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "tech_id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+      "display_name_en": { "type": "string", "minLength": 1 },
+      "display_name_zh": { "type": "string", "minLength": 1 },
+      "visibility": { "const": "internal" },
+      "role": { "enum": ["primary", "supporting", "baseline"] },
+      "services": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "enum": ["heating", "cooling", "heating_and_cooling"] }
+      },
+      "catalog_status": { "enum": ["active", "conditional", "baseline_only", "phase2"] },
+      "ranking_mode": { "enum": ["standalone", "bundle_only", "baseline_only", "phase2"] },
+      "screening": {
+        "type": "object",
+        "required": [
+          "installation_level",
+          "outdoor_space_required",
+          "permanent_modification_required",
+          "onsite_combustion",
+          "infrastructure_required",
+          "climate_rules"
+        ],
+        "properties": {
+          "installation_level": { "enum": ["none", "minor", "moderate", "major"] },
+          "outdoor_space_required": { "enum": ["none", "wall_or_balcony", "small_yard_or_roof", "large_private_land"] },
+          "permanent_modification_required": { "type": "boolean" },
+          "onsite_combustion": { "type": "boolean" },
+          "infrastructure_required": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "electricity",
+                "piped_gas",
+                "delivered_fuel",
+                "solid_fuel_supply",
+                "district_heating_network",
+                "district_cooling_network",
+                "water_supply",
+                "ground_access",
+                "usable_heat_source"
+              ]
+            }
+          },
+          "climate_rules": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "general",
+                "cold_performance_check",
+                "dry_climate_required",
+                "dry_climate_preferred",
+                "humidity_control_helpful",
+                "air_quality_check",
+                "diurnal_temperature_check",
+                "solar_resource_check",
+                "dew_point_control_required"
+              ]
+            }
+          },
+          "supported_building_types": { "type": "array", "items": { "type": "string" } },
+          "excluded_building_types": { "type": "array", "items": { "type": "string" } },
+          "requires_region_confirmation": { "type": "boolean" },
+          "requires_local_installer_confirmation": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      },
+      "baseline_mapping": {
+        "type": "object",
+        "required": ["heating_categories", "cooling_categories"],
+        "properties": {
+          "heating_categories": { "type": "array", "items": { "type": "string" } },
+          "cooling_categories": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": false
+      },
+      "g4_defaults": {
+        "type": "object",
+        "required": [
+          "capex_tier",
+          "operating_cost_model",
+          "comfort_tier",
+          "simplicity_tier",
+          "carbon_model",
+          "maintenance_tier"
+        ],
+        "properties": {
+          "capex_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "operating_cost_model": {
+            "enum": [
+              "heat_pump_cop",
+              "grid_resistance",
+              "grid_cooling_efficiency",
+              "gas_fuel",
+              "delivered_liquid_fuel",
+              "solid_fuel",
+              "district_tariff",
+              "hybrid_dispatch",
+              "low_energy_support",
+              "passive_zero_direct_energy",
+              "local_quote"
+            ]
+          },
+          "comfort_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "simplicity_tier": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "carbon_model": {
+            "enum": [
+              "grid_electricity",
+              "gas_combustion",
+              "liquid_fuel_combustion",
+              "solid_fuel_combustion",
+              "biomass_context_dependent",
+              "district_energy_factor",
+              "hybrid_weighted",
+              "passive_operational_zero",
+              "local_factor_required"
+            ]
+          },
+          "expected_lifetime_years": {
+            "type": "object",
+            "required": ["low", "mid", "high"],
+            "properties": {
+              "low": { "type": "number" },
+              "mid": { "type": "number" },
+              "high": { "type": "number" }
+            },
+            "additionalProperties": false
+          },
+          "maintenance_tier": { "enum": ["very_low", "low", "medium", "high"] }
+        },
+        "additionalProperties": false
+      },
+      "path_rules": {
+        "type": "object",
+        "required": ["can_form_standalone_path", "can_form_bundle"],
+        "properties": {
+          "can_form_standalone_path": { "type": "boolean" },
+          "can_form_bundle": { "type": "boolean" },
+          "recommended_supporting_ids": { "type": "array", "items": { "type": "string" } },
+          "incompatible_tech_ids": { "type": "array", "items": { "type": "string" } },
+          "max_paths_per_primary": { "type": "integer", "minimum": 0 }
+        },
+        "additionalProperties": false
+      },
+      "explanation": {
+        "type": "object",
+        "required": ["summary_en", "summary_zh"],
+        "properties": {
+          "summary_en": { "type": "string", "minLength": 1 },
+          "summary_zh": { "type": "string", "minLength": 1 },
+          "confirmation_en": { "type": "string" },
+          "confirmation_zh": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "evidence": {
+        "type": "object",
+        "required": ["source_names", "last_reviewed", "data_confidence"],
+        "properties": {
+          "source_names": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "source_urls": { "type": "array", "items": { "type": "string" } },
+          "last_reviewed": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "data_confidence": { "enum": ["high", "medium", "low"] }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

@@ -17,7 +17,7 @@ const MESSAGES = {
     checkingText: "Checking possible paths for your home…",
     currentSetup: "Your current setup",
     g4Note:
-      "Candidate paths are produced by deterministic screening from the full technology catalog. The G3 page does not show or whitelist future technologies.",
+      "Candidate paths are produced by deterministic screening from internal data. The G3 page does not show or whitelist future technologies.",
     skipped: "No heating or cooling service is needed, so G3 can be skipped.",
     heating: "Current heating",
     cooling: "Current cooling",
@@ -39,7 +39,7 @@ const MESSAGES = {
     g4Title: "已为这套住宅筛选路径",
     checkingText: "正在筛选适合这套住宅的路径……",
     currentSetup: "当前配置",
-    g4Note: "候选路径由完整后台技术目录经过确定性筛选生成。G3 页面不会展示或要求用户勾选未来候选技术。",
+    g4Note: "候选路径由后台内部数据经过确定性筛选生成。G3 页面不会展示或要求用户勾选未来候选技术。",
     skipped: "这套住宅不需要取暖或制冷，因此可以跳过 G3。",
     heating: "当前取暖",
     cooling: "当前制冷",

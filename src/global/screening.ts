@@ -103,6 +103,8 @@ function exclude(tech_id: string, reason_code: string, evidence_source: "user_an
 }
 
 function serviceMatches(tech: TechnologyProfile, household: HouseholdProfile): boolean {
+  if (tech.catalog_status === "baseline_only" || tech.catalog_status === "phase2") return false;
+  if (tech.ranking_mode === "baseline_only" || tech.ranking_mode === "phase2") return false;
   const hasService = (service: ServiceType) => tech.services.includes(service);
   const heatingMatch = household.needs_heating && (hasService("heating") || hasService("heating_and_cooling"));
   const coolingMatch = household.needs_cooling && (hasService("cooling") || hasService("heating_and_cooling"));
@@ -135,8 +137,8 @@ export function buildBaselineProfile(
   ];
 
   return {
-    heating_categories: heating.filter((method) => method !== "not_sure" && method !== "no_current_heating"),
-    cooling_categories: cooling.filter((method) => method !== "not_sure" && method !== "no_current_cooling"),
+    heating_categories: mapCurrentHeatingToBaseline(heating),
+    cooling_categories: mapCurrentCoolingToBaseline(cooling),
     heating_data_confidence: heatingNotSure ? "low" : noHeating ? "medium" : "high",
     cooling_data_confidence: coolingNotSure ? "low" : noCooling ? "medium" : "high",
     has_mechanical_heating: !noHeating && !heatingNotSure,
@@ -145,6 +147,38 @@ export function buildBaselineProfile(
       (service) => service !== "none" && service !== "not_sure",
     ),
   };
+}
+
+export function mapCurrentHeatingToBaseline(methods: CurrentHeatingMethod[]): string[] {
+  const map: Record<Exclude<CurrentHeatingMethod, "not_sure" | "no_current_heating">, string> = {
+    heat_pump: "heat_pump_unspecified",
+    electric_heating: "electric_heating_unspecified",
+    piped_gas_heating: "gas_heating_unspecified",
+    delivered_fuel_heating: "delivered_fuel_heating_unspecified",
+    solid_fuel_heating: "solid_fuel_heating_unspecified",
+    district_or_shared_heating: "district_heating",
+    passive_or_solar_heating: "passive_heating_support",
+  };
+  return methods
+    .filter((method) => method !== "not_sure" && method !== "no_current_heating")
+    .map((method) => map[method as keyof typeof map])
+    .filter((category, index, array) => Boolean(category) && array.indexOf(category) === index);
+}
+
+export function mapCurrentCoolingToBaseline(methods: CurrentCoolingMethod[]): string[] {
+  const map: Record<Exclude<CurrentCoolingMethod, "not_sure" | "no_current_cooling">, string> = {
+    room_air_conditioning: "room_ac_unspecified",
+    central_air_conditioning: "central_ac",
+    heat_pump_cooling: "heat_pump_cooling_unspecified",
+    evaporative_or_water_cooling: "evaporative_cooling_unspecified",
+    fans: "fan_support",
+    natural_or_passive_cooling: "passive_cooling_support",
+    district_or_shared_cooling: "district_cooling",
+  };
+  return methods
+    .filter((method) => method !== "not_sure" && method !== "no_current_cooling")
+    .map((method) => map[method as keyof typeof map])
+    .filter((category, index, array) => Boolean(category) && array.indexOf(category) === index);
 }
 
 export function screenTechnologies(
@@ -348,8 +382,16 @@ export function generateCandidatePaths(
     .filter((tech): tech is TechnologyProfile => Boolean(tech))
     .sort((a, b) => a.tech_id.localeCompare(b.tech_id));
 
-  const primary = passedTechs.filter((tech) => !tech.services.includes("supporting_measure"));
-  const supporting = passedTechs.filter((tech) => tech.services.includes("supporting_measure"));
+  const primary = passedTechs.filter((tech) =>
+    !tech.services.includes("supporting_measure") &&
+    tech.role !== "supporting" &&
+    tech.ranking_mode !== "bundle_only",
+  );
+  const supporting = passedTechs.filter((tech) =>
+    tech.services.includes("supporting_measure") ||
+    tech.role === "supporting" ||
+    tech.ranking_mode === "bundle_only",
+  );
   const paths: CandidatePath[] = [];
 
   for (const tech of primary) {

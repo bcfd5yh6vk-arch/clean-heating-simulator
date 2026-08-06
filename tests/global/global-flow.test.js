@@ -8,12 +8,16 @@ const {
   validateHomeFeasibility,
   applyExclusiveSelection,
   buildBaselineProfile,
+  mapCurrentHeatingToBaseline,
+  mapCurrentCoolingToBaseline,
   screenTechnologies,
   generateCandidatePaths,
   scoreAndSort,
+  getMvpScreeningCatalog,
 } = require("../../dist/global");
 
-const technologies = require("../../data/global/technologies.json");
+const catalog = require("../../data/technologies/technology_catalog.json");
+const technologies = getMvpScreeningCatalog(catalog);
 
 const household = {
   household_size: 4,
@@ -176,18 +180,18 @@ test("15. G3 page source does not contain technology select-all buttons", () => 
 
 test("16. Baseline records current heating and cooling categories", () => {
   const baseline = buildBaselineProfile(household, feasibility, region);
-  assert.deepEqual(baseline.heating_categories, ["delivered_fuel_heating"]);
-  assert.deepEqual(baseline.cooling_categories, ["room_air_conditioning", "fans"]);
+  assert.deepEqual(baseline.heating_categories, ["delivered_fuel_heating_unspecified"]);
+  assert.deepEqual(baseline.cooling_categories, ["room_ac_unspecified", "fan_support"]);
 });
 
 test("17. Current methods do not overwrite future candidate set", () => {
   const { screening } = runPipeline({ feasibility: { current_heating_methods: ["delivered_fuel_heating"] } });
-  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp"), true);
+  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp_ductless"), true);
 });
 
 test("18. Heat pump can be screened when current heating is not heat pump", () => {
   const { screening } = runPipeline({ feasibility: { current_heating_methods: ["solid_fuel_heating"] } });
-  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp"), true);
+  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp_ductless"), true);
 });
 
 test("19. Missing current gas service alone does not hard-exclude gas path", () => {
@@ -249,8 +253,8 @@ test("27. Missing region infrastructure keeps technology with warning", () => {
 
 test("28. Climate boundary creates warning before exclusion when backup exists", () => {
   const { screening } = runPipeline({ climate: { design_temp_c: -25, design_temp_confidence: "high" } });
-  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp"), true);
-  assert.equal(screening.warnings.some((item) => item.tech_id === "ashp" && item.code === "BACKUP_HEATING_MAY_BE_REQUIRED"), true);
+  assert.equal(screening.passed.some((tech) => tech.tech_id === "ashp_ductless"), true);
+  assert.equal(screening.warnings.some((item) => item.tech_id === "ashp_ductless" && item.code === "BACKUP_HEATING_MAY_BE_REQUIRED"), true);
 });
 
 test("29. High upfront cost is not a G3 hard exclusion", () => {
@@ -278,13 +282,13 @@ test("32. Technology catalog order does not affect final ranked path ids", () =>
 test("33. G4 candidate paths come from full technology catalog screening", () => {
   const { paths } = runPipeline();
   assert.equal(paths.length > 0, true);
-  assert.equal(paths.some((path) => path.primary_tech_ids.includes("ashp")), true);
+  assert.equal(paths.some((path) => path.primary_tech_ids.includes("ashp_ductless")), true);
 });
 
 test("34. G4 can display current setup summary from baseline", () => {
   const { baseline } = runPipeline();
-  assert.deepEqual(baseline.heating_categories, ["delivered_fuel_heating"]);
-  assert.equal(baseline.cooling_categories.includes("room_air_conditioning"), true);
+  assert.deepEqual(baseline.heating_categories, ["delivered_fuel_heating_unspecified"]);
+  assert.equal(baseline.cooling_categories.includes("room_ac_unspecified"), true);
 });
 
 test("35. Baseline does not automatically become a recommended path", () => {
@@ -324,4 +328,15 @@ test("40. China Pilot entry point is not replaced by /global", () => {
   const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../vercel.json"), "utf8"));
   const root = vercel.rewrites.find((rewrite) => rewrite.source === "/");
   assert.equal(root.destination, "/index.html");
+});
+
+test("41. Current setup mapping keeps broad answers broad", () => {
+  assert.deepEqual(mapCurrentHeatingToBaseline(["heat_pump", "piped_gas_heating"]), [
+    "heat_pump_unspecified",
+    "gas_heating_unspecified",
+  ]);
+  assert.deepEqual(mapCurrentCoolingToBaseline(["room_air_conditioning", "fans"]), [
+    "room_ac_unspecified",
+    "fan_support",
+  ]);
 });

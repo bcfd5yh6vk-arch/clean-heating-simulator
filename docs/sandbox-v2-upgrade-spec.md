@@ -867,30 +867,30 @@ AI: read-only explanation (no score mutation)
 
 **实现语言建议**：TypeScript 纯函数模块 `src/scoring/`（前后端共用）；V1 仍可在 `index.html` 内联，V2 新路由单独打包或新 HTML。
 
-### 7.2 候选路径目录（technology_id）
+### 7.2 内部技术目录（runtime source of truth）
 
-MVP 至少包含 **8 条**（取暖/制冷组合可拆成子路径）：
+运行时唯一技术目录：
 
-| tech_id | display_name (EN) | 备注 |
-|---------|-------------------|------|
-| `gas_boiler` | Natural gas boiler | |
-| `lpg_boiler` | LPG / propane boiler | |
-| `ashp` | Air-source heat pump | |
-| `gshp` | Ground-source heat pump | |
-| `resist_electric` | Electric resistance | |
-| `district_heat` | District heating | 依赖 region |
-| `biomass` | Biomass / pellet | |
-| `insulation_plus_ashp` | Insulation retrofit + air-source HP | 组合路径 |
-| `coal_legacy` | Continue solid fuel (baseline) | 仅作对照，部分 region 硬剔除 |
+```text
+data/technologies/technology_catalog.json
+data/technologies/technology_catalog.schema.json
+```
 
-制冷（若 `needs_cooling`）附加或合并：
+- 该目录包含取暖、制冷、取暖+制冷、辅助措施与 baseline-only 技术。
+- 所有技术对象必须包含 `"visibility": "internal"`。
+- Markdown 内部附录中的表格仅供开发和审计，不是第二份运行时数据源。
+- G3 不展示目录；G0/G1/G2/G3/About/Impact/Media 不展示完整目录；不新增 `/technologies` 路由或导航入口。
+- G4 只显示通过筛选的候选路径、必要 warning 和有价值的排除原因。
+- G5 AI 只接收 top paths 与相关技术卡，不接收无关完整目录。
 
-| tech_id | display_name (EN) |
-|---------|-------------------|
-| `room_ac` | Room / split AC |
-| `ashp_cool` | Heat pump (heating + cooling) | 与 ashp 合并计分时可复用 |
+目录状态：
 
-数据文件：`data/technologies/{tech_id}.json`。
+| status | 用途 |
+|--------|------|
+| `active` | 默认进入后台筛选 |
+| `conditional` | 满足地区/基础设施/安装条件时进入 |
+| `baseline_only` | 只用于现状基线、费用和排放，不进入未来推荐 |
+| `phase2` | 保留在内部目录和文档中，当前不进入 G4 |
 
 ### 7.3 硬约束（Hard filter）——任一不满足则 `Excluded`
 
@@ -911,34 +911,47 @@ function screenTechnologies(region, climate, household, feasibility, technologie
 
 **MVP 规则宜少而清晰**；每条 exclude 必须有人类可读 `reason_en` 与 `reason_zh` 字符串。`not_sure` 不硬排除，只降低 confidence 并添加 warning。
 
-### 7.3.1 技术筛选元数据与路径生成
-
-后台继续保留完整技术目录。具体技术名称只在后台技术目录、G4 候选路径、G5 AI 解释、数据文件和开发调试工具中出现；G3 不显示这些技术名称。
+### 7.3.1 技术目录元数据与路径生成
 
 ```ts
-interface TechnologyScreeningMeta {
+interface TechnologyCatalogEntry {
   tech_id: string;
-  services: ("heating" | "cooling" | "heating_and_cooling" | "supporting_measure")[];
-  installation_level: "none" | "minor" | "moderate" | "major";
-  outdoor_space_required: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land";
-  permanent_modification_required: boolean;
-  supported_building_types?: BuildingType[];
-  infrastructure_constraints?: {
-    requires_gas_grid?: boolean;
-    requires_district_network?: boolean;
-    requires_delivered_fuel_market?: boolean;
-    requires_reliable_electricity?: boolean;
+  display_name_en: string;
+  display_name_zh: string;
+  visibility: "internal";
+  role: "primary" | "supporting" | "baseline";
+  services: ("heating" | "cooling" | "heating_and_cooling")[];
+  catalog_status: "active" | "conditional" | "baseline_only" | "phase2";
+  ranking_mode: "standalone" | "bundle_only" | "baseline_only" | "phase2";
+  screening: {
+    installation_level: "none" | "minor" | "moderate" | "major";
+    outdoor_space_required: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land";
+    permanent_modification_required: boolean;
+    onsite_combustion: boolean;
+    infrastructure_required: InfrastructureRequirement[];
+    climate_rules: ClimateRule[];
   };
-  climate_constraints?: {
-    min_design_temp_c?: number;
-    requires_dry_climate?: boolean;
-    humidity_sensitive?: boolean;
+  baseline_mapping: {
+    heating_categories: string[];
+    cooling_categories: string[];
   };
-  can_reuse_baseline_categories?: string[];
-  replaces_baseline_categories?: string[];
-  backup_option_supported?: boolean;
-  fallback_possible?: boolean;
-  data_confidence: "high" | "medium" | "low";
+  g4_defaults: {
+    capex_tier: 1 | 2 | 3 | 4 | 5;
+    operating_cost_model: OperatingCostModel;
+    comfort_tier: 1 | 2 | 3 | 4 | 5;
+    simplicity_tier: 1 | 2 | 3 | 4 | 5;
+    carbon_model: CarbonModel;
+    maintenance_tier: "very_low" | "low" | "medium" | "high";
+  };
+  path_rules: {
+    can_form_standalone_path: boolean;
+    can_form_bundle: boolean;
+    recommended_supporting_ids?: string[];
+    incompatible_tech_ids?: string[];
+    max_paths_per_primary?: number;
+  };
+  explanation: { summary_en: string; summary_zh: string };
+  evidence: { source_names: string[]; last_reviewed: string; data_confidence: "high" | "medium" | "low" };
 }
 ```
 
@@ -1037,18 +1050,19 @@ data/
     us_midwest.json
     ...
   technologies/
-    ashp.json
-    gas_boiler.json
-    ...
+    technology_catalog.json          # one runtime source of truth; internal only
+    technology_catalog.schema.json
   i18n/
     en.json
     zh.json
 src/
-  scoring/
-    hardFilter.ts
-    dimensions.ts
-    aggregate.ts
+  technologies/
     types.ts
+    loadTechnologyCatalog.ts
+  scoring/
+    screenTechnologies.ts
+    buildBaselineProfile.ts
+    generateCandidatePaths.ts
   ai/
     buildScoreCard.ts
     prompts/
@@ -1107,30 +1121,49 @@ api/
 }
 ```
 
-### 8.3 `technology` JSON schema（示例）
+### 8.3 `TechnologyCatalogEntry` schema
+
+`data/technologies/technology_catalog.json` 是运行时单一技术目录。`data/technologies/technology_catalog.schema.json` 用于校验关键结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
+
+字段原则：
+- 主目录描述技术本身：服务类型、安装要求、基础设施要求、气候规则、G4 fallback tier、路径组合规则。
+- Region override 描述当地价格、市场、基础设施、政策和排放因子。
+- Household / G3 profile 描述具体家庭条件。
+- 三者不得混在同一个对象中。
+
+G4 数据优先级：
+
+```text
+1. region technology override exact numeric data
+2. country or admin-1 data
+3. climate-zone technology profile
+4. technology catalog default tiers
+5. Needs local quote / data uncertain
+```
+
+没有当地数字时可用 `capex_tier` 等 tier 做相对分，但不得显示虚构金额或效率。
+
+Region override 示例：
 
 ```json
 {
-  "tech_id": "ashp",
-  "display_name_en": "Air-source heat pump",
-  "display_name_zh": "空气源热泵",
-  "requires": {
-    "gas_grid": false,
-    "min_ambient_c": -15,
-    "backup_heating_recommended_below_c": -10
-  },
-  "economics": {
-    "capex_per_m2": { "mid": 70 },
-    "cop_heating_at_design": 2.2,
-    "maintenance_annual_pct_capex": 0.02
-  },
-  "scores_meta": {
-    "comfort_tier": 4,
-    "simplicity_tier": 3
-  },
-  "explain_en": "Moves heat from outdoor air; efficient in mild cold; may need backup in extreme cold.",
-  "sources": ["IEA heat pump handbook", "..."],
-  "china_parallel_en": "Widely used in North China clean-heating programs; may suit cold-dry winters with proper sizing."
+  "technology_overrides": {
+    "district_heating": {
+      "availability": "unavailable",
+      "availability_confidence": "high"
+    },
+    "ashp_ductless": {
+      "availability": "available",
+      "availability_confidence": "medium",
+      "capex_local": {
+        "low": 4000,
+        "mid": 6500,
+        "high": 9000,
+        "currency": "USD",
+        "basis": "per_home"
+      }
+    }
+  }
 }
 ```
 
@@ -1158,6 +1191,7 @@ api/
 |------|------|
 | AI **不得**修改 fitness 数字 | 后端/前端算完后只读 |
 | AI **不得**编造价格 | 只能引用 score card + region/tech JSON |
+| AI **不得**接收完整技术目录 | 只注入 top paths、excluded 相关项与必要技术卡 |
 | AI **必须**标注不确定性 | “approximate”, “check locally” |
 | 失败降级 | 仅展示表格分数，不阻塞主流程 |
 
@@ -1279,7 +1313,7 @@ Note any technology used in China that may be relevant for this region.
 - [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
 - [ ] 新建 `/global` 入口与 G0–G3 静态页（无打分）
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
-- [ ] `data/regions` + `data/technologies` 各 3 条样例 JSON，必须含 China + 2 个海外地区
+- [ ] `data/regions` 至少 3 条样例 JSON（China + 2 个海外地区）；`data/technologies/technology_catalog.json` 作为完整内部技术目录
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
 - [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G8、Impact/About/Media、AI explanation 全部跟随同一语言
 
@@ -1364,6 +1398,54 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 | `spec.md` | MVP 范围 |
 | `paper/main.tex` § Future directions | 产品愿景原文 |
 | `paper/defense-slides/indexxx.html` | 答辩叙事与视觉参考 |
+
+---
+
+## Internal Appendix · Household technology catalog
+
+> Internal development and scoring reference only.  
+> Do not render this catalog as a public website section.  
+> G3 collects household information without showing future technology options.
+
+如果本文档未来被构建成公开网页，必须排除此内部附录，或在构建流程中隐藏本节。运行时唯一数据源是 `data/technologies/technology_catalog.json`；下表只用于开发审计。
+
+| tech_id | EN display name | 中文名称 | 角色/服务 | 状态 | 安装 | 空间 | 必要基础设施 | 气候/环境规则 | 排名方式 | Capex | Comfort | Simple | 运行费模型 | 碳模型 |
+|---|---|---|---|---|---:|---|---|---|---|---:|---:|---:|---|---|
+| `ashp_ductless` | Ductless air-to-air heat pump | 无风管空气—空气热泵 | P/HC | active | 1 | W | electricity | cold performance check | standalone | 3 | 4 | 3 | heat pump COP | grid electricity |
+| `ashp_ducted` | Ducted air-source heat pump | 风管式空气源热泵 | P/HC | active | 2 | W | electricity | cold performance check | standalone | 4 | 5 | 3 | heat pump COP | grid electricity |
+| `ashp_air_to_water` | Air-to-water heat pump | 空气—水热泵 | P/H | active | 2 | W | electricity | cold performance check | standalone | 4 | 4 | 3 | heat pump COP | grid electricity |
+| `gshp` | Ground-source heat pump | 地源热泵 | P/HC | conditional | 3 | L | electricity, ground access | general | standalone | 5 | 5 | 2 | heat pump COP | grid electricity |
+| `water_source_hp` | Water-source heat pump | 水源热泵 | P/HC | phase2 | 3 | Y | electricity, usable water or shared loop | general | phase2 | 5 | 5 | 2 | heat pump COP | grid electricity |
+| `hybrid_hp_boiler` | Hybrid heat pump and boiler | 热泵与锅炉混合系统 | P/HC | conditional | 2 | W | electricity plus gas or delivered fuel | cold performance check | standalone | 4 | 5 | 2 | hybrid dispatch | hybrid weighted |
+| `gas_boiler` | Natural gas boiler | 天然气锅炉 | P/H | conditional | 2 | 0 | piped gas | air-quality and policy check | standalone | 3 | 4 | 4 | gas fuel | gas combustion |
+| `gas_furnace` | Natural gas furnace | 天然气暖风炉 | P/H | conditional | 2 | 0 | piped gas | air-quality and policy check | standalone | 3 | 4 | 4 | gas fuel | gas combustion |
+| `lpg_propane_heating` | LPG or propane heating | 液化气或丙烷取暖 | P/H | active | 2 | Y | delivered fuel | air-quality and policy check | standalone | 3 | 4 | 3 | delivered liquid fuel | liquid-fuel combustion |
+| `oil_heating` | Heating-oil system | 燃油取暖系统 | P/H | conditional | 2 | Y | delivered fuel | air-quality and policy check | standalone | 3 | 4 | 3 | delivered liquid fuel | liquid-fuel combustion |
+| `electric_boiler` | Electric boiler | 电锅炉 | P/H | conditional | 2 | 0 | electricity | general | standalone | 3 | 4 | 4 | grid resistance | grid electricity |
+| `electric_resistance` | Fixed electric resistance heating | 固定式电阻取暖 | P/H | active | 1 | 0 | electricity | general | standalone | 1 | 3 | 5 | grid resistance | grid electricity |
+| `biomass_pellet` | Biomass or pellet heating | 生物质或颗粒燃料取暖 | P/H | conditional | 2 | Y | solid-fuel supply | air-quality and policy check | standalone | 3 | 3 | 2 | solid fuel | biomass context-dependent |
+| `wood_stove` | Wood stove | 木柴炉 | P/H | conditional | 2 | Y | solid-fuel supply | air-quality and policy check | standalone | 2 | 2 | 2 | solid fuel | biomass context-dependent |
+| `district_heating` | District heating | 区域集中供热 | P/H | conditional | 1 | 0 | district-heating network | general | standalone | 2 | 5 | 5 | district tariff | district-energy factor |
+| `coal_legacy` | Existing coal or solid-fuel heating | 现有煤炭或固体燃料取暖 | B/H | baseline_only | 2 | Y | solid-fuel supply | air-quality and policy check | baseline_only | 1 | 2 | 2 | solid fuel | solid-fuel combustion |
+| `window_ac` | Window air conditioner | 窗式空调 | P/C | active | 1 | 0 | electricity | humidity control helpful | standalone | 1 | 3 | 4 | grid cooling efficiency | grid electricity |
+| `portable_ac` | Portable air conditioner | 移动空调 | P/C | active | 0 | 0 | electricity | humidity control helpful | standalone | 1 | 2 | 5 | grid cooling efficiency | grid electricity |
+| `split_ac_cooling` | Split or ductless air conditioner | 分体式或无风管空调 | P/C | active | 1 | W | electricity | humidity control helpful | standalone | 2 | 4 | 4 | grid cooling efficiency | grid electricity |
+| `central_ac` | Central air conditioning | 中央空调 | P/C | active | 2 | W | electricity | humidity control helpful | standalone | 4 | 5 | 3 | grid cooling efficiency | grid electricity |
+| `evaporative_direct` | Direct evaporative cooler | 直接蒸发式冷却器 | P/C | conditional | 1 | Y | electricity, water supply | dry climate required | standalone | 2 | 3 | 3 | low-energy support | grid electricity |
+| `evaporative_indirect` | Indirect or two-stage evaporative cooler | 间接或两级蒸发冷却 | P/C | phase2 | 2 | Y | electricity, water supply | dry climate preferred | phase2 | 3 | 4 | 2 | local quote | grid electricity |
+| `district_cooling` | District cooling | 区域集中供冷 | P/C | conditional | 1 | 0 | district-cooling network | general | standalone | 2 | 5 | 5 | district tariff | district-energy factor |
+| `radiant_cooling` | Radiant ceiling or wall cooling | 辐射式冷顶或冷墙 | P/C | phase2 | 3 | 0 | electricity or chilled-water source | dew-point control required | phase2 | 4 | 5 | 2 | local quote | local factor required |
+| `absorption_cooling` | Absorption cooling | 吸收式制冷 | P/C | phase2 | 3 | Y | usable heat source, water supply | general | phase2 | 5 | 4 | 1 | local quote | local factor required |
+| `insulation_air_sealing` | Insulation and air sealing | 保温与气密改造 | S/HC | active | 2 | 0 | none | general | bundle_only | 3 | 4 | 4 | passive zero direct energy | passive operational zero |
+| `external_shading` | External shading or shutters | 外遮阳或外卷帘 | S/C | active | 1 | W | none | general | bundle_only | 2 | 3 | 4 | passive zero direct energy | passive operational zero |
+| `cool_roof` | Cool or reflective roof | 冷屋顶或高反射屋顶 | S/C | active | 2 | Y | none | solar-resource check | bundle_only | 2 | 3 | 3 | passive zero direct energy | passive operational zero |
+| `fans` | Ceiling or portable fans | 吊扇或移动风扇 | S/C | active | 0 | 0 | electricity | general | bundle_only | 1 | 3 | 5 | low-energy support | grid electricity |
+| `whole_house_fan` | Whole-house fan | 全屋排风扇 | S/C | conditional | 1 | Y | electricity | diurnal-temperature check | bundle_only | 2 | 3 | 3 | low-energy support | grid electricity |
+| `night_ventilation` | Night ventilation | 夜间通风排热 | S/C | active | 0 | 0 | none | diurnal-temperature check | bundle_only | 1 | 2 | 4 | passive zero direct energy | passive operational zero |
+| `dehumidifier` | Standalone dehumidifier | 独立除湿机 | S/C | active | 0 | 0 | electricity | humidity control helpful | bundle_only | 1 | 3 | 4 | low-energy support | grid electricity |
+| `erv_hrv` | Energy or heat recovery ventilation | 能量或热回收新风 | S/HC | conditional | 2 | 0 | electricity | general | bundle_only | 3 | 3 | 3 | low-energy support | grid electricity |
+| `passive_solar` | Passive solar heating | 被动太阳能取暖 | S/H | conditional | 2 | 0 | none | solar-resource check | bundle_only | 2 | 2 | 4 | passive zero direct energy | passive operational zero |
+| `solar_thermal_heating` | Solar thermal heating support | 太阳能热利用辅助取暖 | S/H | conditional | 2 | Y | none | solar-resource check | bundle_only | 4 | 2 | 2 | passive zero direct energy | passive operational zero |
 
 ---
 

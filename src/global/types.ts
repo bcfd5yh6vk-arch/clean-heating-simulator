@@ -150,6 +150,9 @@ export interface TechnologyScreeningMeta {
 export interface TechnologyProfile extends TechnologyScreeningMeta {
   display_name_en: string;
   display_name_zh: string;
+  role?: "primary" | "supporting" | "baseline";
+  catalog_status?: "active" | "conditional" | "baseline_only" | "phase2";
+  ranking_mode?: "standalone" | "bundle_only" | "baseline_only" | "phase2";
   capex_level?: "low" | "medium" | "high";
   comfort_tier?: 1 | 2 | 3 | 4 | 5;
   simplicity_tier?: 1 | 2 | 3 | 4 | 5;
