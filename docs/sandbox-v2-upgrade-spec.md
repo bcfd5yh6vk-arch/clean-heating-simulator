@@ -390,32 +390,49 @@ ET, EF
 **Layout**
 - Step: `2 of 4 · Your home`
 - 两列表单 + 右侧「Help」折叠说明
+- **金钱字段行**：左侧金额输入，右侧紧挨 **货币选择器**（同一行）
+
+**金钱字段 UI（金额 + 货币）**
+
+```
+┌─────────────────────────────┬──────────────┐
+│  Annual household income    │              │
+│  [ 45000              ]     │ [ CNY ▾ ]    │
+└─────────────────────────────┴──────────────┘
+```
+
+- 凡涉及金钱的输入（`annual_income`、`heating_spend_annual`、`cooling_spend_annual`）均采用「金额 + 右侧货币」布局。
+- 全表单共用一个 `currency`（ISO 4217 代码）；任一金钱行改币种，其余金钱行同步更新。
+- 货币列表：**世界上全部流通法定货币**，以 **ISO 4217 active codes** 为数据源（约 150+ 种），含常用与少用币种；选项展示为 `CODE — Name`（如 `CNY — Chinese Yuan`、`USD — US Dollar`），支持按代码/名称搜索过滤。
+- 默认值：优先用 G1 推断国家的官方货币（来自 `region.currency` / country→currency 表）；若无法推断则默认 `USD`。用户可随时改。
+- 实现建议：内置完整 ISO 4217 静态表（或 `currency-codes` / CLDR 包），不要只列「热门货币」。
 
 **Fields（必填 / 选填）**
 
 | field_key | UI label (EN) | Type | Required | 说明 |
 |-----------|---------------|------|----------|------|
 | `household_size` | People in home | number | yes | 默认 4 |
-| `annual_income` | Annual household income (local currency) | number | yes | 整户收入；用它判断收入水平与负担率，不再单独收集 surplus |
+| `currency` | Currency（各金钱行右侧） | select: ISO 4217 全量 | yes | 整户共用；金额字段右侧选择；完整世界货币列表 |
+| `annual_income` | Annual household income | number + currency | yes | 整户收入；用它判断收入水平与负担率；金额单位 = `currency` |
 | `floor_area_m2` | Total floor area (m²) | number | yes | 整屋总建筑面积 |
 | `building_age` | Building age | select: `<1970`, `1970–1990`, `1990–2010`, `2010+` | no | 影响保温假设 |
 | `insulation_level` | Insulation | select: Poor / Average / Good | no | 默认 Average |
 | `needs_heating` | Need winter heating? | yes/no | yes | 若选 yes，再显示 heating spend |
-| `heating_spend_annual` | Last winter heating spend | number | if heating=yes | 本地货币；仅当 `needs_heating=yes` 时出现 |
+| `heating_spend_annual` | Last winter heating spend | number + currency | if heating=yes | 仅当 `needs_heating=yes`；单位 = 共用 `currency` |
 | `needs_cooling` | Need summer cooling? | yes/no | yes | |
-| `cooling_spend_annual` | Last summer cooling spend | number | if cooling=yes | 仅当 `needs_cooling=yes` 时出现 |
+| `cooling_spend_annual` | Last summer cooling spend | number + currency | if cooling=yes | 仅当 `needs_cooling=yes`；单位 = 共用 `currency` |
 
 **条件显示逻辑**
 
 ```text
 if needs_heating == yes:
-  show heating_spend_annual (required)
+  show heating_spend_annual (required) + shared currency selector
 else:
   hide heating_spend_annual
   treat heating demand as low / none for scoring
 
 if needs_cooling == yes:
-  show cooling_spend_annual (required)
+  show cooling_spend_annual (required) + shared currency selector
 else:
   hide cooling_spend_annual
 ```
@@ -425,8 +442,10 @@ else:
 | 元素 | 英文文案 |
 |------|----------|
 | Heading | **Tell us about this household** |
-| Hint | Use whole-house numbers. Approximate bills are OK. |
+| Hint | Use whole-house numbers. Approximate bills are OK. Pick your currency next to each money field. |
 | Income help | Count all earners in the home for one year—not per person unless we ask. Income is used to estimate affordability. |
+| Currency help | Choose the currency for income and energy bills. All world currencies are listed (ISO 4217). Search by code or name. |
+| Currency placeholder | Search currency… |
 | Floor area help | Enter the total floor area of the home in square meters. |
 | Button back | Back |
 | Button next | **Continue** |
