@@ -1447,6 +1447,9 @@ A: 会，但它是 **China Pilot**。主入口必须是 Climate Adaptation Energ
 **Q: 价格数据从哪来？**  
 A: MVP 用 `research/data/calibration_defaults.json` + 手工 `regions/*.json`；UI 标明 “approximate range”。
 
+**Q: G1 气候数据要做到多细？**  
+A: **中国、美国**：地图识别到省/州，气候用该省/州**首府点数据**代表。**其余国家**：只识别到国家，气候用点击点的 **Köppen 标准 profile**。不要做全省/州 WorldClim zonal mean。
+
 **Q: 现有 DeepSeek Key 能复用吗？**  
 A: 能，新增 `/api/explain` 即可。
 
