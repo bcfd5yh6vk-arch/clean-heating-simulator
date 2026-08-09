@@ -13,14 +13,39 @@ const MESSAGES = {
     validationError: "Please answer each question. Choose “Not sure” whenever you do not know.",
     backButton: "Back",
     findPathsButton: "Find possible paths",
-    g4Title: "Paths screened for your home",
-    checkingText: "Checking possible paths for your home…",
+    g4Title: "Paths ranked for your home",
+    g4Subtitle:
+      "We screened the available paths using your home information and local public data. Select a path to see exactly how its score was calculated.",
     currentSetup: "Your current setup",
-    g4Note:
-      "Candidate paths are produced by deterministic screening from internal data. The G3 page does not show or whitelist future technologies.",
+    rankedPaths: "Ranked paths",
+    excludedTitle: "Not feasible for your place",
+    explainSelectedPath: "Explain selected path",
+    getAnalysisReport: "Get the analysis report",
+    g4AiNote: "Scores come from your answers, local public data, and deterministic formulas. AI does not calculate or change these scores.",
     skipped: "No heating or cooling service is needed, so G3 can be skipped.",
     heating: "Current heating",
     cooling: "Current cooling",
+    selectedPath: "Selected path",
+    overallFitness: "Overall fitness",
+    affordability: "Affordability",
+    climateResilience: "Climate resilience",
+    environmentalImpact: "Environmental impact",
+    practicality: "Practicality",
+    keyEstimates: "Key estimates",
+    dataCoverage: "Data coverage",
+    warnings: "Warnings & local checks",
+    annualRunCost: "Annual run cost",
+    operatingBurden: "Operating burden",
+    upfrontCost: "Upfront cost",
+    annualEmissions: "Annual emissions",
+    unavailable: "Data unavailable",
+    selectedLoading: "Explaining this path using your score card…",
+    reportLoading: "Analyzing your household and ranked paths…",
+    aiError: "AI explanation is temporarily unavailable. Your numeric scores and ranking are unchanged.",
+    selectedHeading: "Path explanation",
+    selectedSubheading: "Why this path received its score for your home.",
+    reportHeading: "Household analysis report",
+    reportSubheading: "A concise view of your home, your leading paths, and the trade-offs that matter most.",
   },
   zh: {
     languageLabel: "语言",
@@ -36,144 +61,50 @@ const MESSAGES = {
     validationError: "请回答每个问题；不了解时可以选择“不确定”。",
     backButton: "返回",
     findPathsButton: "筛选可行路径",
-    g4Title: "已为这套住宅筛选路径",
-    checkingText: "正在筛选适合这套住宅的路径……",
+    g4Title: "适合你家的路径排序",
+    g4Subtitle: "系统结合你的住宅信息和当地公开数据筛选并计算这些路径。点击左侧任一路径，可查看具体评分依据。",
     currentSetup: "当前配置",
-    g4Note: "候选路径由后台内部数据经过确定性筛选生成。G3 页面不会展示或要求用户勾选未来候选技术。",
+    rankedPaths: "路径排序",
+    excludedTitle: "当前条件下不可行",
+    explainSelectedPath: "解释当前路径",
+    getAnalysisReport: "获取整体分析报告",
+    g4AiNote: "所有分数均由你的回答、当地公开数据和确定性公式计算；AI 不参与计算或修改分数。",
     skipped: "这套住宅不需要取暖或制冷，因此可以跳过 G3。",
     heating: "当前取暖",
     cooling: "当前制冷",
+    selectedPath: "当前选择路径",
+    overallFitness: "综合适配分",
+    affordability: "家庭可负担性",
+    climateResilience: "气候适应与可靠性",
+    environmentalImpact: "环境影响",
+    practicality: "实施适配性",
+    keyEstimates: "关键估算",
+    dataCoverage: "数据覆盖度",
+    warnings: "提醒与本地确认",
+    annualRunCost: "年运行费",
+    operatingBurden: "运行负担率",
+    upfrontCost: "前期投入",
+    annualEmissions: "年运行排放",
+    unavailable: "数据暂不可用",
+    selectedLoading: "正在根据你的评分结果解释这条路径……",
+    reportLoading: "正在分析你的家庭情况和候选路径……",
+    aiError: "AI 分析暂时不可用。你的数值评分和排序不会受到影响。",
+    selectedHeading: "路径解释",
+    selectedSubheading: "为什么这条路径会得到当前的适配分。",
+    reportHeading: "家庭整体分析报告",
+    reportSubheading: "综合查看你家的情况、主要候选路径，以及最值得关注的取舍。",
   },
 };
 
 const QUESTIONS = [
-  {
-    id: "housing_status",
-    group: "Your home",
-    type: "radio",
-    label: { en: "What best describes your housing situation?", zh: "以下哪项最符合你的居住情况？" },
-    options: [
-      ["owner", "I own the home", "我拥有这套住宅"],
-      ["renter_permission", "I rent and permanent changes are allowed", "我是租户，并且可以进行永久性改造"],
-      ["renter_no_permission", "I rent and permanent changes are not allowed", "我是租户，并且不能进行永久性改造"],
-      ["renter_not_sure", "I rent and I am not sure", "我是租户，但不确定是否允许改造"],
-      ["other", "Other", "其他"],
-    ],
-  },
-  {
-    id: "building_type",
-    group: "Your home",
-    type: "radio",
-    label: { en: "What type of home is this?", zh: "这是一套什么类型的住宅？" },
-    options: [
-      ["detached", "Detached house", "独栋住宅"],
-      ["semi_detached_or_row", "Semi-detached or row house", "联排、排屋或半独立住宅"],
-      ["apartment", "Apartment", "公寓"],
-      ["mobile_or_temporary", "Mobile or temporary home", "移动式或临时住宅"],
-      ["other", "Other", "其他"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "renovation_tolerance",
-    group: "Your home",
-    type: "radio",
-    label: { en: "How much installation work would you consider?", zh: "你可以接受多大程度的安装或改造？" },
-    options: [
-      ["none", "No permanent work", "不接受永久性施工"],
-      ["minor", "Minor work, such as a small opening or mounted unit", "可以接受少量施工"],
-      ["moderate", "Moderate work in part of the home", "可以接受住宅局部改造"],
-      ["major", "Major renovation is possible", "可以接受较大规模改造"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "outdoor_space",
-    group: "Your home",
-    type: "radio",
-    label: { en: "What outdoor space is available around the home?", zh: "住宅周围有多少可使用的室外空间？" },
-    options: [
-      ["none", "No private outdoor space", "没有私人室外空间"],
-      ["wall_or_balcony", "Exterior wall or balcony only", "只有外墙或阳台"],
-      ["small_yard_or_roof", "Small yard or usable roof", "有小型庭院或可用屋顶"],
-      ["large_private_land", "Large private land", "有较大的私人土地"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "current_energy_services",
-    group: "Current setup",
-    type: "checkbox",
-    label: { en: "Which energy services or bills does this home currently have?", zh: "这套住宅目前有哪些能源供应或能源账单？" },
-    exclusive: ["none", "not_sure"],
-    options: [
-      ["electricity", "Electricity", "电力"],
-      ["piped_gas", "Piped gas", "管道燃气"],
-      ["delivered_fuel", "Delivered fuel, such as LPG or heating oil", "配送燃料，例如液化气或燃油"],
-      ["solid_fuel", "Wood, coal, or other solid fuel", "木材、煤炭或其他固体燃料"],
-      ["district_energy", "District or shared building energy", "区域能源或建筑集中能源"],
-      ["none", "None", "没有"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "current_heating_methods",
-    group: "Current setup",
-    type: "checkbox",
-    when: "heating",
-    label: { en: "How does this home currently stay warm?", zh: "这套住宅目前主要使用哪些方式取暖？" },
-    help: {
-      en: "Select everything the home currently uses. This describes your starting point and does not limit the paths we compare.",
-      zh: "请选择这套住宅目前实际使用的所有取暖方式。这些信息只用于了解现状，不会限制后台比较的候选路径。",
-    },
-    exclusive: ["no_current_heating", "not_sure"],
-    options: [
-      ["heat_pump", "Heat pump", "热泵"],
-      ["electric_heating", "Electric heater or electric heating system", "电暖器或其他电取暖系统"],
-      ["piped_gas_heating", "Piped gas heating", "管道燃气取暖"],
-      ["delivered_fuel_heating", "LPG, propane, or heating oil", "液化气、丙烷或燃油取暖"],
-      ["solid_fuel_heating", "Wood, coal, pellets, or other solid fuel", "木材、煤炭、生物质颗粒或其他固体燃料"],
-      ["district_or_shared_heating", "District or shared building heating", "区域供热或建筑集中供热"],
-      ["passive_or_solar_heating", "Passive solar or solar heating support", "被动太阳能或太阳能辅助取暖"],
-      ["no_current_heating", "No current heating system", "目前没有取暖系统"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "current_cooling_methods",
-    group: "Current setup",
-    type: "checkbox",
-    when: "cooling",
-    label: { en: "How does this home currently stay cool?", zh: "这套住宅目前主要使用哪些方式降温？" },
-    help: {
-      en: "Select everything the home currently uses. This describes your starting point and does not limit the paths we compare.",
-      zh: "请选择这套住宅目前实际使用的所有降温方式。这些信息只用于了解现状，不会限制后台比较的候选路径。",
-    },
-    exclusive: ["no_current_cooling", "not_sure"],
-    options: [
-      ["room_air_conditioning", "Room air conditioner", "房间空调，例如窗式、移动式或分体式空调"],
-      ["central_air_conditioning", "Central air conditioning", "中央空调"],
-      ["heat_pump_cooling", "Heat pump used for cooling", "使用热泵制冷"],
-      ["evaporative_or_water_cooling", "Evaporative or water-based cooler", "蒸发式或水冷降温设备"],
-      ["fans", "Ceiling or portable fans", "吊扇或移动风扇"],
-      ["natural_or_passive_cooling", "Natural ventilation, shading, or other passive cooling", "自然通风、遮阳或其他被动降温"],
-      ["district_or_shared_cooling", "District or shared building cooling", "区域供冷或建筑集中供冷"],
-      ["no_current_cooling", "No current cooling system", "目前没有制冷系统"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
-  {
-    id: "upfront_cost_preference",
-    group: "Practical preferences",
-    type: "radio",
-    label: { en: "How would you approach upfront cost?", zh: "你对前期投入的接受程度如何？" },
-    options: [
-      ["minimum_upfront", "Keep upfront cost as low as possible", "尽量降低前期投入"],
-      ["moderate_investment", "A moderate investment is possible", "可以接受中等投入"],
-      ["higher_if_saves_later", "I could invest more if long-term bills are lower", "如果长期账单更低，可以接受较高投入"],
-      ["not_sure", "Not sure", "不确定"],
-    ],
-  },
+  { id: "housing_status", type: "radio", label: { en: "What best describes your housing situation?", zh: "以下哪项最符合你的居住情况？" }, options: [["owner", "I own the home", "我拥有这套住宅"], ["renter_permission", "I rent and permanent changes are allowed", "我是租户，并且可以进行永久性改造"], ["renter_no_permission", "I rent and permanent changes are not allowed", "我是租户，并且不能进行永久性改造"], ["renter_not_sure", "I rent and I am not sure", "我是租户，但不确定是否允许改造"], ["other", "Other", "其他"]] },
+  { id: "building_type", type: "radio", label: { en: "What type of home is this?", zh: "这是一套什么类型的住宅？" }, options: [["detached", "Detached house", "独栋住宅"], ["semi_detached_or_row", "Semi-detached or row house", "联排、排屋或半独立住宅"], ["apartment", "Apartment", "公寓"], ["mobile_or_temporary", "Mobile or temporary home", "移动式或临时住宅"], ["other", "Other", "其他"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "renovation_tolerance", type: "radio", label: { en: "How much installation work would you consider?", zh: "你可以接受多大程度的安装或改造？" }, options: [["none", "No permanent work", "不接受永久性施工"], ["minor", "Minor work, such as a small opening or mounted unit", "可以接受少量施工"], ["moderate", "Moderate work in part of the home", "可以接受住宅局部改造"], ["major", "Major renovation is possible", "可以接受较大规模改造"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "outdoor_space", type: "radio", label: { en: "What outdoor space is available around the home?", zh: "住宅周围有多少可使用的室外空间？" }, options: [["none", "No private outdoor space", "没有私人室外空间"], ["wall_or_balcony", "Exterior wall or balcony only", "只有外墙或阳台"], ["small_yard_or_roof", "Small yard or usable roof", "有小型庭院或可用屋顶"], ["large_private_land", "Large private land", "有较大的私人土地"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "current_energy_services", type: "checkbox", exclusive: ["none", "not_sure"], label: { en: "Which energy services or bills does this home currently have?", zh: "这套住宅目前有哪些能源供应或能源账单？" }, options: [["electricity", "Electricity", "电力"], ["piped_gas", "Piped gas", "管道燃气"], ["delivered_fuel", "Delivered fuel, such as LPG or heating oil", "配送燃料，例如液化气或燃油"], ["solid_fuel", "Wood, coal, or other solid fuel", "木材、煤炭或其他固体燃料"], ["district_energy", "District or shared building energy", "区域能源或建筑集中能源"], ["none", "None", "没有"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "current_heating_methods", type: "checkbox", when: "heating", exclusive: ["no_current_heating", "not_sure"], label: { en: "How does this home currently stay warm?", zh: "这套住宅目前主要使用哪些方式取暖？" }, help: { en: "This describes your starting point and does not limit the paths we compare.", zh: "这些信息只用于了解现状，不会限制后台比较的候选路径。" }, options: [["heat_pump", "Heat pump", "热泵"], ["electric_heating", "Electric heater or electric heating system", "电暖器或其他电取暖系统"], ["piped_gas_heating", "Piped gas heating", "管道燃气取暖"], ["delivered_fuel_heating", "LPG, propane, or heating oil", "液化气、丙烷或燃油取暖"], ["solid_fuel_heating", "Wood, coal, pellets, or other solid fuel", "木材、煤炭、生物质颗粒或其他固体燃料"], ["district_or_shared_heating", "District or shared building heating", "区域供热或建筑集中供热"], ["passive_or_solar_heating", "Passive solar or solar heating support", "被动太阳能或太阳能辅助取暖"], ["no_current_heating", "No current heating system", "目前没有取暖系统"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "current_cooling_methods", type: "checkbox", when: "cooling", exclusive: ["no_current_cooling", "not_sure"], label: { en: "How does this home currently stay cool?", zh: "这套住宅目前主要使用哪些方式降温？" }, help: { en: "This describes your starting point and does not limit the paths we compare.", zh: "这些信息只用于了解现状，不会限制后台比较的候选路径。" }, options: [["room_air_conditioning", "Room air conditioner", "房间空调，例如窗式、移动式或分体式空调"], ["central_air_conditioning", "Central air conditioning", "中央空调"], ["heat_pump_cooling", "Heat pump used for cooling", "使用热泵制冷"], ["evaporative_or_water_cooling", "Evaporative or water-based cooler", "蒸发式或水冷降温设备"], ["fans", "Ceiling or portable fans", "吊扇或移动风扇"], ["natural_or_passive_cooling", "Natural ventilation, shading, or other passive cooling", "自然通风、遮阳或其他被动降温"], ["district_or_shared_cooling", "District or shared building cooling", "区域供冷或建筑集中供冷"], ["no_current_cooling", "No current cooling system", "目前没有制冷系统"], ["not_sure", "Not sure", "不确定"]] },
+  { id: "upfront_cost_preference", type: "radio", label: { en: "How would you approach upfront cost?", zh: "你对前期投入的接受程度如何？" }, options: [["minimum_upfront", "Keep upfront cost as low as possible", "尽量降低前期投入"], ["moderate_investment", "A moderate investment is possible", "可以接受中等投入"], ["higher_if_saves_later", "I could invest more if long-term bills are lower", "如果长期账单更低，可以接受较高投入"], ["not_sure", "Not sure", "不确定"]] },
 ];
 
 const form = document.getElementById("feasibilityForm");
@@ -183,8 +114,25 @@ const needsCooling = document.getElementById("needsCooling");
 const validationError = document.getElementById("validationError");
 const g4Panel = document.getElementById("g4Panel");
 const baselineSummary = document.getElementById("baselineSummary");
+const rankedPathsList = document.getElementById("rankedPathsList");
+const selectedPathDetail = document.getElementById("selectedPathDetail");
+const excludedList = document.getElementById("excludedList");
+const explainButton = document.getElementById("explainSelectedPath");
+const reportButton = document.getElementById("getAnalysisReport");
+const aiPanel = document.getElementById("aiPanel");
+const aiModeLabel = document.getElementById("aiModeLabel");
+const aiHeading = document.getElementById("aiHeading");
+const aiSubheading = document.getElementById("aiSubheading");
+const aiStatus = document.getElementById("aiStatus");
+const aiContent = document.getElementById("aiContent");
 
 let locale = localStorage.getItem("locale") || (navigator.language.startsWith("zh") ? "zh" : "en");
+let rankedPaths = [];
+let excludedPaths = [];
+let selectedPathId = null;
+let aiInFlight = null;
+let lastBaselineSummary = {};
+let lastHomeFeasibilitySummary = {};
 
 function t(key) {
   return MESSAGES[locale][key] || MESSAGES.en[key] || key;
@@ -227,9 +175,7 @@ function renderQuestion(question) {
     input.type = question.type;
     input.name = question.id;
     input.value = value;
-    if (question.type === "checkbox") {
-      input.addEventListener("change", () => applyExclusion(question));
-    }
+    if (question.type === "checkbox") input.addEventListener("change", () => applyExclusion(question));
     label.append(input, document.createTextNode(locale === "zh" ? zh : en));
     cards.appendChild(label);
   });
@@ -241,11 +187,7 @@ function applyExclusion(question) {
   const exclusive = question.exclusive || [];
   const checked = [...form.querySelectorAll(`[name="${question.id}"]:checked`)];
   const exclusiveChecked = checked.find((item) => exclusive.includes(item.value));
-  if (exclusiveChecked) {
-    checked.forEach((item) => {
-      if (item !== exclusiveChecked) item.checked = false;
-    });
-  }
+  if (exclusiveChecked) checked.forEach((item) => { if (item !== exclusiveChecked) item.checked = false; });
 }
 
 function renderForm() {
@@ -266,30 +208,250 @@ function collectValues(question) {
 }
 
 function validate() {
-  const questions = visibleQuestions();
-  return questions.every((question) => {
+  return visibleQuestions().every((question) => {
     const value = collectValues(question);
     return Array.isArray(value) ? value.length > 0 : Boolean(value);
   });
 }
 
+function labelFor(question, value) {
+  const option = question.options.find(([optionValue]) => optionValue === value);
+  return option ? option[locale === "zh" ? 2 : 1] : value;
+}
+
 function summarizeBaseline() {
   const heatingQuestion = QUESTIONS.find((question) => question.id === "current_heating_methods");
   const coolingQuestion = QUESTIONS.find((question) => question.id === "current_cooling_methods");
-  const labelFor = (question, value) => {
-    const option = question.options.find(([optionValue]) => optionValue === value);
-    return option ? option[locale === "zh" ? 2 : 1] : value;
-  };
   const heating = needsHeating.checked
     ? [...form.querySelectorAll('[name="current_heating_methods"]:checked')].map((item) => labelFor(heatingQuestion, item.value))
     : [];
   const cooling = needsCooling.checked
     ? [...form.querySelectorAll('[name="current_cooling_methods"]:checked')].map((item) => labelFor(coolingQuestion, item.value))
     : [];
+  lastBaselineSummary = { heating, cooling };
   baselineSummary.textContent = [
     needsHeating.checked ? `${t("heating")}: ${heating.join(" + ")}` : "",
     needsCooling.checked ? `${t("cooling")}: ${cooling.join(" + ")}` : "",
   ].filter(Boolean).join(" · ");
+}
+
+function collectHomeFeasibilitySummary() {
+  const result = {};
+  visibleQuestions().forEach((question) => {
+    result[question.id] = collectValues(question);
+  });
+  return result;
+}
+
+function makeRankedPath(path, rank, fitness, dimensions, estimates, warnings, techCards) {
+  return {
+    path_id: path.id,
+    path_name: path.name[locale],
+    rank,
+    fitness,
+    dimensions,
+    dimension_details: {
+      affordability: {
+        annual_run_cost: estimates.annual_run_cost,
+        operating_burden_pct: estimates.operating_burden_pct,
+        operating_burden_score: dimensions.affordability,
+        installed_cost: estimates.upfront_cost || null,
+        upfront_ratio: estimates.upfront_ratio || null,
+        complete: Boolean(estimates.upfront_cost),
+      },
+      climate_resilience: { hdd18: 3400, cdd24: 420, heating_weight: needsHeating.checked ? 0.78 : 0, cooling_weight: needsCooling.checked ? 0.22 : 0, complete: true },
+      environment: { path_emissions_kgco2e: estimates.annual_emissions_kgco2e, reference_type: "regional_equivalent_service", complete: true },
+      practicality: { renovation_score: dimensions.practicality, outdoor_space_score: dimensions.practicality - 2, infrastructure_score: dimensions.practicality + 3, permission_score: 100, complete: true },
+    },
+    score_coverage: estimates.upfront_cost ? 1 : 0.8,
+    estimates,
+    warnings,
+    tech_cards: techCards,
+  };
+}
+
+function buildDemoRankedPaths() {
+  const prefersLowUpfront = lastHomeFeasibilitySummary.upfront_cost_preference === "minimum_upfront";
+  const outdoorNone = lastHomeFeasibilitySummary.outdoor_space === "none";
+  const renterNoPermission = lastHomeFeasibilitySummary.housing_status === "renter_no_permission";
+  const rows = [
+    makeRankedPath(
+      { id: "ashp_ductless", name: { en: "Ductless heat pump", zh: "无风管热泵" } },
+      1,
+      prefersLowUpfront ? 78.6 : 83.3,
+      { affordability: prefersLowUpfront ? 70 : 78, climate_resilience: 91, environment: 88, practicality: outdoorNone ? 62 : 70 },
+      { annual_run_cost: 1240, operating_burden_pct: 3.1, upfront_cost: prefersLowUpfront ? null : 6500, upfront_ratio: prefersLowUpfront ? null : 0.163, annual_emissions_kgco2e: 2100 },
+      prefersLowUpfront ? ["Upfront-cost data unavailable for this location."] : ["Confirm installer access and local permit requirements."],
+      [{ tech_id: "ashp_ductless", display_name: "Ductless air-to-air heat pump", services: ["heating", "cooling"], note: "Eligible with local installation checks." }],
+    ),
+    makeRankedPath(
+      { id: "gas_plus_split_ac", name: { en: "Gas heating + split AC", zh: "燃气取暖 + 分体空调" } },
+      2,
+      74.1,
+      { affordability: 76, climate_resilience: 77, environment: 58, practicality: 85 },
+      { annual_run_cost: 1510, operating_burden_pct: 3.8, upfront_cost: 4200, upfront_ratio: 0.105, annual_emissions_kgco2e: 3600 },
+      ["Gas availability must be confirmed for the home."],
+      [{ tech_id: "gas_boiler", display_name: "Natural gas boiler", services: ["heating"], note: "Requires piped gas." }, { tech_id: "split_ac_cooling", display_name: "Split air conditioner", services: ["cooling"], note: "Requires electricity and outdoor unit space." }],
+    ),
+    makeRankedPath(
+      { id: "district_plus_ac", name: { en: "District energy + AC", zh: "区域能源 + 空调" } },
+      3,
+      71.8,
+      { affordability: 73, climate_resilience: 82, environment: 69, practicality: 58 },
+      { annual_run_cost: 1390, operating_burden_pct: 3.5, upfront_cost: null, annual_emissions_kgco2e: 2800 },
+      ["District energy service area needs local confirmation."],
+      [{ tech_id: "district_heating", display_name: "District heating", services: ["heating"], note: "Requires a district network." }],
+    ),
+  ];
+  return renterNoPermission ? rows.filter((row) => row.path_id !== "district_plus_ac") : rows;
+}
+
+function buildExcludedPaths() {
+  const renterNoPermission = lastHomeFeasibilitySummary.housing_status === "renter_no_permission";
+  return [
+    renterNoPermission
+      ? { path_name: locale === "zh" ? "地源热泵" : "Ground-source heat pump", reason: locale === "zh" ? "需要较大永久施工，但当前住房权限不允许。" : "Requires major permanent work, but current housing permission does not allow it." }
+      : { path_name: locale === "zh" ? "地源热泵" : "Ground-source heat pump", reason: locale === "zh" ? "需要较大的私人土地，当前室外空间可能不足。" : "Needs large private land; current outdoor space may be insufficient." },
+  ];
+}
+
+function scoreLine(label, score) {
+  const safeScore = Math.max(0, Math.min(100, Number(score) || 0));
+  return `<div class="score-line"><strong>${label}</strong><div class="bar"><span style="width:${safeScore}%"></span></div><span>${safeScore}/100</span></div>`;
+}
+
+function money(value) {
+  return value == null ? t("unavailable") : `$${Number(value).toLocaleString(locale === "zh" ? "zh-CN" : "en-US")}`;
+}
+
+function renderRankedPaths() {
+  rankedPathsList.innerHTML = "";
+  rankedPaths.forEach((path) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "path-row";
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(path.path_id === selectedPathId));
+    button.dataset.pathId = path.path_id;
+    button.innerHTML = `<span class="rank">#${path.rank}</span><span>${path.path_name}</span><span class="fitness">${path.fitness}</span>`;
+    button.addEventListener("click", () => {
+      selectedPathId = window.G4AI.selectRankedPath(rankedPaths, path.path_id);
+      renderG4();
+    });
+    rankedPathsList.appendChild(button);
+  });
+}
+
+function renderSelectedPath() {
+  const selected = window.G4AI.getSelectedPath(rankedPaths, selectedPathId);
+  if (!selected) {
+    selectedPathDetail.innerHTML = "";
+    return;
+  }
+  selectedPathDetail.innerHTML = `
+    <h3>${t("selectedPath")}</h3>
+    <h2>${selected.path_name} <span class="fitness">${selected.fitness}</span></h2>
+    <p><strong>${t("overallFitness")}:</strong> ${selected.fitness}/100</p>
+    <div class="score-bars">
+      ${scoreLine(t("affordability"), selected.dimensions.affordability)}
+      ${scoreLine(t("climateResilience"), selected.dimensions.climate_resilience)}
+      ${scoreLine(t("environmentalImpact"), selected.dimensions.environment)}
+      ${scoreLine(t("practicality"), selected.dimensions.practicality)}
+    </div>
+    <h3>${t("keyEstimates")}</h3>
+    <div class="detail-grid">
+      <div class="detail-card"><strong>${t("annualRunCost")}</strong>${money(selected.estimates.annual_run_cost)} / yr</div>
+      <div class="detail-card"><strong>${t("operatingBurden")}</strong>${selected.estimates.operating_burden_pct ?? "—"}%</div>
+      <div class="detail-card"><strong>${t("upfrontCost")}</strong>${money(selected.estimates.upfront_cost)}</div>
+      <div class="detail-card"><strong>${t("annualEmissions")}</strong>${selected.estimates.annual_emissions_kgco2e ?? "—"} kg CO₂e</div>
+      <div class="detail-card"><strong>${t("dataCoverage")}</strong>${Math.round((selected.score_coverage || 0) * 100)}%</div>
+    </div>
+    <h3>${t("warnings")}</h3>
+    <ul>${(selected.warnings || []).map((warning) => `<li>${escapeHtml(warning)}</li>`).join("")}</ul>
+  `;
+}
+
+function renderExcluded() {
+  excludedList.innerHTML = excludedPaths.map((item) => `<li><strong>${escapeHtml(item.path_name)}:</strong> ${escapeHtml(item.reason)}</li>`).join("");
+}
+
+function renderG4() {
+  renderRankedPaths();
+  renderSelectedPath();
+  renderExcluded();
+  explainButton.disabled = !window.G4AI.getSelectedPath(rankedPaths, selectedPathId) || aiInFlight === window.G4AI.MODES.selectedPath;
+  reportButton.disabled = rankedPaths.length === 0 || aiInFlight === window.G4AI.MODES.householdReport;
+}
+
+function buildSharedAiInput() {
+  return {
+    locale,
+    rankedPaths,
+    selectedPathId,
+    excludedPaths,
+    regionSummary: { country: "United States", admin1: "Illinois", climate_zone: "Dfa" },
+    climateSummary: { hdd18: 3400, cdd24: 420, data_resolution: "admin1_capital" },
+    householdSummary: { annual_income: 56000, currency: "USD", floor_area_m2: 120, needs_heating: needsHeating.checked, needs_cooling: needsCooling.checked, heating_spend_annual: 1200, cooling_spend_annual: 450 },
+    homeFeasibilitySummary: lastHomeFeasibilitySummary,
+    baselineSummary: lastBaselineSummary,
+    relevantLocalPublicData: [{ field: "electricity_price_residential", value: "available in score card summary", geographic_level: "admin1" }],
+  };
+}
+
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
+}
+
+function renderMarkdown(markdown) {
+  const escaped = escapeHtml(markdown);
+  return escaped
+    .replace(/^## (.*)$/gm, "<h2>$1</h2>")
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+    .replace(/^- (.*)$/gm, "<li>$1</li>")
+    .replace(/(<li>.*<\/li>)/gs, "<ul>$1</ul>")
+    .replace(/\n{2,}/g, "</p><p>")
+    .replace(/^/, "<p>")
+    .replace(/$/, "</p>");
+}
+
+function showAiPanel(mode) {
+  aiPanel.classList.remove("hidden");
+  aiModeLabel.textContent = mode === window.G4AI.MODES.selectedPath ? "G5 · Selected path" : "G5 · Household report";
+  aiHeading.textContent = mode === window.G4AI.MODES.selectedPath ? t("selectedHeading") : t("reportHeading");
+  aiSubheading.textContent = mode === window.G4AI.MODES.selectedPath ? t("selectedSubheading") : t("reportSubheading");
+  aiContent.innerHTML = "";
+  aiStatus.textContent = mode === window.G4AI.MODES.selectedPath ? t("selectedLoading") : t("reportLoading");
+  aiPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function requestAi(mode) {
+  const request = mode === window.G4AI.MODES.selectedPath
+    ? window.G4AI.buildSelectedPathExplanationRequest(buildSharedAiInput())
+    : window.G4AI.buildHouseholdAnalysisReportRequest(buildSharedAiInput());
+  if (!request || aiInFlight) return;
+
+  aiInFlight = mode;
+  renderG4();
+  showAiPanel(mode);
+
+  try {
+    const response = await fetch("/api/explain", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(request),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error || "AI request failed.");
+    aiStatus.textContent = "";
+    aiContent.innerHTML = renderMarkdown(data.analysis);
+  } catch (error) {
+    aiStatus.textContent = t("aiError");
+    aiStatus.className = "error";
+    aiContent.textContent = error instanceof Error ? error.message : String(error);
+  } finally {
+    aiInFlight = null;
+    renderG4();
+  }
 }
 
 function submitG3() {
@@ -298,8 +460,13 @@ function submitG3() {
     return;
   }
   validationError.classList.add("hidden");
-  g4Panel.classList.remove("hidden");
   summarizeBaseline();
+  lastHomeFeasibilitySummary = collectHomeFeasibilitySummary();
+  rankedPaths = buildDemoRankedPaths();
+  excludedPaths = buildExcludedPaths();
+  selectedPathId = window.G4AI.getInitialSelectedPathId(rankedPaths);
+  g4Panel.classList.remove("hidden");
+  renderG4();
   g4Panel.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -307,6 +474,10 @@ function rerender() {
   renderI18n();
   renderForm();
   validationError.classList.add("hidden");
+  if (!g4Panel.classList.contains("hidden")) {
+    summarizeBaseline();
+    renderG4();
+  }
 }
 
 localeSelect.addEventListener("change", () => {
@@ -317,9 +488,12 @@ localeSelect.addEventListener("change", () => {
   history.replaceState(null, "", url);
   rerender();
 });
+
 needsHeating.addEventListener("change", rerender);
 needsCooling.addEventListener("change", rerender);
 document.getElementById("submitG3").addEventListener("click", submitG3);
+explainButton.addEventListener("click", () => requestAi(window.G4AI.MODES.selectedPath));
+reportButton.addEventListener("click", () => requestAi(window.G4AI.MODES.householdReport));
 
 const urlLocale = new URL(window.location.href).searchParams.get("lang");
 if (urlLocale === "en" || urlLocale === "zh") locale = urlLocale;

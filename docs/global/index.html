@@ -14,6 +14,7 @@
         --accent-soft: #dfeee5;
         --border: #cfd8d1;
         --warn: #8a651b;
+        --danger: #8f2d2d;
         --radius: 18px;
       }
       * { box-sizing: border-box; }
@@ -23,18 +24,9 @@
         color: var(--text);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
-      main {
-        max-width: 1040px;
-        margin: 0 auto;
-        padding: 28px 16px 56px;
-      }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        gap: 16px;
-        align-items: center;
-        margin-bottom: 28px;
-      }
+      main { max-width: 1120px; margin: 0 auto; padding: 28px 16px 56px; }
+      .topbar, .groups, .cta-row { display: flex; justify-content: space-between; gap: 16px; align-items: center; }
+      .topbar { margin-bottom: 28px; }
       .brand { font-weight: 800; color: var(--accent); }
       .lang { display: flex; align-items: center; gap: 8px; }
       select, button {
@@ -46,17 +38,9 @@
         padding: 0 14px;
         font: inherit;
       }
-      button {
-        background: var(--accent);
-        color: #fff;
-        border-color: var(--accent);
-        cursor: pointer;
-        font-weight: 700;
-      }
-      button.secondary {
-        background: var(--card);
-        color: var(--accent);
-      }
+      button { background: var(--accent); color: #fff; border-color: var(--accent); cursor: pointer; font-weight: 700; }
+      button.secondary { background: var(--card); color: var(--accent); }
+      button:disabled { cursor: not-allowed; opacity: 0.55; }
       .panel {
         background: var(--card);
         border: 1px solid var(--border);
@@ -65,28 +49,13 @@
         margin-bottom: 18px;
         box-shadow: 0 12px 30px rgba(47, 107, 79, 0.08);
       }
-      .step {
-        color: var(--accent);
-        font-size: 0.9rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
+      .step { color: var(--accent); font-size: 0.9rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
       h1, h2, h3 { margin: 8px 0 10px; line-height: 1.15; }
       p { color: var(--muted); line-height: 1.65; }
-      fieldset {
-        border: 1px solid var(--border);
-        border-radius: 16px;
-        padding: 16px;
-        margin: 16px 0;
-      }
+      fieldset { border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin: 16px 0; }
       legend { padding: 0 8px; font-weight: 800; }
       .help { margin: 4px 0 12px; font-size: 0.94rem; }
-      .cards {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-        gap: 10px;
-      }
+      .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
       .card-option {
         display: flex;
         align-items: flex-start;
@@ -97,26 +66,44 @@
         padding: 12px;
         background: #fbfaf7;
       }
-      .card-option:focus-within {
-        outline: 3px solid rgba(47, 107, 79, 0.24);
-      }
-      .groups {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 12px;
-      }
-      .summary {
-        background: var(--accent-soft);
-        border-color: #b8d9c5;
-      }
-      .warning {
-        color: var(--warn);
-        font-weight: 700;
-      }
+      .card-option:focus-within { outline: 3px solid rgba(47, 107, 79, 0.24); }
+      .summary { background: var(--accent-soft); border-color: #b8d9c5; }
+      .warning { color: var(--warn); font-weight: 700; }
+      .error { color: var(--danger); font-weight: 700; }
       .hidden { display: none; }
-      @media (max-width: 420px) {
-        .topbar { align-items: flex-start; flex-direction: column; }
+      .g4-grid { display: grid; grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.3fr); gap: 16px; align-items: start; }
+      .path-list { display: grid; gap: 10px; }
+      .path-row {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 10px;
+        align-items: center;
+        text-align: left;
+        border-radius: 14px;
+        border: 2px solid var(--border);
+        background: #fbfaf7;
+        color: var(--text);
+        padding: 12px;
+      }
+      .path-row[aria-selected="true"] { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(47, 107, 79, 0.18); }
+      .rank { font-weight: 900; color: var(--accent); }
+      .fitness { font-weight: 900; }
+      .score-bars { display: grid; gap: 10px; margin: 16px 0; }
+      .score-line { display: grid; grid-template-columns: minmax(140px, 1fr) 2fr auto; gap: 10px; align-items: center; }
+      .bar { height: 10px; border-radius: 999px; background: #e8ece8; overflow: hidden; }
+      .bar span { display: block; height: 100%; background: var(--accent); }
+      .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+      .detail-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: #fbfaf7; }
+      .detail-card strong { display: block; }
+      .ai-output { background: #fbfaf7; border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 12px; }
+      .ai-output h2 { font-size: 1.1rem; margin-top: 14px; }
+      .excluded-list { margin: 16px 0 0; padding-left: 18px; color: var(--muted); }
+      @media (max-width: 760px) {
+        .topbar, .groups, .cta-row { align-items: flex-start; flex-direction: column; }
         .panel { padding: 16px; }
+        .g4-grid { grid-template-columns: 1fr; }
+        .score-line { grid-template-columns: 1fr; }
       }
     </style>
   </head>
@@ -152,13 +139,9 @@
       <section class="panel" aria-labelledby="g3Title">
         <div class="step" data-i18n="g3Step">3 of 4 · About your home</div>
         <h2 id="g3Title" data-i18n="g3Title">A few practical questions about your home</h2>
-        <p data-i18n="g3Intro">
-          Answer what you know. “Not sure” is always fine. We will use your answers, your current heating and cooling setup, local climate data, and regional information to screen possible paths.
-        </p>
+        <p data-i18n="g3Intro"></p>
         <form id="feasibilityForm"></form>
-        <p id="validationError" class="warning hidden" role="alert" data-i18n="validationError">
-          Please answer each question. Choose “Not sure” whenever you do not know.
-        </p>
+        <p id="validationError" class="warning hidden" role="alert" data-i18n="validationError"></p>
         <div class="groups">
           <button type="button" class="secondary" data-i18n="backButton">Back</button>
           <button id="submitG3" type="button" data-i18n="findPathsButton">Find possible paths</button>
@@ -167,15 +150,34 @@
 
       <section id="g4Panel" class="panel summary hidden" aria-live="polite">
         <div class="step">G4 · Results</div>
-        <h2 data-i18n="g4Title">Paths screened for your home</h2>
-        <p id="checkingText" data-i18n="checkingText">Checking possible paths for your home…</p>
+        <h2 data-i18n="g4Title">Paths ranked for your home</h2>
+        <p data-i18n="g4Subtitle"></p>
         <h3 data-i18n="currentSetup">Your current setup</h3>
         <p id="baselineSummary"></p>
-        <p data-i18n="g4Note">
-          Candidate paths are produced by deterministic screening from the full technology catalog. The G3 page does not show or whitelist future technologies.
-        </p>
+        <div class="g4-grid">
+          <div>
+            <h3 data-i18n="rankedPaths">Ranked paths</h3>
+            <div id="rankedPathsList" class="path-list" role="listbox" aria-label="Ranked paths"></div>
+          </div>
+          <article id="selectedPathDetail" aria-live="polite"></article>
+        </div>
+        <h3 data-i18n="excludedTitle">Not feasible for your place</h3>
+        <ul id="excludedList" class="excluded-list"></ul>
+        <div class="cta-row">
+          <button id="explainSelectedPath" type="button" data-i18n="explainSelectedPath">Explain selected path</button>
+          <button id="getAnalysisReport" type="button" class="secondary" data-i18n="getAnalysisReport">Get the analysis report</button>
+        </div>
+        <p class="help" data-i18n="g4AiNote"></p>
+        <div id="aiPanel" class="ai-output hidden">
+          <div class="step" id="aiModeLabel"></div>
+          <h3 id="aiHeading"></h3>
+          <p id="aiSubheading"></p>
+          <p id="aiStatus" class="warning"></p>
+          <div id="aiContent"></div>
+        </div>
       </section>
     </main>
+    <script src="./g4-ai-state.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

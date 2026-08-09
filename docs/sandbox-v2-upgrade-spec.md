@@ -725,7 +725,7 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 │ Not feasible for your place                                               │
 │ excluded paths + readable reasons                                         │
 ├────────────────────────────────────────────────────────────────────────────┤
-│ [ Explain selected path ]   [ Try preview with selected path ]             │
+│ [ Explain selected path ]          [ Get the analysis report ]             │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -813,7 +813,7 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 | CTA | 行为 |
 |-----|------|
 | **Explain selected path** | 把 selected path 的 fitness、四维分数、`dimension_details`、warnings、相关 tech cards 送给 G5；默认未点击时 = #1 |
-| **Try preview with selected path** | 预览/摘要默认用 selected path，不是永远锁死 #1 |
+| **Get the analysis report** | 分析整个 household + full ranked results；当前 selectedPath 只作 UI context，不改变报告范围 |
 | Adjust inputs | 返回修改 G2/G3 |
 
 #### Mobile
@@ -838,46 +838,54 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 | Helper | Scores come from your answers, local public data, and deterministic formulas. AI does not calculate or change these scores. | 所有分数均由你的回答、当地公开数据和确定性公式计算；AI 不参与计算或修改分数。 |
 | Excluded | Not feasible for your place | 当前条件下不可行 |
 | CTA AI | **Explain selected path** | **解释当前路径** |
-| CTA preview | **Try preview with selected path** | **用当前路径预览** |
+| CTA report | **Get the analysis report** | **获取整体分析报告** |
 | Empty | No path passed hard checks. Try adjusting household details or mark unknown answers as Not sure. | 没有路径通过硬筛选。请调整家庭信息，或对不确定项选择「不确定」。 |
 
 ---
 
 ### G5 · AI explanation
 
-**Layout**
-- 左侧：只读「Score card」JSON 摘要（用户可见的简化版）
-- 右侧：流式 Markdown 回答
-- 底部：Suggested questions chips
+G5 支持两个显式 mode，不得通过是否存在 `selectedPath` 来猜测任务：
 
-**Copy**
-
-| 元素 | 英文文案 |
-|------|----------|
-| Heading | **Plain-language guide** |
-| Subheading | AI explains your scores using the same numbers on the left. It does not change your ranking. |
-| Loading | Reading your home profile and path scores… |
-| Error | AI explanation is unavailable. Your numeric scores are still valid. |
-| Chips | Why did this path score this fitness? · How was affordability calculated? · Would this work in my climate? · What should I ask a local installer? |
-
-**AI 输出结构（必须强制，类似现有 `/api/chat` 三段式）**
-
-```markdown
-## Summary
-One sentence: best-fit path and why.
-
-## Compare your top paths
-- **Selected vs next:** …
-- **Affordability:** …
-- **Climate resilience:** …
-
-## What you may not know
-Cross-region technology notes (only from retrieved tech cards).
-
-## Next steps
-- Ask a local installer about …
-- Check subsidy program … (only if in region JSON)
+```ts
+type AIAnalysisMode = "selected_path_explanation" | "household_analysis_report";
 ```
+
+**Mode A · selected_path_explanation**
+
+| 项 | 说明 |
+|----|------|
+| 触发按钮 | **Explain selected path** / **解释当前路径** |
+| Target | 当前 `selectedPathId` 对应的 single `RankedPath` |
+| 输入 | selected path score card + household context + nearby paths + relevant tech cards |
+| 输出 | 简短解释：为什么这条路径对这个 household 得到当前分数 |
+| Heading EN / ZH | Path explanation / 路径解释 |
+| Subheading EN / ZH | Why this path received its score for your home. / 为什么这条路径会得到当前的适配分。 |
+| Loading EN / ZH | Explaining this path using your score card… / 正在根据你的评分结果解释这条路径…… |
+| Suggested chips EN | Why is affordability lower? · Would this work in colder/hotter weather? · What should I confirm with an installer? |
+| Suggested chips ZH | 为什么这个方案的可负担性得分是这样？· 极端冷热天气下表现如何？· 我应该向安装人员确认什么？ |
+
+**Mode B · household_analysis_report**
+
+| 项 | 说明 |
+|----|------|
+| 触发按钮 | **Get the analysis report** / **获取整体分析报告** |
+| Target | whole household + full ranked path summaries |
+| 输入 | G1–G3 context + ranked summaries (最多 12) + exclusions + relevant local public data + top-path tech cards |
+| 输出 | 家庭整体分析、top-3 对比、下一步确认事项 |
+| Heading EN / ZH | Household analysis report / 家庭整体分析报告 |
+| Subheading EN / ZH | A concise view of your home, your leading paths, and the trade-offs that matter most. / 综合查看你家的情况、主要候选路径，以及最值得关注的取舍。 |
+| Loading EN / ZH | Analyzing your household and ranked paths… / 正在分析你的家庭情况和候选路径…… |
+| Suggested chips EN | Why is #1 ahead of #2? · Which assumption matters most? · What could change the ranking? · What should I check first? |
+| Suggested chips ZH | 为什么第一名领先第二名？· 哪个家庭条件对结果影响最大？· 哪些信息可能改变排序？· 我最应该先确认什么？ |
+
+**Shared rules**
+
+- API endpoint: `POST /api/explain` with `{ mode, locale, context }`.
+- Frontend sends structured context only; server chooses prompt builder.
+- AI failure must not hide/reset G4 scores or ranking.
+- AI must not recalculate Fitness, change ranking, invent prices/subsidies/COP/emissions/laws, recommend brands/models, or treat unknown as unavailable.
+- Markdown renderer may support headings, bold and bullets; no HTML, tables, code blocks or raw JSON needed.
 
 ---
 
