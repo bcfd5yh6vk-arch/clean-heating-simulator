@@ -3,7 +3,7 @@
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-06 · COP31 youth-led action edition
+> **本文档版本**：2026-08-09 · COP31 youth-led action edition · G4 four-dimension scoring + data provenance
 
 ---
 
@@ -559,7 +559,7 @@ G1 地区和气候数据
 → 后台载入全部技术和路径
 → 后台执行确定性可行性筛选
 → 通过筛选的路径进入 G4
-→ G4 进行五维打分和排序
+→ G4 进行四维打分和排序
 ```
 
 G3 禁止出现：未来候选技术列表、推荐技术卡片、技术全选按钮、逐项允许/禁止状态、要求用户自己判断法律规定的文案。
@@ -673,14 +673,15 @@ G4 页面上看到的 Path / Excluded，**不是**写死在前端的勾选列表
 
 | 你要找的内容 | 文件路径 | 说明 |
 |--------------|----------|------|
-| **全部取暖/制冷/辅助技术选项（唯一运行时目录）** | `docs/data/technologies/technology_catalog.json` | 35 条；含 `tech_id`、中英名、`role`、`services`、筛选条件、G4 默认分档。**改选项先改这个文件。** |
+| **全部取暖/制冷/辅助技术选项（唯一运行时目录）** | `docs/data/technologies/technology_catalog.json` | 35 条；含 `tech_id`、中英名、`role`、`services`、客观筛选条件。**改选项先改这个文件。** `g4_defaults` 中的 subjective tier **不得**再进入 Fitness（见 §7.4）。 |
 | 目录字段 schema | `docs/data/technologies/technology_catalog.schema.json` | 校验 JSON 结构；新增字段时同步改 |
 | 目录 TypeScript 类型 | `docs/src/technologies/types.ts` | `TechnologyCatalogEntry` 等 |
 | 目录加载 / MVP 筛选集 | `docs/src/technologies/loadTechnologyCatalog.ts` | `getMvpScreeningCatalog()`：把 catalog 转成 screening 用的 profile；`phase2` / `baseline_only` 不会进 G4 候选池 |
-| **G4 硬筛选 + 候选路径生成 + 五维打分** | `docs/src/global/screening.ts` | `screenTechnologies` / `generateCandidatePaths` / `scoreAndSort` |
+| **G4 硬筛选 + 候选路径生成 + 四维打分** | `docs/src/global/screening.ts` | `screenTechnologies` / `generateCandidatePaths` / `scoreAndSort`（实现须对齐 §7 新四维公式；旧五维代码视为待迁移） |
 | Global 类型（Household / Climate / Path） | `docs/src/global/types.ts` | `CandidatePath`、`RankedPath`、`ScreeningResult` 等 |
 | 模块出口 | `docs/src/global/index.ts` | 统一 re-export |
 | G3「当前家里怎么取暖/制冷」（**不是** G4 白名单） | `docs/src/global/homeFeasibility.ts` + 规格 §G3 Q6/Q7 | 只建 baseline；`current_heating_methods` / `current_cooling_methods` |
+| G4 评分用公开地区数据（规划） | `docs/data/scoring/*.json` | 电价、装机成本、效率分位、排放因子、基础设施等；见 §8.1 |
 | G4 原型 UI（摘要页） | `docs/global/index.html`、`docs/global/app.js` | 当前只展示筛选摘要，不渲染完整目录 |
 | 自动化测试 | `docs/tests/global/global-flow.test.js`、`docs/tests/global/technology-catalog.test.js` | 筛选联动、目录完整性、公开页不得暴露完整 catalog |
 | 人工审计总表（与 JSON 对照） | 本文档末尾 **Internal Appendix · Household technology catalog** | 开发对照用；**禁止**做成公开网站栏目 |
@@ -695,7 +696,7 @@ screenTechnologies(...)     ← 还吃 G1 climate / G2 household / G3 homeFeasib
         ▼
 generateCandidatePaths(...)
         ▼
-scoreAndSort(...)           ← G4 五维 Fitness
+scoreAndSort(...)           ← G4 四维 Fitness（§7.4 / §7.5）
         ▼
 G4 UI：Ranked table + Excluded reasons
         （公开页只显示通过筛选的路径，不展示完整 35 项目录）
@@ -718,15 +719,16 @@ G4 UI：Ranked table + Excluded reasons
 ┌──────────────────────────────────────────────────────────────────┐
 │  Your path ranking                          [ Adjust inputs ]    │
 ├───────────────────────────────┬──────────────────────────────────┤
-│  Ranked table (sortable)      │  Radar chart (top 3 paths)       │
-│  #1 Air-source HP   82        │       Cost                       │
-│  #2 Insulation+HP   78      │          \                       │
-│  #3 Gas boiler      61      │   Simple —●— Carbon              │
+│  Ranked table (sortable)      │  Radar chart (top paths)         │
+│  #1 Air-source HP   82        │   Affordability                  │
+│  #2 Insulation+HP   78        │          \                       │
+│  #3 Gas boiler      61        │ Practicality —●— Environment     │
 │  ...                          │          /                       │
-│  [ excluded: ... ]            │       Comfort                    │
+│  [ excluded: ... ]            │   Climate Resilience             │
 ├───────────────────────────────┴──────────────────────────────────┤
-│  Dimension breakdown for selected row (5 bars)                     │
+│  Dimension breakdown for selected row (4 bars)                     │
 │  ⚠ Hard rules: excluded paths listed with reason                  │
+│  ⚠ Missing local cost/emission data flagged, never silently filled │
 └──────────────────────────────────────────────────────────────────┘
 │  [ Get AI explanation ]   [ Save action summary ]                 │
 └──────────────────────────────────────────────────────────────────┘
@@ -736,14 +738,14 @@ G4 UI：Ranked table + Excluded reasons
 
 | Column | 说明 |
 |--------|------|
-| Rank | 1…N；通过后台筛选并完成五维打分的候选路径 |
+| Rank | 1…N；通过后台筛选并完成四维打分的候选路径 |
 | Path | 技术路径显示名 |
 | Fitness | 0–100 综合分（一位小数） |
-| Upfront | 初装成本区间 |
+| Upfront | 初装成本区间；无本地公开数据时显示 unavailable |
 | Run cost | 年运行费估算 |
 | Burden | 能耗负担率 % |
-| Carbon | 相对减排或 kg CO₂e/yr |
-| Status | OK / Excluded |
+| Carbon | 相对减排或 kg CO₂e/yr；缺排放因子时标 incomplete |
+| Status | OK / Excluded / Data incomplete |
 
 **Copy**
 
@@ -898,7 +900,7 @@ Cross-region technology notes (only from retrieved tech cards).
 | `HomeFeasibilityQuestionnaire` | G3 住宅可行性问卷 |
 | `PathResultsTable` | 可排序表格 |
 | `PathRadarChart` | 前五路径雷达（Chart.js 或 ECharts） |
-| `ScoreBreakdownBars` | 五维分项 |
+| `ScoreBreakdownBars` | 四维分项（Affordability / Climate Resilience / Environment / Practicality） |
 | `ExcludedPathsList` | 硬约束剔除 |
 | `AIExplanationPanel` | 流式 Markdown 渲染 |
 | `ActionSummaryCard` | 生成可下载/可分享的个人行动摘要 |
@@ -932,14 +934,14 @@ generateCandidatePaths(screening.passed, baseline, region, climate, household)
         ↓
 for each path: dimension_scores[path][d] ∈ [0,100]
         ↓
-fitness = Σ (default_w_d · score_d) / Σ default_w_d
+fitness = 0.35*affordability + 0.30*climate_resilience + 0.20*environment + 0.15*practicality
         ↓
-output: ranked_paths[], excluded[], breakdown{}, estimates{}
+output: ranked_paths[], excluded[], breakdown{}, estimates{}, data_completeness{}
         ↓
 AI: read-only explanation (no score mutation)
 ```
 
-**实现语言建议**：TypeScript 纯函数模块 `src/scoring/`（前后端共用）；V1 仍可在 `index.html` 内联，V2 新路由单独打包或新 HTML。
+**实现语言建议**：TypeScript 纯函数模块（前后端共用）；V1 仍可在 `index.html` 内联，V2 新路由单独打包或新 HTML。评分输入必须遵守 §7.4 provenance（USER / LOCAL_PUBLIC / DERIVED / TECH_OBJECTIVE_RULE）。
 
 ### 7.2 内部技术目录（runtime source of truth）
 
@@ -978,12 +980,13 @@ function screenTechnologies(region, climate, household, feasibility, technologie
   apply explicit user installation constraints
   use current energy services only for confidence/warnings unless region data proves impossible
   use current heating/cooling methods only to build baseline
-  use climate as G4 climate score unless high-confidence unsafe case has no backup/fallback
+  use climate as climate_resilience input unless high-confidence unsafe case has no backup/fallback
   never hard-exclude for upfront cost
+  never hard-exclude solely on country-level infrastructure prevalence
   return { passed, excluded, warnings }
 ```
 
-**MVP 规则宜少而清晰**；每条 exclude 必须有人类可读 `reason_en` 与 `reason_zh` 字符串。`not_sure` 不硬排除，只降低 confidence 并添加 warning。
+**MVP 规则宜少而清晰**；每条 exclude 必须有人类可读 `reason_en` 与 `reason_zh` 字符串。`not_sure` 不硬排除，只降低 confidence 并添加 warning。基础设施硬排除规则见 §7.4 Infrastructure data special rules。
 
 ### 7.3.1 技术目录元数据与路径生成
 
@@ -998,11 +1001,11 @@ interface TechnologyCatalogEntry {
   catalog_status: "active" | "conditional" | "baseline_only" | "phase2";
   ranking_mode: "standalone" | "bundle_only" | "baseline_only" | "phase2";
   screening: {
-    installation_level: "none" | "minor" | "moderate" | "major";
-    outdoor_space_required: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land";
-    permanent_modification_required: boolean;
+    installation_level: "none" | "minor" | "moderate" | "major"; // TECH_OBJECTIVE_RULE
+    outdoor_space_required: "none" | "wall_or_balcony" | "small_yard_or_roof" | "large_private_land"; // TECH_OBJECTIVE_RULE
+    permanent_modification_required: boolean; // TECH_OBJECTIVE_RULE
     onsite_combustion: boolean;
-    infrastructure_required: InfrastructureRequirement[];
+    infrastructure_required: InfrastructureRequirement[]; // TECH_OBJECTIVE_RULE
     climate_rules: ClimateRule[];
   };
   baseline_mapping: {
@@ -1010,12 +1013,15 @@ interface TechnologyCatalogEntry {
     cooling_categories: string[];
   };
   g4_defaults: {
-    capex_tier: 1 | 2 | 3 | 4 | 5;
-    operating_cost_model: OperatingCostModel;
-    comfort_tier: 1 | 2 | 3 | 4 | 5;
-    simplicity_tier: 1 | 2 | 3 | 4 | 5;
-    carbon_model: CarbonModel;
-    maintenance_tier: "very_low" | "low" | "medium" | "high";
+    // --- deprecated for G4 scoring / descriptive metadata only ---
+    // Do NOT feed these into Fitness. Keep only until runtime JSON/TS are migrated.
+    capex_tier?: 1 | 2 | 3 | 4 | 5;                 // deprecated for G4 scoring
+    comfort_tier?: 1 | 2 | 3 | 4 | 5;               // deprecated for G4 scoring
+    simplicity_tier?: 1 | 2 | 3 | 4 | 5;            // deprecated for G4 scoring
+    maintenance_tier?: "very_low" | "low" | "medium" | "high"; // deprecated for G4 scoring
+    // --- still allowed as labels for cost/carbon *model family*, not as numeric scores ---
+    operating_cost_model?: OperatingCostModel;      // which LOCAL_PUBLIC price × DERIVED energy formula to use
+    carbon_model?: CarbonModel;                     // which LOCAL_PUBLIC emission factor family to use
   };
   path_rules: {
     can_form_standalone_path: boolean;
@@ -1029,13 +1035,38 @@ interface TechnologyCatalogEntry {
 }
 ```
 
+**仍可用于 hard screening 的客观技术条件（TECH_OBJECTIVE_RULE）**
+
+- `installation_level`
+- `outdoor_space_required`
+- `permanent_modification_required`
+- `infrastructure_required`（如 electricity / piped_gas / district networks）
+- `services` / `role` / `ranking_mode`
+
+**不得进入 G4 Fitness 的 subjective tier / 描述性字段（deprecated for G4 scoring）**
+
+| 字段 | 状态 |
+|------|------|
+| `capex_tier` | deprecated for G4 scoring / descriptive metadata only |
+| `comfort_tier` | deprecated for G4 scoring / descriptive metadata only |
+| `simplicity_tier` | deprecated for G4 scoring / descriptive metadata only |
+| `maintenance_tier` | deprecated for G4 scoring / descriptive metadata only |
+| `temperature_stability_tier` | deprecated for G4 scoring（若出现） |
+| `noise_tier` | deprecated for G4 scoring（若出现） |
+| `control_tier` | deprecated for G4 scoring（若出现） |
+| `air_quality_tier` | deprecated for G4 scoring（若出现） |
+| expert climate-fit tier | deprecated for G4 scoring |
+| installer maturity score | deprecated for G4 scoring |
+
+> 本次规格更新**不修改**现有 `technology_catalog.json` / TypeScript。若当前 runtime 仍读取上述字段参与打分，实现侧后续迁移时必须移除；在迁移完成前，规格以本节为准。
+
 新增纯函数：
 
 ```ts
 buildBaselineProfile(household, homeFeasibility, region): BaselineProfile
 screenTechnologies(region, climate, household, homeFeasibility, technologies): ScreeningResult
 generateCandidatePaths(screening.passed, baseline, region, climate, household): CandidatePath[]
-scoreAndSort(candidatePaths, baseline, household, region, climate): RankedPath[]
+scoreAndSort(candidatePaths, baseline, household, region, climate, localPublicData): RankedPath[]
 ```
 
 `BaselineProfile` 规则：
@@ -1051,57 +1082,349 @@ scoreAndSort(candidatePaths, baseline, household, region, climate): RankedPath[]
 - MVP 每个主要系统最多生成一个基础路径和一个高相关组合路径，最终 G4 路径控制在 3–12 条。
 - 路径生成不得使用 AI，必须 deterministic。
 
-### 7.4 五维分项打分（0–100）
+### 7.4 G4 四维分项打分（0–100）
 
-| 维度 key | UI 名 (EN) | 计算要点 |
-|----------|------------|----------|
-| `cost` | Affordability | 年运行费 + 初装摊销（如 10 年）→ **energy burden %**；映射到 0–100（burden 越低分越高） |
-| `carbon` | Emissions | 按 region 电网/气网排放因子 + 路径能耗估算 kg CO₂e/yr；相对 baseline（现状系统）Improvement % |
-| `comfort` | Comfort | 路径 `comfort_tier`（文献/专家表）+ 极端气候惩罚 |
-| `climate` | Climate fit | HDD/CDD 与路径适用区间匹配度 |
-| `simple` | Simplicity | 维护复杂度、设备成熟度、本地 adoption 代理分 |
+#### G4 scoring data provenance rule
 
-**burden 映射示例（与 V1 一致 spirit）**
+所有会影响 G4 数值评分 / Fitness 的变量，只允许属于以下四类之一：
 
-```text
-burden_pct = annual_energy_cost / annual_income * 100
-score_cost = clamp(100 - k * max(0, burden_pct - burden_target), 0, 100)
-// burden_target 默认 5%（可 per-region 调整）
-// k 默认 8
+| source_type | 含义 |
+|-------------|------|
+| `USER` | G1–G3 用户直接填写 |
+| `LOCAL_PUBLIC` | 用户所在点/省州/国家/电网或公用事业区/全国技术市场的**可追溯公开数据** |
+| `DERIVED` | 由 USER 与/或 LOCAL_PUBLIC 经**明确公式**确定性算出 |
+| `TECH_OBJECTIVE_RULE` | 技术客观结构属性，用于筛选或兼容性，**不是**主观数值分 |
+
+**Examples**
+
+| source_type | 字段示例 |
+|-------------|----------|
+| USER | `annual_income`, `heating_spend_annual`, `cooling_spend_annual`, `floor_area_m2`, `renovation_tolerance`, `outdoor_space`, `housing_status`, `current_energy_services`, `current_heating_methods`, `current_cooling_methods`, `upfront_cost_preference` |
+| LOCAL_PUBLIC | electricity price, natural gas price, technology installed cost, SCOP / SEER / AFUE class stats, electricity emission factor, fuel emission factor, weather/climate data, gas-grid coverage, district-energy availability |
+| DERIVED | HDD, CDD, annual candidate energy use, annual run cost, energy burden, emissions reduction, renovation margin |
+| TECH_OBJECTIVE_RULE | `installation_level`, `outdoor_space_required`, `requires_piped_gas`, `requires_district_network`, `permanent_modification_required` |
+
+**明确禁止进入最终评分**
+
+- developer guessed score
+- AI-estimated data
+- global average substituted for missing local data
+- arbitrary tier converted to score（含 `capex_tier` / `comfort_tier` / `simplicity_tier` 等）
+- neighboring-country substitute
+- “未知就给 50 分”（除非该公式中 50 有明确数学含义）
+
+#### G4 score dimensions
+
+| 维度 key | UI 名 (EN) | 权重 | 计算要点（必须可审计） |
+|----------|------------|------|------------------------|
+| `affordability` | Affordability | **35%** | 由 USER 收入/账单 + LOCAL_PUBLIC 价格/装机成本 + DERIVED 年运行费 / energy burden 映射到 0–100；缺装机成本时 `S_upfront = null`，仅用可得运行费并标记 `cost_data_complete = false` |
+| `climate_resilience` | Climate Resilience | **30%** | 由 LOCAL_PUBLIC / G1 气候（月温、极端温度 proxy、HDD/CDD）与 LOCAL_PUBLIC 技术运行温度/效率边界比较；**不用**专家 climate-fit tier |
+| `environment` | Environmental Impact | **20%** | 由 DERIVED 能耗 × LOCAL_PUBLIC 排放因子，相对 baseline 减排；缺因子时计算标为 incomplete，不得填全球默认因子 |
+| `practicality` | Practicality | **15%** | 仅由 USER 可行性答案 + TECH_OBJECTIVE_RULE（安装等级、室外空间、永久改造、基础设施）的确定性匹配度构成；**不用** simplicity / maintenance / installer maturity tier |
+
+Comfort / health：**MVP 仅作描述信息，不贡献 Fitness**，除非未来版本获得客观、可比的本地/公开数据。
+
+#### G4 data acquisition checklist
+
+| field_key | description | source_type | preferred_geography | scoring_dimension | priority | preferred_source | fallback | missing-data behavior |
+|-----------|-------------|-------------|---------------------|-------------------|----------|------------------|----------|------------------------|
+| `annual_income` | Annual household income | USER | household | affordability | required | G2 form | — | block scoring until answered |
+| `heating_spend_annual` | Last winter heating spend | USER | household | affordability / baseline | if needs_heating | G2 form | — | if heating needed and missing → validation error |
+| `cooling_spend_annual` | Last summer cooling spend | USER | household | affordability / baseline | if needs_cooling | G2 form | — | if cooling needed and missing → validation error |
+| `floor_area_m2` | Total floor area | USER | household | affordability / DERIVED energy | required | G2 form | — | block until answered |
+| `building_age` | Building age band | USER | household | practicality / DERIVED | optional | G2 form | null | omit from formulas that need it |
+| `insulation_level` | Insulation quality | USER | household | climate_resilience / DERIVED | optional | G2 form | null | use wider uncertainty band |
+| `housing_status` | Owner / renter permission | USER | household | practicality / screening | required | G3 Q1 | — | validation error |
+| `building_type` | Detached / apartment / … | USER | household | practicality / screening | required | G3 Q2 | — | validation error |
+| `renovation_tolerance` | Acceptable install work | USER | household | practicality / screening | required | G3 Q3 | — | validation error |
+| `outdoor_space` | Outdoor space available | USER | household | practicality / screening | required | G3 Q4 | — | validation error |
+| `current_energy_services` | Current bills / fuels | USER | household | baseline / warnings | required | G3 Q5 | — | validation error |
+| `current_heating_methods` | Current heating setup | USER | household | baseline only | if needs_heating | G3 Q6 | `[]` | baseline incomplete warning |
+| `current_cooling_methods` | Current cooling setup | USER | household | baseline only | if needs_cooling | G3 Q7 | `[]` | baseline incomplete warning |
+| `upfront_cost_preference` | Upfront cost preference | USER | household | affordability weighting | required | G3 Q8 | — | validation error；never hard-exclude |
+| `temperature_c_monthly` | 12 monthly mean temps | LOCAL_PUBLIC / G1 | CN/US admin1 capital；else Köppen profile | climate_resilience | required | existing G1 climate files / NASA POWER | Köppen profile (non-CN/US) | follow G1 rules；do not invent |
+| `extreme_low_temp_proxy` | Cold extreme proxy | LOCAL_PUBLIC / DERIVED | point or admin1 | climate_resilience | high | NASA POWER daily Tmin P01 | null | widen climate uncertainty；no expert tier |
+| `extreme_high_temp_proxy` | Heat extreme proxy | LOCAL_PUBLIC / DERIVED | point or admin1 | climate_resilience | high | NASA POWER daily Tmax P99 | null | widen climate uncertainty |
+| `hdd18` | Heating degree days base 18°C | DERIVED | same as climate | climate_resilience / affordability | high | derived from monthly/daily temps | null | skip HDD-scaled terms |
+| `cdd24` | Cooling degree days base 24°C | DERIVED | same as climate | climate_resilience / affordability | high | derived from monthly/daily temps | null | skip CDD-scaled terms |
+| `electricity_price_residential` | Residential electricity price | LOCAL_PUBLIC | admin1 → country | affordability | required for electric paths | EIA / Eurostat / provincial DRC or grid co. / IEA | null | electric run-cost incomplete |
+| `natural_gas_price_residential` | Residential gas price | LOCAL_PUBLIC | admin1 → country | affordability | if gas path | EIA / Eurostat / national official / IEA | null | gas run-cost incomplete |
+| `lpg_propane_price` | LPG / propane price | LOCAL_PUBLIC | admin1 → country | affordability | if LPG path | EIA / national official / IEA | null | LPG run-cost incomplete |
+| `heating_oil_price` | Heating oil price | LOCAL_PUBLIC | admin1 → country | affordability | if oil path | EIA / national official / IEA | null | oil run-cost incomplete |
+| `district_heating_tariff` | District heating tariff | LOCAL_PUBLIC | network area → admin1 → country | affordability | if DH path | utility / regulator / national | null | DH run-cost incomplete |
+| `district_cooling_tariff` | District cooling tariff | LOCAL_PUBLIC | network area → admin1 → country | affordability | if DC path | utility / regulator / national | null | DC run-cost incomplete |
+| `installed_cost_local` | Local installed cost for tech class | LOCAL_PUBLIC | admin1 → country | affordability | high | government / utility / public study；US may use ResStock if documented | null | `S_upfront = null`；`cost_data_complete = false`；UI: “Upfront-cost data unavailable for this location.” |
+| `seasonal_heating_efficiency` | SCOP / HSPF / AFUE class stats | LOCAL_PUBLIC | country / market | affordability / environment | high | ENERGY STAR / AHRI / EPREL P25–P50–P75 | null | do not invent COP/SCOP |
+| `seasonal_cooling_efficiency` | SEER / EER class stats | LOCAL_PUBLIC | country / market | affordability / environment | high | ENERGY STAR / AHRI / EPREL P25–P50–P75 | null | do not invent SEER/EER |
+| `minimum_operating_temp` | Rated min outdoor operating temp | LOCAL_PUBLIC / TECH_OBJECTIVE_RULE | country product class | climate_resilience | medium | certification / manufacturer class docs via public DB | null | climate match uses monthly means only + warning |
+| `maximum_operating_temp` | Rated max outdoor operating temp | LOCAL_PUBLIC / TECH_OBJECTIVE_RULE | country product class | climate_resilience | medium | same as above | null | same |
+| `grid_emission_factor` | Electricity CO₂ factor | LOCAL_PUBLIC | network / eGRID subregion → admin1 → country | environment | high | EPA eGRID / MEE·NBS China / national inventory | null | environment incomplete |
+| `natural_gas_emission_factor` | Gas combustion factor | LOCAL_PUBLIC | country | environment | if gas path | EPA GHG Hub / national inventory | null | environment incomplete for gas paths |
+| `lpg_emission_factor` | LPG combustion factor | LOCAL_PUBLIC | country | environment | if LPG path | EPA GHG Hub / national inventory | null | incomplete for LPG paths |
+| `heating_oil_emission_factor` | Heating oil factor | LOCAL_PUBLIC | country | environment | if oil path | EPA GHG Hub / national inventory | null | incomplete for oil paths |
+| `district_heating_emission_factor` | DH system factor | LOCAL_PUBLIC | network → country | environment | if DH path | utility / national inventory | null | incomplete for DH paths |
+| `district_cooling_emission_factor` | DC system factor | LOCAL_PUBLIC | network → country | environment | if DC path | utility / national inventory | null | incomplete for DC paths |
+| `gas_grid_available` | Piped gas available to home/area | LOCAL_PUBLIC + USER | network area；confirm with USER services | screening / practicality | high | utility service-area map + G3 | unknown | **no hard exclude** on country prevalence alone；`eligible_with_warning` |
+| `district_heating_available` | DH available to home/area | LOCAL_PUBLIC + USER | network area | screening / practicality | high | utility service-area + G3 | unknown | same infrastructure rule |
+| `district_cooling_available` | DC available to home/area | LOCAL_PUBLIC + USER | network area | screening / practicality | medium | utility service-area + G3 | unknown | same infrastructure rule |
+| `fx_rate` | FX to session currency | LOCAL_PUBLIC / DERIVED | country pair | affordability display | medium | official / widely published FX table with date | null | keep native currency；no silent USD convert |
+
+**Checklist field count：** 39（USER 14 + CLIMATE 5 + ENERGY PRICES 6 + TECH COST/PERF 5 + EMISSIONS 6 + INFRASTRUCTURE 3 + UTILITY 1）。
+
+#### Recommended public data sources
+
+不要绑定单一商业 API；按 **source hierarchy** 取数。缺本地数据时 **→ NULL**，禁止邻国替代、禁止全球均值。
+
+**Climate**
+
+- Preferred global source: [NASA POWER API](https://power.larc.nasa.gov/docs/services/api/) — monthly temperature、daily series、extreme proxies。
+- Current G1（**本次不改 G1 产品逻辑**）：
+  - China / USA: Admin-1 capital representative climate
+  - Other countries: Köppen standard profile
+- Suggested future extreme proxies（climate proxies，**不是** ASHRAE design temperatures）:
+  - `extreme_low_temp_proxy` = P01 of long-run daily minimum temperature
+  - `extreme_high_temp_proxy` = P99 of long-run daily maximum temperature
+
+**US residential energy prices**
+
+- [U.S. EIA Open Data](https://www.eia.gov/opendata/documentation.php)
+- Prefer: electricity = state + residential；natural gas = state residential；propane / heating oil = EIA residential retail when available
+
+**European Union**
+
+- [Eurostat Energy](https://ec.europa.eu/eurostat/web/energy/information-data)
+- Electricity: `nrg_pc_204`；Natural gas: `nrg_pc_202`
+- Use household prices including taxes/levies unless the dataset definition requires otherwise
+
+**Global country energy-price fallback**
+
+- [IEA End-Use Prices Data Explorer](https://www.iea.org/data-and-statistics/data-tools/energy-prices-data-explorer)
+- Hierarchy: admin1/local official → national official → IEA country → **NULL**
+- Never: neighboring country B；Never: global average
+
+**China electricity prices**
+
+- Do **NOT** use provincial transmission/distribution tariff as household retail price
+- Collect current residential tariff from provincial Development and Reform Commission **or** official grid-company residential tariff publication
+- Store effective date and pricing tier
+
+**US technology performance**
+
+- DOE / ENERGY STAR heat pump guidance: https://www.energy.gov/cmei/femp/purchasing-energy-efficient-residential-air-source-heat-pumps
+- ENERGY STAR: https://www.energystar.gov/products/air_source_heat_pumps
+- AHRI: https://www.ahridirectory.org/
+- With enough product records: filter category → P25 / P50 / P75（low / mid / high）。Do not pick one arbitrary “typical” model.
+
+**EU technology performance**
+
+- [EPREL](https://eprel.ec.europa.eu/) — SEER / SCOP / EER / COP / design loads / annual electricity where available；P25 / P50 / P75 when sample sufficient
+
+**Installed cost**
+
+- No assumed global default installation cost
+- Hierarchy: local/state/provincial government retrofit study → utility/regulator cost-effectiveness study → national public residential energy study → **NULL**
+- US: NREL/DOE ResStock may be used **only** where documented measure-cost assumptions match the technology: https://resstock.nrel.gov/
+- Do NOT use: retailer list price alone, Amazon/Home Depot alone, random installer blog, AI-estimated cost
+- If missing: `installed_cost_local = null`；`S_upfront = null`；`cost_data_complete = false`；display “Upfront-cost data unavailable for this location.”
+
+**US electricity emissions**
+
+- [EPA eGRID](https://www.epa.gov/egrid) — prefer user’s electricity grid / eGRID subregion when resolvable
+
+**US combustion emission factors**
+
+- [EPA GHG Emission Factors Hub](https://www.epa.gov/climateleadership/ghg-emission-factors-hub)
+
+**China electricity emissions**
+
+- Use latest official Ministry of Ecology and Environment / National Bureau of Statistics electricity **CO₂ emission factor** publication
+- Explicitly distinguish **electricity CO₂ emission factor** from **electricity carbon-footprint factor**；do not mix accounting boundaries
+
+**Other countries’ emissions**
+
+- Hierarchy: official national environment ministry / inventory → energy ministry / system operator → other official national factor → **NULL**
+- Do not insert an arbitrary global grid factor
+
+#### Technology performance aggregation
+
+G4 使用的性能值应描述**当地/全国技术品类**，而不是手挑单品。
+
+当公开认证/产品库样本量足够时：
+
+1. select currently valid products  
+2. filter to the exact technology category  
+3. normalize units  
+4. remove invalid/missing records  
+5. calculate `low = P25`, `mid = median`, `high = P75`  
+6. store `sample_count`, `source`, `retrieval date`
+
+Schema example（**illustrative only — not runtime data**）：
+
+```json
+{
+  "tech_id": "ashp_ductless",
+  "country_iso3": "USA",
+  "metric": "hspf2",
+  "low": 7.8,
+  "mid": 8.7,
+  "high": 10.0,
+  "sample_count": 1234,
+  "source_name": "AHRI / ENERGY STAR product class aggregate (illustrative)",
+  "source_url": "https://www.ahridirectory.org/",
+  "reference_period": "illustrative-only",
+  "retrieved_at": "illustrative-only",
+  "confidence": "high",
+  "aggregation_method": "P25_P50_P75",
+  "product_filter": "ductless air-source heat pump, currently valid"
+}
 ```
 
-**碳排放估算**：复用 V1 思路（`algori_spec.md` emission 节）——按路径能耗 × 排放因子；无精确负荷时用 **degree-day 缩放 + 用户账单校准**：
+Do not put fabricated example numbers into runtime JSON. Markdown examples must stay labelled **illustrative only**.
+
+#### Scoring data provenance schema
+
+```ts
+interface ScoringDataPoint<T> {
+  value: T | null;
+  low?: number;
+  mid?: number;
+  high?: number;
+  unit?: string;
+  country_iso3: string;
+  admin1_name?: string;
+  geographic_level: "point" | "network_area" | "admin1" | "country";
+  reference_period: string;
+  source_name: string;
+  source_url: string;
+  retrieved_at: string; // ISO date
+  confidence: "high" | "medium" | "low";
+  // optional for product-class aggregates:
+  sample_count?: number;
+  aggregation_method?: "P25_P50_P75" | "single_official_value" | "derived_formula";
+  product_filter?: string;
+}
+```
+
+#### Geographic fallback rules
+
+Ordinary LOCAL_PUBLIC fields:
 
 ```text
-estimated_heating_energy = heating_spend / fuel_price  // 或 kWh/m³
-// 用 household.heating_spend 反推 baseline，再模拟切换路径后的 spend
+exact local / network area
+  → admin1
+  → country
+  → NULL
+```
+
+**Forbidden fallbacks：** neighboring country · similar-climate country · global average · developer default · AI estimate
+
+Climate keeps current G1 special rules（**do not change G1 in this task**）：
+
+- China / US: admin1 capital representative  
+- other countries: clicked-point Köppen standard profile
+
+#### Infrastructure data special rules
+
+`gas_grid_available` / `district_heating_available` / `district_cooling_available`
+
+Hard exclusion **only when**:
+
+1. the user explicitly confirms the relevant infrastructure is unavailable to the home；**OR**  
+2. a reliable local/network service-area source confirms that service is unavailable
+
+Country-level prevalence alone is **not** sufficient to hard-exclude a household. Unknown → `eligible_with_warning`.
+
+#### Missing data rules
+
+Missing data must never be silently replaced by a subjective score.
+
+| Missing | Behavior |
+|---------|----------|
+| installed cost | `S_upfront = null`；`cost_data_complete = false` |
+| emission factor | environmental calculation = incomplete |
+| technology performance (COP/SCOP/SEER) | do not invent |
+| local network status | keep candidate with warning |
+| unknown numeric score | **never** assign `50` unless 50 has explicit mathematical meaning in that formula |
+
+#### Dimension formulas (spirit)
+
+**Affordability（示意）**
+
+```text
+annual_run_cost = DERIVED(energy use from USER bills / HDD·CDD + LOCAL_PUBLIC prices + LOCAL_PUBLIC efficiency mid)
+annualized_upfront = installed_cost_local.mid / payback_years   // only if installed_cost_local != null
+burden_pct = (annual_run_cost + annualized_upfront_or_0) / annual_income * 100
+score_affordability = clamp(100 - k * max(0, burden_pct - burden_target), 0, 100)
+// if installed_cost_local is null: omit annualized_upfront; set cost_data_complete=false
+```
+
+**Climate Resilience（示意）**
+
+```text
+compare extreme_low/high proxies and monthly means against minimum_operating_temp / maximum_operating_temp
+and HDD/CDD vs technology service (heating/cooling)
+→ deterministic match score in [0,100]
+// no expert climate-fit tier
+```
+
+**Environmental Impact（示意）**
+
+```text
+candidate_emissions = DERIVED energy × LOCAL_PUBLIC emission factors
+baseline_emissions  = baseline energy × factors
+improvement = (baseline - candidate) / baseline
+score_environment = map improvement to [0,100]
+// if any required factor is null → environment incomplete (do not use global default factor)
+```
+
+**Practicality（示意）**
+
+```text
+score from deterministic match of:
+  USER renovation_tolerance vs TECH installation_level
+  USER outdoor_space vs TECH outdoor_space_required
+  USER housing_status vs TECH permanent_modification_required
+  USER/LOCAL infrastructure flags vs TECH infrastructure_required
+// no simplicity_tier / maintenance_tier / installer maturity
 ```
 
 ### 7.5 综合适配分（Fitness）
 
 ```text
-default_w = normalize({ cost: 35, carbon: 20, comfort: 20, climate: 15, simple: 10 })
-fitness = Σ_d default_w[d] * score[d]
+A = affordability      // 0–100
+C = climate_resilience // 0–100
+E = environment        // 0–100
+P = practicality       // 0–100
+
+Fitness = 0.35 * A + 0.30 * C + 0.20 * E + 0.15 * P
 ```
 
+旧五维权重（**已废弃，不得再用于实现**）：
+
+```text
+// DEPRECATED: { cost: 35, carbon: 20, comfort: 20, climate: 15, simple: 10 }
+```
+
+- AI **不参与**计算。
 - 输出保留 **1 位小数**。
 - **同一输入必须 deterministic**（无 random）。
 - 单元测试：固定 fixture 输入 → 快照对比 `fitness` 与各维分。
-- MVP 不再让用户手动调权重；默认权重应写死在 scoring module，并在结果页用简短文案说明。
-- `upfront_cost_preference` 只影响 G4 affordability、初装成本 penalty、生命周期费用权重与补贴/融资提示。
-- 停止使用 `upfrontCost > annualIncome * 0.5` 作为硬约束；高初装路径只能降低 affordability 或显示成本压力。
+- MVP 不再让用户手动调权重；默认权重写死在 scoring module，结果页用简短文案说明。
+- `upfront_cost_preference` 只影响 affordability 权重/初装压力展示与融资提示，**不是**硬排除。
+- 停止使用 `upfrontCost > annualIncome * 0.5` 作为硬约束。
+- Comfort 不进入 Fitness。
 
 ### 7.6 与 V1 五回合引擎的关系
 
 | 项目 | V1 | V2 Global |
 |------|-----|-----------|
-| 决策单元 | 村/户沙盘叙事 | 路径评分 + 行动摘要 |
+| 决策单元 | 村/户沙盘叙事 | 四维路径评分 + 行动摘要 |
 | 路线数 | 3（气/地源/空气源） | 8+ |
-| 补贴退坡 | 固定回合 | region JSON 规则 |
+| 补贴退坡 | 固定回合 | region JSON / LOCAL_PUBLIC 政策备注 |
 | 合规执法 | 有 | Global 流程不包含合规执法回合 |
-| AI | 终局 debrief | 分数解释 + 技术科普（RAG） |
+| AI | 终局 debrief | 分数解释 + 技术科普（RAG）；不改分 |
 
-**说明**：V2 Global **不再做** mini-sandbox / 多回合推演。China Pilot（V1）仍保留完整五回合沙盘。若未来复用 V1 经济/排放公式，可抽成 `lib/simulationEngine.ts` 仅供 China Pilot；Global 路径以 `screening.ts` 五维打分为准。
+**说明**：V2 Global **不再做** mini-sandbox / 多回合推演。China Pilot（V1）仍保留完整五回合沙盘。Global 路径以 `screening.ts` **四维打分**为准，且 Fitness 输入必须遵守 §7.4 provenance。
 
 ---
 
@@ -1121,6 +1444,14 @@ docs/
     climate/
       cn_us_admin1_capitals.json      # China provinces + US states: capital-city climate
       climate_profiles.json           # Köppen standard profiles for all other countries
+    scoring/                          # LOCAL_PUBLIC inputs for G4 Fitness (planned; not created in this doc-only pass)
+      residential_energy_prices.json
+      technology_performance.json
+      technology_installed_costs.json
+      electricity_emission_factors.json
+      fuel_emission_factors.json
+      infrastructure_availability.json
+      scoring_data_sources.json
     regions/                          # optional energy/policy overrides (not required for G1 climate)
       cn_example.json
       us_example.json
@@ -1156,7 +1487,7 @@ docs/
 - **中国 / 美国**：得到 `country_iso3` + `admin1_name`，气候取自该省/州 **首府**（`cn_us_admin1_capitals.json`）。
 - **其余国家**：只得到 `country_iso3`（`admin1_name` 为空），气候取自点击点 Köppen **标准 profile**（`climate_profiles.json`）。
 
-可选的 `docs/data/regions/*.json` 仍可用于电价、基础设施、政策备注等 override，但**不是** G1 气候数据的主来源。
+可选的 `docs/data/regions/*.json` 与 `docs/data/scoring/*` 可用于电价、基础设施、政策备注等 LOCAL_PUBLIC override，但**不是** G1 气候数据的主来源。下方 `energy` 数字仅为 **illustrative schema**，不得当作 runtime 默认值写入仓库。
 
 ```json
 {
@@ -1211,44 +1542,54 @@ docs/
 
 ### 8.3 `TechnologyCatalogEntry` schema
 
-`docs/data/technologies/technology_catalog.json` 是运行时单一技术目录。`docs/data/technologies/technology_catalog.schema.json` 用于校验关键结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
+`docs/data/technologies/technology_catalog.json` 是运行时单一技术目录。`docs/data/technologies/technology_catalog.schema.json` 用于校验字段结构。旧版单一 ASHP 示例已废弃，不再作为运行时数据源。
 
 字段原则：
-- 主目录描述技术本身：服务类型、安装要求、基础设施要求、气候规则、G4 fallback tier、路径组合规则。
-- Region override 描述当地价格、市场、基础设施、政策和排放因子。
-- Household / G3 profile 描述具体家庭条件。
-- 三者不得混在同一个对象中。
+- 主目录描述技术本身：服务类型、安装要求、基础设施要求、气候规则、路径组合规则，以及 **TECH_OBJECTIVE_RULE**。
+- `g4_defaults.capex_tier` / `comfort_tier` / `simplicity_tier` / `maintenance_tier`：**deprecated for G4 scoring / descriptive metadata only**；不得写入 Fitness。
+- 真实价格、效率分位、排放因子来自 `docs/data/scoring/*`（LOCAL_PUBLIC），须带 provenance（见 §7.4 `ScoringDataPoint`）。
+- Household / G3 profile 描述具体家庭条件（USER）。
+- 四者不得混在同一个对象中。
 
-G4 数据优先级：
+G4 数据优先级（对齐 provenance，**不再使用 catalog subjective tiers**）：
 
 ```text
-1. region technology override exact numeric data
-2. China/US admin-1 capital climate + optional country/admin1 energy overrides
-3. Köppen standard climate profile (non-CN/US, or missing capital row)
-4. technology catalog default tiers
-5. Needs local quote / data uncertain
+1. USER answers from G1–G3
+2. LOCAL_PUBLIC ScoringDataPoint for the user's geography (network → admin1 → country → NULL)
+3. DERIVED quantities from explicit formulas
+4. TECH_OBJECTIVE_RULE for screening / practicality match only
+5. If required LOCAL_PUBLIC value is null → mark dimension incomplete; never invent / global-average / AI-estimate
 ```
 
-没有当地数字时可用 `capex_tier` 等 tier 做相对分，但不得显示虚构金额或效率。
+Region override / scoring file 示例中的数字必须来自真实公开来源并带 provenance；**Markdown 中的示例数字一律视为 illustrative only，不得写入 runtime。**
 
-Region override 示例：
+Region override 示例（illustrative structure only；`null` 表示尚未采集，禁止用虚构 mid 值冒充）：
 
 ```json
 {
   "technology_overrides": {
     "district_heating": {
       "availability": "unavailable",
-      "availability_confidence": "high"
+      "availability_confidence": "high",
+      "availability_source_url": "https://example.utility/service-area"
     },
     "ashp_ductless": {
       "availability": "available",
       "availability_confidence": "medium",
-      "capex_local": {
-        "low": 4000,
-        "mid": 6500,
-        "high": 9000,
-        "currency": "USD",
-        "basis": "per_home"
+      "installed_cost_local": {
+        "value": null,
+        "low": null,
+        "mid": null,
+        "high": null,
+        "unit": "USD",
+        "country_iso3": "USA",
+        "admin1_name": "Illinois",
+        "geographic_level": "admin1",
+        "reference_period": "TBD",
+        "source_name": "TBD public study",
+        "source_url": "TBD",
+        "retrieved_at": "TBD",
+        "confidence": "low"
       }
     }
   }
@@ -1412,13 +1753,14 @@ Note any technology used in China that may be relevant for this region.
 
 ### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
 
-- [ ] 实现 `hardFilter` + 五维分 + `fitness` 排序
+- [ ] 实现 `hardFilter` + **四维分**（Affordability / Climate Resilience / Environment / Practicality）+ `fitness` 排序
 - [ ] G3 `HomeFeasibilityQuestionnaire` + 后台技术筛选 + G4 结果表 + 雷达图
 - [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
 - [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
 - [ ] 单元测试 ≥10 cases
 - [ ] **G1 气候两档落地**：中国/美国全省/州首府气候表 + 全球 Köppen 标准 profile；地图点击中美精确到省/州，其余国家只到国家
 - [ ] 用至少 3 个场景跑通筛选（如：河北首府气候、Illinois 首府气候、德国某点 Cfb profile）× 技术目录
+- [ ] 规划并接入 `docs/data/scoring/*` LOCAL_PUBLIC 数据（可先少数国家）；遵守 §7.4 provenance 与 missing-data 规则；**不得**再用 catalog subjective tier 打分
 
 **验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；能生成一张可用于 COP31 材料和社媒传播的行动摘要卡。
 
@@ -1468,7 +1810,10 @@ A: 不必。可新建 `docs/global/index.html` + 共享 `lib/scoring.js`。
 A: 会，但它是 **China Pilot**。主入口必须是 Climate Adaptation Energy Advisor，因为内部申报项目不能只局限于中国北方农村。
 
 **Q: 价格数据从哪来？**  
-A: MVP 用 `research/data/calibration_defaults.json` + 手工 `regions/*.json`；UI 标明 “approximate range”。
+A: 必须是用户所在地的 **LOCAL_PUBLIC** 可追溯公开数据（EIA / Eurostat / 省级发改委或电网公司居民电价 / IEA country fallback → NULL）。禁止邻国替代、全球均值、AI 估计、catalog `capex_tier`。详见 §7.4。
+
+**Q: G4 还用五维 Comfort / Simplicity 吗？**  
+A: **不用。** 现为四维：Affordability 35% · Climate Resilience 30% · Environment 20% · Practicality 15%。Comfort 仅描述，不进 Fitness。
 
 **Q: G1 气候数据要做到多细？**  
 A: **中国、美国**：地图识别到省/州，气候用该省/州**首府点数据**代表。**其余国家**：只识别到国家，气候用点击点的 **Köppen 标准 profile**。不要做全省/州 WorldClim zonal mean。
@@ -1501,7 +1846,9 @@ A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；C
 > Do not render this catalog as a public website section.  
 > G3 collects household information without showing future technology options.
 
-**给 CS**：本表是 `docs/data/technologies/technology_catalog.json` 的审计对照；G4 如何引用这些文件见上文 **§G4 · Results →「CS 同学：取暖/制冷选项都在哪」**。
+**给 CS**：本表是 `docs/data/technologies/technology_catalog.json` 的审计对照；G4 如何引用这些文件见上文 **§G4 · Results →「CS 同学：取暖/制冷选项都在哪」** 与 **§7.4**。
+
+表中 **Capex / Comfort / Simple** 列对应 JSON 里的 `capex_tier` / `comfort_tier` / `simplicity_tier`，现已标记为 **deprecated for G4 scoring / descriptive metadata only**，不得进入 Fitness。筛选仍以安装等级、空间、基础设施等客观列为准。
 
 如果本文档未来被构建成公开网页，必须排除此内部附录，或在构建流程中隐藏本节。运行时唯一数据源是 `docs/data/technologies/technology_catalog.json`；下表只用于开发审计。
 
