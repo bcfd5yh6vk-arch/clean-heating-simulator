@@ -114,8 +114,7 @@ MVP 产品说明见：`spec.md`。
 ```
 Global Landing → Click home location on climate map → Household form
     → Home feasibility questionnaire → [Screen paths] → Results table + radar → AI explanation panel
-    → Shareable action summary → [Optional] Mini-sandbox (3 turns)
-    → Survey / thanks
+    → Shareable action summary → Survey / thanks
 
 Parallel evidence pages:
 Impact dashboard → Youth-led story → Media kit / case materials
@@ -130,8 +129,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | G4 | `global-results` | 适配分排序 + 雷达 + 硬约束剔除说明 |
 | G5 | `global-ai` | AI 解读（RAG，引用分数卡） |
 | G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
-| G7 | `global-mini-sandbox` | 可选，3 回合简化推演 top 路径 |
-| G8 | `global-feedback` | 短问卷 + 是否愿意推荐 |
+| G7 | `global-feedback` | 短问卷 + 是否愿意推荐 |
 
 | 申报/传播页面 | 页面 ID | 目的 |
 |----------------|---------|------|
@@ -152,7 +150,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 - 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit` + **Language selector（English / 中文）**
 - Hero：公开品牌名 + 中文副名 + 副标题 + 主按钮
 - 三列价值点 + 影响力数字条 + 底部 disclaimer
-- 用户在首页选择语言后，后续 G1–G8 以及 `/impact`、`/about`、`/media` 的所有文字信息都使用对应语言。
+- 用户在首页选择语言后，后续 G1–G7 以及 `/impact`、`/about`、`/media` 的所有文字信息都使用对应语言。
 
 **Copy**
 
@@ -598,7 +596,7 @@ G3 禁止出现：未来候选技术列表、推荐技术卡片、技术全选�
 | Q5 | `current_energy_services` | Which energy services or bills does this home currently have? | 这套住宅目前有哪些能源供应或能源账单？ | checkbox cards |
 | Q6 | `current_heating_methods` | How does this home currently stay warm? | 这套住宅目前主要使用哪些方式取暖？ | checkbox cards, only if `needs_heating` |
 | Q7 | `current_cooling_methods` | How does this home currently stay cool? | 这套住宅目前主要使用哪些方式降温？ | checkbox cards, only if `needs_cooling` |
-| Q8 | `upfront_cost_preference` | How would you approach upfront cost? | 你对前期投入的接受程度如何？ | radio cards |
+| Q8 | `upfront_cost_preference` | How do you feel about the initial one-time investment? | 你对前期一次性投入的接受程度如何？ | radio cards |
 
 **关键选项与规则**
 
@@ -730,7 +728,7 @@ G4 UI：Ranked table + Excluded reasons
 │  Dimension breakdown for selected row (5 bars)                     │
 │  ⚠ Hard rules: excluded paths listed with reason                  │
 └──────────────────────────────────────────────────────────────────┘
-│  [ Get AI explanation ]   [ Try mini-sandbox with #1 ]             │
+│  [ Get AI explanation ]   [ Save action summary ]                 │
 └──────────────────────────────────────────────────────────────────┘
 ```
 
@@ -758,7 +756,7 @@ G4 UI：Ranked table + Excluded reasons
 | Excluded reason examples | No gas grid in region · Permanent work not allowed · Insufficient outdoor space |
 | Empty state | No path passed hard checks. Try adjusting household details or mark unknown answers as Not sure. |
 | CTA AI | **Explain these results** |
-| CTA sandbox | **Try a 3-step preview of #1** |
+| CTA summary | **Save action summary** |
 
 ---
 
@@ -832,26 +830,7 @@ Cross-region technology notes (only from retrieved tech cards).
 
 ---
 
-### G7 · Mini-sandbox（可选）
-
-简化 V1：**3 turns**，不做合规执法概率。
-
-| Turn | 内容 |
-|------|------|
-| 1 | 确认/切换路径（默认 top-1） |
-| 2 | 选一项：提高收入 / 降低用能 / 加强保温 |
-| 3 | 价格或补贴冲击 → 终局 |
-
-**Copy**
-
-| 元素 | 英文文案 |
-|------|----------|
-| Title | **Quick preview: one path** |
-| Hint | This is a simplified simulation—not a contract or quote. |
-
----
-
-### G8 · Feedback
+### G7 · Feedback
 
 | 元素 | 英文文案 |
 |------|----------|
@@ -1116,13 +1095,13 @@ fitness = Σ_d default_w[d] * score[d]
 
 | 项目 | V1 | V2 Global |
 |------|-----|-----------|
-| 决策单元 | 村/户沙盘叙事 | 路径评分 + 可选 mini-sandbox |
+| 决策单元 | 村/户沙盘叙事 | 路径评分 + 行动摘要 |
 | 路线数 | 3（气/地源/空气源） | 8+ |
 | 补贴退坡 | 固定回合 | region JSON 规则 |
-| 合规执法 | 有 | Global mini-sandbox 可省略 |
+| 合规执法 | 有 | Global 流程不包含合规执法回合 |
 | AI | 终局 debrief | 分数解释 + 技术科普（RAG） |
 
-**建议**：把 V1 经济/排放公式抽成 `lib/simulationEngine.ts`，Global mini-sandbox 调用同一套，避免两套公式分叉。
+**说明**：V2 Global **不再做** mini-sandbox / 多回合推演。China Pilot（V1）仍保留完整五回合沙盘。若未来复用 V1 经济/排放公式，可抽成 `lib/simulationEngine.ts` 仅供 China Pilot；Global 路径以 `screening.ts` 五维打分为准。
 
 ---
 
@@ -1399,7 +1378,7 @@ Note any technology used in China that may be relevant for this region.
 | 打分 | **优先前端完成**（零额外延迟） | MVP 简单 |
 | AI | Vercel serverless | 与现网一致 |
 | 测试 | Vitest 对 `scoring/*` 快照测试 | 可答辩复现 |
-| i18n | `en.json` / `zh.json` | 首页可切换 English / 中文；G1–G8 与 AI explanation 跟随同一 `locale` |
+| i18n | `en.json` / `zh.json` | 首页可切换 English / 中文；G1–G7 与 AI explanation 跟随同一 `locale` |
 
 ### 10.3 路由部署（Vercel）
 
@@ -1427,7 +1406,7 @@ Note any technology used in China that may be relevant for this region.
 - [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
 - [ ] `docs/data/climate/cn_us_admin1_capitals.json` 样例（至少各 2 个中美省/州首府气候）+ `docs/data/climate/climate_profiles.json` 若干 Köppen profile；`docs/data/technologies/technology_catalog.json` 作为完整内部技术目录
 - [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
-- [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G8、Impact/About/Media、AI explanation 全部跟随同一语言
+- [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G7、Impact/About/Media、AI explanation 全部跟随同一语言
 
 **验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能切换 English / 中文；切换后后续页面文字跟随语言；能在地图上点选位置（中美到省/州，其他到国家）、填表、数据写入 console；China pilot 仍可进入。
 
@@ -1453,10 +1432,9 @@ Note any technology used in China that may be relevant for this region.
 
 **验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；媒体页可直接作为 COP31 申报附件入口。
 
-### Phase 3 · 2 周 — Mini-sandbox + COP polish
+### Phase 3 · 1–2 周 — Feedback + COP polish
 
-- [ ] G7 三回合预览（复用 simulation engine）
-- [ ] G8 问卷
+- [ ] G7 问卷（理解提升、是否愿意推荐、开放反馈）
 - [ ] `/about` 补充青年主导时间线、活动照片、匿名用户反馈
 - [ ] Mobile 适配 + 免责声明法务审阅
 
@@ -1468,7 +1446,7 @@ Note any technology used in China that may be relevant for this region.
 
 ## 12. 验收标准（Definition of Done）
 
-1. **功能**：Global 全流程 G0→G8 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
+1. **功能**：Global 全流程 G0→G7 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
 2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
 3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
 4. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
