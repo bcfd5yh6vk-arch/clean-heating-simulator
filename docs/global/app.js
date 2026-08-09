@@ -56,6 +56,38 @@ const MESSAGES = {
     errorDisclaimer: "AI does not calculate or change your scores.",
     stalePathHint:
       "This explanation refers to the previously selected path. Click “Explain selected path” to explain the current path.",
+    continueToFeedback: "Continue to optional feedback",
+    g7Step: "G7 · One-minute feedback",
+    feedbackHeading: "Help us improve",
+    feedbackOptional: "Optional",
+    feedbackSubheading:
+      "Your anonymous feedback helps us understand whether this tool is actually useful. This step is optional.",
+    feedbackPrivacy: "Feedback is anonymous and optional.",
+    feedbackUnderstandingQuestion:
+      "Did this tool help you understand which heating and cooling paths fit your home?",
+    feedbackUnderstanding1: "1 · Not at all",
+    feedbackUnderstanding2: "2 · A little",
+    feedbackUnderstanding3: "3 · Somewhat",
+    feedbackUnderstanding4: "4 · Quite a lot",
+    feedbackUnderstanding5: "5 · Very much",
+    feedbackAiQuestion: "How useful was the AI explanation or household analysis?",
+    feedbackAi1: "1 · Not useful",
+    feedbackAi2: "2 · Slightly useful",
+    feedbackAi3: "3 · Somewhat useful",
+    feedbackAi4: "4 · Useful",
+    feedbackAi5: "5 · Very useful",
+    feedbackAiNotUsed: "I did not use the AI analysis",
+    feedbackImprovementQuestion: "What would you improve?",
+    feedbackImprovementHelper: "Optional. Please do not include personal contact information.",
+    feedbackImprovementPlaceholder: "Share one idea…",
+    feedbackSubmit: "Submit feedback",
+    feedbackSkip: "Skip",
+    feedbackSubmitting: "Submitting…",
+    feedbackSuccess: "Thanks — your feedback was submitted anonymously.",
+    feedbackError: "We couldn't save your feedback. You can try again or skip this step.",
+    feedbackEmptyHint: "You can answer any question or choose Skip.",
+    backToResults: "Back to results",
+    finishGlobal: "Done",
   },
   zh: {
     languageLabel: "语言",
@@ -112,6 +144,36 @@ const MESSAGES = {
       "此分析由 AI 生成，仅供参考。数值评分与排序由确定性算法计算，AI 不参与计算或修改结果。实际安装、费用、安全与合规情况请向当地专业人员确认。",
     errorDisclaimer: "AI 不参与分数计算，也不会修改排序。",
     stalePathHint: "这份解释对应之前选择的路径。点击“解释当前路径”可分析现在选中的方案。",
+    continueToFeedback: "继续到可选反馈",
+    g7Step: "G7 · 1 分钟反馈",
+    feedbackHeading: "帮助我们改进",
+    feedbackOptional: "可选",
+    feedbackSubheading: "你的匿名反馈可以帮助我们了解这个工具是否真的有用。本步骤完全自愿。",
+    feedbackPrivacy: "反馈匿名且完全自愿。",
+    feedbackUnderstandingQuestion: "这个工具是否帮助你更清楚地理解哪些取暖和制冷方案适合你家？",
+    feedbackUnderstanding1: "1 · 完全没有",
+    feedbackUnderstanding2: "2 · 有一点",
+    feedbackUnderstanding3: "3 · 有一些",
+    feedbackUnderstanding4: "4 · 比较有帮助",
+    feedbackUnderstanding5: "5 · 非常有帮助",
+    feedbackAiQuestion: "AI 的路径解释或家庭整体分析对你有多大帮助？",
+    feedbackAi1: "1 · 没有帮助",
+    feedbackAi2: "2 · 帮助较小",
+    feedbackAi3: "3 · 有一些帮助",
+    feedbackAi4: "4 · 有帮助",
+    feedbackAi5: "5 · 非常有帮助",
+    feedbackAiNotUsed: "我没有使用 AI 分析",
+    feedbackImprovementQuestion: "你觉得哪里还可以改进？",
+    feedbackImprovementHelper: "选填。请不要填写姓名、电话、邮箱等个人联系方式。",
+    feedbackImprovementPlaceholder: "写一条建议……",
+    feedbackSubmit: "提交反馈",
+    feedbackSkip: "跳过",
+    feedbackSubmitting: "正在提交……",
+    feedbackSuccess: "谢谢，你的反馈已匿名提交。",
+    feedbackError: "反馈暂时无法保存。你可以重试，也可以跳过这一步。",
+    feedbackEmptyHint: "你可以回答任意问题，也可以直接跳过。",
+    backToResults: "返回结果",
+    finishGlobal: "完成",
   },
 };
 
@@ -146,6 +208,18 @@ const aiStaleHint = document.getElementById("aiStaleHint");
 const aiStatus = document.getElementById("aiStatus");
 const aiContent = document.getElementById("aiContent");
 const aiDisclaimer = document.getElementById("aiDisclaimer");
+const continueToG7 = document.getElementById("continueToG7");
+const g7Panel = document.getElementById("g7Panel");
+const understandingChoices = document.getElementById("understandingChoices");
+const aiHelpfulnessChoices = document.getElementById("aiHelpfulnessChoices");
+const improvementText = document.getElementById("improvementText");
+const feedbackHint = document.getElementById("feedbackHint");
+const feedbackStatus = document.getElementById("feedbackStatus");
+const feedbackThanks = document.getElementById("feedbackThanks");
+const submitFeedbackButton = document.getElementById("submitFeedback");
+const skipFeedbackButton = document.getElementById("skipFeedback");
+const backToResultsButton = document.getElementById("backToResults");
+const finishGlobalButton = document.getElementById("finishGlobal");
 
 let locale = localStorage.getItem("locale") || (navigator.language.startsWith("zh") ? "zh" : "en");
 let rankedPaths = [];
@@ -155,6 +229,8 @@ let lastBaselineSummary = {};
 let lastHomeFeasibilitySummary = {};
 let scoringInputHash = null;
 let aiAnalysis = window.G4AI.createIdleAiAnalysisState();
+let feedbackState = "idle";
+let aiUsedThisFlow = false;
 
 function t(key) {
   return MESSAGES[locale][key] || MESSAGES.en[key] || key;
@@ -175,6 +251,10 @@ function renderI18n() {
   document.querySelectorAll("[data-i18n]").forEach((element) => {
     element.textContent = t(element.dataset.i18n);
   });
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
+    element.setAttribute("placeholder", t(element.dataset.i18nPlaceholder));
+  });
+  renderFeedbackChoices();
 }
 
 function renderQuestion(question) {
@@ -514,6 +594,10 @@ async function requestAi(mode) {
   if (!request) return;
   if (aiAnalysis.status === "loading" || aiAnalysis.status === "streaming") return;
 
+  // Behavioral flag: intentional AI trigger counts as used, even if the request fails.
+  aiUsedThisFlow = true;
+  window.G7Feedback.markAiUsed();
+
   const selected = window.G4AI.getSelectedPath(rankedPaths, selectedPathId);
   aiAnalysis = {
     mode,
@@ -569,12 +653,151 @@ function submitG3() {
   });
   scoringInputHash = nextHash;
   resetAiAnalysisState();
+  aiUsedThisFlow = false;
+  window.G7Feedback.clearAiUsedForNewFlow();
   rankedPaths = buildDemoRankedPaths();
   excludedPaths = buildExcludedPaths();
   selectedPathId = window.G4AI.getInitialSelectedPathId(rankedPaths);
   g4Panel.classList.remove("hidden");
+  g7Panel.classList.add("hidden");
+  feedbackState = "idle";
+  feedbackThanks.classList.add("hidden");
+  finishGlobalButton.classList.add("hidden");
   renderG4();
   g4Panel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderFeedbackChoices() {
+  const understandingSelected = formValue("helped_understand_score");
+  understandingChoices.innerHTML = "";
+  [
+    ["1", "feedbackUnderstanding1"],
+    ["2", "feedbackUnderstanding2"],
+    ["3", "feedbackUnderstanding3"],
+    ["4", "feedbackUnderstanding4"],
+    ["5", "feedbackUnderstanding5"],
+  ].forEach(([value, key]) => {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "helped_understand_score";
+    input.value = value;
+    if (understandingSelected === value) input.checked = true;
+    label.append(input, document.createTextNode(t(key)));
+    understandingChoices.appendChild(label);
+  });
+
+  const aiSelected =
+    formValue("ai_helpfulness") ||
+    (aiUsedThisFlow || window.G7Feedback.readAiUsed()
+      ? ""
+      : window.G7Feedback.suggestedAiHelpfulness(false));
+  aiHelpfulnessChoices.innerHTML = "";
+  [
+    ["1", "feedbackAi1"],
+    ["2", "feedbackAi2"],
+    ["3", "feedbackAi3"],
+    ["4", "feedbackAi4"],
+    ["5", "feedbackAi5"],
+    ["not_used", "feedbackAiNotUsed"],
+  ].forEach(([value, key]) => {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "ai_helpfulness";
+    input.value = value;
+    if (aiSelected === value) input.checked = true;
+    label.append(input, document.createTextNode(t(key)));
+    aiHelpfulnessChoices.appendChild(label);
+  });
+}
+
+function formValue(name) {
+  return g7Panel.querySelector(`input[name="${name}"]:checked`)?.value || "";
+}
+
+function collectFeedbackAnswers() {
+  return window.G7Feedback.buildFeedbackPayload({
+    locale,
+    country_iso3: "USA",
+    admin1_name: "Illinois",
+    helped_understand_score: formValue("helped_understand_score"),
+    ai_helpfulness: formValue("ai_helpfulness"),
+    improvement_text: improvementText.value,
+    ai_used: aiUsedThisFlow || window.G7Feedback.readAiUsed(),
+  });
+}
+
+function setFeedbackBusy(busy) {
+  submitFeedbackButton.disabled = busy;
+  skipFeedbackButton.disabled = busy;
+  continueToG7.disabled = busy;
+}
+
+function showThanksState(message) {
+  feedbackState = "success";
+  feedbackStatus.textContent = "";
+  feedbackHint.classList.add("hidden");
+  feedbackThanks.classList.remove("hidden");
+  feedbackThanks.textContent = message || t("feedbackSuccess");
+  finishGlobalButton.classList.remove("hidden");
+  setFeedbackBusy(false);
+  submitFeedbackButton.disabled = true;
+}
+
+function finishWithoutFeedback() {
+  showThanksState(
+    locale === "zh"
+      ? "已跳过反馈。你的结果与 AI 分析不受影响。"
+      : "Feedback skipped. Your results and AI analysis are unchanged.",
+  );
+}
+
+function openG7() {
+  g7Panel.classList.remove("hidden");
+  feedbackState = "idle";
+  feedbackHint.classList.add("hidden");
+  feedbackStatus.textContent = "";
+  feedbackThanks.classList.add("hidden");
+  finishGlobalButton.classList.add("hidden");
+  submitFeedbackButton.disabled = false;
+  skipFeedbackButton.disabled = false;
+  renderFeedbackChoices();
+  g7Panel.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+async function submitFeedback() {
+  if (feedbackState === "submitting") return;
+  const payload = collectFeedbackAnswers();
+  if (window.G7Feedback.isEmptyFeedback(payload)) {
+    feedbackHint.classList.remove("hidden");
+    feedbackHint.textContent = t("feedbackEmptyHint");
+    return;
+  }
+
+  feedbackState = "submitting";
+  feedbackHint.classList.add("hidden");
+  feedbackStatus.className = "help";
+  feedbackStatus.textContent = t("feedbackSubmitting");
+  setFeedbackBusy(true);
+
+  try {
+    const response = await fetch("/api/global-feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.error || "Feedback request failed.");
+    showThanksState(t("feedbackSuccess"));
+  } catch (_error) {
+    feedbackState = "error";
+    feedbackStatus.className = "error";
+    feedbackStatus.textContent = t("feedbackError");
+    setFeedbackBusy(false);
+    // Skip remains available after error.
+    skipFeedbackButton.disabled = false;
+  }
 }
 
 function rerender() {
@@ -584,6 +807,9 @@ function rerender() {
   if (!g4Panel.classList.contains("hidden")) {
     summarizeBaseline();
     renderG4();
+  }
+  if (!g7Panel.classList.contains("hidden") && feedbackState !== "success") {
+    renderFeedbackChoices();
   }
 }
 
@@ -601,6 +827,15 @@ needsCooling.addEventListener("change", rerender);
 document.getElementById("submitG3").addEventListener("click", submitG3);
 explainButton.addEventListener("click", () => requestAi(window.G4AI.MODES.selectedPath));
 reportButton.addEventListener("click", () => requestAi(window.G4AI.MODES.householdReport));
+continueToG7.addEventListener("click", openG7);
+submitFeedbackButton.addEventListener("click", submitFeedback);
+skipFeedbackButton.addEventListener("click", finishWithoutFeedback);
+backToResultsButton.addEventListener("click", () => {
+  g4Panel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+finishGlobalButton.addEventListener("click", () => {
+  g7Panel.scrollIntoView({ behavior: "smooth", block: "start" });
+});
 
 const urlLocale = new URL(window.location.href).searchParams.get("lang");
 if (urlLocale === "en" || urlLocale === "zh") locale = urlLocale;

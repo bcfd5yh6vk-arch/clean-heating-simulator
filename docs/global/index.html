@@ -110,6 +110,54 @@
         line-height: 1.55;
       }
       .excluded-list { margin: 16px 0 0; padding-left: 18px; color: var(--muted); }
+      .g7-wrap { max-width: 640px; margin: 0 auto; }
+      .g7-panel { background: #fffdf8; }
+      .rating-row, .choice-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 10px 0 4px;
+      }
+      .rating-row label, .choice-row label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        min-height: 44px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 8px 12px;
+        background: #fbfaf7;
+        cursor: pointer;
+      }
+      .rating-row input, .choice-row input { margin: 0; }
+      textarea {
+        width: 100%;
+        min-height: 96px;
+        max-width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 12px;
+        font: inherit;
+        resize: vertical;
+        background: #fff;
+      }
+      .optional-tag {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+      }
+      .thanks-box {
+        margin-top: 12px;
+        padding: 14px;
+        border-radius: 12px;
+        background: var(--accent-soft);
+        color: var(--text);
+      }
       @media (max-width: 760px) {
         .topbar, .groups, .cta-row { align-items: flex-start; flex-direction: column; }
         .panel { padding: 16px; }
@@ -189,9 +237,59 @@
           <div id="aiContent"></div>
           <p id="aiDisclaimer" class="ai-disclaimer" data-i18n="aiIdleDisclaimer"></p>
         </section>
+        <div class="groups" style="margin-top: 18px;">
+          <span></span>
+          <button id="continueToG7" type="button" class="secondary" data-i18n="continueToFeedback">Continue to optional feedback</button>
+        </div>
+      </section>
+
+      <section id="g7Panel" class="panel g7-panel hidden" aria-labelledby="g7Title">
+        <div class="g7-wrap">
+          <div class="step" data-i18n="g7Step">G7 · One-minute feedback</div>
+          <h2 id="g7Title">
+            <span data-i18n="feedbackHeading">Help us improve</span>
+            <span class="optional-tag" data-i18n="feedbackOptional">Optional</span>
+          </h2>
+          <p data-i18n="feedbackSubheading"></p>
+          <p class="help" data-i18n="feedbackPrivacy"></p>
+
+          <fieldset>
+            <legend data-i18n="feedbackUnderstandingQuestion"></legend>
+            <div id="understandingChoices" class="rating-row"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="feedbackAiQuestion"></legend>
+            <div id="aiHelpfulnessChoices" class="choice-row"></div>
+          </fieldset>
+
+          <fieldset>
+            <legend data-i18n="feedbackImprovementQuestion"></legend>
+            <p class="help" data-i18n="feedbackImprovementHelper"></p>
+            <textarea
+              id="improvementText"
+              maxlength="500"
+              data-i18n-placeholder="feedbackImprovementPlaceholder"
+            ></textarea>
+          </fieldset>
+
+          <p id="feedbackHint" class="help hidden" role="status"></p>
+          <p id="feedbackStatus" class="help" role="status"></p>
+          <div id="feedbackThanks" class="thanks-box hidden"></div>
+
+          <div class="groups">
+            <button id="skipFeedback" type="button" class="secondary" data-i18n="feedbackSkip">Skip</button>
+            <button id="submitFeedback" type="button" data-i18n="feedbackSubmit">Submit feedback</button>
+          </div>
+          <div class="groups" style="margin-top: 12px;">
+            <button id="backToResults" type="button" class="secondary" data-i18n="backToResults">Back to results</button>
+            <button id="finishGlobal" type="button" class="secondary hidden" data-i18n="finishGlobal">Done</button>
+          </div>
+        </div>
       </section>
     </main>
     <script src="./g4-ai-state.js"></script>
+    <script src="./g7-feedback.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>

@@ -115,7 +115,8 @@ MVP 产品说明见：`spec.md`。
 Global Landing → Click home location on climate map → Household form
     → Home feasibility questionnaire → [Screen paths]
     → G4 Results + inline AI analysis
-    → Shareable action summary → Survey / thanks
+    → Shareable action summary
+    → Optional one-minute feedback (G7, skippable) / thanks
 
 Parallel evidence pages:
 Impact dashboard → Youth-led story → Media kit / case materials
@@ -130,7 +131,7 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | G4 | `global-results` | 适配分排序 + selected path detail + **inline AI Analysis Panel** |
 | G5 | *(embedded module)* | AI 解释能力模块；**不作为独立跳转页面**，输出渲染在 G4 |
 | G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
-| G7 | `global-feedback` | 短问卷 + 是否愿意推荐 |
+| G7 | `global-feedback` | **Optional** one-minute feedback（理解度 / AI 有用性 / 改进建议；可 Skip） |
 
 | 申报/传播页面 | 页面 ID | 目的 |
 |----------------|---------|------|
@@ -952,14 +953,79 @@ Household report scope does **not** change when the user clicks another ranked r
 
 ---
 
-### G7 · Feedback
+### G7 · Feedback（optional one-minute feedback）
 
-| 元素 | 英文文案 |
-|------|----------|
-| Q1 | Did this help you compare paths? (1–5) |
-| Q2 | Would you recommend this tool? (Yes / Maybe / No) |
-| Q3 | What was missing? (optional text) |
-| Submit | **Submit & finish** |
+定位：极轻量、**可跳过**的匿名反馈模块。不阻挡用户已获得的 G4 结果、inline AI 分析或 G6 行动摘要。
+
+**Copy**
+
+| 元素 | English | 中文 |
+|------|---------|------|
+| Heading | Help us improve | 帮助我们改进 |
+| Badge | Optional | 可选 |
+| Subheading | Your anonymous feedback helps us understand whether this tool is actually useful. This step is optional. | 你的匿名反馈可以帮助我们了解这个工具是否真的有用。本步骤完全自愿。 |
+| Privacy | Feedback is anonymous and optional. | 反馈匿名且完全自愿。 |
+| Submit | Submit feedback | 提交反馈 |
+| Skip | Skip | 跳过 |
+
+**Questions（仅 3 题，全部 optional）**
+
+| field_key | Type | English | 中文 |
+|-----------|------|---------|------|
+| `helped_understand_score` | 1–5 rating | Did this tool help you understand which heating and cooling paths fit your home? | 这个工具是否帮助你更清楚地理解哪些取暖和制冷方案适合你家？ |
+| `ai_helpfulness` | 1–5 or `not_used` | How useful was the AI explanation or household analysis? | AI 的路径解释或家庭整体分析对你有多大帮助？ |
+| `improvement_text` | textarea ≤500 | What would you improve? (no contact info) | 你觉得哪里还可以改进？（请勿填写联系方式） |
+
+Labels：
+
+- Understanding 1–5：Not at all → Very much / 完全没有 → 非常有帮助
+- AI 1–5：Not useful → Very useful / 没有帮助 → 非常有帮助；另有 **I did not use the AI analysis** / **我没有使用 AI 分析**
+
+**Deleted from Global G7**
+
+- ~~Would you recommend this tool? (Yes / Maybe / No)~~
+- Do **not** ask `recommendation` / `would_recommend` in Global MVP.
+- China Pilot survey may keep its own recommendation / survey fields unchanged.
+
+**Skip / empty Submit**
+
+- Skip：零回答也可离开；不报错、不弹 modal。
+- 三题全空点 Submit：当作 Skip，或轻提示 “You can answer any question or choose Skip.”（非红色 error）。
+- Submit 失败仍允许 Skip / Finish。
+
+**`ai_used` behavioral flag**
+
+- `ai_used = true` when the user intentionally triggers at least one G4 AI request (`selected_path_explanation` or `household_analysis_report`), even if the request fails.
+- Distinct from self-reported `ai_helpfulness`.
+
+**Schema `GlobalFeedback`**
+
+```ts
+interface GlobalFeedback {
+  session_id?: string; // anonymous only
+  locale: "en" | "zh";
+  region?: { country_iso3?: string; admin1_name?: string | null };
+  helped_understand_score?: 1 | 2 | 3 | 4 | 5 | null;
+  ai_helpfulness?: 1 | 2 | 3 | 4 | 5 | "not_used" | null;
+  improvement_text?: string; // trimmed, max 500, no HTML
+  ai_used?: boolean;
+  submitted_at?: string;
+}
+```
+
+No name / email / phone / address / IP / fingerprint. Do not store raw income, bills, or full G1–G4 JSON in the feedback table.
+
+**Persistence**
+
+- Table: `global_feedback`（见 `docs/data/supabase/global_feedback.sql`）
+- API: `POST /api/global-feedback`
+- Free-text testimonials on `/impact` require **manual review / moderation** first — never auto-publish.
+
+**Behavioral vs self-reported**
+
+| Behavioral | Self-reported |
+|------------|---------------|
+| completed G4, AI used, feedback opened/submitted | helped_understand_score, ai_helpfulness, improvement_text |
 
 ---
 
@@ -969,14 +1035,18 @@ Household report scope does **not** change when the user clicks another ranked r
 
 #### `/impact` Impact Dashboard
 
+**China Pilot Evidence** 与 **Global Advisor Feedback** 必须分开展示，不可合并为一个平均值。
+
 | 模块 | 必放内容 |
 |------|----------|
-| Headline metrics | Valid sessions, completed surveys, understanding gain, recommendation rate, AI helpful rate |
-| Region coverage | 已覆盖 China pilot + Global MVP regions |
-| User groups | Farmers / students / public users / global household users |
-| Anonymous testimonials | 2–4 条匿名短反馈 |
-| Download | `Download data snapshot PDF` |
+| China Pilot Evidence | Valid sessions, completed surveys, pre/post understanding gain（现有证据；保留 recommendation 等 Pilot 指标） |
+| Global Advisor Feedback | `global_feedback` 行数；helped-understand average / positive rate（score≥4）；AI helpfulness average / positive rate（排除 `not_used`）；AI usage rate（behavioral `ai_used`） |
+| Region coverage | China pilot + Global MVP regions |
+| Anonymous testimonials | 2–4 条经人工审核的匿名短反馈（不自动公开自由文本） |
+| Small-sample label | Early feedback · n = X / 早期反馈 · 样本量 n = X |
 | Caution | Small-sample, exploratory, anonymous data |
+
+Global metrics 只统计非 null 的 understanding；AI 平均分排除 `not_used` 与 null。
 
 #### `/about` Youth-led Story
 
@@ -1023,7 +1093,8 @@ Household report scope does **not** change when the user clicks another ranked r
 | `PathRadarChart` | 可选辅助；仅四维，表示 selected path（禁止旧五维） |
 | `ScoreBreakdownBars` | Affordability / Climate resilience / Environmental impact / Practicality 明细 |
 | `ExcludedPathsList` | 硬约束剔除 |
-| `AIExplanationPanel` | 流式 Markdown 渲染 |
+| `AIExplanationPanel` | G4 inline AI Analysis Panel |
+| `GlobalFeedbackForm` | G7 optional 3-question feedback + Skip |
 | `ActionSummaryCard` | 生成可下载/可分享的个人行动摘要 |
 | `DisclaimerBanner` | 全局免责 |
 | `ImpactMetricWall` | COP31 影响力数字墙 |
@@ -1828,6 +1899,23 @@ Region override 示例（illustrative structure only；`null` 表示尚未采集
 | ai_explanation | text | |
 | created_at | timestamptz | |
 
+#### `global_feedback`（Global G7）
+
+| column | type | 说明 |
+|--------|------|------|
+| id | uuid | |
+| session_id | text | 匿名 session id（可关联已有 Global session，勿复制 household） |
+| locale | text | `en` / `zh` |
+| country_iso3 | text | optional |
+| admin1_name | text | optional |
+| helped_understand_score | smallint | 1–5 or null |
+| ai_helpfulness | text | `1`–`5` / `not_used` / null |
+| improvement_text | text | ≤500；Impact 展示前需人工审核 |
+| ai_used | boolean | behavioral |
+| submitted_at | timestamptz | |
+
+SQL：`docs/data/supabase/global_feedback.sql`。与 China Pilot `simulation_sessions` 问卷字段隔离。
+
 ---
 
 ## 9. AI 接入规范
@@ -1990,7 +2078,7 @@ Do not change any numbers.
 - [ ] 实现 `hardFilter` + **四维分**（Affordability / Climate Resilience / Environment / Practicality）+ `fitness` 排序
 - [ ] G3 `HomeFeasibilityQuestionnaire` + 后台技术筛选 + G4 ranked table + **selected-path** 四维明细（§7.6–§7.10）
 - [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
-- [ ] `/impact` 接入静态或 Supabase 汇总数据：valid sessions、completed surveys、understanding gain、recommendation rate
+- [ ] `/impact` 分开展示 China Pilot Evidence 与 Global Advisor Feedback（helped-understand / AI helpfulness；排除 null 与 not_used）
 - [ ] 单元测试 ≥10 cases
 - [ ] **G1 气候两档落地**：中国/美国全省/州首府气候表 + 全球 Köppen 标准 profile；地图点击中美精确到省/州，其余国家只到国家
 - [ ] 用至少 3 个场景跑通筛选（如：河北首府气候、Illinois 首府气候、德国某点 Cfb profile）× 技术目录
@@ -2010,7 +2098,7 @@ Do not change any numbers.
 
 ### Phase 3 · 1–2 周 — Feedback + COP polish
 
-- [ ] G7 问卷（理解提升、是否愿意推荐、开放反馈）
+- [ ] G7 optional one-minute feedback（understanding / AI helpfulness / improvement；可 Skip；无 recommendation）
 - [ ] `/about` 补充青年主导时间线、活动照片、匿名用户反馈
 - [ ] Mobile 适配 + 免责声明法务审阅
 
@@ -2022,6 +2110,7 @@ Do not change any numbers.
 
 ## 12. 验收标准（Definition of Done）
 
+1. **G7 Feedback**：all questions optional；Skip works with zero answers；submit failure does not block completion；Impact averages exclude null / `not_used`；free text not auto-published.
 1. **功能**：Global 全流程 G0→G7 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
 2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
 3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
