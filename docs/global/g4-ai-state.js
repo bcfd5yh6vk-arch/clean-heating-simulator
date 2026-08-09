@@ -111,6 +111,40 @@
     };
   }
 
+  function createIdleAiAnalysisState() {
+    return {
+      mode: null,
+      status: "idle",
+      content: "",
+      error: "",
+      targetPathId: null,
+      targetPathName: "",
+      scoringInputHash: null,
+    };
+  }
+
+  function resetAIAnalysis(previous) {
+    return {
+      ...createIdleAiAnalysisState(),
+      scoringInputHash: previous && previous.scoringInputHash != null ? previous.scoringInputHash : null,
+    };
+  }
+
+  function buildScoringInputHash(parts) {
+    return JSON.stringify(parts || {});
+  }
+
+  function shouldShowPathMismatchHint(aiAnalysis, selectedPathId) {
+    if (!aiAnalysis || aiAnalysis.mode !== MODES.selectedPath) return false;
+    if (aiAnalysis.status !== "success") return false;
+    if (!aiAnalysis.targetPathId || !selectedPathId) return false;
+    return aiAnalysis.targetPathId !== selectedPathId;
+  }
+
+  function usesInlinePanelOnly() {
+    return true;
+  }
+
   return {
     MODES,
     normalizeLocale,
@@ -119,5 +153,10 @@
     selectRankedPath,
     buildSelectedPathExplanationRequest,
     buildHouseholdAnalysisReportRequest,
+    createIdleAiAnalysisState,
+    resetAIAnalysis,
+    buildScoringInputHash,
+    shouldShowPathMismatchHint,
+    usesInlinePanelOnly,
   };
 });

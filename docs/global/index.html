@@ -96,8 +96,19 @@
       .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
       .detail-card { border: 1px solid var(--border); border-radius: 14px; padding: 12px; background: #fbfaf7; }
       .detail-card strong { display: block; }
-      .ai-output { background: #fbfaf7; border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 12px; }
+      .ai-output { background: #fbfaf7; border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 16px; }
       .ai-output h2 { font-size: 1.1rem; margin-top: 14px; }
+      #aiSubheading { white-space: pre-line; }
+      .ai-target { margin: 0 0 8px; font-weight: 700; color: var(--text); }
+      .ai-stale { color: var(--warn); font-weight: 700; margin: 8px 0; }
+      .ai-disclaimer {
+        margin-top: 16px;
+        padding-top: 12px;
+        border-top: 1px solid var(--border);
+        color: var(--muted);
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
       .excluded-list { margin: 16px 0 0; padding-left: 18px; color: var(--muted); }
       @media (max-width: 760px) {
         .topbar, .groups, .cta-row { align-items: flex-start; flex-direction: column; }
@@ -168,13 +179,16 @@
           <button id="getAnalysisReport" type="button" class="secondary" data-i18n="getAnalysisReport">Get the analysis report</button>
         </div>
         <p class="help" data-i18n="g4AiNote"></p>
-        <div id="aiPanel" class="ai-output hidden">
-          <div class="step" id="aiModeLabel"></div>
-          <h3 id="aiHeading"></h3>
-          <p id="aiSubheading"></p>
-          <p id="aiStatus" class="warning"></p>
+        <section id="aiPanel" class="ai-output" aria-label="AI Analysis Panel" aria-live="polite">
+          <div class="step" data-i18n="aiPanelStep">AI Analysis Panel</div>
+          <h3 id="aiHeading" data-i18n="aiIdleHeading">AI analysis</h3>
+          <p id="aiTargetPath" class="ai-target hidden"></p>
+          <p id="aiSubheading" data-i18n="aiIdleHelper"></p>
+          <p id="aiStaleHint" class="ai-stale hidden" role="status"></p>
+          <p id="aiStatus" class="help"></p>
           <div id="aiContent"></div>
-        </div>
+          <p id="aiDisclaimer" class="ai-disclaimer" data-i18n="aiIdleDisclaimer"></p>
+        </section>
       </section>
     </main>
     <script src="./g4-ai-state.js"></script>
