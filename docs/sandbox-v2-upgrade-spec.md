@@ -3,7 +3,8 @@
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-09 · G4 selected-path UI + complete §7.5–§7.12 scoring formulas
+> **本文档版本**：2026-08-10 · Story / Impact IA + analytics definitions
+> **重要边界**：本文是给 CS 技术协作者看的 development specification，不代表功能已经实现。本轮只更新 Markdown 规格，不实现 route、页面、API、数据库或 runtime data。
 
 ---
 
@@ -14,10 +15,10 @@
 **核心原则**：
 - **分数由算法给，不由 AI 编造**（AI 只解释、翻译、对照，不凭空写补贴金额或 COP）。
 - **Global-first**：COP 项目不能局限于中国北方农村；中国北方是第一个实证试点和故事起点，不是产品边界。
-- **保留 V1** 作为 China pilot / evidence mode，用来展示已完成研究、用户数据和青年主导行动的真实性。
+- **保留 V1** 作为 China pilot / evidence mode，用来展示已完成研究与早期内部测试证据。正式公开口径：**50+ internal-test participants · limited internal testing · not publicly released**。
 - **默认静态、低门槛**：无需注册即可试用；研究数据仍匿名入库（Supabase）。
 - **公开页面不写 COP31**：网站面对普通用户时只呈现为气候适应与家庭能源选择工具，避免让人感觉是专门为某个征集项目包装出来的。COP31 只作为内部申报背景和材料准备目标。
-- **申报友好**：网站必须能支撑案例材料：中英双语简介、青年主导说明、数据影响力、可下载材料、视频/截图证据。
+- **申报友好但不牺牲产品主线**：网站必须能支撑案例材料，但 MVP 优先级为 Global Advisor 主流程、Impact & Evidence、My Story。Media Kit / Project Resources 只是未来可选资源，不阻塞上线。
 
 ### 0.1 COP31 申报定位
 
@@ -81,20 +82,21 @@ MVP 产品说明见：`spec.md`。
 
 ---
 
-## 3. 产品形态：Global-first 入口 + China pilot 证据
+## 3. 产品形态：Global-first 入口 + Story / Impact 支撑
 
-首页改成 **Global-first landing**。第一屏主 CTA 必须进入 Climate Adaptation Energy Advisor；China Pilot 作为「已有试点证据」入口放在第二 CTA 或导航里，不再与全球工具平级抢主叙事。
+首页改成 **Global-first landing**。第一屏主 CTA 必须进入 Climate Adaptation Energy Advisor；China Pilot 作为轻量入口放在导航中；My Story 负责叙事；Impact 负责证据。不要把 `/story` 做成 Impact Dashboard，也不要把 `/impact` 写成个人故事页面。
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│  Climate Adaptation Energy Advisor                        │
-│  气候适应家庭能源选择助手                                  │
+│  Climate Adaptation Energy Advisor           English/中文 │
+│  China Pilot · Impact                                      │
+│                                                           │
 │  Find a heating and cooling path that fits your home,      │
 │  your local climate, and your budget.                     │
 │                                                          │
-│  [ Start from map ]   [ View China pilot ]                │
+│  [ Start from the map — about 3 minutes ]                 │
+│  See my story →                                           │
 │                                                          │
-│  Impact: 28 valid sessions · +1.50 understanding gain    │
 │  China pilot → global household energy advisor            │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -103,9 +105,10 @@ MVP 产品说明见：`spec.md`。
 |-----------|----------|------|
 | Climate Adaptation Energy Advisor | `/` 或 `/global` | **主入口**：面向国际用户的全球取暖/制冷适配工具 |
 | China Pilot Sandbox | `/china` | 现有 `index.html` 流程，作为中文试点和已验证案例 |
-| Impact & Evidence | `/impact` | 匿名数据、前后测、推荐率、用户反馈、截图/视频 |
-| Youth-led Story | `/about` | 青年主导、项目时间线、团队角色、项目愿景（公开页面不写 COP31） |
-| Media Kit | `/media` | 中英 one-pager、logo、演示视频、案例材料下载 |
+| My Story | `/story` | 项目缘起、发展过程、工具原理、早期影响、学生发起与下一步 |
+| Impact & Evidence | `/impact` | China Pilot 证据、Global site visits、Global feedback、数据口径与方法说明 |
+| About（deprecated） | `/about` | 不再作为正式页面；未来实际开发可 redirect `/about` → `/story`，本规格不实现 redirect |
+| Media Kit / Project Resources | `/media` | Optional future route；不进 MVP 主导航，不阻塞 Global Advisor 上线 |
 
 ---
 
@@ -119,7 +122,7 @@ Global Landing → Click home location on climate map → Household form
     → Optional one-minute feedback (G7, skippable) / thanks
 
 Parallel evidence pages:
-Impact dashboard → Youth-led story → Media kit / case materials
+My Story → Impact & Evidence
 ```
 
 | 步骤 | 页面 ID | 目的 |
@@ -135,9 +138,9 @@ Impact dashboard → Youth-led story → Media kit / case materials
 
 | 申报/传播页面 | 页面 ID | 目的 |
 |----------------|---------|------|
-| Impact Dashboard | `impact` | 展示匿名使用数据、理解提升、推荐率、地区覆盖、媒体/活动记录 |
-| Youth-led Story | `about` | 讲清青年主导、项目缘起、时间线、团队角色、行动愿景 |
-| Media Kit | `media` | 下载中英 one-pager、申报摘要、demo 视频、截图、数据报告 |
+| My Story | `story` | 讲清项目缘起、从中国试点到全球工具的发展、工具差异、早期证据与下一步 |
+| Impact & Evidence | `impact` | 展示 China Pilot 证据、Global site visits、Global feedback、数据定义与方法说明 |
+| Media Kit / Project Resources | `media` | Optional future resources；不属于核心 MVP，不在主导航抢叙事 |
 | China Pilot | `china` | 保留现有中国北方五回合沙盘，作为已验证的第一阶段案例 |
 
 ---
@@ -149,10 +152,11 @@ Impact dashboard → Youth-led story → Media kit / case materials
 ### G0 · Landing
 
 **Layout**
-- 顶栏：Logo + `China Pilot` / `Impact` / `About` / `Media Kit` + **Language selector（English / 中文）**
-- Hero：公开品牌名 + 中文副名 + 副标题 + 主按钮
-- 三列价值点 + 影响力数字条 + 底部 disclaimer
-- 用户在首页选择语言后，后续 G1–G7 以及 `/impact`、`/about`、`/media` 的所有文字信息都使用对应语言。
+- 顶栏：Logo / Project name + `China Pilot` / `Impact` + **Language selector（English / 中文）**
+- 主导航不要显示 `About` / `Media Kit`。`About` 已由轻量文字 CTA `See my story →` 指向 `/story`；Media Kit 不属于普通用户核心体验。
+- Hero：公开品牌名 + 副标题 + 主按钮 + 轻量文字 CTA。
+- `Start from the map` 是唯一视觉主按钮；`See my story →` 是更轻的 secondary text CTA，不要与主按钮同等抢眼。
+- 用户在首页选择语言后，后续 G1–G7 以及 `/story`、`/impact` 的所有文字信息都使用对应语言。`/media` 若未来实现，也必须跟随同一 locale。
 
 **Copy**
 
@@ -161,19 +165,18 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | Language label | Language |
 | Language option EN | English |
 | Language option ZH | 中文 |
+| Nav | Logo / Project name · China Pilot · Impact · English / 中文 |
 | Title | **Climate Adaptation Energy Advisor** |
-| Chinese title | **气候适应家庭能源选择助手** |
-| Eyebrow | **Household energy choices for a changing climate** |
-| Subtitle | Click your home on the climate map, compare heating and cooling paths, and see what fits your local climate and budget. |
+| Subtitle | Find a heating and cooling path that fits your home, your local climate, and your budget. |
 | Primary CTA | **Start from the map — about 3 minutes** |
-| Secondary CTA | **View China Pilot Evidence** |
+| Secondary text CTA | **See my story →** |
+| Secondary target | `/story` |
 | Bullet 1 title | Household-first |
 | Bullet 1 body | Enter income, home size, and energy bills. See what fits you. |
 | Bullet 2 title | Scores you can trace |
 | Bullet 2 body | Each path gets a fitness score from clear rules—not AI guesswork. |
 | Bullet 3 title | Plain-language guide |
 | Bullet 3 body | AI explains trade-offs and technologies you may not know in your country. |
-| Impact strip | China pilot: 28 valid sessions · 21 completed surveys · +1.50 understanding gain |
 | Disclaimer | *Decision support only. Not engineering design, installation quote, or legal advice. Local installers must confirm sizing and safety.* |
 | Footer | Anonymous · No account required · ~3 min |
 
@@ -184,19 +187,18 @@ Impact dashboard → Youth-led story → Media kit / case materials
 | Language label | 语言 |
 | Language option EN | English |
 | Language option ZH | 中文 |
+| Nav | Logo / Project name · China Pilot · Impact · English / 中文 |
 | Title | **气候适应家庭能源选择助手** |
-| English title | **Climate Adaptation Energy Advisor** |
-| Eyebrow | **面向气候变化的家庭能源选择** |
-| Subtitle | 在气候地图上点击你家的大致位置，比较取暖和制冷方案，看看哪些更适合当地气候和家庭预算。 |
-| Primary CTA | **从地图开始，约 3 分钟** |
-| Secondary CTA | **查看中国试点证据** |
+| Subtitle | 结合你家的情况、当地气候和预算，比较可能适合你的取暖与制冷路径。 |
+| Primary CTA | **从地图开始 — 约 3 分钟** |
+| Secondary text CTA | **查看我的故事 →** |
+| Secondary target | `/story` |
 | Bullet 1 title | 以家庭为中心 |
 | Bullet 1 body | 输入收入、住房面积和能源账单，查看适合你的方案。 |
 | Bullet 2 title | 分数可追溯 |
 | Bullet 2 body | 每条路径都由清晰规则打分，不是 AI 猜测。 |
 | Bullet 3 title | 通俗解释 |
 | Bullet 3 body | AI 会用易懂语言解释取舍，也补充你所在国家可能不熟悉的技术信息。 |
-| Impact strip | 中国试点：28 个有效会话 · 21 份完成问卷 · 理解提升 +1.50 |
 | Disclaimer | *本工具仅作决策参考，不是工程设计、安装报价或法律建议。设备选型、安全与合规需由当地安装人员确认。* |
 | Footer | 匿名 · 无需账号 · 约 3 分钟 |
 
@@ -205,7 +207,8 @@ Impact dashboard → Youth-led story → Media kit / case materials
 - 首页右上角提供语言选项：`English` / `中文`。
 - 语言选择写入 `localStorage.locale`，并可同步到 URL query（如 `?lang=zh` / `?lang=en`）方便分享。
 - 默认语言：若浏览器语言以 `zh` 开头则默认中文，否则默认英文；用户手动选择后以用户选择为准。
-- 语言选择后，全流程所有 UI 文案、按钮、表单提示、验证错误、结果页说明、AI explanation 请求的 `locale` 都使用对应语言。
+- 语言选择后，全流程所有 UI 文案、按钮、表单提示、验证错误、结果页说明、`/story`、`/impact`、AI explanation 请求的 `locale` 都使用对应语言。
+- 不要同屏双语显示。用户选择 English，则 `/story` 与 `/impact` 全部英文；用户选择中文，则全部中文。Markdown 中保留中英两套 copy，只是供 CS 接入 i18n。
 - 文案来源必须走 i18n 字典：`i18n/en.json` 与 `i18n/zh.json`。不要在组件里硬编码英文或中文。
 
 **禁止出现在 G0 的公开文案**
@@ -976,6 +979,9 @@ Household report scope does **not** change when the user clicks another ranked r
 | `ai_helpfulness` | 1–5 or `not_used` | How useful was the AI explanation or household analysis? | AI 的路径解释或家庭整体分析对你有多大帮助？ |
 | `improvement_text` | textarea ≤500 | What would you improve? (no contact info) | 你觉得哪里还可以改进？（请勿填写联系方式） |
 
+连接我的Supabase来储存这个feedback表格里面用户提交的数据，其他部分收集到的数据全部不入库。
+（给冯冯看：这个feedback是为了满足要求做的表面工程，对我的活动/研究几乎没有影响，无须担心毒数据）
+
 Labels：
 
 - Understanding 1–5：Not at all → Very much / 完全没有 → 非常有帮助
@@ -1029,44 +1035,394 @@ No name / email / phone / address / IP / fingerprint. Do not store raw income, b
 
 ---
 
-### Evidence pages · Impact / About / Media Kit
+### Evidence & Story Pages
 
-这些页面不属于个人评分流程，但对内部申报与外部传播非常关键，必须和 Climate Adaptation Energy Advisor 同期上线。
+这些页面不属于 G1–G7 household scoring flow。用户不需要经过 Story 或 Impact 才能完成家庭评估。
 
-#### `/impact` Impact Dashboard
+MVP 公共页面优先级：
 
-**China Pilot Evidence** 与 **Global Advisor Feedback** 必须分开展示，不可合并为一个平均值。
+| 页面 | 路由 | MVP 优先级 | 作用 |
+|------|------|------------|------|
+| My Story | `/story` | Public MVP recommended / important | 负责叙事：项目为什么开始、如何发展、由谁推动、下一步要解决什么 |
+| Impact & Evidence | `/impact` | Public MVP recommended / important | 负责证据：China Pilot 内测证据、Global site visits、Global feedback、数据口径 |
+| Media Kit / Project Resources | `/media` | Optional future | 未来资源页；不进主导航，不进 Story final CTA，不阻塞 Global Advisor 上线 |
 
-| 模块 | 必放内容 |
+`/story` 不能做成 Impact Dashboard。`/impact` 不能写成个人故事页。`/media` 若保留，只标注为 optional future resources。
+
+#### `/story` · My Story
+
+`/story` 取代原 `/about` · Youth-led Story。`/about` 不再是正式页面；未来实际开发可 redirect `/about` → `/story`，本规格只写推荐，不实现 redirect。
+
+My Story 不是简历页、申请表内容堆砌页、技术说明书或 Impact Dashboard。目标是让普通用户、评审、老师和合作伙伴在很短时间内理解：
+
+1. 为什么这个项目会出现；
+2. 最初看到的问题是什么；
+3. 项目如何从中国试点发展到全球工具；
+4. 这个工具为什么与普通 AI 推荐工具不同；
+5. 目前有什么早期证据；
+6. 这个项目由谁发起和推动；
+7. 下一步希望解决什么。
+
+Story 页面整体视觉：editorial / documentary。继续沿用暖米白背景和森林绿 accent，但建议更大的标题、更多留白、少量真实照片、时间线、impact numbers。大段 card 尽量减少，不要把每一段都包在白色圆角 card 中。
+
+Story 页面只保留：
+
+1. Hero
+2. 01 · The Question
+3. 02 · How It Grew
+4. 03 · How the Tool Works
+5. 04 · Early Impact
+6. 05 · Built from a Student Question
+7. 06 · What's Next
+8. Final CTA
+
+不要再额外增加大量项目介绍 section。
+
+##### My Story Hero copy
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | MY STORY |
+| Heading | From cleaner skies to a harder question at home. |
+| Body | I started this project with a simple question: when cleaner-energy transitions change how families heat and cool their homes, who helps ordinary households understand what actually fits their climate, budget, and living conditions? |
+| Supporting line | From a household-energy study in northern China to a global climate-adaptation decision tool. |
+| Byline | A student-led climate and household energy project. |
+| Back link | ← Back to the advisor |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 我的故事 |
+| Heading | 从更蓝的天空，到一个更难回答的家庭问题。 |
+| Body | 这个项目最初来自一个很简单的问题：当清洁能源转型改变家庭取暖和制冷方式时，谁来帮助普通家庭理解，究竟什么方案真正适合自己的气候、预算和居住条件？ |
+| Supporting line | 从中国北方家庭能源研究，到面向全球家庭的气候适应决策工具。 |
+| Byline | 一个由学生发起并主导的气候与家庭能源项目。 |
+| Back link | ← 返回家庭能源助手 |
+
+##### 01 · The Question
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 01 · THE QUESTION |
+| Heading | Cleaner air can be a success. The transition can still be difficult at home. |
+| Body | Energy transitions are often measured through emissions, infrastructure and policy. But households experience them through everyday questions: How much will this cost? Will the home stay warm in winter or cool in summer? How difficult is installation? What happens when a family does not know which technologies are available? |
+| Pull quote | A climate solution also has to make sense at the household level. |
+| Small labels | Cost · Climate resilience · Household constraints · Access to information |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 01 · 问题从哪里开始 |
+| Heading | 空气可以变得更清洁，但能源转型对家庭来说仍然可能很困难。 |
+| Body | 能源转型往往通过排放、基础设施和政策来衡量，但家庭真正面对的是更日常的问题：要花多少钱？冬天能不能稳定取暖？夏天能不能有效降温？安装是否困难？如果一个家庭根本不了解有哪些技术选择，又该如何判断？ |
+| Pull quote | 一个气候解决方案，也必须在家庭层面真正可行。 |
+| Small labels | 家庭成本 · 气候适应 · 住宅条件 · 信息获取 |
+
+##### 02 · How It Grew
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 02 · HOW IT GREW |
+| Heading | One question became a pilot, and the pilot became a broader tool. |
+
+| Timeline | Label | English copy |
+|----------|-------|--------------|
+| 1 | RESEARCH | I began by studying how household heating transitions can create different experiences for policy, climate outcomes and household well-being. |
+| 2 | CHINA PILOT | I then developed an interactive China pilot to explore how people understand household heating choices and their trade-offs. |
+| 2 Evidence | 50+ internal-test participants | Limited internal testing with students from my school and a small number of farmers and village committee staff from communities in Hebei. The China pilot has not been publicly released. |
+| 3 | GLOBAL ADVISOR | The next step was to expand the question beyond one region and beyond heating alone: What happens when climate, household income, cooling needs, installation constraints and different technologies all have to be considered together? |
+| 4 | NOW | The result is the Climate Adaptation Energy Advisor: a tool where deterministic rules calculate the ranking and AI helps people understand what the results mean. |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 02 · 项目如何一步步发展 |
+| Heading | 一个问题变成了一次试点，而试点又发展成了一个更广泛的工具。 |
+
+| Timeline | Label | 中文文案 |
+|----------|-------|----------|
+| 1 | 研究 | 我最初关注的是：家庭取暖转型在政策效果、气候目标和家庭生活体验之间，可能产生怎样不同的结果。 |
+| 2 | 中国试点 | 随后，我设计了一套互动式中国试点，用来探索人们如何理解家庭取暖选择，以及不同方案之间的取舍。 |
+| 2 Evidence | 50+ 名内测参与者 | 有限内部测试包括我校学生，以及河北部分村落的少量农民和村委工作人员。中国试点目前尚未进行公开发布。 |
+| 3 | 全球家庭能源助手 | 下一步，我把问题从一个地区扩展到全球，也从单纯取暖扩展到取暖和制冷：当气候、家庭收入、住宅条件、安装限制以及不同能源技术同时进入决策时，我们该如何比较？ |
+| 4 | 现在 | 最终形成了 Climate Adaptation Energy Advisor：由确定性算法计算排序，由 AI 帮助用户理解这些结果意味着什么。 |
+
+##### China Pilot public data wording
+
+整份公开页面统一口径：
+
+- `50+ internal-test participants`
+- `limited internal testing`
+- `not publicly released`
+- 参与者包括我校同学、河北部分村落的农民、河北部分村落的村委工作人员
+- 不公开显示学生、农民、村委工作人员的具体人数拆分
+- 不把旧版 valid-session / completed-survey counts 作为 Story / Impact 主 headline。若旧研究数字仍需保留，只能放在内部 research appendix 或 Methodology 的历史记录中，并清楚标注来源、范围和非公开性质。
+
+公开解释文案：
+
+| Language | Copy |
+|----------|------|
+| English | Limited internal testing only. The China pilot was tested with more than 50 participants, including students from my school and a small number of farmers and village committee staff from communities in Hebei. It has not been publicly released, so these figures should be interpreted as early, exploratory evidence rather than public-user statistics. |
+| 中文 | 仅限小规模内部测试。中国试点目前已有 50 余名内测参与者，包括我校学生，以及河北部分村落的农民和村委工作人员。项目尚未进行公开发布，因此这些数据属于早期探索性证据，不代表公开用户统计。 |
+
+##### 03 · How the Tool Works
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 03 · HOW THE TOOL WORKS |
+| Heading | The score comes from the data. The explanation comes from AI. |
+
+| Step | Title | English copy |
+|------|-------|--------------|
+| 1 | YOUR HOME | The tool starts with what matters to the household: income, home size, energy bills, heating and cooling needs, and practical home conditions. |
+| 2 | LOCAL PUBLIC DATA | It combines those answers with traceable public data for the user's location, such as climate, energy prices and emissions factors. |
+| 3 | DETERMINISTIC SCORING | Eligible paths are compared through transparent formulas for affordability, climate resilience, environmental impact and practicality. |
+| 4 | AI EXPLANATION | AI explains the existing scores in plain language. It does not calculate, change or reorder the results. |
+| Bottom line |  | User answers + local public data → deterministic scoring → AI explanation |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 03 · 这个工具如何工作 |
+| Heading | 分数来自数据，解释来自 AI。 |
+
+| Step | Title | 中文文案 |
+|------|-------|----------|
+| 1 | 你的家庭 | 工具首先关注真正与家庭有关的信息：收入、住宅面积、能源账单、取暖与制冷需求，以及住宅实际条件。 |
+| 2 | 当地公开数据 | 系统再结合用户所在地可追溯的公开数据，例如气候、能源价格和排放因子。 |
+| 3 | 确定性算法评分 | 通过筛选的路径按照明确公式，从家庭可负担性、气候适应与可靠性、环境影响和实施适配性四个方面进行比较。 |
+| 4 | AI 解释 | AI 用更容易理解的语言解释已经计算好的结果，但不会计算、修改或重新排序这些分数。 |
+| Bottom line |  | 用户回答 + 当地公开数据 → 确定性评分 → AI 解释 |
+
+##### 04 · Early Impact
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 04 · EARLY IMPACT |
+| Heading | What we are learning so far |
+
+| Metric | English label |
+|--------|---------------|
+| `50+` | China pilot internal-test participants |
+| `{global_site_visit_count}` | Global site visits |
+| `{global_feedback_count}` | Global feedback responses |
+| `{understanding_positive_rate}%` when enough G7 feedback exists | said the tool helped them better understand their options |
+| fallback when sample is small | Early feedback collecting now |
+
+Disclaimer: Early and exploratory evidence. The China pilot was conducted as limited internal testing with students and participants from several Hebei village communities and was not publicly released. Global site visits represent recorded website visits, not verified unique individuals.
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 04 · 早期影响力 |
+| Heading | 我们目前正在了解到什么 |
+
+| Metric | 中文标签 |
+|--------|----------|
+| `50+` | 中国试点内测参与者 |
+| `{global_site_visit_count}` | 全球网站访问次数 |
+| `{global_feedback_count}` | 全球反馈提交数 |
+| `{understanding_positive_rate}%` when enough G7 feedback exists | 的反馈者表示工具帮助他们更好地理解了可选方案 |
+| fallback when sample is small | 正在收集早期反馈 |
+
+Disclaimer: 以上均为早期探索性证据。中国试点仅进行了有限内部测试，参与者包括我校学生以及河北部分村落的参与者，尚未公开发布。全球网站访问次数表示记录到的网站访问，并不等同于经过身份验证的独立个人数量。
+
+不要为了页面排版写假百分比。数据不足时显示 `Early feedback collecting now` / `正在收集早期反馈`。
+
+##### 05 · The People Behind It
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 05 · THE PEOPLE BEHIND IT |
+| Heading | Built from a student question |
+| Body | I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. |
+
+到这里结束。不要再增加 `Technical collaborators ...`，不要增加 `Youth-led does not mean ...`，不要增加任何额外 Principle quote。
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 05 · 项目背后的人 |
+| Heading | 从一个学生的问题开始 |
+| Body | 我发起了最初的研究问题，并从早期研究、中国试点一路参与并主导到全球家庭能源助手的设计。我的工作包括项目设计、研究、参与者招募、数据分析、产品方向以及决策框架的构建。 |
+
+到这里结束。不要出现“在技术实现过程中，也有技术协作者……”，不要出现“青年主导并不意味着……”，不要增加其他额外 Principle 文案。
+
+##### 06 · What's Next
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 06 · WHAT'S NEXT |
+| Heading | There is no single best technology for every household. |
+| Body | The next goal is not to tell every family to choose the same solution. It is to make complex household energy choices easier to understand across different climates, incomes and homes. |
+
+| Direction | English copy |
+|-----------|--------------|
+| MORE PLACES | Expand reliable local public data to more countries and regions. |
+| MORE HOUSEHOLDS | Learn from a wider range of households, including people with tighter budgets or fewer local energy choices. |
+| BETTER EVIDENCE | Use real user feedback to improve the questions, scoring transparency and explanations. |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 06 · 下一步 |
+| Heading | 没有一种技术会是所有家庭的唯一最佳答案。 |
+| Body | 下一步的目标不是告诉所有家庭选择同一种方案，而是让不同气候、不同收入和不同住宅条件下的复杂家庭能源选择变得更容易理解。 |
+
+| Direction | 中文文案 |
+|-----------|----------|
+| 覆盖更多地区 | 为更多国家和地区补充可靠、可追溯的当地公开数据。 |
+| 接触更多家庭 | 从更广泛的家庭中学习，尤其关注预算更紧张、当地能源选择更有限的家庭。 |
+| 建立更好的证据 | 利用真实用户反馈继续改进问题设计、评分透明度和解释方式。 |
+
+**不要混淆**：本节是 Story 页面 `06 · What's Next`。当前项目里的 `G6 · Action Summary` 是评分流程功能，本次不修改 G6 share card、PNG/PDF 或 summary logic。
+
+##### My Story Final CTA
+
+Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。删除 `View full impact →` 和 `Project resources →`，不要在 Story 最后出现 secondary links。
+
+| 元素 | English |
+|------|---------|
+| Heading | What could fit your home? |
+| Body | Explore heating and cooling paths using your own household information and local climate. |
+| Primary CTA | Start your home assessment |
+| Target | G1 / start assessment flow |
+
+| 元素 | 中文 |
+|------|------|
+| Heading | 哪些方案可能适合你家？ |
+| Body | 使用你自己的家庭信息和当地气候，比较不同的取暖和制冷路径。 |
+| Primary CTA | 开始家庭评估 |
+| Target | G1 / 家庭评估主流程 |
+
+##### Story image guidance
+
+建议最多 3–4 张真实图片：
+
+| 位置 | 建议图片 |
 |------|----------|
-| China Pilot Evidence | Valid sessions, completed surveys, pre/post understanding gain（现有证据；保留 recommendation 等 Pilot 指标） |
-| Global Advisor Feedback | `global_feedback` 行数；helped-understand average / positive rate（score≥4）；AI helpfulness average / positive rate（排除 `not_used`）；AI usage rate（behavioral `ai_used`） |
-| Region coverage | China pilot + Global MVP regions |
-| Anonymous testimonials | 2–4 条经人工审核的匿名短反馈（不自动公开自由文本） |
-| Small-sample label | Early feedback · n = X / 早期反馈 · 样本量 n = X |
-| Caution | Small-sample, exploratory, anonymous data |
+| Hero | 项目 / 调研代表照片 |
+| 01 The Question | 河北村落 / 住宅 / 能源环境照片 |
+| 02 How It Grew | China Pilot 页面截图或测试过程 |
+| 05 Built from a Student Question | 研究 / 项目设计过程照片 |
 
-Global metrics 只统计非 null 的 understanding；AI 平均分排除 `not_used` 与 null。
+原则：优先真实项目材料，不为视觉效果放大量 stock photo。涉及真实参与者时，必须确保有适当的公开使用权限。没有明确许可时，优先使用环境、建筑、设备、背影、试点 UI 截图，避免未经许可公开可识别个人肖像。
 
-#### `/about` Youth-led Story
+##### Story page wireframe
 
-| 模块 | 必放内容 |
-|------|----------|
-| Why I started | 从中国北方「蓝天变好、过冬账变难」出发 |
-| Youth leadership | Guo Hang 发起、设计、部署、招募、分析；CS 同学作为技术协作 |
-| Timeline | Research → China pilot → global household advisor |
-| Climate justice | 关注低收入、农村、偏远地区家庭的能源负担 |
-| Global vision | 从 China pilot 扩展到多国取暖/制冷决策支持 |
+```text
+┌──────────────────────────────────────────────────────────┐
+│ ← Back to advisor                       English / 中文    │
+├──────────────────────────────────────────────────────────┤
+│ MY STORY                                                 │
+│                                                          │
+│ From cleaner skies                                       │
+│ to a harder question at home.                            │
+│                                         [REAL PHOTO]     │
+├──────────────────────────────────────────────────────────┤
+│ 01 · THE QUESTION                                        │
+│                                                          │
+│ Story / problem                         [FIELD PHOTO]    │
+│                                                          │
+│ Cost · Climate · Home · Information                      │
+├──────────────────────────────────────────────────────────┤
+│ 02 · HOW IT GREW                                         │
+│                                                          │
+│ Research → China Pilot → Global Advisor → Now            │
+│                                                          │
+│ China Pilot: 50+ internal-test participants              │
+│ Limited internal testing · Not publicly released         │
+├──────────────────────────────────────────────────────────┤
+│ 03 · HOW THE TOOL WORKS                                  │
+│                                                          │
+│ Home                                                     │
+│   + Local public data                                    │
+│   ↓                                                      │
+│ Deterministic scoring                                    │
+│   ↓                                                      │
+│ AI explanation                                           │
+├──────────────────────────────────────────────────────────┤
+│ 04 · EARLY IMPACT                                        │
+│                                                          │
+│ 50+               {visits}          {feedback}           │
+│ China test         Site visits       Feedback            │
+│                                                          │
+│ Early / exploratory data note                            │
+├──────────────────────────────────────────────────────────┤
+│ 05 · BUILT FROM A STUDENT QUESTION                       │
+│                                                          │
+│ Short personal project-leadership paragraph              │
+│                                         [PROJECT PHOTO]  │
+├──────────────────────────────────────────────────────────┤
+│ 06 · WHAT'S NEXT                                         │
+│                                                          │
+│ More places · More households · Better evidence          │
+├──────────────────────────────────────────────────────────┤
+│ What could fit your home?                                │
+│                                                          │
+│ [ Start your home assessment ]                           │
+└──────────────────────────────────────────────────────────┘
+```
 
-#### `/media` Media Kit
+#### `/impact` · Impact & Evidence
 
-| 下载项 | 格式 |
-|--------|------|
-| One-page project brief | Chinese PDF + English PDF |
-| 2-minute demo video | MP4 / hosted link |
-| Screenshots | PNG |
-| Logo / project title card | PNG |
-| Case report draft | DOCX / PDF |
+Impact 页面保持独立，负责真实项目证据 / 匿名统计，不负责个人叙事。建议结构：
+
+| Section | 内容 |
+|---------|------|
+| IMPACT & EVIDENCE | 页面标题与早期证据说明 |
+| 01 · China Pilot | `50+` Internal-test participants · Limited internal testing only · Not publicly released |
+| 02 · Global Advisor | `{global_site_visit_count}` Global site visits · `{global_feedback_count}` Feedback responses · `{understanding_positive_rate}%` Helped understand options · `{ai_helpfulness_average}/5` AI helpfulness；数据不足时显示 Early data / collecting feedback |
+| 03 · What these numbers mean | China Pilot 是内部有限测试，不是公开用户；Global site visits 是访问次数，不是 verified unique individuals；Global feedback 是自愿、匿名、optional |
+| 04 · Methodology note | data definition · sample size · last updated · anonymous · exploratory |
+
+China Pilot 参与者公开描述为 students from my school + farmers / village committee staff from several Hebei village communities。不要细分人数。
+
+Global metrics 规则：
+
+| Metric | Definition |
+|--------|------------|
+| `global_site_visit_count` | 记录到的 Global site visits，不是 Global users |
+| `global_feedback_count` | G7 optional feedback submissions |
+| `helped_understand_average` | 非 null `helped_understand_score` 的平均值 |
+| `helped_understand_positive_rate` | `helped_understand_score >= 4` / 非 null understanding responses |
+| `ai_helpfulness_average` | numeric 1–5 only；排除 `not_used` 与 null |
+| `ai_helpfulness_positive_rate` | numeric `ai_helpfulness >= 4` / numeric AI helpfulness responses |
+| `AI usage rate` | behavioral `ai_used = true` / relevant Global sessions or submitted feedback rows，开发时需明确 denominator |
+
+自由文本不能自动公开。`improvement_text` 或 testimonial 必须 manual review 后，才可选择少量匿名 feedback 展示。
+
+G7 与 Impact 的关系：G7 是 optional、anonymous、not required。Impact 必须写 `X% of feedback respondents...`，不要写 `X% of all users...`。例如：
+
+| Language | Correct wording |
+|----------|-----------------|
+| English | 82% of feedback respondents said the tool helped them better understand their options. |
+| 中文 | 82% 的反馈提交者表示，这个工具帮助他们更好地理解了可选方案。 |
+
+#### Impact data provenance
+
+Impact statistics must be traceable. 每个 public metric 最好能够回答：
+
+- what is being counted?
+- where does it come from?
+- what period does it cover?
+- when was it last updated?
+
+禁止过度宣称：
+
+| 不要说 | 应改为 |
+|--------|--------|
+| site visits = individual users | site visits = recorded website visits |
+| internal-test participants = public users | China Pilot internal-test participants |
+| optional feedback respondents = all website users | feedback respondents |
+
+Impact data must follow the same traceability principle as G4 scoring. 不要为了让页面数字好看而人为设置初始值。
+
+#### `/media` · Optional future resources
+
+Media Kit / Project Resources 降级为未来可选资源，不应阻塞 MVP。
+
+`/media` 不应：
+
+- 出现在主导航；
+- 出现在 Story Final CTA；
+- 阻塞 Global Advisor 上线；
+- 与 Impact / Story 平级抢叙事。
+
+若文档或未来产品保留 `/media`，必须标注 `Optional / future` 与 `Not required for core MVP`。可选资源包括 one-pager、demo video、screenshots、logo/title card、case report draft 等，但这些不是当前核心交付。
 
 ---
 
@@ -1097,8 +1453,17 @@ Global metrics 只统计非 null 的 understanding；AI 平均分排除 `not_use
 | `GlobalFeedbackForm` | G7 optional 3-question feedback + Skip |
 | `ActionSummaryCard` | 生成可下载/可分享的个人行动摘要 |
 | `DisclaimerBanner` | 全局免责 |
-| `ImpactMetricWall` | COP31 影响力数字墙 |
-| `MediaDownloadGrid` | one-pager、视频、截图下载 |
+| `StoryHero` | `/story` editorial hero + photo |
+| `StoryTimeline` | Research → China Pilot → Global Advisor → Now |
+| `StoryHowItWorks` | Home + local public data → deterministic scoring → AI explanation |
+| `StoryImpactPreview` | Story 中的 early impact placeholders |
+| `StoryNextSteps` | More places / More households / Better evidence |
+| `ImpactMetricWall` | `/impact` 指标墙：China Pilot + Global Advisor |
+| `ChinaPilotEvidenceCard` | 50+ internal-test participants · limited internal testing · not publicly released |
+| `GlobalTrafficMetrics` | Global site visits；不要显示 Global users |
+| `GlobalFeedbackMetrics` | G7 optional feedback 指标；denominator = feedback respondents |
+| `EvidenceMethodologyNote` | data definition / sample size / last updated / anonymous / exploratory |
+| `MediaDownloadGrid` | optional future；one-pager、视频、截图下载，不属于 MVP blocker |
 
 ### 6.3 响应式
 
@@ -1885,9 +2250,116 @@ Region override 示例（illustrative structure only；`null` 表示尚未采集
 }
 ```
 
-### 8.4 Supabase 扩展（可选 Phase 2）
+### 8.4 Analytics / Supabase / API implementation guidance（future only）
 
-新表 `pathfinder_sessions`：
+本节只写未来实现建议，不代表本轮要创建数据库表、Supabase migration、API 或生产代码。
+
+#### Global site visit definition
+
+公开 Impact 页使用指标名：
+
+| English | 中文 |
+|---------|------|
+| Global site visits | 全球网站访问次数 |
+
+不要叫 `Global users`、`Global individual users` 或 `verified individual users`。如果未来做 anonymous visitor ID，最多称 `Anonymous browser visitors` / `匿名浏览器访客`。
+
+一个 `site visit` 定义为：用户开启一个新的浏览器访问 session，进入 `/` 或 `/global`，记录一次 visit。
+
+在同一个浏览器 session 中：
+
+```text
+G0 → G1 → G2 → G3 → G4
+```
+
+只算 `1 site visit`。页面刷新不应该持续重复增加。在一个新的浏览器 session 再次打开 `/` 或 `/global`，再记录一个新的 visit。这比每 render 一次页面都 +1 更能反映真实网站访问。
+
+#### Recommended future data flow
+
+未来建议使用 Supabase + server-side API：
+
+```text
+Browser
+  → POST /api/visit
+  → server
+  → Supabase
+```
+
+不要让浏览器直接使用 Supabase service-role key。禁止：
+
+```text
+browser → service-role Supabase key
+```
+
+#### Suggested table: `site_visit_events`
+
+| column | type | 说明 |
+|--------|------|------|
+| id | uuid | primary key |
+| visitor_id | text nullable | optional anonymous browser visitor id |
+| visit_session_id | text | one browser session visit id |
+| route | text | `/` or `/global` |
+| locale | text | `en` / `zh` |
+| country_iso3 | text nullable | optional if known after G1 |
+| visited_at | timestamptz | server timestamp |
+
+#### Optional table: `anonymous_visitors`
+
+| column | type | 说明 |
+|--------|------|------|
+| visitor_id | text | random anonymous id generated in browser |
+| first_seen_at | timestamptz | |
+| last_seen_at | timestamptz | |
+| visit_count | integer | approximate repeat visits for this browser |
+
+#### Session duplicate prevention
+
+未来前端可使用 `sessionStorage` 防重复。概念逻辑：
+
+```text
+On entering / or /global:
+  if current browser session has not recorded a visit:
+      call POST /api/visit
+      after successful/accepted request:
+          sessionStorage.site_visit_recorded = true
+  else:
+      do not add another visit
+```
+
+这只是 implementation guidance，本轮不要写代码。
+
+#### Anonymous visitor ID
+
+未来可以使用 `localStorage` 保存随机 `anonymous_visitor_id`，用途仅限：
+
+- 粗略判断同一 browser 是否曾经访问过；
+- 分析 repeat visits；
+- 统计 approximate anonymous browser visitors。
+
+不得用于：
+
+- 身份识别；
+- tracking across unrelated websites；
+- 收集姓名、邮箱；
+- 浏览器 fingerprinting。
+
+公开 Impact 页目前主要展示 `Global site visits`，不是 unique users。
+
+#### No artificial initial count
+
+不要在 Markdown 或未来实现中设计：
+
+```text
+display_count = real_count + 100
+```
+
+如果这 100 没有真实来源，不能作为 Impact Evidence。若有经过确认的历史真实访问，可以建立 `verified_historical_visit_baseline`，并在 Methodology 写清来源、时间范围和计算方法。否则真实访问统计从实际数据库记录开始。
+
+核心原则：Impact data must follow the same traceability principle as G4 scoring.
+
+#### Optional future table: `pathfinder_sessions`
+
+`pathfinder_sessions` 可作为未来产品分析表，不是核心 MVP 必需项。若实现，必须脱敏，且不公开原始 household JSON。
 
 | column | type | 说明 |
 |--------|------|------|
@@ -1900,6 +2372,8 @@ Region override 示例（illustrative structure only；`null` 表示尚未采集
 | created_at | timestamptz | |
 
 #### `global_feedback`（Global G7）
+
+G7 是 optional、anonymous、not required。Impact 统计必须基于 feedback respondents，而不是 all users。
 
 | column | type | 说明 |
 |--------|------|------|
@@ -1914,7 +2388,20 @@ Region override 示例（illustrative structure only；`null` 表示尚未采集
 | ai_used | boolean | behavioral |
 | submitted_at | timestamptz | |
 
-SQL：`docs/data/supabase/global_feedback.sql`。与 China Pilot `simulation_sessions` 问卷字段隔离。
+与 China Pilot `simulation_sessions` 问卷字段隔离。自由文本 `improvement_text` 不能自动公开，必须 manual review 后才可选择少量匿名展示。
+
+Impact 可未来计算：
+
+| Metric | Definition |
+|--------|------------|
+| `global_feedback_count` | `global_feedback` rows submitted |
+| `helped_understand_average` | avg numeric `helped_understand_score`，only non-null |
+| `helped_understand_positive_rate` | `helped_understand_score >= 4` / non-null understanding responses |
+| `ai_helpfulness_average` | avg numeric `ai_helpfulness`，exclude `not_used` and null |
+| `ai_helpfulness_positive_rate` | numeric `ai_helpfulness >= 4` / numeric AI helpfulness responses |
+| `AI usage rate` | behavioral `ai_used`，denominator must be explicitly defined |
+
+公开文案必须写 `feedback respondents` / `反馈提交者`。不要写 `users`，除非 denominator 真的是所有用户。
 
 ---
 
@@ -2045,65 +2532,91 @@ Do not change any numbers.
 
 ### 10.3 路由部署（Vercel）
 
+推荐 route：
+
+| Route | Meaning |
+|-------|---------|
+| `/` | Global landing |
+| `/global` | Global landing / advisor |
+| `/story` | My Story |
+| `/impact` | Impact & Evidence |
+| `/china` | China Pilot |
+| `/about` | deprecated；future implementation may redirect to `/story` |
+| `/media` | optional future route；not required for core MVP |
+
+示例 rewrites（只作为未来实现建议，本轮不修改 route）：
+
 ```json
 {
   "rewrites": [
     { "source": "/global", "destination": "/docs/global/index.html" },
     { "source": "/china", "destination": "/index.html" },
+    { "source": "/story", "destination": "/story/index.html" },
     { "source": "/impact", "destination": "/impact/index.html" },
-    { "source": "/about", "destination": "/about/index.html" },
     { "source": "/media", "destination": "/media/index.html" },
     { "source": "/", "destination": "/global/index.html" }
   ]
 }
 ```
 
+`/about` 不再是正式页面。未来实际开发时可以 redirect `/about` → `/story`，但本轮 Markdown 不实现 redirect。
+
 ---
 
 ## 11. 分阶段交付（请 CS 同学按 Phase 排期）
 
-### Phase 0 · 1 周 — COP31 Global-first 脚手架
+### Phase 0 · 1 周 — Global-first 脚手架
 
 - [ ] 把 `/` 改为 Global-first landing；现有 V1 移到 `/china`
 - [ ] 新建 `/global` 入口与 G0–G3 静态页（无打分）
-- [ ] 新建 `/impact`、`/about`、`/media` 三个 COP31 申报支撑页的静态版
 - [ ] `docs/data/climate/cn_us_admin1_capitals.json` 样例（至少各 2 个中美省/州首府气候）+ `docs/data/climate/climate_profiles.json` 若干 Köppen profile；`docs/data/technologies/technology_catalog.json` 作为完整内部技术目录
-- [ ] 首页写明 “Youth-led climate action · China pilot to global tool”
-- [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G7、Impact/About/Media、AI explanation 全部跟随同一语言
+- [ ] 首页 G0 使用新 IA：主导航只放 `China Pilot` / `Impact` / `English / 中文`；Hero 主按钮为 `Start from the map — about 3 minutes`；轻量文字 CTA 为 `See my story →`
+- [ ] 首页加入 `English / 中文` 语言选择；选择后 G1–G7、`/story`、`/impact`、AI explanation 全部跟随同一语言
 
-**验收**：评审打开首页 30 秒内能看懂这是全球青年气候行动项目；能切换 English / 中文；切换后后续页面文字跟随语言；能在地图上点选位置（中美到省/州，其他到国家）、填表、数据写入 console；China pilot 仍可进入。
+**验收**：用户打开首页 30 秒内能看懂这是 Climate Adaptation Energy Advisor；能切换 English / 中文；切换后后续页面文字跟随语言；能在地图上点选位置（中美到省/州，其他到国家）、填表、数据写入 console；China pilot 仍可进入。
 
-### Phase 1 · 2–3 周 — 全球打分 MVP + 影响力证据
+### Phase 1 · 2–3 周 — Priority 1: G1–G4 scoring core
 
 - [ ] 实现 `hardFilter` + **四维分**（Affordability / Climate Resilience / Environment / Practicality）+ `fitness` 排序
 - [ ] G3 `HomeFeasibilityQuestionnaire` + 后台技术筛选 + G4 ranked table + **selected-path** 四维明细（§7.6–§7.10）
-- [ ] G6 `ActionSummaryCard` 下载 PNG/复制文字
-- [ ] `/impact` 分开展示 China Pilot Evidence 与 Global Advisor Feedback（helped-understand / AI helpfulness；排除 null 与 not_used）
 - [ ] 单元测试 ≥10 cases
 - [ ] **G1 气候两档落地**：中国/美国全省/州首府气候表 + 全球 Köppen 标准 profile；地图点击中美精确到省/州，其余国家只到国家
 - [ ] 用至少 3 个场景跑通筛选（如：河北首府气候、Illinois 首府气候、德国某点 Cfb profile）× 技术目录
 - [ ] 规划并接入 `docs/data/scoring/*` LOCAL_PUBLIC 数据（可先少数国家）；遵守 §7.4 provenance 与 missing-data 规则；**不得**再用 catalog subjective tier 打分
 
-**验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；能生成一张可用于 COP31 材料和社媒传播的行动摘要卡。
+**验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；G4 显示 selected-path 四维明细；AI 不参与计算或排序。
 
-### Phase 2 · 1–2 周 — AI 解释 + 国际传播
+### Phase 2 · 1–2 周 — Priority 2: AI + G7 feedback
 
 - [ ] `POST /api/explain` + RAG（JSON 注入）
 - [ ] G4 inline AI Analysis Panel + 错误降级（G5 = embedded module）
 - [ ] AI 输出必须包含 “Cross-region technology note”，解释不同国家之间的信息差
-- [ ] `/media` 放入中英 one-pager、2 分钟 demo 视频入口、截图包
+- [ ] G7 optional one-minute feedback（understanding / AI helpfulness / improvement；可 Skip；无 recommendation）
+- [ ] 未来实现 `/api/visit` + `site_visit_events` 时遵守 §8.4：sessionStorage 防重复、server-side API、Supabase service-role secret 不进浏览器
 - [ ] Supabase `pathfinder_sessions`（可选）
 
-**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；媒体页可直接作为 COP31 申报附件入口。
+**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；G7 可跳过；feedback failure 不阻塞用户完成流程。
 
-### Phase 3 · 1–2 周 — Feedback + COP polish
+### Phase 3 · 1 周 — Priority 3: `/impact`
 
-- [ ] G7 optional one-minute feedback（understanding / AI helpfulness / improvement；可 Skip；无 recommendation）
-- [ ] `/about` 补充青年主导时间线、活动照片、匿名用户反馈
+- [ ] `/impact` 分开展示 China Pilot Evidence 与 Global Advisor metrics
+- [ ] China Pilot headline 统一为 `50+ internal-test participants`
+- [ ] 明确 limited internal testing / not publicly released
+- [ ] Global public metric 使用 `Global site visits`，不要使用 `Global users`
+- [ ] Global feedback metrics 按 §8.4 排除 null / `not_used`，自由文本经人工审核后才可公开
+- [ ] Methodology note 显示 data definition / sample size / last updated / anonymous / exploratory
+
+### Phase 4 · 1 周 — Priority 4: `/story`
+
+- [ ] `/story` 使用本规格 6 个 section：The Question / How It Grew / How the Tool Works / Early Impact / Built from a Student Question / What's Next
+- [ ] Story 05 只保留学生发起与主导说明，不出现 technical collaborators 句子或 Youth-led principle quote
+- [ ] Story Final CTA 只有 `Start your home assessment`，不出现 `View full impact` 或 `Project resources`
+- [ ] Story 使用 3–4 张真实项目材料图片；可识别个人肖像必须有公开使用许可
 - [ ] Mobile 适配 + 免责声明法务审阅
 
-### Phase 4 · 未来
+### Optional future
 
+- `/media` Media Kit / Project Resources：one-pager、2 分钟 demo 视频入口、截图包、logo/title card、case report draft。
 - 政府/企业多角色；村庄 aggregate dashboard；更多国家；制冷负荷详细模型；国际合作数据源。
 
 ---
@@ -2111,13 +2624,13 @@ Do not change any numbers.
 ## 12. 验收标准（Definition of Done）
 
 1. **G7 Feedback**：all questions optional；Skip works with zero answers；submit failure does not block completion；Impact averages exclude null / `not_used`；free text not auto-published.
-1. **功能**：Global 全流程 G0→G7 无 dead end；首页可选择 English / 中文，选择后全流程 UI 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
-2. **正确性**：scoring 模块有单测；hard exclude 理由可见。
-3. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
-4. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
-5. **隐私**：无 PII 强制；Supabase 仅存匿名 session。
-6. **COP31 传播**：`/impact`、`/about`、`/media` 可公开访问；有中英项目简介、影响力数字、行动摘要卡、demo 视频入口。
-7. **文档**：README 增加 Global mode、China pilot、COP31 media kit、语言切换与环境变量说明。
+2. **功能**：Global 全流程 G0→G7 无 dead end；首页可选择 English / 中文，选择后全流程 UI、`/story`、`/impact` 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
+3. **正确性**：scoring 模块有单测；hard exclude 理由可见。
+4. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
+5. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
+6. **隐私**：无 PII 强制；Supabase 仅存匿名 session / optional feedback / future site visit events；service-role secret 不得暴露到客户端。
+7. **Story / Impact**：G0 有 `See my story →` 指向 `/story`；`/about` 不再是正式页面；`/media` 是 optional future；Story 有完整 6 section；Story 05 已删除 technical collaborators 句子与 Youth-led principle；Story final CTA 只有 `Start your home assessment`；Impact 使用 `50+ internal-test participants` 和 `Global site visits` 口径，并包含 Methodology note。
+8. **文档**：README 增加 Global mode、China pilot、Story、Impact、语言切换与环境变量说明；Media Kit 只作为 optional future resources。
 
 ---
 
@@ -2146,7 +2659,7 @@ A: **中国、美国**：地图识别到省/州，气候用该省/州**首府点
 A: 能，新增 `/api/explain` 即可。
 
 **Q: 论文/答辩要截图什么？**  
-A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；COP31 申报还要截图 `/impact` 数字墙、`/about` 青年主导故事、G6 行动摘要卡。
+A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；申报材料还可截图 `/impact` 证据页、`/story` My Story、G6 行动摘要卡。`/about` 已 deprecated，`/media` 只是 optional future resources。
 
 ---
 
