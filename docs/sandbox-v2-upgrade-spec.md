@@ -3,14 +3,14 @@
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-10 · Story / Impact IA + analytics definitions
+> **本文档版本**：2026-08-10 · G6 optional home-energy summary card (PNG-only, Markdown-only)
 > **重要边界**：本文是给 CS 技术协作者看的 development specification，不代表功能已经实现。本轮只更新 Markdown 规格，不实现 route、页面、API、数据库或 runtime data。
 
 ---
 
 ## 0. 一句话目标
 
-把现有「华北村级煤改 X 五回合沙盘」升级为 **Climate Adaptation Energy Advisor（气候适应家庭能源选择助手）**——用户在全球地图上点击自家位置 → 系统识别位置（**中国/美国精确到省或州**；**其余国家只识别到国家**）→ 载入对应气候数据（中美用省/州首府气候代表；其余国家用 Köppen 标准 profile）→ 用户补充家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 生成可分享的个人行动摘要与匿名影响力数据。
+把现有「华北村级煤改 X 五回合沙盘」升级为 **Climate Adaptation Energy Advisor（气候适应家庭能源选择助手）**——用户在全球地图上点击自家位置 → 系统识别位置（**中国/美国精确到省或州**；**其余国家只识别到国家**）→ 载入对应气候数据（中美用省/州首府气候代表；其余国家用 Köppen 标准 profile）→ 用户补充家庭数据 → **规则引擎算出不同取暖/制冷方案的适配分** → **AI 用 plain language 解释分数、填补跨国技术信息差** → 用户可选择保存家庭能源摘要卡（G6，optional）→ 可选匿名反馈与 Impact 证据页。
 
 **核心原则**：
 - **分数由算法给，不由 AI 编造**（AI 只解释、翻译、对照，不凭空写补贴金额或 COP）。
@@ -119,8 +119,9 @@ Global Landing (G0)
     ├─ Start from the map → G1 climate map → Household form
     │     → Home feasibility questionnaire → [Screen paths]
     │     → G4 Results + inline AI analysis
-    │     → Shareable action summary
-    │     → Optional one-minute feedback (G7, skippable) / thanks
+    │           ├─ [ Save my summary ] → optional G6 (PNG summary card)
+    │           ├─ optional G7 feedback
+    │           └─ finish / return / continue as product flow defines
     │
     ├─ See my story → /story  → Back to advisor (G0) 或 Start assessment (G1)
     └─ Nav Impact → /impact → Back to advisor (G0)
@@ -134,7 +135,7 @@ Global Landing (G0)
 | G3 | `global-home-feasibility` | 不超过 8 个住宅可行性问题，供后台自动筛选候选路径 |
 | G4 | `global-results` | 适配分排序 + selected path detail + **inline AI Analysis Panel** |
 | G5 | *(embedded module)* | AI 解释能力模块；**不作为独立跳转页面**，输出渲染在 G4 |
-| G6 | `global-action-summary` | 生成可分享的个人行动摘要卡片（支持下载 PNG/PDF） |
+| G6 | `global-action-summary` | **Optional** utility：把 G4 `#1` 结果整理成可保存到本地的家庭能源摘要卡（PNG only；不依赖 AI） |
 | G7 | `global-feedback` | **Optional** one-minute feedback（理解度 / AI 有用性 / 改进建议；可 Skip） |
 
 | 申报/传播页面 | 页面 ID | 目的 |
@@ -495,7 +496,7 @@ Disclaimer: 以上均为早期探索性证据。中国试点仅进行了有限�
 | 接触更多家庭 | 从更广泛的家庭中学习，尤其关注预算更紧张、当地能源选择更有限的家庭。 |
 | 建立更好的证据 | 利用真实用户反馈继续改进问题设计、评分透明度和解释方式。 |
 
-**不要混淆**：本节是 Story 页面 `06 · What's Next`。当前项目里的 `G6 · Action Summary` 是评分流程功能，本次不修改 G6 share card、PNG/PDF 或 summary logic。
+**不要混淆**：本节是 Story 页面 `06 · What's Next`。产品流程里的 `G6 · Action Summary` 是 **optional** 的结果保存工具（PNG summary card），不是 Story 叙事页，也不再要求 PDF。
 
 ##### My Story Final CTA
 
@@ -1277,7 +1278,8 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 |-----|----------|
 | **Explain selected path** | Explain the current `selectedPath` **inline** in the G4 AI Analysis Panel. Does **not** navigate away from G4. Default selected = #1. |
 | **Get the analysis report** | Analyze the whole household and complete ranked results **inline** in the same G4 AI Analysis Panel. Does **not** navigate away from G4. `selectedPath` is UI context only and does not change report scope. |
-| Adjust inputs | Return to G2/G3. If scoring inputs change / G4 is regenerated, previous AI output is invalidated and reset to idle. |
+| **Save my summary** / **保存我的摘要** | Optional utility CTA. Opens **G6** and summarizes `rankedPaths[0]` (algorithm Best-fit). Does **not** change ranking, does **not** call AI, and does **not** treat the currently selected `#2/#3` path as Best-fit. |
+| Adjust inputs | Return to G2/G3. If scoring inputs change / G4 is regenerated, previous AI output is invalidated and reset to idle; any later G6 visit must use the new `rankedPaths[0]`. |
 
 #### Mobile
 
@@ -1302,6 +1304,7 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 | Excluded | Not feasible for your place | 当前条件下不可行 |
 | CTA AI | **Explain selected path** | **解释当前路径** |
 | CTA report | **Get the analysis report** | **获取整体分析报告** |
+| CTA save summary | **Save my summary** | **保存我的摘要** |
 | AI panel idle heading | AI analysis | AI 分析 |
 | AI panel idle helper | Want a clearer explanation? Choose an option above… | 想进一步了解结果？可选择上方功能… |
 | AI path heading | AI path explanation | AI 路径解释 |
@@ -1378,41 +1381,360 @@ Household report scope does **not** change when the user clicks another ranked r
 
 ---
 
-### G6 · Action summary（可分享）
+### G6 · Action Summary（optional home-energy summary）
 
-**目的**：COP31 项目需要可传播、可截图、可作为「行动证据」的输出。用户完成评分和 AI 解释后，生成一张个人行动摘要卡片。
+> **Internal ID**：`G6 · Action Summary` / route id `global-action-summary`  
+> **User-facing page name**：My home energy summary / 我的家庭能源摘要  
+> **本规格只定义产品与数据结构，不实现代码。**
 
-**Layout**
-- 左侧：摘要卡片预览（适合手机截图）
-- 右侧：按钮 `Download PNG` / `Download PDF` / `Copy summary text`
-- 底部：匿名免责声明
+#### Product purpose（对用户有用优先）
 
-**Card fields**
+G6 是一个 **OPTIONAL** 的结果保存工具。
 
-| 字段 | 英文文案 |
-|------|----------|
-| Title | **My home energy path summary** |
-| Region | Region: `{region_label}` |
-| Top path | Best-fit path: `{path_name}` |
-| Fitness | Fitness score: `{score}/100` |
-| Why | Why it fits: `{one_sentence_reason}` |
-| Climate action | Potential benefit: lower household burden / better climate resilience / lower operational emissions / easier implementation |
-| Footer | Generated by Climate Adaptation Energy Advisor |
+它帮助用户把 **G4 已经计算好的核心结果**整理成一张简洁的个人家庭能源摘要图片，方便：
 
-**Copy**
+- 自己留存；
+- 与家人讨论；
+- 与当地安装人员沟通；
+- 与社区或其他相关人员分享。
 
-| 元素 | 英文文案 |
-|------|----------|
-| Heading | **Save your action summary** |
-| Hint | This summary helps you discuss options with family, community groups, or local installers. |
-| CTA PNG | **Download share card** |
-| CTA Text | **Copy plain text summary** |
+公开产品定位（给 CS / 文案）：
+
+| Locale | Positioning |
+|--------|-------------|
+| EN | Turn the G4 result into a concise home-energy summary card that the user can save locally. |
+| ZH | 把 G4 的核心结果整理成一张可以保存到本地的家庭能源摘要卡。 |
+
+内部可理解它也有项目传播价值，但公开文案与 G6 规格必须首先以「对用户有用」为目的。
+
+**不要公开突出**：Action evidence / COP31 / case evidence。
+
+G6 **不是**必须步骤。用户在 G4 已经获得排名、selected-path detail、以及可选的 inline AI 解释后，就算完成主评估。G6 只是 Save/export utility。
+
+#### Optional placement in Global flow
+
+```text
+G4 Results + inline AI analysis
+│
+├── [ Save my summary ] → optional G6
+│
+├── optional G7 feedback
+│
+└── finish / return / continue as product flow defines
+```
+
+合法完成路径包括：
+
+- G4 → optional G6 → optional G7
+- G4 → optional G7
+- G4 → finish
+
+**不要**要求用户必须先保存图片才能进入 G7。  
+G6 and G7 are both optional utilities after the user has already received the main result.
+
+#### Page headings
+
+| Element | English | 中文 |
+|---------|---------|------|
+| Page name | My home energy summary | 我的家庭能源摘要 |
+| Heading | Save your home energy summary | 保存你的家庭能源摘要 |
+| Subheading | A short record of the path that ranked highest for your home, the key numbers behind it, and what to confirm next. | 保存一份简短摘要，查看你家当前排名最高的路径、关键数据，以及下一步需要确认的事项。 |
+| Save CTA | Save summary card | 保存摘要卡 |
+
+#### Which path does G6 summarize?
+
+```text
+summaryPath = rankedPaths[0]   // deterministic Best-fit path
+```
+
+必须明确：
+
+- G6 永远使用 G4 scoring engine 排名第一的 path。
+- **不要**因为 `selectedPathId` 是 `#2/#3` 就把该 path 写成 Best-fit。
+- **不要**因为用户点过 Explain selected path 就修改 G6。
+- `selectedPath` ≠ `bestFitPath`。
+- MVP 只保存算法当前 `#1`。未来若支持 Save selected alternative，不得把 alternative 叫 Best-fit；本版不做。
+
+#### Data source（no AI）
+
+```text
+scoreAndSort()
+  → RankedPath[]
+  → G4 display
+  → G6 formatter
+  → PNG summary card
+```
+
+G6 可读取：
+
+- region label
+- `rankedPaths[0].path_name`
+- `rankedPaths[0].fitness`
+- `rankedPaths[0].dimensions`
+- `rankedPaths[0].estimates`
+- `rankedPaths[0].warnings`
+- `rankedPaths[0].score_coverage`
+
+禁止：
+
+- G4 → ask AI to summarize → G6
+- 在 G6 重新计算 Fitness / 四维分数 / estimates / coverage
+
+原因：用户可能未使用 AI；分享卡应代表正式算法结果；AI 失败不应影响保存；避免第二套不可追溯解释。
+
+若用户 Adjust inputs 后 G4 重新评分，再次进入 G6 必须使用新的 `rankedPaths[0]`，不得复用旧 card state。
+
+**G6 不入库**：只是 client-side presentation/export；本版不为生成/下载摘要卡新增数据库记录。
+
+#### Card field order（final）
+
+1. Title  
+2. Region  
+3. Best-fit path  
+4. Overall Fitness  
+5. Four dimension scores  
+6. Key estimates  
+7. Main strengths  
+8. What to confirm next  
+9. Data coverage / preliminary state  
+10. Disclaimer  
+11. Generated by product name  
+
+#### Title / Region / Best-fit / Fitness
+
+| Field | English | 中文 |
+|-------|---------|------|
+| Title | MY HOME ENERGY SUMMARY | 我的家庭能源摘要 |
+| Region | Region: `{region_label}` | 地区：`{region_label}` |
+| Best-fit | Best-fit path: `{path_name}` | 当前排名最高的路径：`{path_name}` |
+| Fitness | Overall fitness: `{fitness}/100` | 综合适配分：`{fitness}/100` |
+
+Region precision on the card：
+
+- China / US：`admin1, country`（例：`Hebei, China` / `Illinois, United States`）
+- Other countries：country only
+- Never show exact coordinates / address
+
+#### Four dimension scores
+
+只展示 G4 已计算结果；G6 不展示复杂公式。
+
+| English | 中文 | Value |
+|---------|------|-------|
+| Affordability | 家庭可负担性 | `{affordability}/100` |
+| Climate resilience | 气候适应与可靠性 | `{climate_resilience}/100` |
+| Environmental impact | 环境影响 | `{environment}/100` |
+| Practicality | 实施适配性 | `{practicality}/100` |
+
+#### Key estimates
+
+只展示已经存在且可靠的 estimate。推荐字段：
+
+| English | 中文 |
+|---------|------|
+| KEY ESTIMATES | 关键估算 |
+| Estimated annual run cost · `{annual_run_cost}` / year | 预计年度运行费用 · `{annual_run_cost}` / 年 |
+| Estimated upfront cost · `{upfront_cost}` | 预计初装成本 · `{upfront_cost}` |
+| Operating burden · `{operating_burden_pct}%` of annual income | 运行费用负担率 · 占家庭年收入 `{operating_burden_pct}%` |
+| Operational emissions · `{annual_emissions}` / year | 运行阶段排放 · `{annual_emissions}` / 年 |
+
+Missing-data（对齐 §7.11）：
+
+- `missing ≠ 0` / `≠ 50` / ≠ developer guess
+- 不存在则不编数字
+- EN examples：`Upfront cost: Local data unavailable` · `Operational emissions: Data unavailable`
+- ZH examples：`初装成本：暂无可靠的当地数据` · `运行阶段排放：暂无可靠数据`
+- 可隐藏完全无意义空行，但不得显示假值
+
+#### Main strengths（deterministic； replaces Why it fits）
+
+**删除**旧字段：
+
+- ~~Why it fits / `one_sentence_reason`~~
+- ~~Potential benefit~~
+
+对 `summaryPath` 计算 weighted contribution：
+
+```text
+affordability_contribution  = 0.35 * affordability
+climate_contribution        = 0.30 * climate_resilience
+environment_contribution    = 0.20 * environment
+practicality_contribution   = 0.15 * practicality
+```
+
+规则：
+
+1. 按 contribution 从高到低排序；
+2. 取最高 **2** 个 **available**（非 null）dimensions；
+3. 只有一个 available 时只显示一个；
+4. null dimension 不参与；
+5. **不要让 AI 决定 strengths**。
+
+显示：
+
+| Locale | Label | Example |
+|--------|-------|---------|
+| EN | Main strengths | Climate resilience · Affordability |
+| ZH | 主要优势 | 气候适应与可靠性 · 家庭可负担性 |
+
+#### What to confirm next
+
+| Locale | Heading |
+|--------|---------|
+| EN | WHAT TO CONFIRM NEXT |
+| ZH | 下一步需要确认 |
+
+来源：`summaryPath.warnings` + G4 local checks（已有结果）。最多 **1–3** 条最重要项。不要让 AI 新生成。
+
+若无 warning：
+
+- EN：No major unresolved checks were identified from the available data. Local installation confirmation is still recommended.
+- ZH：根据当前数据，没有发现明显未解决的条件，但仍建议由当地专业人员确认实际安装情况。
+
+#### Data coverage
+
+显示：`Data coverage: {score_coverage}%` / `数据覆盖度：{score_coverage}%`
+
+若 coverage < 100%（或 `< 1.0`）：
+
+- EN：Preliminary result — Some local data were unavailable when this summary was calculated.
+- ZH：初步结果 — 计算本摘要时，部分当地数据尚不可获得。
+
+若 = 100%：只显示 coverage，不加 warning。
+
+#### Disclaimer（UI fixed copy； not AI）
+
+| Locale | Copy |
+|--------|------|
+| EN | Decision-support summary only. Based on your answers and available local public data. Confirm actual costs, installation, equipment sizing, safety, and local requirements with qualified local professionals. |
+| ZH | 本摘要仅用于辅助决策。结果基于你的回答和当前可获得的当地公开数据。实际费用、安装条件、设备容量、安全及当地要求请向合格的当地专业人员确认。 |
+| Footer EN | Generated by Climate Adaptation Energy Advisor |
+| Footer ZH | 由 Climate Adaptation Energy Advisor 生成 |
+
+不要写 “AI-generated”（G6 不依赖 AI）。
+
+#### Privacy / share-card data rules
+
+分享卡可能被用户保存并转发，因此 **禁止**显示：
+
+- `annual_income` 原始值
+- `heating_spend_annual` / `cooling_spend_annual` 原始值
+- exact latitude / longitude
+- exact home address
+- session_id / anonymous UUID
+- ownership/rental raw answer
+- detailed G2/G3 answers
+- email / phone / IP / hidden analytics IDs
+
+**允许**：region label、path name、Fitness、四维分数、derived estimates、operating burden %、Main strengths、warnings/checks、data coverage。
+
+#### Save / download（PNG only）
+
+本版最小目标：
+
+用户点击 **Save summary card / 保存摘要卡**  
+→ 将摘要 Card 导出为 **PNG image**  
+→ 浏览器下载 / 保存到用户本地终端。
+
+技术实现建议（供 CS 选型，本规格不绑定库）：
+
+```text
+HTML summary card → render/export PNG → browser download
+```
+
+可选库示例：`html-to-image`、`html2canvas` 或其他稳定方案。PNG 内容必须与用户看到的 Card 一致。
+
+**本版不要求**：
+
+- Download PDF / PDF export / print-to-PDF as required feature
+- Copy summary text as required feature
+
+#### Desktop layout（spec only； no mobile redesign in this update）
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│ Save your home energy summary                               │
+│ A short record of your highest-ranked path and next checks. │
+├────────────────────────────────────┬─────────────────────────┤
+│                                    │                         │
+│ MY HOME ENERGY SUMMARY             │ [ Save summary card ]   │
+│                                    │                         │
+│ Illinois, United States            │                         │
+│                                    │                         │
+│ Best-fit path                      │                         │
+│ Ductless heat pump                 │                         │
+│                                    │                         │
+│ Overall fitness       83.3 / 100   │                         │
+│                                    │                         │
+│ Affordability             78       │                         │
+│ Climate resilience        91       │                         │
+│ Environmental impact      88       │                         │
+│ Practicality              70       │                         │
+│                                    │                         │
+│ KEY ESTIMATES                      │                         │
+│ Annual run cost       $1,240 / yr  │                         │
+│ Upfront cost          ~$6,500      │                         │
+│ Operating burden      3.1%         │                         │
+│ Emissions             1.4 t/yr     │                         │
+│                                    │                         │
+│ MAIN STRENGTHS                     │                         │
+│ Climate resilience · Affordability │                         │
+│                                    │                         │
+│ WHAT TO CONFIRM NEXT               │                         │
+│ • Get local installed quote        │                         │
+│ • Confirm outdoor-unit location    │                         │
+│                                    │                         │
+│ Data coverage: 80%                 │                         │
+│ Preliminary result                 │                         │
+│                                    │                         │
+│ Decision-support summary only...   │                         │
+│ Climate Adaptation Energy Advisor  │                         │
+└────────────────────────────────────┴─────────────────────────┘
+```
+
+#### Bilingual copy table
+
+| Element | English | 中文 |
+|---------|---------|------|
+| Heading | Save your home energy summary | 保存你的家庭能源摘要 |
+| Hint | A short record of the path that ranked highest for your home, the key numbers behind it, and what to confirm next. | 保存一份简短摘要，查看你家当前排名最高的路径、关键数据，以及下一步需要确认的事项。 |
+| Card title | My home energy summary | 我的家庭能源摘要 |
+| Region | Region | 地区 |
+| Best-fit | Best-fit path | 当前排名最高的路径 |
+| Fitness | Overall fitness | 综合适配分 |
+| Dim A | Affordability | 家庭可负担性 |
+| Dim C | Climate resilience | 气候适应与可靠性 |
+| Dim E | Environmental impact | 环境影响 |
+| Dim P | Practicality | 实施适配性 |
+| Key estimates | Key estimates | 关键估算 |
+| Strengths | Main strengths | 主要优势 |
+| Checks | What to confirm next | 下一步需要确认 |
+| Coverage | Data coverage | 数据覆盖度 |
+| Preliminary | Preliminary result | 初步结果 |
+| Save CTA | Save summary card | 保存摘要卡 |
+
+#### G6 Definition of Done（for CS implementation later）
+
+- G6 is optional.
+- G4 provides `Save my summary` / `保存我的摘要`.
+- G6 always summarizes ranked path `#1`.
+- G6 does not use `selectedPath` as Best-fit.
+- G6 does not call AI.
+- G6 uses G4 `RankedPath` as source of truth and does not recalculate scores.
+- Card includes Overall Fitness, four dimension scores, available key estimates, deterministic Main strengths, 1–3 existing warnings/local checks, and Data coverage.
+- Missing values are not fabricated.
+- Sensitive raw household inputs and exact coordinates are not shown.
+- User can save/download the card as an **image (PNG)**.
+- No PDF export is required.
+- G6 does not block G7 or flow completion.
+- English / Chinese copy follow global locale.
+- Generating/saving the card does not create a new database row in this MVP.
 
 ---
 
 ### G7 · Feedback（optional one-minute feedback）
 
-定位：极轻量、**可跳过**的匿名反馈模块。不阻挡用户已获得的 G4 结果、inline AI 分析或 G6 行动摘要。
+定位：极轻量、**可跳过**的匿名反馈模块。不阻挡用户已获得的 G4 结果、inline AI 分析；也不要求用户先进入 optional G6。
 
 **Copy**
 
@@ -1514,7 +1836,14 @@ No name / email / phone / address / IP / fingerprint. Do not store raw income, b
 | `ExcludedPathsList` | 硬约束剔除 |
 | `AIExplanationPanel` | G4 inline AI Analysis Panel |
 | `GlobalFeedbackForm` | G7 optional 3-question feedback + Skip |
-| `ActionSummaryCard` | 生成可下载/可分享的个人行动摘要 |
+| `ActionSummaryPage` | Optional G6 page shell |
+| `SummaryCard` | G6 share-card preview（读 `rankedPaths[0]`） |
+| `SummaryDimensionList` | 四维分数展示 |
+| `SummaryEstimateList` | Key estimates；missing → unavailable copy |
+| `SummaryStrengths` | Deterministic Main strengths |
+| `SummaryNextChecks` | 1–3 warnings / local checks |
+| `SummaryDataCoverage` | coverage % + preliminary state |
+| `SaveSummaryCardButton` | Export visible card as PNG to user device |
 | `DisclaimerBanner` | 全局免责 |
 | `StoryHero` | `/story` editorial hero + photo |
 | `StoryTimeline` | Research → China Pilot → Global Advisor → Now |
@@ -2654,16 +2983,19 @@ Do not change any numbers.
 
 **验收**：同一 JSON 输入，fitness 列表可复现；exclude 有 reason；G4 显示 selected-path 四维明细；AI 不参与计算或排序。
 
-### Phase 2 · 1–2 周 — Priority 2: AI + G7 feedback
+### Phase 2 · 1–2 周 — Priority 2: AI + optional G6 + G7 feedback
 
 - [ ] `POST /api/explain` + RAG（JSON 注入）
 - [ ] G4 inline AI Analysis Panel + 错误降级（G5 = embedded module）
 - [ ] AI 输出必须包含 “Cross-region technology note”，解释不同国家之间的信息差
+- [ ] G4 CTA `Save my summary` → optional G6；G6 只读 `rankedPaths[0]`，不调用 AI，不重新打分
+- [ ] G6 PNG-only save/download；**不要** PDF / Copy text as required
+- [ ] G6 card：Fitness + 四维 + estimates + deterministic Main strengths + warnings + coverage + decision-support disclaimer
 - [ ] G7 optional one-minute feedback（understanding / AI helpfulness / improvement；可 Skip；无 recommendation）
 - [ ] 未来实现 `/api/visit` + `site_visit_events` 时遵守 §8.4：sessionStorage 防重复、server-side API、Supabase service-role secret 不进浏览器
 - [ ] Supabase `pathfinder_sessions`（可选）
 
-**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；G7 可跳过；feedback failure 不阻塞用户完成流程。
+**验收**：AI 文案引用 score card 中数字；改分数后 AI 跟着变；G6 可跳过且 PNG 与预览一致；G7 可跳过；G6/G7 failure 均不阻塞用户完成流程。
 
 ### Phase 3 · 1 周 — Priority 3: `/impact`
 
@@ -2691,14 +3023,15 @@ Do not change any numbers.
 
 ## 12. 验收标准（Definition of Done）
 
-1. **G7 Feedback**：all questions optional；Skip works with zero answers；submit failure does not block completion；Impact averages exclude null / `not_used`；free text not auto-published.
-2. **功能**：Global 全流程 G0→G7 无 dead end；首页可选择 English / 中文，选择后全流程 UI、`/story`、`/impact` 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
-3. **正确性**：scoring 模块有单测；hard exclude 理由可见。
-4. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
-5. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
-6. **隐私**：无 PII 强制；Supabase 仅存匿名 session / optional feedback / future site visit events；service-role secret 不得暴露到客户端。
-7. **Story / Impact**：G0 有 `See my story →` 指向 `/story`；`/about` 不再是正式页面；`/media` 是 optional future；Story 有完整 6 section；Story 05 已删除 technical collaborators 句子与 Youth-led principle；Story final CTA 只有 `Start your home assessment`；Impact 使用 `50+ internal-test participants` 和 `Global site visits` 口径，并包含 Methodology note。
-8. **文档**：README 增加 Global mode、China pilot、Story、Impact、语言切换与环境变量说明；Media Kit 只作为 optional future resources。
+1. **G6 Summary**：optional；G4 has `Save my summary`；always uses `rankedPaths[0]`；no AI；no score recalculation；PNG save only（no PDF required）；missing values not fabricated；no sensitive raw inputs / coordinates；does not block G7 or completion.
+2. **G7 Feedback**：all questions optional；Skip works with zero answers；submit failure does not block completion；Impact averages exclude null / `not_used`；free text not auto-published.
+3. **功能**：Global 全流程 G0→G7 无 dead end（G6/G7 均可跳过）；首页可选择 English / 中文，选择后全流程 UI、`/story`、`/impact` 与 AI explanation 跟随同一语言；G1 在中国/美国精确到省/州并用首府气候，其余国家只到国家并用 Köppen 标准 profile；China pilot 仍可独立进入并完成一局。
+4. **正确性**：scoring 模块有单测；hard exclude 理由可见。
+5. **AI 安全**：prompt injection 测试：用户填 `"ignore rules"` 不改变 fitness。
+6. **性能**：打分 < 200ms（前端）；AI 首 token < 5s（依赖 API）。
+7. **隐私**：无 PII 强制；Supabase 仅存匿名 session / optional feedback / future site visit events；service-role secret 不得暴露到客户端；G6 share card 不展示原始收入/账单/坐标/session id。
+8. **Story / Impact**：G0 有 `See my story →` 指向 `/story`；`/about` 不再是正式页面；`/media` 是 optional future；Story 有完整 6 section；Story 05 已删除 technical collaborators 句子与 Youth-led principle；Story final CTA 只有 `Start your home assessment`；Impact 使用 `50+ internal-test participants` 和 `Global site visits` 口径，并包含 Methodology note。
+9. **文档**：README 增加 Global mode、China pilot、Story、Impact、语言切换与环境变量说明；Media Kit 只作为 optional future resources。
 
 ---
 
@@ -2726,8 +3059,11 @@ A: **中国、美国**：地图识别到省/州，气候用该省/州**首府点
 **Q: 现有 DeepSeek Key 能复用吗？**  
 A: 能，新增 `/api/explain` 即可。
 
+**Q: G6 用哪条 path？要不要 PDF / AI？**  
+A: 永远用 `rankedPaths[0]`（Best-fit）。不因 selectedPath 改变。不调用 AI，不重算分。本版只要 PNG 保存到用户终端，不要 PDF。
+
 **Q: 论文/答辩要截图什么？**  
-A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；申报材料还可截图 `/impact` 证据页、`/story` My Story、G6 行动摘要卡。`/about` 已 deprecated，`/media` 只是 optional future resources。
+A: G4 排序表 + 雷达 + AI 解释里 “cross-region technology” 一段；申报材料还可截图 `/impact` 证据页、`/story` My Story、以及 optional G6 家庭能源摘要卡（PNG）。`/about` 已 deprecated，`/media` 只是 optional future resources。
 
 ---
 
