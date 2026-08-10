@@ -240,7 +240,7 @@ Global Landing (G0)
 |----------------|----------|--------------|
 | 点击 Hero 轻量文字 CTA **`See my story →` / `查看我的故事 →`** | `/story` · My Story | 页顶 **`← Back to the advisor` / `← 返回家庭能源助手`** → 回到 G0 Landing；或页底唯一主 CTA **`Start your home assessment` / `开始家庭评估`** → 进入 G1 主线 |
 | 点击顶栏 **`Impact`** | `/impact` · Impact & Evidence | 页顶返回入口（与 Story 同级实现）**`← Back to the advisor` / `← 返回家庭能源助手`** → 回到 G0 Landing；也可再点顶栏 Logo / Project name → G0 |
-| 点击顶栏 **`China Pilot`** | `/china` · China Pilot（现有沙盘） | 由 China Pilot 自身导航返回 Global Landing（`/` 或 `/global`）；不属于 Story/Impact 叙事页 |
+| 点击顶栏 **`China Pilot`** | `/china` · China Pilot（现有沙盘）https://www.clean-heating-simulator.com(目前中国区网址，后面你可以改，但是要保证中国和全球两个网站挂不挂VPN都能进入) | 由 China Pilot 自身导航返回 Global Landing（`/` 或 `/global`）；不属于 Story/Impact 叙事页 |
 | 点击主按钮 **`Start from the map — about 3 minutes` / `从地图开始 — 约 3 分钟`** | **不进入** Story/Impact | 直接进入 **G1** 评分主线 |
 
 补充规则：
@@ -457,17 +457,17 @@ Disclaimer: 以上均为早期探索性证据。中国试点仅进行了有限�
 |------|---------|
 | Eyebrow | 05 · THE PEOPLE BEHIND IT |
 | Heading | Built from a student question |
-| Body | I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. |
+| Body | I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. Also Listen to the opinions of industry insiders and feedbacks from users; collaborated with others during the process to refine the website model |
 
-到这里结束。不要再增加 `Technical collaborators ...`，不要增加 `Youth-led does not mean ...`，不要增加任何额外 Principle quote。
+
 
 | 元素 | 中文 |
 |------|------|
 | Eyebrow | 05 · 项目背后的人 |
 | Heading | 从一个学生的问题开始 |
-| Body | 我发起了最初的研究问题，并从早期研究、中国试点一路参与并主导到全球家庭能源助手的设计。我的工作包括项目设计、研究、参与者招募、数据分析、产品方向以及决策框架的构建。 |
+| Body | 我发起了最初的研究问题，并从早期研究、中国试点一路参与并主导到全球家庭能源助手的设计。我的工作包括项目设计、研究、参与者招募、数据分析、产品方向以及决策框架的构建。也向业内人士和实际使用者征求建议和反馈；与他人合作，一起完善网站模型 |
 
-到这里结束。不要出现“在技术实现过程中，也有技术协作者……”，不要出现“青年主导并不意味着……”，不要增加其他额外 Principle 文案。
+
 
 ##### 06 · What's Next
 
@@ -517,16 +517,38 @@ Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。�
 
 ##### Story image guidance
 
-建议最多 3–4 张真实图片：
+`/story` **只用下面这三张已入库真实素材**，不要再加第四张，也不要用 stock photo 顶替。
 
-| 位置 | 建议图片 |
-|------|----------|
-| Hero | 项目 / 调研代表照片 |
-| 01 The Question | 河北村落 / 住宅 / 能源环境照片 |
-| 02 How It Grew | China Pilot 页面截图或测试过程 |
-| 05 Built from a Student Question | 研究 / 项目设计过程照片 |
+**素材目录（给 CS）**
 
-原则：优先真实项目材料，不为视觉效果放大量 stock photo。涉及真实参与者时，必须确保有适当的公开使用权限。没有明确许可时，优先使用环境、建筑、设备、背影、试点 UI 截图，避免未经许可公开可识别个人肖像。
+```text
+docs/story/images/
+  story-hero-rooftop-solar.jpg      # Hero
+  story-01-question-gas-meter.jpg   # 01 The Question
+  story-02-china-pilot-ui.jpg       # 02 How It Grew
+```
+
+| # | 文件路径 | 用在哪 | 图里是什么 | 实现提示 |
+|---|----------|--------|------------|----------|
+| 1 | `docs/story/images/story-hero-rooftop-solar.jpg` | **Hero**（标题旁 / 右侧主图） | 实地拍摄：浅色建筑屋顶铺满光伏板，蓝天 + 广场瓷砖前景 | 横向构图（约 1024×768）。作 Hero 主视觉；`alt` 英文：`Rooftop solar array on a building photographed for the project`；中文：`项目实地拍摄的屋顶光伏阵列` |
+| 2 | `docs/story/images/story-01-question-gas-meter.jpg` | **01 · The Question**（问题叙述旁） | 实地拍摄：砖墙上的蓝色 NB-IoT 燃气表与管线（户级能源基础设施） | 竖向构图（约 768×1024）。与「家庭层面成本 / 能源条件」叙事并排；`alt` 英文：`Smart gas meter (NB-IoT) on a brick wall`；中文：`砖墙上的 NB-IoT 智能燃气表`。图中仪表读数与序列号只作场景，**不要**在文案里当成研究统计数字引用 |
+| 3 | `docs/story/images/story-02-china-pilot-ui.jpg` | **02 · How It Grew**（China Pilot timeline 旁） | China Pilot 界面截图：华北农村「空气在变好 / 费用在上升」与「参与进来」入口 | 接近方形。说明这是**试点产品 UI 证据**，不是现场人像；`alt` 英文：`Screenshot of the China Pilot welcome screen`；中文：`中国试点欢迎页界面截图` |
+
+**不要放图的位置**
+
+- **03 How the Tool Works**：用步骤示意（文字 / 简单流程图），不加照片。
+- **04 Early Impact**：用数字与 methodology note，不加照片。
+- **05 Built from a Student Question**：本轮**不再单独配图**（原先建议的第 4 张研究过程照取消；三张配额已满）。
+- **06 What's Next / Final CTA**：不加照片。
+
+**实现约束（必须遵守）**
+
+1. 前端引用上述仓库路径（或构建时拷贝到 `/story/images/...` 静态目录）；文件名勿改，方便对照本规格。
+2. 三张图均为项目真实材料：1、2 为实地照片；3 为 China Pilot UI 截图。
+3. 三张图均**无人脸 / 无可识别个人肖像**，可按当前权限用于公开 `/story`。
+4. 响应式：桌面 Hero 与正文并排；窄屏图在文下，避免文字叠在照片上。
+5. 不要压缩到看不清仪表或 UI 文字；也不要额外加滤镜贴纸。
+6. 不要把仪表读数、UI 上的 `PM2.5` / `取暖费用` 示意数字，当作 Impact 页的正式统计指标。
 
 ##### Story page wireframe
 
@@ -538,18 +560,18 @@ Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。�
 │                                                          │
 │ From cleaner skies                                       │
 │ to a harder question at home.                            │
-│                                         [REAL PHOTO]     │
+│                    [story-hero-rooftop-solar.jpg]        │
 ├──────────────────────────────────────────────────────────┤
 │ 01 · THE QUESTION                                        │
 │                                                          │
-│ Story / problem                         [FIELD PHOTO]    │
+│ Story / problem      [story-01-question-gas-meter.jpg]   │
 │                                                          │
 │ Cost · Climate · Home · Information                      │
 ├──────────────────────────────────────────────────────────┤
 │ 02 · HOW IT GREW                                         │
 │                                                          │
 │ Research → China Pilot → Global Advisor → Now            │
-│                                                          │
+│                    [story-02-china-pilot-ui.jpg]         │
 │ China Pilot: 50+ internal-test participants              │
 │ Limited internal testing · Not publicly released         │
 ├──────────────────────────────────────────────────────────┤
@@ -572,7 +594,7 @@ Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。�
 │ 05 · BUILT FROM A STUDENT QUESTION                       │
 │                                                          │
 │ Short personal project-leadership paragraph              │
-│                                         [PROJECT PHOTO]  │
+│ (no dedicated photo in this MVP)                         │
 ├──────────────────────────────────────────────────────────┤
 │ 06 · WHAT'S NEXT                                         │
 │                                                          │
@@ -2132,6 +2154,11 @@ Global V2 相关源码、数据、测试与原型页面统一放在 `docs/` 下�
 ```
 docs/
   sandbox-v2-upgrade-spec.md
+  story/
+    images/                        # /story My Story 固定三张素材（已入库）
+      story-hero-rooftop-solar.jpg
+      story-01-question-gas-meter.jpg
+      story-02-china-pilot-ui.jpg
   global/                          # Global mode 原型 UI（/global 路由入口）
     index.html
     app.js
@@ -2652,7 +2679,7 @@ Do not change any numbers.
 - [ ] `/story` 使用本规格 6 个 section：The Question / How It Grew / How the Tool Works / Early Impact / Built from a Student Question / What's Next
 - [ ] Story 05 只保留学生发起与主导说明，不出现 technical collaborators 句子或 Youth-led principle quote
 - [ ] Story Final CTA 只有 `Start your home assessment`，不出现 `View full impact` 或 `Project resources`
-- [ ] Story 使用 3–4 张真实项目材料图片；可识别个人肖像必须有公开使用许可
+- [ ] Story 固定使用 `docs/story/images/` 下三张图：`story-hero-rooftop-solar.jpg`（Hero）、`story-01-question-gas-meter.jpg`（01）、`story-02-china-pilot-ui.jpg`（02）；05 不配图；不用 stock photo
 - [ ] Mobile 适配 + 免责声明法务审阅
 
 ### Optional future
