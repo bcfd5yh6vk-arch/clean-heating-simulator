@@ -115,14 +115,15 @@ MVP 产品说明见：`spec.md`。
 ## 4. Global mode 用户流程（逐步）
 
 ```
-Global Landing → Click home location on climate map → Household form
-    → Home feasibility questionnaire → [Screen paths]
-    → G4 Results + inline AI analysis
-    → Shareable action summary
-    → Optional one-minute feedback (G7, skippable) / thanks
-
-Parallel evidence pages:
-My Story → Impact & Evidence
+Global Landing (G0)
+    ├─ Start from the map → G1 climate map → Household form
+    │     → Home feasibility questionnaire → [Screen paths]
+    │     → G4 Results + inline AI analysis
+    │     → Shareable action summary
+    │     → Optional one-minute feedback (G7, skippable) / thanks
+    │
+    ├─ See my story → /story  → Back to advisor (G0) 或 Start assessment (G1)
+    └─ Nav Impact → /impact → Back to advisor (G0)
 ```
 
 | 步骤 | 页面 ID | 目的 |
@@ -218,6 +219,437 @@ My Story → Impact & Evidence
 - `申报`
 - `征集`
 - 任何让用户觉得“这个网站是为了某个活动临时包装”的表述
+
+**支线入口（详见紧接本节的 Evidence & Story Pages）**
+- 进 Story：点 `See my story →` / `查看我的故事 →`
+- 进 Impact：点顶栏 `Impact`
+- 回主线：Story / Impact 页顶 `← Back to the advisor` / `← 返回家庭能源助手` → G0；Story 页底 `Start your home assessment` / `开始家庭评估` → G1
+- 不进支线、直接主线：点 `Start from the map — about 3 minutes` / `从地图开始 — 约 3 分钟` → G1
+
+---
+
+### Evidence & Story Pages
+
+> **文档位置**：本规格把 Story / Impact 写在 G0 与 G1 之间，因为它们是从 Landing 分支出去的支撑页，不属于 G1–G7 评分主线。
+
+这些页面不属于 G1–G7 household scoring flow。用户不需要经过 Story 或 Impact 才能完成家庭评估。
+
+#### 从 G0 进入 / 回到主线（必须实现）
+
+| 用户动作（G0） | 进入页面 | 回主线怎么走 |
+|----------------|----------|--------------|
+| 点击 Hero 轻量文字 CTA **`See my story →` / `查看我的故事 →`** | `/story` · My Story | 页顶 **`← Back to the advisor` / `← 返回家庭能源助手`** → 回到 G0 Landing；或页底唯一主 CTA **`Start your home assessment` / `开始家庭评估`** → 进入 G1 主线 |
+| 点击顶栏 **`Impact`** | `/impact` · Impact & Evidence | 页顶返回入口（与 Story 同级实现）**`← Back to the advisor` / `← 返回家庭能源助手`** → 回到 G0 Landing；也可再点顶栏 Logo / Project name → G0 |
+| 点击顶栏 **`China Pilot`** | `/china` · China Pilot（现有沙盘） | 由 China Pilot 自身导航返回 Global Landing（`/` 或 `/global`）；不属于 Story/Impact 叙事页 |
+| 点击主按钮 **`Start from the map — about 3 minutes` / `从地图开始 — 约 3 分钟`** | **不进入** Story/Impact | 直接进入 **G1** 评分主线 |
+
+补充规则：
+
+- Story / Impact 是 **可选支线**。用户可以完全跳过，只点 G0 主按钮进入 G1。
+- 从 `/story` 回到主线有两条合法路径：① 页顶 Back → **G0**；② 页底 `Start your home assessment` → **G1**。不要在 Story 页底再放 `View full impact` 或 `Project resources`。
+- 从 `/impact` 回到主线：页顶 Back → **G0**。Impact 页不要抢走 G0 的主评估 CTA 叙事；若提供继续评估入口，文案权重必须轻于 Back，且目标仍是 G0 或 G1。
+- Logo / Project name 在 Story / Impact 顶栏也应回到 G0。
+- `/media` 不进 G0 主导航，因此 **没有** 从 G0 进入 `/media` 的 MVP 路径。
+
+```text
+G0 Landing
+│
+├── [Start from the map] ───────────────► G1 → G2 → G3 → G4 → …
+│
+├── [See my story →] ──► /story
+│                         ├─ [← Back to the advisor] ──► G0
+│                         └─ [Start your home assessment] ──► G1
+│
+├── Nav [Impact] ───────► /impact
+│                         └─ [← Back to the advisor] ──► G0
+│
+└── Nav [China Pilot] ──► /china ──► (return to Global Landing)
+```
+
+MVP 公共页面优先级：
+
+| 页面 | 路由 | MVP 优先级 | 作用 |
+|------|------|------------|------|
+| My Story | `/story` | Public MVP recommended / important | 负责叙事：项目为什么开始、如何发展、由谁推动、下一步要解决什么 |
+| Impact & Evidence | `/impact` | Public MVP recommended / important | 负责证据：China Pilot 内测证据、Global site visits、Global feedback、数据口径 |
+| Media Kit / Project Resources | `/media` | Optional future | 未来资源页；不进主导航，不进 Story final CTA，不阻塞 Global Advisor 上线 |
+
+`/story` 不能做成 Impact Dashboard。`/impact` 不能写成个人故事页。`/media` 若保留，只标注为 optional future resources。
+
+#### `/story` · My Story
+
+`/story` 取代原 `/about` · Youth-led Story。`/about` 不再是正式页面；未来实际开发可 redirect `/about` → `/story`，本规格只写推荐，不实现 redirect。
+
+My Story 不是简历页、申请表内容堆砌页、技术说明书或 Impact Dashboard。目标是让普通用户、评审、老师和合作伙伴在很短时间内理解：
+
+1. 为什么这个项目会出现；
+2. 最初看到的问题是什么；
+3. 项目如何从中国试点发展到全球工具；
+4. 这个工具为什么与普通 AI 推荐工具不同；
+5. 目前有什么早期证据；
+6. 这个项目由谁发起和推动；
+7. 下一步希望解决什么。
+
+Story 页面整体视觉：editorial / documentary。继续沿用暖米白背景和森林绿 accent，但建议更大的标题、更多留白、少量真实照片、时间线、impact numbers。大段 card 尽量减少，不要把每一段都包在白色圆角 card 中。
+
+Story 页面只保留：
+
+1. Hero
+2. 01 · The Question
+3. 02 · How It Grew
+4. 03 · How the Tool Works
+5. 04 · Early Impact
+6. 05 · Built from a Student Question
+7. 06 · What's Next
+8. Final CTA
+
+不要再额外增加大量项目介绍 section。
+
+##### My Story Hero copy
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | MY STORY |
+| Heading | From cleaner skies to a harder question at home. |
+| Body | I started this project with a simple question: when cleaner-energy transitions change how families heat and cool their homes, who helps ordinary households understand what actually fits their climate, budget, and living conditions? |
+| Supporting line | From a household-energy study in northern China to a global climate-adaptation decision tool. |
+| Byline | A student-led climate and household energy project. |
+| Back link | ← Back to the advisor |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 我的故事 |
+| Heading | 从更蓝的天空，到一个更难回答的家庭问题。 |
+| Body | 这个项目最初来自一个很简单的问题：当清洁能源转型改变家庭取暖和制冷方式时，谁来帮助普通家庭理解，究竟什么方案真正适合自己的气候、预算和居住条件？ |
+| Supporting line | 从中国北方家庭能源研究，到面向全球家庭的气候适应决策工具。 |
+| Byline | 一个由学生发起并主导的气候与家庭能源项目。 |
+| Back link | ← 返回家庭能源助手 |
+
+##### 01 · The Question
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 01 · THE QUESTION |
+| Heading | Cleaner air can be a success. The transition can still be difficult at home. |
+| Body | Energy transitions are often measured through emissions, infrastructure and policy. But households experience them through everyday questions: How much will this cost? Will the home stay warm in winter or cool in summer? How difficult is installation? What happens when a family does not know which technologies are available? |
+| Pull quote | A climate solution also has to make sense at the household level. |
+| Small labels | Cost · Climate resilience · Household constraints · Access to information |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 01 · 问题从哪里开始 |
+| Heading | 空气可以变得更清洁，但能源转型对家庭来说仍然可能很困难。 |
+| Body | 能源转型往往通过排放、基础设施和政策来衡量，但家庭真正面对的是更日常的问题：要花多少钱？冬天能不能稳定取暖？夏天能不能有效降温？安装是否困难？如果一个家庭根本不了解有哪些技术选择，又该如何判断？ |
+| Pull quote | 一个气候解决方案，也必须在家庭层面真正可行。 |
+| Small labels | 家庭成本 · 气候适应 · 住宅条件 · 信息获取 |
+
+##### 02 · How It Grew
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 02 · HOW IT GREW |
+| Heading | One question became a pilot, and the pilot became a broader tool. |
+
+| Timeline | Label | English copy |
+|----------|-------|--------------|
+| 1 | RESEARCH | I began by studying how household heating transitions can create different experiences for policy, climate outcomes and household well-being. |
+| 2 | CHINA PILOT | I then developed an interactive China pilot to explore how people understand household heating choices and their trade-offs. |
+| 2 Evidence | 50+ internal-test participants | Limited internal testing with students from my school and a small number of farmers and village committee staff from communities in Hebei. The China pilot has not been publicly released. |
+| 3 | GLOBAL ADVISOR | The next step was to expand the question beyond one region and beyond heating alone: What happens when climate, household income, cooling needs, installation constraints and different technologies all have to be considered together? |
+| 4 | NOW | The result is the Climate Adaptation Energy Advisor: a tool where deterministic rules calculate the ranking and AI helps people understand what the results mean. |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 02 · 项目如何一步步发展 |
+| Heading | 一个问题变成了一次试点，而试点又发展成了一个更广泛的工具。 |
+
+| Timeline | Label | 中文文案 |
+|----------|-------|----------|
+| 1 | 研究 | 我最初关注的是：家庭取暖转型在政策效果、气候目标和家庭生活体验之间，可能产生怎样不同的结果。 |
+| 2 | 中国试点 | 随后，我设计了一套互动式中国试点，用来探索人们如何理解家庭取暖选择，以及不同方案之间的取舍。 |
+| 2 Evidence | 50+ 名内测参与者 | 有限内部测试包括我校学生，以及河北部分村落的少量农民和村委工作人员。中国试点目前尚未进行公开发布。 |
+| 3 | 全球家庭能源助手 | 下一步，我把问题从一个地区扩展到全球，也从单纯取暖扩展到取暖和制冷：当气候、家庭收入、住宅条件、安装限制以及不同能源技术同时进入决策时，我们该如何比较？ |
+| 4 | 现在 | 最终形成了 Climate Adaptation Energy Advisor：由确定性算法计算排序，由 AI 帮助用户理解这些结果意味着什么。 |
+
+##### China Pilot public data wording
+
+整份公开页面统一口径：
+
+- `50+ internal-test participants`
+- `limited internal testing`
+- `not publicly released`
+- 参与者包括我校同学、河北部分村落的农民、河北部分村落的村委工作人员
+- 不公开显示学生、农民、村委工作人员的具体人数拆分
+- 不把旧版 valid-session / completed-survey counts 作为 Story / Impact 主 headline。若旧研究数字仍需保留，只能放在内部 research appendix 或 Methodology 的历史记录中，并清楚标注来源、范围和非公开性质。
+
+公开解释文案：
+
+| Language | Copy |
+|----------|------|
+| English | Limited internal testing only. The China pilot was tested with more than 50 participants, including students from my school and a small number of farmers and village committee staff from communities in Hebei. It has not been publicly released, so these figures should be interpreted as early, exploratory evidence rather than public-user statistics. |
+| 中文 | 仅限小规模内部测试。中国试点目前已有 50 余名内测参与者，包括我校学生，以及河北部分村落的农民和村委工作人员。项目尚未进行公开发布，因此这些数据属于早期探索性证据，不代表公开用户统计。 |
+
+##### 03 · How the Tool Works
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 03 · HOW THE TOOL WORKS |
+| Heading | The score comes from the data. The explanation comes from AI. |
+
+| Step | Title | English copy |
+|------|-------|--------------|
+| 1 | YOUR HOME | The tool starts with what matters to the household: income, home size, energy bills, heating and cooling needs, and practical home conditions. |
+| 2 | LOCAL PUBLIC DATA | It combines those answers with traceable public data for the user's location, such as climate, energy prices and emissions factors. |
+| 3 | DETERMINISTIC SCORING | Eligible paths are compared through transparent formulas for affordability, climate resilience, environmental impact and practicality. |
+| 4 | AI EXPLANATION | AI explains the existing scores in plain language. It does not calculate, change or reorder the results. |
+| Bottom line |  | User answers + local public data → deterministic scoring → AI explanation |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 03 · 这个工具如何工作 |
+| Heading | 分数来自数据，解释来自 AI。 |
+
+| Step | Title | 中文文案 |
+|------|-------|----------|
+| 1 | 你的家庭 | 工具首先关注真正与家庭有关的信息：收入、住宅面积、能源账单、取暖与制冷需求，以及住宅实际条件。 |
+| 2 | 当地公开数据 | 系统再结合用户所在地可追溯的公开数据，例如气候、能源价格和排放因子。 |
+| 3 | 确定性算法评分 | 通过筛选的路径按照明确公式，从家庭可负担性、气候适应与可靠性、环境影响和实施适配性四个方面进行比较。 |
+| 4 | AI 解释 | AI 用更容易理解的语言解释已经计算好的结果，但不会计算、修改或重新排序这些分数。 |
+| Bottom line |  | 用户回答 + 当地公开数据 → 确定性评分 → AI 解释 |
+
+##### 04 · Early Impact
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 04 · EARLY IMPACT |
+| Heading | What we are learning so far |
+
+| Metric | English label |
+|--------|---------------|
+| `50+` | China pilot internal-test participants |
+| `{global_site_visit_count}` | Global site visits |
+| `{global_feedback_count}` | Global feedback responses |
+| `{understanding_positive_rate}%` when enough G7 feedback exists | said the tool helped them better understand their options |
+| fallback when sample is small | Early feedback collecting now |
+
+Disclaimer: Early and exploratory evidence. The China pilot was conducted as limited internal testing with students and participants from several Hebei village communities and was not publicly released. Global site visits represent recorded website visits, not verified unique individuals.
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 04 · 早期影响力 |
+| Heading | 我们目前正在了解到什么 |
+
+| Metric | 中文标签 |
+|--------|----------|
+| `50+` | 中国试点内测参与者 |
+| `{global_site_visit_count}` | 全球网站访问次数 |
+| `{global_feedback_count}` | 全球反馈提交数 |
+| `{understanding_positive_rate}%` when enough G7 feedback exists | 的反馈者表示工具帮助他们更好地理解了可选方案 |
+| fallback when sample is small | 正在收集早期反馈 |
+
+Disclaimer: 以上均为早期探索性证据。中国试点仅进行了有限内部测试，参与者包括我校学生以及河北部分村落的参与者，尚未公开发布。全球网站访问次数表示记录到的网站访问，并不等同于经过身份验证的独立个人数量。
+
+不要为了页面排版写假百分比。数据不足时显示 `Early feedback collecting now` / `正在收集早期反馈`。
+
+##### 05 · The People Behind It
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 05 · THE PEOPLE BEHIND IT |
+| Heading | Built from a student question |
+| Body | I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. |
+
+到这里结束。不要再增加 `Technical collaborators ...`，不要增加 `Youth-led does not mean ...`，不要增加任何额外 Principle quote。
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 05 · 项目背后的人 |
+| Heading | 从一个学生的问题开始 |
+| Body | 我发起了最初的研究问题，并从早期研究、中国试点一路参与并主导到全球家庭能源助手的设计。我的工作包括项目设计、研究、参与者招募、数据分析、产品方向以及决策框架的构建。 |
+
+到这里结束。不要出现“在技术实现过程中，也有技术协作者……”，不要出现“青年主导并不意味着……”，不要增加其他额外 Principle 文案。
+
+##### 06 · What's Next
+
+| 元素 | English |
+|------|---------|
+| Eyebrow | 06 · WHAT'S NEXT |
+| Heading | There is no single best technology for every household. |
+| Body | The next goal is not to tell every family to choose the same solution. It is to make complex household energy choices easier to understand across different climates, incomes and homes. |
+
+| Direction | English copy |
+|-----------|--------------|
+| MORE PLACES | Expand reliable local public data to more countries and regions. |
+| MORE HOUSEHOLDS | Learn from a wider range of households, including people with tighter budgets or fewer local energy choices. |
+| BETTER EVIDENCE | Use real user feedback to improve the questions, scoring transparency and explanations. |
+
+| 元素 | 中文 |
+|------|------|
+| Eyebrow | 06 · 下一步 |
+| Heading | 没有一种技术会是所有家庭的唯一最佳答案。 |
+| Body | 下一步的目标不是告诉所有家庭选择同一种方案，而是让不同气候、不同收入和不同住宅条件下的复杂家庭能源选择变得更容易理解。 |
+
+| Direction | 中文文案 |
+|-----------|----------|
+| 覆盖更多地区 | 为更多国家和地区补充可靠、可追溯的当地公开数据。 |
+| 接触更多家庭 | 从更广泛的家庭中学习，尤其关注预算更紧张、当地能源选择更有限的家庭。 |
+| 建立更好的证据 | 利用真实用户反馈继续改进问题设计、评分透明度和解释方式。 |
+
+**不要混淆**：本节是 Story 页面 `06 · What's Next`。当前项目里的 `G6 · Action Summary` 是评分流程功能，本次不修改 G6 share card、PNG/PDF 或 summary logic。
+
+##### My Story Final CTA
+
+Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。删除 `View full impact →` 和 `Project resources →`，不要在 Story 最后出现 secondary links。
+
+| 元素 | English |
+|------|---------|
+| Heading | What could fit your home? |
+| Body | Explore heating and cooling paths using your own household information and local climate. |
+| Primary CTA | Start your home assessment |
+| Target | G1 / start assessment flow |
+
+| 元素 | 中文 |
+|------|------|
+| Heading | 哪些方案可能适合你家？ |
+| Body | 使用你自己的家庭信息和当地气候，比较不同的取暖和制冷路径。 |
+| Primary CTA | 开始家庭评估 |
+| Target | G1 / 家庭评估主流程 |
+
+##### Story image guidance
+
+建议最多 3–4 张真实图片：
+
+| 位置 | 建议图片 |
+|------|----------|
+| Hero | 项目 / 调研代表照片 |
+| 01 The Question | 河北村落 / 住宅 / 能源环境照片 |
+| 02 How It Grew | China Pilot 页面截图或测试过程 |
+| 05 Built from a Student Question | 研究 / 项目设计过程照片 |
+
+原则：优先真实项目材料，不为视觉效果放大量 stock photo。涉及真实参与者时，必须确保有适当的公开使用权限。没有明确许可时，优先使用环境、建筑、设备、背影、试点 UI 截图，避免未经许可公开可识别个人肖像。
+
+##### Story page wireframe
+
+```text
+┌──────────────────────────────────────────────────────────┐
+│ ← Back to advisor                       English / 中文    │
+├──────────────────────────────────────────────────────────┤
+│ MY STORY                                                 │
+│                                                          │
+│ From cleaner skies                                       │
+│ to a harder question at home.                            │
+│                                         [REAL PHOTO]     │
+├──────────────────────────────────────────────────────────┤
+│ 01 · THE QUESTION                                        │
+│                                                          │
+│ Story / problem                         [FIELD PHOTO]    │
+│                                                          │
+│ Cost · Climate · Home · Information                      │
+├──────────────────────────────────────────────────────────┤
+│ 02 · HOW IT GREW                                         │
+│                                                          │
+│ Research → China Pilot → Global Advisor → Now            │
+│                                                          │
+│ China Pilot: 50+ internal-test participants              │
+│ Limited internal testing · Not publicly released         │
+├──────────────────────────────────────────────────────────┤
+│ 03 · HOW THE TOOL WORKS                                  │
+│                                                          │
+│ Home                                                     │
+│   + Local public data                                    │
+│   ↓                                                      │
+│ Deterministic scoring                                    │
+│   ↓                                                      │
+│ AI explanation                                           │
+├──────────────────────────────────────────────────────────┤
+│ 04 · EARLY IMPACT                                        │
+│                                                          │
+│ 50+               {visits}          {feedback}           │
+│ China test         Site visits       Feedback            │
+│                                                          │
+│ Early / exploratory data note                            │
+├──────────────────────────────────────────────────────────┤
+│ 05 · BUILT FROM A STUDENT QUESTION                       │
+│                                                          │
+│ Short personal project-leadership paragraph              │
+│                                         [PROJECT PHOTO]  │
+├──────────────────────────────────────────────────────────┤
+│ 06 · WHAT'S NEXT                                         │
+│                                                          │
+│ More places · More households · Better evidence          │
+├──────────────────────────────────────────────────────────┤
+│ What could fit your home?                                │
+│                                                          │
+│ [ Start your home assessment ]                           │
+└──────────────────────────────────────────────────────────┘
+```
+
+#### `/impact` · Impact & Evidence
+
+Impact 页面保持独立，负责真实项目证据 / 匿名统计，不负责个人叙事。建议结构：
+
+| Section | 内容 |
+|---------|------|
+| IMPACT & EVIDENCE | 页面标题与早期证据说明 |
+| 01 · China Pilot | `50+` Internal-test participants · Limited internal testing only · Not publicly released |
+| 02 · Global Advisor | `{global_site_visit_count}` Global site visits · `{global_feedback_count}` Feedback responses · `{understanding_positive_rate}%` Helped understand options · `{ai_helpfulness_average}/5` AI helpfulness；数据不足时显示 Early data / collecting feedback |
+| 03 · What these numbers mean | China Pilot 是内部有限测试，不是公开用户；Global site visits 是访问次数，不是 verified unique individuals；Global feedback 是自愿、匿名、optional |
+| 04 · Methodology note | data definition · sample size · last updated · anonymous · exploratory |
+
+China Pilot 参与者公开描述为 students from my school + farmers / village committee staff from several Hebei village communities。不要细分人数。
+
+Global metrics 规则：
+
+| Metric | Definition |
+|--------|------------|
+| `global_site_visit_count` | 记录到的 Global site visits，不是 Global users |
+| `global_feedback_count` | G7 optional feedback submissions |
+| `helped_understand_average` | 非 null `helped_understand_score` 的平均值 |
+| `helped_understand_positive_rate` | `helped_understand_score >= 4` / 非 null understanding responses |
+| `ai_helpfulness_average` | numeric 1–5 only；排除 `not_used` 与 null |
+| `ai_helpfulness_positive_rate` | numeric `ai_helpfulness >= 4` / numeric AI helpfulness responses |
+| `AI usage rate` | behavioral `ai_used = true` / relevant Global sessions or submitted feedback rows，开发时需明确 denominator |
+
+自由文本不能自动公开。`improvement_text` 或 testimonial 必须 manual review 后，才可选择少量匿名 feedback 展示。
+
+G7 与 Impact 的关系：G7 是 optional、anonymous、not required。Impact 必须写 `X% of feedback respondents...`，不要写 `X% of all users...`。例如：
+
+| Language | Correct wording |
+|----------|-----------------|
+| English | 82% of feedback respondents said the tool helped them better understand their options. |
+| 中文 | 82% 的反馈提交者表示，这个工具帮助他们更好地理解了可选方案。 |
+
+#### Impact data provenance
+
+Impact statistics must be traceable. 每个 public metric 最好能够回答：
+
+- what is being counted?
+- where does it come from?
+- what period does it cover?
+- when was it last updated?
+
+禁止过度宣称：
+
+| 不要说 | 应改为 |
+|--------|--------|
+| site visits = individual users | site visits = recorded website visits |
+| internal-test participants = public users | China Pilot internal-test participants |
+| optional feedback respondents = all website users | feedback respondents |
+
+Impact data must follow the same traceability principle as G4 scoring. 不要为了让页面数字好看而人为设置初始值。
+
+#### `/media` · Optional future resources
+
+Media Kit / Project Resources 降级为未来可选资源，不应阻塞 MVP。
+
+`/media` 不应：
+
+- 出现在主导航；
+- 出现在 Story Final CTA；
+- 阻塞 Global Advisor 上线；
+- 与 Impact / Story 平级抢叙事。
+
+若文档或未来产品保留 `/media`，必须标注 `Optional / future` 与 `Not required for core MVP`。可选资源包括 one-pager、demo video、screenshots、logo/title card、case report draft 等，但这些不是当前核心交付。
 
 ---
 
@@ -1032,397 +1464,6 @@ No name / email / phone / address / IP / fingerprint. Do not store raw income, b
 | Behavioral | Self-reported |
 |------------|---------------|
 | completed G4, AI used, feedback opened/submitted | helped_understand_score, ai_helpfulness, improvement_text |
-
----
-
-### Evidence & Story Pages
-
-这些页面不属于 G1–G7 household scoring flow。用户不需要经过 Story 或 Impact 才能完成家庭评估。
-
-MVP 公共页面优先级：
-
-| 页面 | 路由 | MVP 优先级 | 作用 |
-|------|------|------------|------|
-| My Story | `/story` | Public MVP recommended / important | 负责叙事：项目为什么开始、如何发展、由谁推动、下一步要解决什么 |
-| Impact & Evidence | `/impact` | Public MVP recommended / important | 负责证据：China Pilot 内测证据、Global site visits、Global feedback、数据口径 |
-| Media Kit / Project Resources | `/media` | Optional future | 未来资源页；不进主导航，不进 Story final CTA，不阻塞 Global Advisor 上线 |
-
-`/story` 不能做成 Impact Dashboard。`/impact` 不能写成个人故事页。`/media` 若保留，只标注为 optional future resources。
-
-#### `/story` · My Story
-
-`/story` 取代原 `/about` · Youth-led Story。`/about` 不再是正式页面；未来实际开发可 redirect `/about` → `/story`，本规格只写推荐，不实现 redirect。
-
-My Story 不是简历页、申请表内容堆砌页、技术说明书或 Impact Dashboard。目标是让普通用户、评审、老师和合作伙伴在很短时间内理解：
-
-1. 为什么这个项目会出现；
-2. 最初看到的问题是什么；
-3. 项目如何从中国试点发展到全球工具；
-4. 这个工具为什么与普通 AI 推荐工具不同；
-5. 目前有什么早期证据；
-6. 这个项目由谁发起和推动；
-7. 下一步希望解决什么。
-
-Story 页面整体视觉：editorial / documentary。继续沿用暖米白背景和森林绿 accent，但建议更大的标题、更多留白、少量真实照片、时间线、impact numbers。大段 card 尽量减少，不要把每一段都包在白色圆角 card 中。
-
-Story 页面只保留：
-
-1. Hero
-2. 01 · The Question
-3. 02 · How It Grew
-4. 03 · How the Tool Works
-5. 04 · Early Impact
-6. 05 · Built from a Student Question
-7. 06 · What's Next
-8. Final CTA
-
-不要再额外增加大量项目介绍 section。
-
-##### My Story Hero copy
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | MY STORY |
-| Heading | From cleaner skies to a harder question at home. |
-| Body | I started this project with a simple question: when cleaner-energy transitions change how families heat and cool their homes, who helps ordinary households understand what actually fits their climate, budget, and living conditions? |
-| Supporting line | From a household-energy study in northern China to a global climate-adaptation decision tool. |
-| Byline | A student-led climate and household energy project. |
-| Back link | ← Back to the advisor |
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 我的故事 |
-| Heading | 从更蓝的天空，到一个更难回答的家庭问题。 |
-| Body | 这个项目最初来自一个很简单的问题：当清洁能源转型改变家庭取暖和制冷方式时，谁来帮助普通家庭理解，究竟什么方案真正适合自己的气候、预算和居住条件？ |
-| Supporting line | 从中国北方家庭能源研究，到面向全球家庭的气候适应决策工具。 |
-| Byline | 一个由学生发起并主导的气候与家庭能源项目。 |
-| Back link | ← 返回家庭能源助手 |
-
-##### 01 · The Question
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 01 · THE QUESTION |
-| Heading | Cleaner air can be a success. The transition can still be difficult at home. |
-| Body | Energy transitions are often measured through emissions, infrastructure and policy. But households experience them through everyday questions: How much will this cost? Will the home stay warm in winter or cool in summer? How difficult is installation? What happens when a family does not know which technologies are available? |
-| Pull quote | A climate solution also has to make sense at the household level. |
-| Small labels | Cost · Climate resilience · Household constraints · Access to information |
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 01 · 问题从哪里开始 |
-| Heading | 空气可以变得更清洁，但能源转型对家庭来说仍然可能很困难。 |
-| Body | 能源转型往往通过排放、基础设施和政策来衡量，但家庭真正面对的是更日常的问题：要花多少钱？冬天能不能稳定取暖？夏天能不能有效降温？安装是否困难？如果一个家庭根本不了解有哪些技术选择，又该如何判断？ |
-| Pull quote | 一个气候解决方案，也必须在家庭层面真正可行。 |
-| Small labels | 家庭成本 · 气候适应 · 住宅条件 · 信息获取 |
-
-##### 02 · How It Grew
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 02 · HOW IT GREW |
-| Heading | One question became a pilot, and the pilot became a broader tool. |
-
-| Timeline | Label | English copy |
-|----------|-------|--------------|
-| 1 | RESEARCH | I began by studying how household heating transitions can create different experiences for policy, climate outcomes and household well-being. |
-| 2 | CHINA PILOT | I then developed an interactive China pilot to explore how people understand household heating choices and their trade-offs. |
-| 2 Evidence | 50+ internal-test participants | Limited internal testing with students from my school and a small number of farmers and village committee staff from communities in Hebei. The China pilot has not been publicly released. |
-| 3 | GLOBAL ADVISOR | The next step was to expand the question beyond one region and beyond heating alone: What happens when climate, household income, cooling needs, installation constraints and different technologies all have to be considered together? |
-| 4 | NOW | The result is the Climate Adaptation Energy Advisor: a tool where deterministic rules calculate the ranking and AI helps people understand what the results mean. |
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 02 · 项目如何一步步发展 |
-| Heading | 一个问题变成了一次试点，而试点又发展成了一个更广泛的工具。 |
-
-| Timeline | Label | 中文文案 |
-|----------|-------|----------|
-| 1 | 研究 | 我最初关注的是：家庭取暖转型在政策效果、气候目标和家庭生活体验之间，可能产生怎样不同的结果。 |
-| 2 | 中国试点 | 随后，我设计了一套互动式中国试点，用来探索人们如何理解家庭取暖选择，以及不同方案之间的取舍。 |
-| 2 Evidence | 50+ 名内测参与者 | 有限内部测试包括我校学生，以及河北部分村落的少量农民和村委工作人员。中国试点目前尚未进行公开发布。 |
-| 3 | 全球家庭能源助手 | 下一步，我把问题从一个地区扩展到全球，也从单纯取暖扩展到取暖和制冷：当气候、家庭收入、住宅条件、安装限制以及不同能源技术同时进入决策时，我们该如何比较？ |
-| 4 | 现在 | 最终形成了 Climate Adaptation Energy Advisor：由确定性算法计算排序，由 AI 帮助用户理解这些结果意味着什么。 |
-
-##### China Pilot public data wording
-
-整份公开页面统一口径：
-
-- `50+ internal-test participants`
-- `limited internal testing`
-- `not publicly released`
-- 参与者包括我校同学、河北部分村落的农民、河北部分村落的村委工作人员
-- 不公开显示学生、农民、村委工作人员的具体人数拆分
-- 不把旧版 valid-session / completed-survey counts 作为 Story / Impact 主 headline。若旧研究数字仍需保留，只能放在内部 research appendix 或 Methodology 的历史记录中，并清楚标注来源、范围和非公开性质。
-
-公开解释文案：
-
-| Language | Copy |
-|----------|------|
-| English | Limited internal testing only. The China pilot was tested with more than 50 participants, including students from my school and a small number of farmers and village committee staff from communities in Hebei. It has not been publicly released, so these figures should be interpreted as early, exploratory evidence rather than public-user statistics. |
-| 中文 | 仅限小规模内部测试。中国试点目前已有 50 余名内测参与者，包括我校学生，以及河北部分村落的农民和村委工作人员。项目尚未进行公开发布，因此这些数据属于早期探索性证据，不代表公开用户统计。 |
-
-##### 03 · How the Tool Works
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 03 · HOW THE TOOL WORKS |
-| Heading | The score comes from the data. The explanation comes from AI. |
-
-| Step | Title | English copy |
-|------|-------|--------------|
-| 1 | YOUR HOME | The tool starts with what matters to the household: income, home size, energy bills, heating and cooling needs, and practical home conditions. |
-| 2 | LOCAL PUBLIC DATA | It combines those answers with traceable public data for the user's location, such as climate, energy prices and emissions factors. |
-| 3 | DETERMINISTIC SCORING | Eligible paths are compared through transparent formulas for affordability, climate resilience, environmental impact and practicality. |
-| 4 | AI EXPLANATION | AI explains the existing scores in plain language. It does not calculate, change or reorder the results. |
-| Bottom line |  | User answers + local public data → deterministic scoring → AI explanation |
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 03 · 这个工具如何工作 |
-| Heading | 分数来自数据，解释来自 AI。 |
-
-| Step | Title | 中文文案 |
-|------|-------|----------|
-| 1 | 你的家庭 | 工具首先关注真正与家庭有关的信息：收入、住宅面积、能源账单、取暖与制冷需求，以及住宅实际条件。 |
-| 2 | 当地公开数据 | 系统再结合用户所在地可追溯的公开数据，例如气候、能源价格和排放因子。 |
-| 3 | 确定性算法评分 | 通过筛选的路径按照明确公式，从家庭可负担性、气候适应与可靠性、环境影响和实施适配性四个方面进行比较。 |
-| 4 | AI 解释 | AI 用更容易理解的语言解释已经计算好的结果，但不会计算、修改或重新排序这些分数。 |
-| Bottom line |  | 用户回答 + 当地公开数据 → 确定性评分 → AI 解释 |
-
-##### 04 · Early Impact
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 04 · EARLY IMPACT |
-| Heading | What we are learning so far |
-
-| Metric | English label |
-|--------|---------------|
-| `50+` | China pilot internal-test participants |
-| `{global_site_visit_count}` | Global site visits |
-| `{global_feedback_count}` | Global feedback responses |
-| `{understanding_positive_rate}%` when enough G7 feedback exists | said the tool helped them better understand their options |
-| fallback when sample is small | Early feedback collecting now |
-
-Disclaimer: Early and exploratory evidence. The China pilot was conducted as limited internal testing with students and participants from several Hebei village communities and was not publicly released. Global site visits represent recorded website visits, not verified unique individuals.
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 04 · 早期影响力 |
-| Heading | 我们目前正在了解到什么 |
-
-| Metric | 中文标签 |
-|--------|----------|
-| `50+` | 中国试点内测参与者 |
-| `{global_site_visit_count}` | 全球网站访问次数 |
-| `{global_feedback_count}` | 全球反馈提交数 |
-| `{understanding_positive_rate}%` when enough G7 feedback exists | 的反馈者表示工具帮助他们更好地理解了可选方案 |
-| fallback when sample is small | 正在收集早期反馈 |
-
-Disclaimer: 以上均为早期探索性证据。中国试点仅进行了有限内部测试，参与者包括我校学生以及河北部分村落的参与者，尚未公开发布。全球网站访问次数表示记录到的网站访问，并不等同于经过身份验证的独立个人数量。
-
-不要为了页面排版写假百分比。数据不足时显示 `Early feedback collecting now` / `正在收集早期反馈`。
-
-##### 05 · The People Behind It
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 05 · THE PEOPLE BEHIND IT |
-| Heading | Built from a student question |
-| Body | I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. |
-
-到这里结束。不要再增加 `Technical collaborators ...`，不要增加 `Youth-led does not mean ...`，不要增加任何额外 Principle quote。
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 05 · 项目背后的人 |
-| Heading | 从一个学生的问题开始 |
-| Body | 我发起了最初的研究问题，并从早期研究、中国试点一路参与并主导到全球家庭能源助手的设计。我的工作包括项目设计、研究、参与者招募、数据分析、产品方向以及决策框架的构建。 |
-
-到这里结束。不要出现“在技术实现过程中，也有技术协作者……”，不要出现“青年主导并不意味着……”，不要增加其他额外 Principle 文案。
-
-##### 06 · What's Next
-
-| 元素 | English |
-|------|---------|
-| Eyebrow | 06 · WHAT'S NEXT |
-| Heading | There is no single best technology for every household. |
-| Body | The next goal is not to tell every family to choose the same solution. It is to make complex household energy choices easier to understand across different climates, incomes and homes. |
-
-| Direction | English copy |
-|-----------|--------------|
-| MORE PLACES | Expand reliable local public data to more countries and regions. |
-| MORE HOUSEHOLDS | Learn from a wider range of households, including people with tighter budgets or fewer local energy choices. |
-| BETTER EVIDENCE | Use real user feedback to improve the questions, scoring transparency and explanations. |
-
-| 元素 | 中文 |
-|------|------|
-| Eyebrow | 06 · 下一步 |
-| Heading | 没有一种技术会是所有家庭的唯一最佳答案。 |
-| Body | 下一步的目标不是告诉所有家庭选择同一种方案，而是让不同气候、不同收入和不同住宅条件下的复杂家庭能源选择变得更容易理解。 |
-
-| Direction | 中文文案 |
-|-----------|----------|
-| 覆盖更多地区 | 为更多国家和地区补充可靠、可追溯的当地公开数据。 |
-| 接触更多家庭 | 从更广泛的家庭中学习，尤其关注预算更紧张、当地能源选择更有限的家庭。 |
-| 建立更好的证据 | 利用真实用户反馈继续改进问题设计、评分透明度和解释方式。 |
-
-**不要混淆**：本节是 Story 页面 `06 · What's Next`。当前项目里的 `G6 · Action Summary` 是评分流程功能，本次不修改 G6 share card、PNG/PDF 或 summary logic。
-
-##### My Story Final CTA
-
-Story 页面最底部只保留一个 CTA，把用户拉回核心产品主线。删除 `View full impact →` 和 `Project resources →`，不要在 Story 最后出现 secondary links。
-
-| 元素 | English |
-|------|---------|
-| Heading | What could fit your home? |
-| Body | Explore heating and cooling paths using your own household information and local climate. |
-| Primary CTA | Start your home assessment |
-| Target | G1 / start assessment flow |
-
-| 元素 | 中文 |
-|------|------|
-| Heading | 哪些方案可能适合你家？ |
-| Body | 使用你自己的家庭信息和当地气候，比较不同的取暖和制冷路径。 |
-| Primary CTA | 开始家庭评估 |
-| Target | G1 / 家庭评估主流程 |
-
-##### Story image guidance
-
-建议最多 3–4 张真实图片：
-
-| 位置 | 建议图片 |
-|------|----------|
-| Hero | 项目 / 调研代表照片 |
-| 01 The Question | 河北村落 / 住宅 / 能源环境照片 |
-| 02 How It Grew | China Pilot 页面截图或测试过程 |
-| 05 Built from a Student Question | 研究 / 项目设计过程照片 |
-
-原则：优先真实项目材料，不为视觉效果放大量 stock photo。涉及真实参与者时，必须确保有适当的公开使用权限。没有明确许可时，优先使用环境、建筑、设备、背影、试点 UI 截图，避免未经许可公开可识别个人肖像。
-
-##### Story page wireframe
-
-```text
-┌──────────────────────────────────────────────────────────┐
-│ ← Back to advisor                       English / 中文    │
-├──────────────────────────────────────────────────────────┤
-│ MY STORY                                                 │
-│                                                          │
-│ From cleaner skies                                       │
-│ to a harder question at home.                            │
-│                                         [REAL PHOTO]     │
-├──────────────────────────────────────────────────────────┤
-│ 01 · THE QUESTION                                        │
-│                                                          │
-│ Story / problem                         [FIELD PHOTO]    │
-│                                                          │
-│ Cost · Climate · Home · Information                      │
-├──────────────────────────────────────────────────────────┤
-│ 02 · HOW IT GREW                                         │
-│                                                          │
-│ Research → China Pilot → Global Advisor → Now            │
-│                                                          │
-│ China Pilot: 50+ internal-test participants              │
-│ Limited internal testing · Not publicly released         │
-├──────────────────────────────────────────────────────────┤
-│ 03 · HOW THE TOOL WORKS                                  │
-│                                                          │
-│ Home                                                     │
-│   + Local public data                                    │
-│   ↓                                                      │
-│ Deterministic scoring                                    │
-│   ↓                                                      │
-│ AI explanation                                           │
-├──────────────────────────────────────────────────────────┤
-│ 04 · EARLY IMPACT                                        │
-│                                                          │
-│ 50+               {visits}          {feedback}           │
-│ China test         Site visits       Feedback            │
-│                                                          │
-│ Early / exploratory data note                            │
-├──────────────────────────────────────────────────────────┤
-│ 05 · BUILT FROM A STUDENT QUESTION                       │
-│                                                          │
-│ Short personal project-leadership paragraph              │
-│                                         [PROJECT PHOTO]  │
-├──────────────────────────────────────────────────────────┤
-│ 06 · WHAT'S NEXT                                         │
-│                                                          │
-│ More places · More households · Better evidence          │
-├──────────────────────────────────────────────────────────┤
-│ What could fit your home?                                │
-│                                                          │
-│ [ Start your home assessment ]                           │
-└──────────────────────────────────────────────────────────┘
-```
-
-#### `/impact` · Impact & Evidence
-
-Impact 页面保持独立，负责真实项目证据 / 匿名统计，不负责个人叙事。建议结构：
-
-| Section | 内容 |
-|---------|------|
-| IMPACT & EVIDENCE | 页面标题与早期证据说明 |
-| 01 · China Pilot | `50+` Internal-test participants · Limited internal testing only · Not publicly released |
-| 02 · Global Advisor | `{global_site_visit_count}` Global site visits · `{global_feedback_count}` Feedback responses · `{understanding_positive_rate}%` Helped understand options · `{ai_helpfulness_average}/5` AI helpfulness；数据不足时显示 Early data / collecting feedback |
-| 03 · What these numbers mean | China Pilot 是内部有限测试，不是公开用户；Global site visits 是访问次数，不是 verified unique individuals；Global feedback 是自愿、匿名、optional |
-| 04 · Methodology note | data definition · sample size · last updated · anonymous · exploratory |
-
-China Pilot 参与者公开描述为 students from my school + farmers / village committee staff from several Hebei village communities。不要细分人数。
-
-Global metrics 规则：
-
-| Metric | Definition |
-|--------|------------|
-| `global_site_visit_count` | 记录到的 Global site visits，不是 Global users |
-| `global_feedback_count` | G7 optional feedback submissions |
-| `helped_understand_average` | 非 null `helped_understand_score` 的平均值 |
-| `helped_understand_positive_rate` | `helped_understand_score >= 4` / 非 null understanding responses |
-| `ai_helpfulness_average` | numeric 1–5 only；排除 `not_used` 与 null |
-| `ai_helpfulness_positive_rate` | numeric `ai_helpfulness >= 4` / numeric AI helpfulness responses |
-| `AI usage rate` | behavioral `ai_used = true` / relevant Global sessions or submitted feedback rows，开发时需明确 denominator |
-
-自由文本不能自动公开。`improvement_text` 或 testimonial 必须 manual review 后，才可选择少量匿名 feedback 展示。
-
-G7 与 Impact 的关系：G7 是 optional、anonymous、not required。Impact 必须写 `X% of feedback respondents...`，不要写 `X% of all users...`。例如：
-
-| Language | Correct wording |
-|----------|-----------------|
-| English | 82% of feedback respondents said the tool helped them better understand their options. |
-| 中文 | 82% 的反馈提交者表示，这个工具帮助他们更好地理解了可选方案。 |
-
-#### Impact data provenance
-
-Impact statistics must be traceable. 每个 public metric 最好能够回答：
-
-- what is being counted?
-- where does it come from?
-- what period does it cover?
-- when was it last updated?
-
-禁止过度宣称：
-
-| 不要说 | 应改为 |
-|--------|--------|
-| site visits = individual users | site visits = recorded website visits |
-| internal-test participants = public users | China Pilot internal-test participants |
-| optional feedback respondents = all website users | feedback respondents |
-
-Impact data must follow the same traceability principle as G4 scoring. 不要为了让页面数字好看而人为设置初始值。
-
-#### `/media` · Optional future resources
-
-Media Kit / Project Resources 降级为未来可选资源，不应阻塞 MVP。
-
-`/media` 不应：
-
-- 出现在主导航；
-- 出现在 Story Final CTA；
-- 阻塞 Global Advisor 上线；
-- 与 Impact / Story 平级抢叙事。
-
-若文档或未来产品保留 `/media`，必须标注 `Optional / future` 与 `Not required for core MVP`。可选资源包括 one-pager、demo video、screenshots、logo/title card、case report draft 等，但这些不是当前核心交付。
 
 ---
 
