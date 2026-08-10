@@ -3,8 +3,8 @@
 > **文档用途**：给负责改网站的同学（CS 背景）看的**产品 + 技术 + UI 全文说明**。  
 > **产品负责人**：Guo Hang  
 > **当前线上版本**：https://www.clean-heating-simulator.com（根目录 `index.html` + Vercel `api/`）  
-> **本文档版本**：2026-08-10 · G6 optional home-energy summary card (PNG-only, Markdown-only)
-> **重要边界**：本文是给 CS 技术协作者看的 development specification，不代表功能已经实现。本轮只更新 Markdown 规格，不实现 route、页面、API、数据库或 runtime data。
+> **本文档版本**：2026-08-10 · Implementation handoff hardening pass (Markdown-only)
+> **重要边界**：本文是给 CS 技术协作者看的 development specification。本轮只加固 handoff 清晰度，不改变产品页面思路，不实现网站/API/数据库/数据文件。
 
 ---
 
@@ -32,6 +32,290 @@
 | 社群影响力 | 覆盖中国农户、学生、公众，并扩展到全球个体家庭；提供匿名数据看板 |
 | 故事感染力 | 从中国北方清洁取暖真实问题出发，讲到全球公正转型和家庭气候行动 |
 | 附加分 | 国际视野（多地区）、跨领域融合（环境×AI×教育×金融算账）、弱势群体包容（农村、低收入、偏远地区） |
+
+
+## 0.2 Implementation handoff contract
+
+This document is the **implementation specification** for the CS collaborator.
+
+Product decisions marked **MUST / MUST NOT / 必须 / 禁止** are **locked** unless Guo Hang explicitly approves a change.
+
+CS may choose implementation details **only** where this document explicitly says:
+
+- implementation choice
+- recommended
+- optional
+- future
+
+CS should **not** independently change:
+
+- page flow (G0–G7)
+- scoring weights
+- G1 location logic
+- G2 / G3 questions
+- technology screening principles
+- G4 four-dimension model
+- AI role boundary
+- G6 behavior
+- G7 questions
+- Story structure
+- Impact metric definitions
+- bilingual content meaning
+
+If implementation constraints require changing one of these:
+
+```text
+STOP
+→ document the issue
+→ ask Guo Hang
+→ do not silently redesign
+```
+
+中文：本规格中 **MUST / MUST NOT / 必须 / 禁止** 的内容视为锁定产品要求。遇到实现冲突时先停下来询问，不要静默改产品。
+
+---
+
+## 0.3 Source-of-truth hierarchy
+
+整份 MD 很长。冲突时按下列优先级，**不要自行挑选“看起来更新的句子”**。
+
+### Product / UX
+
+1. §4 Global flow  
+2. §5 UI + bilingual copy  
+3. specific G-page section（G0–G7 / Story / Impact）  
+4. wireframe / ASCII layout = visual guidance only  
+
+### Scoring
+
+1. §7.4–§7.12  
+2. `RankedPath` contract（§7.10）  
+3. Internal Appendix = catalog **audit / documentation only**  
+
+如果 UI 示例数字和 §7 公式冲突：**§7 胜出**。
+
+### Technology catalog
+
+| Role | Path |
+|------|------|
+| Runtime source of truth | `docs/data/technologies/technology_catalog.json` |
+| Schema | `docs/data/technologies/technology_catalog.schema.json` |
+| Internal Appendix | audit only |
+
+**禁止**从 Markdown table 在 runtime 重建 catalog。
+
+### Local scoring data
+
+| Role | Path |
+|------|------|
+| Runtime source of truth | `docs/data/scoring/*.json`（Guo 后续补齐） |
+| Provenance | required for every LOCAL_PUBLIC field |
+| Markdown numbers | illustrative only |
+
+### Climate
+
+| Region class | Runtime source |
+|--------------|----------------|
+| China / US | `docs/data/climate/cn_us_admin1_capitals.json` |
+| Other countries | `docs/data/climate/climate_profiles.json` |
+
+### AI
+
+1. G5 two-mode product behavior（`selected_path_explanation` / `household_analysis_report`）  
+2. §9 API / prompt contract  
+
+如果旧 §9 单 prompt 示例与最新 G5 双 mode 冲突：**G5 two-mode behavior 胜出**；本 handoff pass 已把 §9 修正到一致。
+
+### Story copy
+
+§ Evidence & Story Pages（§5 内 Story 小节）
+
+### Impact metrics
+
+§ Impact（§5） + §8.4 analytics definitions
+
+### Deployment
+
+§10
+
+### Delivery order
+
+§11
+
+---
+
+## 0.4 CS handoff package manifest
+
+Status values（基于 **2026-08-10 仓库扫描**，不是 MD 假设）：
+
+| Status | Meaning |
+|--------|---------|
+| **EXISTS** | 仓库中已有（含 git tracked） |
+| **MISSING** | 当前仓库没有；实现前需由指定 Owner 提供或创建 |
+| **PLANNED** | 规格要求存在，但尚未落地 |
+| **OPTIONAL** | 非 MVP blocker |
+| **LEGACY** | 旧版/China Pilot 资产，Global 可参考但不要覆盖 |
+
+| File / directory | Status now | Owner | Required for | Purpose | Runtime? | Notes |
+|------------------|------------|-------|--------------|---------|----------|-------|
+| `index.html` | EXISTS | shared | China Pilot | V1 完整 UI + 模拟 | yes (Pilot) | LEGACY for Global; keep at `/china` |
+| `api/chat.js` | EXISTS | CS | China Pilot AI | V1 debrief | yes (Pilot) | Do not replace with Global explain |
+| `api/supabase-config.js` | EXISTS | CS | Pilot / future Global | expose public Supabase config | yes | no secrets in client |
+| `api/explain.js` | EXISTS | CS | Global G5 | Global AI endpoint shell | yes | already present; align with §9 two-mode |
+| `api/global-ai.js` | EXISTS | CS | Global G5 | prompt builders | yes | server-side prompts |
+| `api/global-feedback.js` | EXISTS | CS | Global G7 | feedback API | yes | writes `global_feedback` when configured |
+| `algori_spec.md` | EXISTS | Guo | Pilot reference | V1 formulas | no | LEGACY reference |
+| `research/data/calibration_defaults.json` | EXISTS | Guo | Pilot | V1 constants | yes (Pilot) | LEGACY |
+| `spec.md` | EXISTS | Guo | context | older MVP scope | no | LEGACY; Global truth is this Upgrade Spec |
+| `paper/main.tex` | EXISTS | Guo | narrative | paper | no | |
+| `paper/defense-slides/indexxx.html` | EXISTS | Guo | visual ref | defense deck | no | |
+| `docs/data/climate/cn_us_admin1_capitals.json` | **MISSING** | **Guo** | G1 China/US | admin1 capital climate | **yes** | Guo must supply before full G1 |
+| `docs/data/climate/climate_profiles.json` | **MISSING** | **Guo** | G1 other countries | Köppen profiles | **yes** | Guo must supply |
+| `docs/data/climate/` | **MISSING** | Guo | G1 | climate data dir | yes | create when providing JSONs |
+| `docs/data/maps/admin0-boundaries.geojson` | **MISSING** | Guo/CS | G1 map | country polygons | yes | Guo provides or approves source; CS wires loader |
+| `docs/data/maps/admin1-cn-us.geojson` | **MISSING** | Guo/CS | G1 map | CN/US admin1 | yes | same |
+| `docs/data/maps/populated-places.geojson` | **MISSING** | OPTIONAL | G1 map labels | places | optional | OPTIONAL |
+| `docs/global-climate-zones-koppen-source.svg` | EXISTS | Guo | G1 design ref | Köppen visual source | no | not runtime climate values |
+| `docs/global-climate-zones-map-source.md` | EXISTS | Guo | G1 notes | map source notes | no | |
+| `docs/data/technologies/technology_catalog.json` | EXISTS | Guo+CS | G3→G4 | runtime tech catalog | **yes** | SOT for technologies |
+| `docs/data/technologies/technology_catalog.schema.json` | EXISTS | CS | validation | schema | yes (validate) | |
+| `docs/data/scoring/residential_energy_prices.json` | **MISSING** | **Guo** | G4 Affordability | LOCAL_PUBLIC prices | **yes** | inventing forbidden |
+| `docs/data/scoring/technology_performance.json` | **MISSING** | **Guo** | G4 Climate/Afford. | COP/SCOP/SEER etc. | **yes** | |
+| `docs/data/scoring/technology_installed_costs.json` | **MISSING** | **Guo** | G4 Affordability | installed costs | **yes** | |
+| `docs/data/scoring/electricity_emission_factors.json` | **MISSING** | **Guo** | G4 Environment | grid factors | **yes** | may be null → incomplete E |
+| `docs/data/scoring/fuel_emission_factors.json` | **MISSING** | **Guo** | G4 Environment | fuel factors | **yes** | |
+| `docs/data/scoring/infrastructure_availability.json` | **MISSING** | **Guo** | G3 screen / G4 | gas/district etc. | **yes** | |
+| `docs/data/scoring/scoring_data_sources.json` | **MISSING** | **Guo** | provenance | source registry | yes | recommended |
+| `docs/data/scoring/` | **MISSING** | Guo | G4 | scoring data dir | yes | |
+| `docs/story/images/story-hero-rooftop-solar.jpg` | EXISTS | Guo | Story | hero photo | yes (Story) | |
+| `docs/story/images/story-01-question-gas-meter.jpg` | EXISTS | Guo | Story | section 01 | yes | |
+| `docs/story/images/story-02-china-pilot-ui.jpg` | EXISTS | Guo | Story | section 02 | yes | |
+| `docs/data/supabase/global_feedback.sql` | EXISTS | CS | G7 | create `global_feedback` | apply once | SQL exists; table must be applied in Supabase by CS |
+| `docs/global/app.js` | EXISTS | CS | Global prototype | current prototype logic | prototype | not full production UI |
+| `docs/global/g4-ai-state.js` | EXISTS | CS | G4 AI helpers | request builders | prototype | |
+| `docs/global/g7-feedback.js` | EXISTS | CS | G7 helpers | feedback payload | prototype | |
+| `docs/global/index.html` | EXISTS (git) | CS | Global prototype shell | HTML shell | prototype | tracked in git; restore if missing locally |
+| `docs/src/global/*` | EXISTS | CS | scoring / feedback TS | deterministic modules | build → dist | |
+| `docs/src/technologies/*` | EXISTS | CS | catalog loader | load/filter catalog | yes | |
+| `docs/tests/global/*` | EXISTS | CS | regression | Node tests | no | keep green |
+| `i18n/en.json` / `i18n/zh.json` | **MISSING** | CS | production i18n | locale dictionaries | planned | prototype currently inlines copy; production SHOULD move to i18n |
+| `prompts/*` | **MISSING** | CS | optional file split | prompt modules | optional | prompts currently live in `api/global-ai.js` |
+| `vercel.json` | EXISTS | CS | deploy | rewrites | yes | |
+| `package.json` / `tsconfig.json` | EXISTS | CS | build/test | tooling | yes | no Vite config in repo |
+| `.cursor/skills/frontend-design/` | EXISTS | CS | design guidance | optional skill | no | OPTIONAL |
+
+---
+
+## 0.5 Responsibility matrix
+
+### Guo Hang / product owner
+
+负责：
+
+- 最终产品规则  
+- G1–G7 产品决策  
+- scoring methodology approval  
+- technology catalog content approval  
+- LOCAL_PUBLIC data source selection / review  
+- China Pilot evidence wording  
+- Story / Impact wording  
+- real project photos  
+- disclaimers final approval  
+- 典型家庭 fixtures  
+- 对科学数据与来源最终负责  
+
+### CS collaborator
+
+负责：
+
+- website architecture  
+- frontend implementation  
+- routing / state management  
+- map interaction  
+- data loaders  
+- deterministic scoring implementation  
+- UI rendering  
+- API implementation  
+- AI request routing  
+- i18n implementation  
+- Supabase integration  
+- PNG export (G6)  
+- responsive implementation  
+- accessibility  
+- tests  
+- deployment  
+
+### Very important
+
+CS **不应自行**：
+
+- invent technology performance  
+- invent installed cost  
+- invent emission factors  
+- choose arbitrary fallback scientific numbers  
+- change scoring weights  
+- change hard-filter logic  
+- change public impact numbers  
+
+如果所需数据缺失：
+
+```text
+implement NULL / missing behavior (§7.10 / §7.11)
++
+report missing dataset to Guo
+```
+
+**不要自己补“合理默认值”。**
+
+---
+
+## 0.6 Implementation blockers / data readiness
+
+| Dependency | Needed by | Can UI work without it? | Scoring effect if missing | Who resolves |
+|------------|-----------|-------------------------|---------------------------|--------------|
+| Climate: CN/US admin1 capitals JSON | G1 / G4 Climate | Map UI can scaffold; real climate cards need data | Climate dimension incomplete / insufficient | **Guo** |
+| Climate: Köppen profiles JSON | G1 other countries | same | same | **Guo** |
+| Map boundaries GeoJSON | G1 | placeholders possible | no direct score | Guo provides source; CS loads |
+| Technology catalog JSON | G3→G4 | no real ranking without it | **blocker for scoring** | EXISTS now (Guo maintains content) |
+| Residential energy prices | G4 Affordability | UI can show unavailable | A incomplete or insufficient_data | **Guo** |
+| Technology performance | G4 A/C | same | same | **Guo** |
+| Installed costs | G4 Affordability | same | skip upfront subscore | **Guo** |
+| Emission factors | G4 Environment | yes | E incomplete; normalize weights | **Guo** |
+| Infrastructure availability | screening / Practicality | warnings | soft warning or hard exclude only if verified false | **Guo** |
+| Extreme temperature proxy | Climate extremes | yes | extreme component omitted | **Guo** |
+| `DEEPSEEK_API_KEY` | G5 | yes | AI unavailable; scores unchanged | CS env / Guo ops |
+| Supabase `global_feedback` table | G7 persist | yes (Skip still works) | feedback save fails; flow continues | CS applies SQL |
+| Site visit analytics | Impact visits | yes | metric unavailable | future / OPTIONAL |
+
+### Climate coverage requirement
+
+G1 需要覆盖全局两类：
+
+1. China / US admin1 capital climate  
+2. other-country Köppen profile  
+
+### G4 scoring data readiness
+
+不是所有国家都必须一开始拥有完整 LOCAL_PUBLIC 数据。  
+但 **不得因为缺数据而 invent**。某地区缺失时 follow §7.10 / §7.11。
+
+### Launch data gate（正式展示完整 Fitness 前）
+
+至少要能计算：
+
+- Affordability  
+- Climate Resilience  
+- Practicality  
+
+Environment 可以缺失，并进行 available-weight normalization。
+
+如果 A / C / P **任一完全不可算**：
+
+```text
+path.status = "insufficient_data"
+```
+
+不要显示假精确 Fitness。
 
 ---
 
@@ -1160,6 +1444,33 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 右侧永远渲染 selected；不要复制第二套 scoring 计算到 UI
 ```
 
+#### Product states vs scoring states（MUST）
+
+不要把 **excluded** 和 **insufficient_data** 混为一谈。
+
+| State | Meaning | Where shown |
+|-------|---------|-------------|
+| `eligible` | 通过 hard screen；能得到正式/预备 Fitness | Ranked table |
+| `eligible_with_warning` | 通过 hard screen，但有 local confirmation warning | Ranked table（带 warning） |
+| `excluded` | 客观条件明确不可行（如永久施工被禁止、已验证无管网、安全工作区间 hard fail） | **Not feasible for your place** |
+| `insufficient_data` | 技术未被证明不可行；只是当前数据不足，无法满足 §7.10 最低评分条件 | **Could not rank with available data**（secondary） |
+
+```text
+data missing ≠ technology infeasible
+```
+
+因此：`insufficient_data` **禁止**显示在 “Not feasible for your place” 下。
+
+轻量 secondary block（不改变 G4 主布局）：
+
+| Locale | Label |
+|--------|-------|
+| EN | Could not rank with available data |
+| ZH | 当前数据不足，暂无法排名 |
+
+若没有 `insufficient_data` paths，该区域不显示。
+
+
 #### Desktop layout
 
 ```
@@ -1185,6 +1496,8 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 │ Not feasible for your place                                               │
 │ excluded paths + readable reasons                                         │
 ├────────────────────────────────────────────────────────────────────────────┤
+│ Could not rank with available data   (only if insufficient_data paths)    │
+├────────────────────────────────────────────────────────────────────────────┤
 │ [ Explain selected path ]          [ Get the analysis report ]             │
 ├────────────────────────────────────────────────────────────────────────────┤
 │ AI Analysis Panel                                                          │
@@ -1209,7 +1522,8 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 | Confidence / data coverage | optional compact status（如 80%） |
 
 规则：
-- Excluded **不进入** ranked rows；放在下方 Excluded section。
+- Excluded **不进入** ranked rows；放在下方 **Not feasible for your place**。
+- `insufficient_data` **不进入** ranked rows；也不进入 Not feasible；放在 **Could not rank with available data**。
 - 主表每行不必重复写 Status=OK。
 - 每行 clickable + keyboard selectable；selected 有明显边框/背景；不只靠颜色；`aria-selected` 正确；整行可点。
 - 点击只切换 `selectedPathId`，不重算 ranking。
@@ -1302,6 +1616,7 @@ selected = rankedPaths.find(p => p.path_id === selectedPathId)
 | Warnings | Warnings & local checks | 提醒与本地确认 |
 | Helper | Scores come from your answers, local public data, and deterministic formulas. AI does not calculate or change these scores. | 所有分数均由你的回答、当地公开数据和确定性公式计算；AI 不参与计算或修改分数。 |
 | Excluded | Not feasible for your place | 当前条件下不可行 |
+| Insufficient data (secondary) | Could not rank with available data | 当前数据不足，暂无法排名 |
 | CTA AI | **Explain selected path** | **解释当前路径** |
 | CTA report | **Get the analysis report** | **获取整体分析报告** |
 | CTA save summary | **Save my summary** | **保存我的摘要** |
@@ -1799,7 +2114,7 @@ No name / email / phone / address / IP / fingerprint. Do not store raw income, b
 
 **Persistence**
 
-- Table: `global_feedback`（见 `docs/data/supabase/global_feedback.sql`）
+- Table: `global_feedback`（SQL file **EXISTS**: `docs/data/supabase/global_feedback.sql`；CS 需在 Supabase 中 apply；未 apply 前 G7 仍可 Skip，保存可能失败但不阻塞流程）
 - API: `POST /api/global-feedback`
 - Free-text testimonials on `/impact` require **manual review / moderation** first — never auto-publish.
 
@@ -2335,65 +2650,113 @@ Fitness = min(Fitness, 65)
 # UI: Climate resilience is weak for this location.
 ```
 
-#### Suggested `RankedPath` output
+#### Canonical `RankedPath` contract（UI / G6 / AI 共用）
+
+此类型是 G4 展示、G6 摘要卡、G5 AI context 的 **shared contract**。  
+CS 实现 scoring engine 时必须以本接口为准（可在内部多字段，但对外输出必须兼容）。
 
 ```ts
+type PathScoreStatus =
+  | "ranked"              // full or preliminary Fitness shown in ranked table
+  | "preliminary"         // Fitness shown but score_coverage < 1
+  | "insufficient_data";  // cannot meet §7.10 minimum; NOT excluded
+
+interface ScoringWarning {
+  code: string;
+  message_en: string;
+  message_zh: string;
+  source: "user_answer" | "region_data" | "climate_data" | "scoring_data";
+}
+
+interface DataNote {
+  field_key: string;
+  note_en: string;
+  note_zh: string;
+}
+
 interface RankedPath {
   path_id: string;
-  rank: number;
+
+  display_name_en: string;
+  display_name_zh: string;
+
+  /** null when status === "insufficient_data" */
+  rank: number | null;
+
+  status: PathScoreStatus;
+
+  /** null when status === "insufficient_data" */
   fitness: number | null;
+
   dimensions: {
     affordability: number | null;
     climate_resilience: number | null;
     environment: number | null;
     practicality: number | null;
   };
+
   dimension_details: {
     affordability: {
-      annual_run_cost?: number;
-      operating_burden_pct?: number;
-      operating_burden_score?: number;
-      installed_cost?: number;
-      upfront_ratio?: number;
-      upfront_score?: number;
+      annual_run_cost?: number | null;
+      operating_burden_pct?: number | null;
+      operating_burden_score?: number | null;
+      installed_cost?: number | null;
+      upfront_ratio?: number | null;
+      upfront_score?: number | null;
       complete: boolean;
     };
     climate_resilience: {
-      hdd18?: number;
-      cdd24?: number;
-      heating_weight?: number;
-      cooling_weight?: number;
-      seasonal_heating_score?: number;
-      seasonal_cooling_score?: number;
-      extreme_heating_score?: number;
-      extreme_cooling_score?: number;
+      hdd18?: number | null;
+      cdd24?: number | null;
+      heating_weight?: number | null;
+      cooling_weight?: number | null;
+      seasonal_heating_score?: number | null;
+      seasonal_cooling_score?: number | null;
+      extreme_heating_score?: number | null;
+      extreme_cooling_score?: number | null;
       complete: boolean;
     };
     environment: {
-      path_emissions_kgco2e?: number;
-      reference_emissions_kgco2e?: number;
-      reduction_pct?: number;
+      path_emissions_kgco2e?: number | null;
+      reference_emissions_kgco2e?: number | null;
+      reduction_pct?: number | null;
       reference_type?: "household_baseline" | "regional_equivalent_service";
       complete: boolean;
     };
     practicality: {
-      renovation_score?: number;
-      outdoor_space_score?: number;
-      infrastructure_score?: number;
-      permission_score?: number;
+      renovation_score?: number | null;
+      outdoor_space_score?: number | null;
+      infrastructure_score?: number | null;
+      permission_score?: number | null;
       complete: boolean;
     };
   };
+
+  /** ALWAYS 0–1 internally. UI may show percent. */
   score_coverage: number;
+
   estimates: {
-    upfront_cost?: number;
-    annual_run_cost?: number;
-    operating_burden_pct?: number;
-    annual_emissions_kgco2e?: number;
+    currency?: string;
+    upfront_cost?: number | null;
+    annual_run_cost?: number | null;
+    operating_burden_pct?: number | null;
+    annual_emissions_kgco2e?: number | null;
   };
-  warnings: string[];
+
+  warnings: ScoringWarning[];
+  data_notes?: DataNote[];
 }
 ```
+
+映射到 UI：
+
+| `status` | Ranked table | Not feasible | Could not rank |
+|----------|--------------|--------------|----------------|
+| `ranked` / `preliminary` | yes | no | no |
+| `insufficient_data` | no | no | yes |
+| hard-excluded (separate list) | no | yes | no |
+
+Hard-excluded paths 继续使用现有 `ExcludedTechnology` / excluded list contract，**不要**塞进 `RankedPath.status = insufficient_data`。
 
 ### 7.11 Missing-data behavior
 
@@ -2475,6 +2838,10 @@ Global 以本节四维打分为准；China Pilot 保持独立。
 ---
 
 ## 8. 数据模型与文件结构
+
+### 8.1 建议新增目录
+
+> **Status note for CS（2026-08-10 scan）**：`docs/data/technologies/*` 与 `docs/data/supabase/global_feedback.sql` **EXISTS**。`docs/data/climate/`、`docs/data/maps/`、`docs/data/scoring/` 当前 **MISSING**——由 Guo 提供数据后创建；CS 先实现 loaders + missing behavior，不要 invent 数值。详见 §0.4 / §0.6。
 
 ### 8.1 建议新增目录
 
@@ -2822,83 +3189,91 @@ Impact 可未来计算：
 | B | V1 终局 debrief | `POST /api/chat` | 保持现有 |
 | C | （未来）聊天追问 | `POST /api/explain/followup` | 带 thread id |
 
-### 9.3 `/api/explain` 请求体
+### 9.3 `/api/explain` 请求体（MUST align with G5 two modes）
 
-`locale` 必须来自首页语言选择，取值为 `en` 或 `zh`。
+`locale` 必须来自全局语言状态（`en` / `zh`）。  
+Frontend 只发送 `mode` + `locale` + structured `context`。  
+**禁止**从浏览器传可随意修改的完整 system prompt。
 
-```json
-{
-  "locale": "en",
-  "region_id": "us_il_springfield_capital",
-  "country_iso3": "USA",
-  "admin1_name": "Illinois",
-  "climate_data_resolution": "admin1_capital",
-  "household": { "...": "..." },
-  "home_feasibility": {
-    "housing_status": "owner",
-    "building_type": "detached",
-    "renovation_tolerance": "moderate",
-    "outdoor_space": "small_yard_or_roof",
-    "current_energy_services": ["electricity", "delivered_fuel"],
-    "current_heating_methods": ["delivered_fuel_heating"],
-    "current_cooling_methods": ["room_air_conditioning", "fans"],
-    "upfront_cost_preference": "higher_if_saves_later"
-  },
-  "selected_path_id": "ashp_ductless",
-  "score_card": {
-    "ranked": [
-      {
-        "path_id": "ashp_ductless",
-        "rank": 1,
-        "fitness": 83.3,
-        "score_coverage": 1.0,
-        "dimensions": {
-          "affordability": 78,
-          "climate_resilience": 91,
-          "environment": 88,
-          "practicality": 70
-        },
-        "dimension_details": { "...": "see RankedPath in §7.10" },
-        "estimates": {
-          "upfront_cost": null,
-          "annual_run_cost": 1240,
-          "operating_burden_pct": 3.1,
-          "annual_emissions_kgco2e": 2100
-        },
-        "warnings": ["Upfront-cost data unavailable for this location."]
-      }
-    ],
-    "excluded": [{ "path_id": "gas_boiler", "reason_en": "Reliable local source: no gas grid for this home." }]
-  },
-  "retrieved_tech_ids": ["ashp_ductless", "gshp", "insulation_air_sealing"]
+```ts
+type AIAnalysisMode =
+  | "selected_path_explanation"
+  | "household_analysis_report";
+```
+
+Server routing：
+
+```text
+switch (body.mode) {
+  case "selected_path_explanation":
+    prompt = buildSelectedPathExplanationPrompt(body)
+  case "household_analysis_report":
+    prompt = buildHouseholdAnalysisReportPrompt(body)
+  default:
+    return 400
 }
 ```
 
-### 9.4 RAG 检索（MVP 可简化为 JSON 注入）
+**Selected-path request shape（illustrative）：**
 
-**Phase 1**：把 top-5 + excluded 的 tech JSON 全文塞进 system prompt（<8k tokens）。  
-**Phase 2**：向量库（Supabase pgvector / 本地 JSON index）按 `tech_id` + 关键词检索。
-
-System prompt 要点（按 `locale` 选择英文或中文版本）：
-
-```text
-You are a plain-language home energy guide.
-You ONLY explain the score_card and retrieved technology facts.
-If data is missing, say you don't know—do not invent subsidies or prices.
-Audience: homeowners, not academics.
-Format: use the required Markdown headings.
+```json
+{
+  "mode": "selected_path_explanation",
+  "locale": "en",
+  "context": {
+    "region_summary": { "country": "United States", "admin1": "Illinois" },
+    "climate_summary": { "hdd18": 3400, "cdd24": 420 },
+    "household_summary": { "needs_heating": true, "needs_cooling": true },
+    "home_feasibility_summary": { "housing_status": "owner" },
+    "baseline_summary": { "heating": ["delivered_fuel"], "cooling": ["room_ac"] },
+    "selected_path": { "/* RankedPath contract */": "..." },
+    "nearby_ranked_paths": [],
+    "relevant_tech_cards": []
+  }
+}
 ```
 
-User message：
+**Household-report request shape（illustrative）：**
 
-```text
-Explain the selected path fitness and four dimension scores.
-Compare the selected path with the next-ranked path on affordability and climate resilience.
-Note any technology used in China that may be relevant for this region.
-Do not change any numbers.
+```json
+{
+  "mode": "household_analysis_report",
+  "locale": "zh",
+  "context": {
+    "region_summary": {},
+    "climate_summary": {},
+    "household_summary": {},
+    "home_feasibility_summary": {},
+    "baseline_summary": {},
+    "ranked_paths": [ { "/* compact RankedPath summaries, max 12 */": "..." } ],
+    "excluded_paths": [ { "path_name": "...", "reason": "..." } ],
+    "relevant_local_public_data": [],
+    "relevant_tech_cards": []
+  }
+}
 ```
 
-`locale=zh` 时使用等价中文 prompt，输出标题与正文都用中文；`locale=en` 时使用英文 prompt。不得出现“界面是中文但 AI 解释仍为英文”的混用。
+Validation MUST：
+
+- `selected_path_explanation` → require `selected_path.path_id` + `dimensions`
+- `household_analysis_report` → require non-empty `ranked_paths`
+- reject unexpected / PII fields
+- do not accept full `technology_catalog.json`
+
+若仓库已有 `api/explain.js` + `api/global-ai.js`：实现时以其为起点，但产品行为以 **G5 two-mode section** 为准。
+
+### 9.4 RAG / context injection（MVP）
+
+**Phase 1**：只注入 selected / top paths + 必要 tech cards + exclusions readable reasons（token-bounded）。  
+**Phase 2（optional/future）**：向量检索。
+
+Prompt builder 必须：
+
+- 强制单语输出（follow `locale`）
+- 禁止重新算分 / 改排名 / 编造价格补贴 COP 排放法规
+- 使用 G5 规定的 Markdown 标题结构（selected vs household 两套不同）
+
+旧的单一 “plain-language guide / three generic sections” 示例 **已废弃**；勿再实现为唯一 prompt。
 
 ### 9.5 与 V1 prompt 的关系
 
