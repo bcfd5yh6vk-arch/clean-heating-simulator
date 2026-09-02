@@ -451,70 +451,14 @@ export function generateCandidatePaths(
     .slice(0, 12);
 }
 
-function scoreFromTier(tier: number | undefined): number {
-  return Math.max(0, Math.min(100, (tier ?? 3) * 20));
-}
-
-function capexPenalty(capex: TechnologyProfile["capex_level"], preference: HomeFeasibilityProfile["upfront_cost_preference"]): number {
-  const base = capex === "high" ? 24 : capex === "medium" ? 12 : 4;
-  if (preference === "minimum_upfront") return base * 1.4;
-  if (preference === "higher_if_saves_later") return base * 0.55;
-  if (preference === "not_sure") return base;
-  return base;
-}
-
-export function scoreAndSort(
-  candidatePaths: CandidatePath[],
-  baseline: BaselineProfile,
-  household: HouseholdProfile,
-  _region: RegionProfile,
-  _climate: ClimateProfile,
-  feasibility: HomeFeasibilityProfile,
-  technologies: TechnologyProfile[],
-): RankedPath[] {
-  const technologyById = new Map(technologies.map((tech) => [tech.tech_id, tech]));
-
-  return candidatePaths
-    .map((path) => {
-      const primary = technologyById.get(path.primary_tech_ids[0]);
-      const support = path.supporting_measure_ids.map((id) => technologyById.get(id)).filter(Boolean) as TechnologyProfile[];
-      const capex = primary?.capex_level ?? "medium";
-      const warningPenalty = path.screening_warnings.length * 4;
-      const confidencePenalty = path.screening_confidence === "low" ? 12 : path.screening_confidence === "medium" ? 6 : 0;
-      const cost = Math.round(Math.max(0, 90 - capexPenalty(capex, feasibility.upfront_cost_preference) - warningPenalty));
-      const carbon = Math.round(Math.min(100, 55 + support.length * 8 + (primary?.services.includes("supporting_measure") ? 6 : 18)));
-      const comfort = Math.round(Math.max(0, scoreFromTier(primary?.comfort_tier) - confidencePenalty));
-      const climate = Math.round(Math.max(0, 82 - warningPenalty - confidencePenalty));
-      const simple = Math.round(Math.max(0, scoreFromTier(primary?.simplicity_tier) - (path.baseline_transition?.replacement_complexity === "high" ? 15 : 0)));
-      const defaultWeights = { cost: 35, carbon: 20, comfort: 20, climate: 15, simple: 10 };
-      const fitness =
-        (cost * defaultWeights.cost +
-          carbon * defaultWeights.carbon +
-          comfort * defaultWeights.comfort +
-          climate * defaultWeights.climate +
-          simple * defaultWeights.simple) /
-        100;
-
-      return {
-        ...path,
-        fitness: Number(fitness.toFixed(1)),
-        dimensions: { cost, carbon, comfort, climate, simple },
-      };
-    })
-    .sort((a, b) => {
-      if (b.fitness !== a.fitness) return b.fitness - a.fitness;
-      return a.path_id.localeCompare(b.path_id);
-    })
-    .map((path) => ({
-      ...path,
-      baseline_transition: {
-        ...path.baseline_transition,
-        from_categories: path.baseline_transition?.from_categories ?? [
-          ...(household.needs_heating ? baseline.heating_categories : []),
-          ...(household.needs_cooling ? baseline.cooling_categories : []),
-        ],
-        reuse_existing_infrastructure: path.baseline_transition?.reuse_existing_infrastructure ?? false,
-        replacement_complexity: path.baseline_transition?.replacement_complexity ?? "unknown",
-      },
-    }));
-}
+/* -----------------------------------------------------------------------
+ * 已移除：scoreFromTier / capexPenalty / scoreAndSort
+ *
+ * 它们实现的是规格 §7.10 明令「已废弃，不得再实现」的旧五维模型
+ * { cost:35, carbon:20, comfort:20, climate:15, simple:10 }，并且直接把
+ * capex_tier / comfort_tier / simplicity_tier 这些 §7.2 标为
+ * “Deprecated for G4 numeric scoring” 的主观档位换算成分数。
+ *
+ * 正式的四维打分见 docs/src/scoring/（§7.5–§7.10）。
+ * screening.ts 现在只负责硬筛选与候选路径生成。
+ * --------------------------------------------------------------------- */

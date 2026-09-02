@@ -1,0 +1,52 @@
+{
+  "_note": "每份 LOCAL_PUBLIC 数据的有效期政策。抓取脚本（Python）与测试/前端（JS）都读这一个文件，避免两边各写一份而悄悄漂移。",
+  "_why": "抓一次不等于永远对。这里做的不是「保证新鲜」——那做不到——而是让过期变成可检测、会报警、且在页面上对用户可见的事，而不是一个没人知道的静默错误。",
+  "_how_it_works": [
+    "1. 每个生成的数据文件都带 _vintage：retrieved_at、source_period、stale_after。",
+    "2. docs/tests/global/data-freshness.test.js 在 stale_after 过期时变红，CI 与本地 npm test 都会挡住。",
+    "3. 前端在展示数字的地方标出数据年份，用户看得到自己在看多旧的数字。",
+    "4. 重跑对应的 scripts/fetch_*.py 就是刷新动作；脚本可复现，不依赖任何人手工记录。"
+  ],
+  "datasets": {
+    "cn_us_admin1_capitals": {
+      "refresh_cadence_days": 3650,
+      "rationale": "WMO 气候标准值按 10 年一版（当前 1991–2020，下一版 2001–2030 预计 2031 年前后发布）。气候平均态本身变化极慢，这是全部数据里最不怕放的一份。",
+      "script": "scripts/fetch_climate_data.py"
+    },
+    "climate_profiles": {
+      "refresh_cadence_days": 3650,
+      "rationale": "同上；另外 Köppen 分类本身也随气候标准值一起更新（Beck et al. 的版本迭代周期也是数年级）。",
+      "script": "scripts/fetch_climate_data.py"
+    },
+    "residential_energy_prices": {
+      "refresh_cadence_days": 200,
+      "rationale": "Eurostat nrg_pc_204/202 是半年一期；美国 EIA 月度更新；中国省级居民电价虽然调整不频繁但一调就是全省。这是全部数据里最容易过期、过期后果也最直接的一份——它直接决定 Affordability 维。",
+      "script": "scripts/fetch_energy_data.py"
+    },
+    "electricity_emission_factors": {
+      "refresh_cadence_days": 400,
+      "rationale": "电网排放因子随发电结构逐年变化，各国官方口径基本是年度发布（eGRID 年度、中国生态环境部年度）。",
+      "script": "scripts/fetch_emission_factors.py"
+    },
+    "fuel_emission_factors": {
+      "refresh_cadence_days": 1825,
+      "rationale": "燃料的含碳量是物理性质，IPCC 缺省值多年不变（2006 指南沿用至今，2019 精细化版本也未改动主要燃料的缺省因子）。放 5 年是安全的。",
+      "script": "scripts/fetch_emission_factors.py"
+    },
+    "technology_performance": {
+      "refresh_cadence_days": 730,
+      "rationale": "SCOP/SEER 的市售机型分布逐年缓慢上移，但按 P25–P50–P75 聚合后年际差异很小。两年一刷足够。",
+      "script": "scripts/fetch_tech_performance.py"
+    },
+    "technology_installed_costs": {
+      "refresh_cadence_days": 365,
+      "rationale": "装机成本受补贴政策、供应链和人工费影响，是变化最快的一类，且地域差异极大。EIA 该研究非年度更新，365 天到期时先查有没有新版报告，没有就顺延并记录。",
+      "script": "scripts/fetch_installed_costs.py"
+    },
+    "infrastructure_availability": {
+      "refresh_cadence_days": 730,
+      "rationale": "管网服务区扩张缓慢；而且规格 §7.3 明令它不得用于硬排除技术，过期的后果相对轻。",
+      "script": "scripts/fetch_infrastructure.py"
+    }
+  }
+}

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-root>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Impact &amp; Evidence · Climate Adaptation Energy Advisor</title>
+<meta name="description" content="China Pilot internal-test evidence and Global Advisor metric definitions, reported separately." />
+<meta name="robots" content="index, follow" />
+<style>
+  /* ------------------------------------------------------------------
+     Design tokens —— 与 docs/global/landing.html 完全一致，两页必须是同一个
+     产品。任何颜色都只经 token 定义：bare :root 给浅色全集，
+     @media (prefers-color-scheme: dark) 里用 :root:not([data-theme="light"])
+     覆盖，再由 :root[data-theme="dark"] 让显式切换在两个方向都生效。
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:      #EDF0F3;
+    --surface:     #FFFFFF;
+    --sunken:      #E2E7EC;
+    --ink:         #12171D;
+    --ink-2:       #3A454F;
+    --ink-3:       #6C7885;
+    --rule:        #CFD6DD;
+    --rule-soft:   #E1E6EB;
+
+    --cold:        #1E5F8E;
+    --cold-hover:  #17496D;
+    --cold-ink:    #17496D;
+    --on-cold:     #FFFFFF;
+    --ember:       #B4551F;
+
+    /* Köppen 气候带 —— 只用于那条色条与要点标记 */
+    --z-polar:       #7C99B4;
+    --z-continental: #2F6E96;
+    --z-temperate:   #3F7A56;
+    --z-arid:        #A98235;
+    --z-tropical:    #1F7F79;
+
+    --measure: 34rem;
+    --s-1: 0.8125rem;
+    --s0:  1rem;
+    --s1:  1.1875rem;
+    --s2:  1.5rem;
+    --s3:  clamp(2rem, 4.6vw, 3.15rem);
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #0F141A;
+      --surface:   #161C23;
+      --sunken:    #1D242C;
+      --ink:       #E7ECF1;
+      --ink-2:     #B3BDC7;
+      --ink-3:     #7F8B97;
+      --rule:      #2A333C;
+      --rule-soft: #222932;
+
+      --cold:       #6BA6D4;
+      --cold-hover: #8FBFE3;
+      --cold-ink:   #9CC6E7;
+      --on-cold:    #0F141A;
+      --ember:      #DC8B55;
+
+      --z-polar:       #8FA9C1;
+      --z-continental: #4E8CB4;
+      --z-temperate:   #5A9A74;
+      --z-arid:        #C2A057;
+      --z-tropical:    #3E9E97;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:    #0F141A;
+    --surface:   #161C23;
+    --sunken:    #1D242C;
+    --ink:       #E7ECF1;
+    --ink-2:     #B3BDC7;
+    --ink-3:     #7F8B97;
+    --rule:      #2A333C;
+    --rule-soft: #222932;
+
+    --cold:       #6BA6D4;
+    --cold-hover: #8FBFE3;
+    --cold-ink:   #9CC6E7;
+    --on-cold:    #0F141A;
+    --ember:      #DC8B55;
+
+    --z-polar:       #8FA9C1;
+    --z-continental: #4E8CB4;
+    --z-temperate:   #5A9A74;
+    --z-arid:        #C2A057;
+    --z-tropical:    #3E9E97;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--s0);
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* 在 i18n 字典载入前隐藏正文，避免闪现未替换的 key */
+  body[data-i18n-state="loading"] main,
+  body[data-i18n-state="loading"] .masthead__inner,
+  body[data-i18n-state="loading"] footer { visibility: hidden; }
+
+  .shell {
+    width: 100%;
+    max-width: 68rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.1rem, 4vw, 2.75rem);
+  }
+
+  /* ---------------- masthead ---------------- */
+  .masthead { background: var(--surface); border-bottom: 1px solid var(--rule); }
+
+  .masthead__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.6rem;
+    padding-block: 0.95rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    font-size: var(--s0);
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    text-decoration: none;
+    margin-inline-end: auto;
+  }
+  .brand:hover { color: var(--cold-ink); }
+
+  .navlinks { display: flex; gap: 1.3rem; align-items: center; }
+  .navlinks a {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 0.925rem;
+  }
+  .navlinks a:hover { color: var(--cold-ink); text-decoration: underline; text-underline-offset: 3px; }
+  .navlinks a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 650;
+    border-bottom: 2px solid var(--cold);
+    padding-bottom: 1px;
+  }
+
+  .lang { display: flex; align-items: center; gap: 0.5rem; }
+  .lang__label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .lang__select {
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.25rem 0.5rem;
+    min-height: 2rem;
+  }
+
+  /* ---------------- climate band ---------------- */
+  .band { display: flex; height: 5px; width: 100%; }
+  .band > i { flex: 1 1 0; display: block; }
+  .band > i:nth-child(1) { background: var(--z-polar); }
+  .band > i:nth-child(2) { background: var(--z-continental); flex-grow: 1.6; }
+  .band > i:nth-child(3) { background: var(--z-temperate); flex-grow: 1.35; }
+  .band > i:nth-child(4) { background: var(--z-arid); }
+  .band > i:nth-child(5) { background: var(--z-tropical); flex-grow: 0.8; }
+
+  main { flex: 1 0 auto; }
+
+  a:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 2px solid var(--cold);
+    outline-offset: 3px;
+  }
+
+  /* ---------------- back to advisor ---------------- */
+  .backrow { padding-block: 1.15rem 0; }
+  .back {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--cold-ink);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+  }
+  .back:hover { border-bottom-color: currentColor; }
+
+  /* ---------------- page head ---------------- */
+  .pagehead { padding-block: 1.6rem clamp(1.75rem, 4vw, 2.5rem); }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.05rem;
+  }
+  .eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1 1 auto;
+    max-width: 7rem;
+    background: var(--rule);
+  }
+
+  h1 {
+    font-size: var(--s3);
+    line-height: 1.1;
+    letter-spacing: -0.026em;
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  html[lang^="zh"] h1 { letter-spacing: -0.01em; max-width: 15ch; }
+
+  .lede {
+    font-size: var(--s1);
+    color: var(--ink-2);
+    max-width: var(--measure);
+    margin: 0 0 1.35rem;
+  }
+
+  .stamp {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .stamp::before {
+    content: "";
+    width: 1.6rem;
+    height: 2px;
+    background: var(--ember);
+    flex: none;
+  }
+  .stamp span {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ember);
+  }
+
+  /* ---------------- sections ---------------- */
+  .sec {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(1.85rem, 4vw, 2.85rem);
+  }
+
+  .sec__label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 1.1rem;
+  }
+
+  h2 {
+    font-size: var(--s2);
+    line-height: 1.24;
+    letter-spacing: -0.018em;
+    font-weight: 750;
+    margin: 0 0 0.9rem;
+    max-width: 26ch;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .body-text {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.965rem;
+    max-width: 44rem;
+  }
+
+  /* ---------------- China Pilot panel ---------------- */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--ember);
+    padding: clamp(1.1rem, 2.6vw, 1.6rem);
+    max-width: 48rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0 0 1.05rem;
+    padding: 0;
+    list-style: none;
+  }
+  .chip {
+    font-family: var(--mono);
+    font-size: 0.685rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    background: var(--sunken);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.2rem 0.55rem;
+  }
+
+  /* ---------------- metric cards ---------------- */
+  .notice {
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--cold);
+    padding: 0.9rem 1.15rem;
+    max-width: 48rem;
+    margin: 0 0 1.6rem;
+    font-size: 0.93rem;
+    color: var(--ink-2);
+  }
+  .notice strong {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--cold-ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(12.5rem, 1fr));
+    gap: 1px;
+    background: var(--rule-soft);
+    border: 1px solid var(--rule-soft);
+    margin-bottom: 1.75rem;
+  }
+  .metric {
+    background: var(--surface);
+    padding: 1.1rem 1.15rem 1.25rem;
+  }
+  .metric__tick { display: block; width: 1.75rem; height: 3px; margin-bottom: 0.8rem; }
+  .metric:nth-child(1) .metric__tick { background: var(--z-continental); }
+  .metric:nth-child(2) .metric__tick { background: var(--z-temperate); }
+  .metric:nth-child(3) .metric__tick { background: var(--z-arid); }
+  .metric:nth-child(4) .metric__tick { background: var(--z-tropical); }
+
+  .metric__name {
+    font-size: 0.9rem;
+    font-weight: 650;
+    letter-spacing: -0.004em;
+    margin: 0 0 0.55rem;
+    color: var(--ink);
+  }
+
+  /* 空状态：一个明确的「等数字的槽位」，而不是一个像装饰线的破折号。
+     没有真实数据前这里绝不填示例数字。 */
+  .metric__value {
+    margin: 0 0 0.7rem;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    color: var(--ink-3);
+    border: 1px dashed var(--rule);
+    border-radius: 2px;
+    background: var(--sunken);
+    padding: 0.3rem 0.7rem;
+    min-width: 4.75rem;
+  }
+  .metric__num {
+    font-size: 1.7rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+  .metric__unit {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric__status {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    line-height: 1.45;
+  }
+  .metric__status::before {
+    content: "";
+    width: 0.4rem;
+    height: 0.4rem;
+    border: 1px solid var(--ink-3);
+    border-radius: 50%;
+    flex: none;
+    margin-top: 0.35rem;
+  }
+
+  /* ---------------- provenance table ---------------- */
+  .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  table {
+    width: 100%;
+    min-width: 44rem;
+    border-collapse: collapse;
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    font-size: 0.9rem;
+  }
+  caption {
+    caption-side: top;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-bottom: 0.55rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.72rem 0.95rem;
+    border-bottom: 1px solid var(--rule-soft);
+    vertical-align: top;
+  }
+  thead th {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-weight: 500;
+    background: var(--sunken);
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+  tbody th {
+    font-weight: 650;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  tbody td { color: var(--ink-2); }
+  tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+  .empty { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  .table-note {
+    margin: 0.85rem 0 0;
+    font-size: 0.87rem;
+    color: var(--ink-3);
+    max-width: 44rem;
+  }
+
+  /* ---------------- meaning list ---------------- */
+  .meaning {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: clamp(1.25rem, 3vw, 2.25rem);
+    margin: 0;
+    padding: 0;
+  }
+  .meaning > div { min-width: 0; }
+  .meaning dt {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 0.45rem;
+    padding-top: 0.55rem;
+    border-top: 2px solid var(--rule);
+  }
+  .meaning > div:nth-child(1) dt { border-top-color: var(--ember); }
+  .meaning > div:nth-child(2) dt { border-top-color: var(--z-continental); }
+  .meaning > div:nth-child(3) dt { border-top-color: var(--z-temperate); }
+  .meaning dd {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.945rem;
+  }
+
+  /* ---------------- methodology ---------------- */
+  .method {
+    margin: 0 0 1.5rem;
+    display: grid;
+    grid-template-columns: minmax(9rem, 12rem) 1fr;
+    gap: 0 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    padding: clamp(1rem, 2.4vw, 1.5rem);
+  }
+  .method dt {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .method dd {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 0.93rem;
+    padding-block: 0.7rem;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .method > dt:first-of-type, .method > dt:first-of-type + dd {
+    border-top: 0;
+  }
+  @media (max-width: 40rem) {
+    .method { grid-template-columns: 1fr; gap: 0; }
+    .method dd { border-top: 0; padding-top: 0; }
+  }
+
+  .rules { margin: 0; padding: 0; list-style: none; max-width: 44rem; }
+  .rules li {
+    position: relative;
+    padding-left: 1.1rem;
+    margin-bottom: 0.55rem;
+    color: var(--ink-2);
+    font-size: 0.93rem;
+  }
+  .rules li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.72em;
+    width: 0.5rem;
+    height: 1px;
+    background: var(--ink-3);
+  }
+  .rules li:last-child { margin-bottom: 0; }
+
+  /* ---------------- footer ---------------- */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+    padding-block: 1.5rem 2.25rem;
+    flex-shrink: 0;
+  }
+  .disclaimer {
+    font-size: 0.855rem;
+    font-style: italic;
+    color: var(--ink-3);
+    max-width: 46rem;
+    margin: 0 0 0.9rem;
+  }
+  .footmeta {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body data-i18n-state="loading">
+
+  <header class="masthead">
+    <div class="shell masthead__inner">
+      <a class="brand" href="/global" data-i18n="nav.projectName">Climate Adaptation Energy Advisor</a>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="/china" data-i18n="nav.chinaPilot">China Pilot</a>
+        <a href="/impact" aria-current="page" data-i18n="nav.impact">Impact</a>
+      </nav>
+      <div class="lang">
+        <label class="lang__label" for="localeSelect" data-i18n="nav.languageLabel">Language</label>
+        <select class="lang__select" id="localeSelect">
+          <option value="en" data-i18n="nav.languageEn">English</option>
+          <option value="zh" data-i18n="nav.languageZh">中文</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Köppen 气候带：与 landing 同一条结构线 -->
+  <div class="band" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <main>
+
+    <div class="shell backrow">
+      <a class="back" href="/global" data-i18n="impact.backLink">← Back to the advisor</a>
+    </div>
+
+    <section class="shell pagehead">
+      <p class="eyebrow" data-i18n="impact.eyebrow">China Pilot · Global Advisor</p>
+      <h1 data-i18n="impact.title">Impact &amp; Evidence</h1>
+      <p class="lede" data-i18n="impact.lede">
+        China Pilot evidence and Global Advisor metrics are reported separately. They are not combined into one number.
+      </p>
+      <p class="stamp"><span data-i18n="impact.stamp">Early · exploratory evidence</span></p>
+    </section>
+
+    <!-- ============ 01 · China Pilot ============ -->
+    <section class="shell sec" id="china-pilot" aria-labelledby="china-pilot-h">
+      <p class="sec__label" data-i18n="impact.s1.label">01 · China Pilot</p>
+
+      <div class="panel">
+        <h2 id="china-pilot-h" data-i18n="impact.china.headline">50+ internal-test participants</h2>
+        <ul class="chips">
+          <li class="chip" data-i18n="impact.china.chip1">Limited internal testing only</li>
+          <li class="chip" data-i18n="impact.china.chip2">Not publicly released</li>
+        </ul>
+        <p class="body-text" data-i18n="impact.china.body">
+          Limited internal testing only. The China pilot was tested with more than 50 participants,
+          including students from my school and a small number of farmers and village committee staff
+          from communities in Hebei. It has not been publicly released, so these figures should be
+          interpreted as early, exploratory evidence rather than public-user statistics.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 02 · Global Advisor ============ -->
+    <section class="shell sec" id="global-advisor" aria-labelledby="global-advisor-h">
+      <p class="sec__label" data-i18n="impact.s2.label">02 · Global Advisor</p>
+      <h2 id="global-advisor-h" data-i18n="impact.global.headline">Global metrics have not started collecting yet.</h2>
+
+      <p class="notice">
+        <strong data-i18n="impact.global.noticeLabel">Early data</strong>
+        <span data-i18n="impact.global.noticeBody">No site visit or feedback data has been recorded for the Global Advisor yet, so no number is published below. Each metric is defined here first, so that whatever appears later can be checked against its definition.</span>
+      </p>
+
+      <div class="metrics">
+        <article class="metric">
+          <span class="metric__tick" aria-hidden="true"></span>
+          <h3 class="metric__name" data-i18n="impact.metric.visits.name">Global site visits</h3>
+          <p class="metric__value" aria-hidden="true"><span class="metric__num">—</span></p>
+          <p class="metric__status" data-i18n="impact.metric.status">Early data / collecting feedback</p>
+        </article>
+
+        <article class="metric">
+          <span class="metric__tick" aria-hidden="true"></span>
+          <h3 class="metric__name" data-i18n="impact.metric.feedback.name">Global feedback responses</h3>
+          <p class="metric__value" aria-hidden="true"><span class="metric__num">—</span></p>
+          <p class="metric__status" data-i18n="impact.metric.status">Early data / collecting feedback</p>
+        </article>
+
+        <article class="metric">
+          <span class="metric__tick" aria-hidden="true"></span>
+          <h3 class="metric__name" data-i18n="impact.metric.understand.name">Helped understand options</h3>
+          <p class="metric__value" aria-hidden="true"><span class="metric__num">—</span><span class="metric__unit">%</span></p>
+          <p class="metric__status" data-i18n="impact.metric.status">Early data / collecting feedback</p>
+        </article>
+
+        <article class="metric">
+          <span class="metric__tick" aria-hidden="true"></span>
+          <h3 class="metric__name" data-i18n="impact.metric.ai.name">AI helpfulness</h3>
+          <p class="metric__value" aria-hidden="true"><span class="metric__num">—</span><span class="metric__unit">/ 5</span></p>
+          <p class="metric__status" data-i18n="impact.metric.status">Early data / collecting feedback</p>
+        </article>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <caption data-i18n="impact.table.caption">Global Advisor metric definitions</caption>
+          <thead>
+            <tr>
+              <th scope="col" data-i18n="impact.table.colMetric">Metric</th>
+              <th scope="col" data-i18n="impact.table.colCounted">What is counted</th>
+              <th scope="col" data-i18n="impact.table.colSource">Where it comes from</th>
+              <th scope="col" data-i18n="impact.table.colPeriod">Period covered</th>
+              <th scope="col" data-i18n="impact.table.colUpdated">Last updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row" data-i18n="impact.metric.visits.name">Global site visits</th>
+              <td data-i18n="impact.metric.visits.def">Recorded website visits, not verified unique individuals.</td>
+              <td data-i18n="impact.table.notCollected">Not collected yet</td>
+              <td class="empty">—</td>
+              <td class="empty">—</td>
+            </tr>
+            <tr>
+              <th scope="row" data-i18n="impact.metric.feedback.name">Global feedback responses</th>
+              <td data-i18n="impact.metric.feedback.def">Optional anonymous feedback submissions from people who chose to answer.</td>
+              <td data-i18n="impact.table.notCollected">Not collected yet</td>
+              <td class="empty">—</td>
+              <td class="empty">—</td>
+            </tr>
+            <tr>
+              <th scope="row" data-i18n="impact.metric.understand.name">Helped understand options</th>
+              <td data-i18n="impact.metric.understand.def">Share of feedback respondents who rated this 4 or 5 out of 5. Blank answers are excluded from the denominator.</td>
+              <td data-i18n="impact.table.notCollected">Not collected yet</td>
+              <td class="empty">—</td>
+              <td class="empty">—</td>
+            </tr>
+            <tr>
+              <th scope="row" data-i18n="impact.metric.ai.name">AI helpfulness</th>
+              <td data-i18n="impact.metric.ai.def">Average of numeric 1–5 ratings only. “I did not use the AI analysis” and blank answers are excluded.</td>
+              <td data-i18n="impact.table.notCollected">Not collected yet</td>
+              <td class="empty">—</td>
+              <td class="empty">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note" data-i18n="impact.table.note">
+        Period covered and last updated will be filled in once collection begins. Until then these cells stay empty rather than showing an example number.
+      </p>
+    </section>
+
+    <!-- ============ 03 · What these numbers mean ============ -->
+    <section class="shell sec" id="what-these-mean" aria-labelledby="what-these-mean-h">
+      <p class="sec__label" data-i18n="impact.s3.label">03 · What these numbers mean</p>
+      <h2 id="what-these-mean-h" data-i18n="impact.meaning.headline">Read each number for exactly what it counts.</h2>
+
+      <dl class="meaning">
+        <div>
+          <dt data-i18n="impact.meaning.chinaTerm">China Pilot</dt>
+          <dd data-i18n="impact.meaning.chinaBody">
+            The China pilot was conducted as limited internal testing with students and participants from
+            several Hebei village communities and was not publicly released. Internal-test participants are
+            not public users.
+          </dd>
+        </div>
+        <div>
+          <dt data-i18n="impact.meaning.visitsTerm">Global site visits</dt>
+          <dd data-i18n="impact.meaning.visitsBody">
+            Global site visits represent recorded website visits, not verified unique individuals.
+          </dd>
+        </div>
+        <div>
+          <dt data-i18n="impact.meaning.feedbackTerm">Global feedback</dt>
+          <dd data-i18n="impact.meaning.feedbackBody">
+            Feedback is anonymous and optional. Any percentage on this page describes feedback respondents,
+            not all website visitors.
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- ============ 04 · Methodology note ============ -->
+    <section class="shell sec" id="methodology" aria-labelledby="methodology-h">
+      <p class="sec__label" data-i18n="impact.s4.label">04 · Methodology note</p>
+      <h2 id="methodology-h" data-i18n="impact.method.headline">How these figures are defined and updated</h2>
+
+      <dl class="method">
+        <dt data-i18n="impact.method.definitionTerm">Data definition</dt>
+        <dd data-i18n="impact.method.definitionBody">
+          Every public metric states what is being counted, where it comes from, what period it covers,
+          and when it was last updated.
+        </dd>
+
+        <dt data-i18n="impact.method.sampleTerm">Sample size</dt>
+        <dd data-i18n="impact.method.sampleBody">
+          China Pilot: more than 50 internal-test participants. Global Advisor: no feedback responses have
+          been recorded, so no average and no percentage is published.
+        </dd>
+
+        <dt data-i18n="impact.method.updatedTerm">Last updated</dt>
+        <dd data-i18n="impact.method.updatedBody">
+          Collection of Global Advisor metrics has not started, so there is no update date to report yet.
+        </dd>
+
+        <dt data-i18n="impact.method.anonymousTerm">Anonymous</dt>
+        <dd data-i18n="impact.method.anonymousBody">
+          Feedback is anonymous and optional. No name, email, phone, address, IP address or browser
+          fingerprint is collected.
+        </dd>
+
+        <dt data-i18n="impact.method.exploratoryTerm">Exploratory</dt>
+        <dd data-i18n="impact.method.exploratoryBody">
+          Early and exploratory evidence. These figures should be interpreted as early, exploratory
+          evidence rather than public-user statistics.
+        </dd>
+      </dl>
+
+      <ul class="rules">
+        <li data-i18n="impact.method.rule1">
+          Counts start from the real recorded data. No baseline number is added to make a figure look larger.
+        </li>
+        <li data-i18n="impact.method.rule2">
+          Free-text feedback is never published automatically. An anonymous quotation can only appear after manual review.
+        </li>
+        <li data-i18n="impact.method.rule3">
+          Impact data follows the same traceability principle as the scoring: every published number must be traceable to its source.
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="shell">
+      <p class="disclaimer" data-i18n="g0.disclaimer">
+        Decision support only. Not engineering design, installation quote, or legal advice.
+        Local installers must confirm sizing and safety.
+      </p>
+      <p class="footmeta" data-i18n="impact.footMeta">Anonymous · Optional feedback · Early exploratory data</p>
+    </div>
+  </footer>
+
+  <script src="/docs/global/i18n.js"></script>
+</body>
+</html>

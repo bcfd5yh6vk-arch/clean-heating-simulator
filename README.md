@@ -1,95 +1,78 @@
-# 保定煤改X村级转型模拟沙盘
+# 这个项目在做什么
 
-一个面向保定煤改X区域的清洁取暖转型模拟沙盘，用农户家庭数据比较不同取暖路径的可负担性，并为村级清洁取暖决策提供参考。
+这是一个给普通家庭用的取暖 / 制冷选择工具。
 
-## 上线地址
+你告诉它自己住在哪、房子什么样、一年在能源上花多少钱。它用公开数据和一套固定公式，给几条候选路径打分，再用白话把取舍讲清楚。分数是公式算出来的，AI 只负责解释已经算好的结果，并补上你可能不熟悉的技术背景。
 
-**https://www.clean-heating-simulator.com**
+它帮你做决定，但不代替安装商。装之前还是要找本地师傅核对尺寸和安全。
 
-域名在 Cloudflare 注册并解析；站点托管在 Vercel（原 `clean-heating-simulator.vercel.app` 仍可访问，但以自定义域名为准）。
+现在线上有两套站点：
 
-线上部署的是根目录 `index.html`（静态页）+ `api/` 下的 Vercel Serverless 接口。**DeepSeek API Key 与 Supabase 连接信息只存在 Vercel 环境变量中，不会出现在前端代码或 GitHub 仓库里。**
+| | 中国试点 | 全球版 |
+|---|---|---|
+| 打开 | **https://www.clean-heating-simulator.com** | **https://climate.ponderin.cn** |
+| 给谁 | 华北农村家庭，尤其是保定一带经历过煤改电 / 煤改气的村子 | 任何国家的家庭，页面有中文和英文 |
+| 怎么用 | 五回合沙盘：填整户收入、住房面积、电费，比较不同取暖路径能不能负担 | 在地图上点自己的位置，再填家庭情况，大约三分钟出候选路径 |
+| 位置怎么定 | 固定在中国试点场景 | 中国、美国精确到省或州；其他国家识别到国家和 Köppen 气候区 |
 
-### 在 Vercel 配置环境变量（必做）
+中国试点是这个项目真正跑过现场的版本（大约 50 人的内部测试，没有公开发布过面向公众的招募）。全球版把同一条问题往外推：你家适不适合这条路径，按气候带和公开能源数据来算。
 
-1. 打开 [vercel.com](https://vercel.com) 并登录。
-2. 进入项目 **clean-heating-simulator**（或你的项目名）。
-3. 顶部点 **Settings** → 左侧点 **Environment Variables**。
-4. 添加以下变量（**Environments** 建议 Production / Preview / Development 全勾）：
+全球版由我和同学一起开发。同学那边的开发仓是私有的，本仓库同步全球版的代码和公开数据，**不包含任何 API 密钥**。中国站的网址没有改：这个仓库部署出去时，根路径 `/` 仍然是中国沙盘。
 
-| Key | 说明 |
-|-----|------|
-| `DEEPSEEK_API_KEY` | [platform.deepseek.com](https://platform.deepseek.com) 获取；未配置则智能分析不可用 |
-| `SUPABASE_URL` | Supabase 项目 URL（如 `https://xxxx.supabase.co`） |
-| `SUPABASE_ANON_KEY` | Supabase 项目 **anon public** key；未配置则研究数据无法保存 |
+---
 
-5. 点 **Save** 保存。
-6. 回到 **Deployments** → 最新部署 **⋯** → **Redeploy** → **Redeploy**。
+## 全球版现在做到哪了
 
-本地用 `vercel dev` 时，可在项目根目录建 `.env.local` 写入同名变量（勿提交 Git）。
+主流程已经能在浏览器里走完：落地页 → 地图选点 → 家庭问卷 → 四维打分 → 可选的白话解释、家庭能源摘要卡、匿名反馈。另外还有 [My Story](https://climate.ponderin.cn/story) 和 [Impact](https://climate.ponderin.cn/impact) 两页。
 
-### 原 DeepSeek 配置说明
+打分权重是可负担性 35%、气候适应 30%、环境影响 20%、实施适配 15%。缺哪份公开数据，页面就显示算不出，不会用假分数顶上。
 
-`DEEPSEEK_API_KEY` 配置完成后，线上 `https://www.clean-heating-simulator.com/api/chat` 会用服务器端 Key 调用 DeepSeek，浏览器里看不到 Key。
+已经入库、可以参与计算的公开数据包括：NASA POWER 的中美省州首府气候和 30 个 Köppen 气候区；中国省级居民电价 / 气价、美国各州和欧洲多国居民能源价格；电网和燃料排放因子；美国 ENERGY STAR 设备性能与安装成本；中国能效标识备案库里的空调和壁挂炉性能分布；中美管道气、中国集中供热、多国电网可得性。
 
-## 项目结构
+目前算得比较完整的，是美国取暖家庭，以及中国以采暖为主、不需要按制冷账单反推的家庭。还缺的比较明确：
 
-- `index.html`：单文件作品页，也是 Vercel 部署入口。
-- `docs/global/`：Global mode 原型页面，当前包含 G3 Home feasibility 问卷与 G4 筛选结果摘要。
-- `docs/src/global/`：Global mode 的 TypeScript 类型、G3 验证、baseline、技术筛选、候选路径生成和排序逻辑。
-- `docs/data/technologies/technology_catalog.json`：Global mode 后台唯一运行时技术目录；G3 不向用户展示该目录。
-- `docs/data/technologies/technology_catalog.schema.json`：内部技术目录 schema，用于测试和审计。
-- `docs/tests/global/`：Global mode 的 Node 测试，覆盖 G3 条件显示、baseline、筛选算法、G4 联动和 China Pilot 隔离。
-- `docs/sandbox-v2-upgrade-spec.md`：Global V2 升级规格说明。
-- `app.py`：Flask 应用主文件。
-- `policysandbox.py`：政策沙盘与辅助逻辑。
-- `spec.md`：MVP 规格与研究问题。
-- `research/`：文献、政策、案例、参数和开放问题。
-- `midterm/`：中期答辩材料（PPT、演讲稿、draft、生成脚本）。
-- `templates/indexChinese.html`：Flask 版本实际使用的页面模板。
-- `static/`：Flask 版本的前端脚本和样式。
+- 欧盟设备性能（要申请 EPREL 接口）
+- 中国安装成本（没有可引用的官方口径，这一维会如实缺席）
+- 中国存量空调的制冷基线，所以「家里需要制冷」的中国家庭，制冷账单反推会断掉
+- 散煤、按面积计价的集中供热，和引擎现在的「按每度电 / 气算」对不上
 
-## 本地查看静态作品页
+协作开发的交接说明在 `docs/HANDOFF.md`，数据口径的自行裁定在 `docs/CS-DECISIONS.md`。
 
-直接双击根目录的 `index.html`，或在浏览器中打开该文件。
+---
 
-## Global mode 原型
+## 仓库里什么是什么
 
-打开 `/global` 或本地打开 `docs/global/index.html`。首页语言选项支持 English / 中文，并将选择保存到 `localStorage.locale`；Global 流程后续文案应跟随同一语言。
+- `index.html`：中国试点沙盘，也是中国站首页。
+- `docs/global/`：全球版页面（落地页、地图、问卷、结果、Story、Impact）。
+- `docs/src/scoring/`：四维打分引擎。
+- `docs/data/`：技术目录、气候、价格、排放因子、地图边界。运行时只读这些 JSON，不从表格现场编数。
+- `i18n/`：全球版中英文字典。
+- `api/`：Vercel 接口，用来做白话解释和研究数据入库。密钥只放服务器环境变量。
+- `research/`、`paper/`、`midterm/`：中国试点的文献、参数、论文和答辩材料。
 
-G3 已改为 **Home feasibility**：只询问住宅状态、建筑类型、可接受改造程度、室外空间、当前能源服务、当前取暖/制冷方式和前期投入偏好。它不会显示未来候选技术，也不会让用户逐项勾选技术。G4 候选路径由 `docs/src/global/screening.ts` 从完整技术目录确定性筛选和生成。
+中国沙盘里填的是**整户年收入**，默认按约 6 万元的基准户来校准。不要把农村人均可支配收入（约 23006 元）直接填进去。口径见 `spec.md`。
 
-## 测试
+---
 
-```bash
-npm run typecheck
-npm test
-```
+## 本地怎么打开
 
-## 本地运行 Flask 后端
+中国试点：用浏览器直接打开根目录的 `index.html`。
+
+全球版：
 
 ```bash
-python3 -m pip install -r requirements.txt
-export ANTHROPIC_API_KEY="你的 Anthropic API Key"
-python3 app.py
+npm install
+npm run dev        # http://127.0.0.1:5173
 ```
 
-然后浏览器打开 [http://127.0.0.1:5000](http://127.0.0.1:5000)（本地 Flask 服务，不是 Vercel 线上地址）。
+本仓库本地路由和中国站线上一致：
 
-## 模拟参数口径（收入）
+| 路径 | 页面 |
+|------|------|
+| `/` | 中国试点 |
+| `/global` | 全球版落地页 |
+| `/advisor` | 地图 + 问卷 + 结果 |
+| `/story` | My Story |
+| `/impact` | Impact & Evidence |
 
-`research/data/calibration_defaults.json` 里有两个容易混淆的数字：
-
-- **23006 元**：保定农村**人均可支配收入**（2024，人均口径）。
-- **60000 元**：模拟器用的**整户年总收入**默认值（约 100㎡ 基准户），不是人均。
-
-整户收入约为「人均 × 户内常住人数」的粗算结果（文件中按约 3 人 × 23006 ≈ 69000 取 **60000 作为偏保守的整户基准**）。用户在 `index.html` 里应输入自家**整户**年收入，不要直接填 23006。
-
-更完整的参数说明见 `spec.md` 与 `research/data/stats_baseline.md`。
-
-## 说明
-
-当前仓库同时保留两个版本：
-
-- 静态单文件作品页：用于 Vercel 展示和课程提交。
-- Flask 版本：用于后续接入 Claude API 和扩展交互逻辑。
+`npm test` 会编译打分引擎并跑全球版测试。要调用 AI 或写入研究库时，在项目根建 `.env.local`，写入 `DEEPSEEK_API_KEY`、`SUPABASE_URL`、`SUPABASE_ANON_KEY`，不要提交这个文件。

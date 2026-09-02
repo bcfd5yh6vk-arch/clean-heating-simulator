@@ -1,0 +1,859 @@
+{
+  "_status": "POPULATED",
+  "_owner": "由 scripts/fetch_tech_performance.py 生成，不要手工编辑",
+  "_vintage": {
+    "retrieved_at": "2026-08-23",
+    "source_period": "ENERGY STAR 认证列表实时快照 2026-08-23",
+    "refresh_cadence_days": 730,
+    "stale_after": "2028-08-22",
+    "rationale": "SCOP/SEER 的市售机型分布逐年缓慢上移，但按 P25–P50–P75 聚合后年际差异很小。两年一刷足够。",
+    "refresh_by": "重跑 scripts/fetch_tech_performance.py"
+  },
+  "field_key": "technology_performance",
+  "unit": "无量纲季节效率（热泵为 SCOP 量纲、燃烧类 <1）；运行温度为 °C",
+  "provenance_note": "禁止手挑“典型机型”；禁止用厂商宣传峰值 COP。本文件全部为分布聚合（P25/P50/P75）。",
+  "_not_covered": "中国已覆盖 ashp_ductless（分体/热泵房间空调，GB 21455-2019 备案全体）与 gas_boiler（燃气采暖热水炉，GB 20665-2015 备案全体）；中国的 ashp_ducted/gshp/window_ac 及存量基线（散煤/集中供热/燃气炉下限）仍缺——GB 20665 能效限定值可作燃气炉存量下限口径，待取到标准原文再入库。欧盟 EPREL 需要 API key，仍整体缺席（HSPF2/SEER2/APF 三种测试口径不得互相冒充，跨国比较无效）。minimum/maximum_operating_temp_c 无公开结构化来源（NEEP ccASHP 列批次 4）。central_ac/split_ac_cooling/portable_ac：无对应在售认证品类，留空。baseline:solid_fuel 与 baseline:district_*：存量效率无可引用公开口径，留空。",
+  "entries": {
+    "ashp_ductless|seasonal_heating_efficiency": [
+      {
+        "value": 2.9308,
+        "low": 2.7843,
+        "mid": 2.9308,
+        "high": 3.136,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Heat Pumps（data.energystar.gov/83eb-xbyy）",
+        "source_url": "https://data.energystar.gov/d/83eb-xbyy",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 16799,
+        "aggregation_method": "HSPF2（美国 AHRI 210/240-2023 测试口径）÷ 3.412；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      },
+      {
+        "value": 3.7375,
+        "low": 3.4154,
+        "mid": 3.7375,
+        "high": 4.0117,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "中国能效标识备案库（中国标准化研究院官方备案包 + 能效标识网公开接口）",
+        "source_url": "https://www.cnis.ac.cn/tzgg/202412/t20241231_59316.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 11495,
+        "pipeline": "cn_energylabel",
+        "source_period": "备案公告 2020-04 至 2024-12",
+        "aggregation_method": "制热季节效率 = HSTL/HSEC（单暖机为直接值）。universe=中标院 2024-12 官方备案包（GB 21455-2019，2020.04–2024.12 全体 12,031 条备案，逐条取详情）。指标拆算（CS-DECISIONS D11，固定份额法）：制冷季节负荷常数 Kc=623.5 负荷小时由 422 台单冷机备案的 SEER×CSEC/CC 中位数解出（IQR 散布 0.46%）；全体热泵 APF·ΣE/CC 的中位 K_ref=954.6（所有机型子类含定频均钉在 ~955，锚定常数普适）；制冷份额=Kc/K_ref=0.6531，每台热泵 制冷效率=份额×APF×ΣE/CSEC、制热效率=(1−份额)×APF×ΣE/HSEC——铭牌容量不进拆分（其与实测的散差不污染结果）。剔除 62 台（K_total 出 [800,1200] 垃圾带或效率出量程）+ 分类失败 40 台。独立交叉验证：热泵拆算的制冷 P50 与单冷机直接 SEER 的 P50 相差 ~1%。机型构成：热泵 10688 台（拆算）、单暖机 862 台（制热季节能源消耗效率直接值，只入制热分布）、单冷机 421 台（SEER 直接值，只入制冷分布）。按备案条目计数、未按销量加权；备案集=在售全体（含定频），非高效端子集。"
+      }
+    ],
+    "ashp_ductless|seasonal_cooling_efficiency": [
+      {
+        "value": 6.1547,
+        "low": 5.8617,
+        "mid": 6.1547,
+        "high": 6.7409,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Heat Pumps（data.energystar.gov/83eb-xbyy）",
+        "source_url": "https://data.energystar.gov/d/83eb-xbyy",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 16799,
+        "aggregation_method": "SEER2 ÷ 3.412；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      },
+      {
+        "value": 5.87,
+        "low": 5.4121,
+        "mid": 5.87,
+        "high": 6.3034,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "中国能效标识备案库（中国标准化研究院官方备案包 + 能效标识网公开接口）",
+        "source_url": "https://www.cnis.ac.cn/tzgg/202412/t20241231_59316.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 11054,
+        "pipeline": "cn_energylabel",
+        "source_period": "备案公告 2020-04 至 2024-12",
+        "aggregation_method": "制冷季节效率 = CSTL/CSEC（单冷机为直接值）。universe=中标院 2024-12 官方备案包（GB 21455-2019，2020.04–2024.12 全体 12,031 条备案，逐条取详情）。指标拆算（CS-DECISIONS D11，固定份额法）：制冷季节负荷常数 Kc=623.5 负荷小时由 422 台单冷机备案的 SEER×CSEC/CC 中位数解出（IQR 散布 0.46%）；全体热泵 APF·ΣE/CC 的中位 K_ref=954.6（所有机型子类含定频均钉在 ~955，锚定常数普适）；制冷份额=Kc/K_ref=0.6531，每台热泵 制冷效率=份额×APF×ΣE/CSEC、制热效率=(1−份额)×APF×ΣE/HSEC——铭牌容量不进拆分（其与实测的散差不污染结果）。剔除 62 台（K_total 出 [800,1200] 垃圾带或效率出量程）+ 分类失败 40 台。独立交叉验证：热泵拆算的制冷 P50 与单冷机直接 SEER 的 P50 相差 ~1%。机型构成：热泵 10688 台（拆算）、单暖机 862 台（制热季节能源消耗效率直接值，只入制热分布）、单冷机 421 台（SEER 直接值，只入制冷分布）。按备案条目计数、未按销量加权；备案集=在售全体（含定频），非高效端子集。"
+      }
+    ],
+    "ashp_ducted|seasonal_heating_efficiency": [
+      {
+        "value": 2.4912,
+        "low": 2.3447,
+        "mid": 2.4912,
+        "high": 2.6377,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Heat Pumps（data.energystar.gov/83eb-xbyy）",
+        "source_url": "https://data.energystar.gov/d/83eb-xbyy",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 263479,
+        "aggregation_method": "HSPF2 ÷ 3.412；含分体与整体式风管热泵；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "ashp_ducted|seasonal_cooling_efficiency": [
+      {
+        "value": 4.7479,
+        "low": 4.5428,
+        "mid": 4.7479,
+        "high": 5.2755,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Heat Pumps（data.energystar.gov/83eb-xbyy）",
+        "source_url": "https://data.energystar.gov/d/83eb-xbyy",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 263479,
+        "aggregation_method": "SEER2 ÷ 3.412；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "gshp|seasonal_heating_efficiency": [
+      {
+        "value": 4.1,
+        "low": 3.8,
+        "mid": 4.1,
+        "high": 4.5,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Geothermal Heat Pumps（data.energystar.gov/acvd-5wvz）",
+        "source_url": "https://data.energystar.gov/d/acvd-5wvz",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "sample_count": 4633,
+        "aggregation_method": "地源热泵额定 COP（ISO 13256 部分负荷工况）；地温稳定，作季节值近似；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "gshp|seasonal_cooling_efficiency": [
+      {
+        "value": 6.4771,
+        "low": 5.7737,
+        "mid": 6.4771,
+        "high": 7.1805,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Geothermal Heat Pumps（data.energystar.gov/acvd-5wvz）",
+        "source_url": "https://data.energystar.gov/d/acvd-5wvz",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "sample_count": 4509,
+        "aggregation_method": "EER ÷ 3.412；EER 是稳态工况，作季节值近似偏保守；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "window_ac|seasonal_cooling_efficiency": [
+      {
+        "value": 4.3962,
+        "low": 4.2204,
+        "mid": 4.3962,
+        "high": 4.3962,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Room Air Conditioners（data.energystar.gov/5xn2-dv4h）",
+        "source_url": "https://data.energystar.gov/d/5xn2-dv4h",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 453,
+        "aggregation_method": "CEER ÷ 3.412（含待机能耗的综合口径）；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "gas_boiler|seasonal_heating_efficiency": [
+      {
+        "value": 0.95,
+        "low": 0.95,
+        "mid": 0.95,
+        "high": 0.95,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Boilers（data.energystar.gov/6rww-hpns）",
+        "source_url": "https://data.energystar.gov/d/6rww-hpns",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 472,
+        "aggregation_method": "AFUE ÷ 100（燃料池：6rww-hpns）；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      },
+      {
+        "value": 0.856,
+        "low": 0.856,
+        "mid": 0.856,
+        "high": 0.8747,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "中国能效标识备案库（中国标准化研究院官方备案包 + 能效标识网公开接口）",
+        "source_url": "https://www.cnis.ac.cn/tzgg/202412/t20241231_59316.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 21856,
+        "pipeline": "cn_energylabel",
+        "source_period": "备案公告 2016-08 至 2024-12",
+        "aggregation_method": "universe=中标院 2024-12 官方备案包（GB 20665-2015，2016.08–2024.12 采暖热水炉 22,377 条=型号 L1*/LL1*/N1*/LN1*±LIPB 打字错误，热水器 JS* 系不入），逐条取详情。ηs=0.85×η(30%负荷)+0.15×η(额定)（部分负荷主导季节运行，权重借用 EU 813/2013 结构；与算术平均差 ≤1.5 个百分点，方向不定）。热效率为低位热值基（GB 20665），与 residential_energy_prices 的中国气价 LHV 换算口径自洽——不得与 HHV 基的 AFUE 直接比较。1 级 n=4185、2 级 n=17671，等级中位数单调性哨兵通过。"
+      }
+    ],
+    "gas_furnace|seasonal_heating_efficiency": [
+      {
+        "value": 0.961,
+        "low": 0.95,
+        "mid": 0.961,
+        "high": 0.97,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Furnaces（data.energystar.gov/i97v-e8au）",
+        "source_url": "https://data.energystar.gov/d/i97v-e8au",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 2760,
+        "aggregation_method": "AFUE ÷ 100（燃料池：i97v-e8au）；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "oil_heating|seasonal_heating_efficiency": [
+      {
+        "value": 0.87,
+        "low": 0.87,
+        "mid": 0.87,
+        "high": 0.87,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Boilers（data.energystar.gov/6rww-hpns）",
+        "source_url": "https://data.energystar.gov/d/6rww-hpns",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 142,
+        "aggregation_method": "AFUE ÷ 100（燃料池：6rww-hpns+i97v-e8au）；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "lpg_propane_heating|seasonal_heating_efficiency": [
+      {
+        "value": 0.96,
+        "low": 0.95,
+        "mid": 0.96,
+        "high": 0.97,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "ENERGY STAR Certified Boilers（data.energystar.gov/6rww-hpns）",
+        "source_url": "https://data.energystar.gov/d/6rww-hpns",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "sample_count": 3081,
+        "aggregation_method": "AFUE ÷ 100（燃料池：6rww-hpns+i97v-e8au）；对全部在售认证条目取 P25/P50/P75（value=P50），按认证列表行计数、未去重贴牌。注意集合是 ENERGY STAR 认证机型（市场高效端），P25 ≈ 认证门槛，不是全市场存量均值。"
+      }
+    ],
+    "baseline:electricity|seasonal_heating_efficiency": [
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "TECH_OBJECTIVE_RULE",
+        "source_name": "物理定义：电阻加热转换效率 = 1.0（§7.4 TECH_OBJECTIVE_RULE）",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "电阻加热的能量转换效率按物理定义为 1.0（焦耳加热，点位转换，不含围护/分配损失）。注意：G3 的 heat_pump 与 electric_heating 现状都映射到此基线（引擎按载体建键），对热泵现状家庭会低估有用需求——见 docs/CS-DECISIONS.md D7 与 HANDOFF §3.3。"
+      }
+    ],
+    "baseline:natural_gas|seasonal_heating_efficiency": [
+      {
+        "value": 0.8,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "美国联邦最低能效标准（10 CFR 430.32，存量下限口径）",
+        "source_url": "https://www.ecfr.gov/current/title-10/section-430.32",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "10 CFR 430.32(e)(1)：“Non-weatherized gas furnaces (not including mobile home furnaces) 80.0” AFUE。美国燃气采暖存量以暖炉为主，故取暖炉类；燃气热水锅炉下限为 82，已知偏差 ±2%。"
+      }
+    ],
+    "baseline:heating_oil|seasonal_heating_efficiency": [
+      {
+        "value": 0.83,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "美国联邦最低能效标准（10 CFR 430.32，存量下限口径）",
+        "source_url": "https://www.ecfr.gov/current/title-10/section-430.32",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "10 CFR 430.32(e)(1)：“Non-weatherized oil-fired furnaces (not including mobile home furnaces) 83.0” AFUE。燃油热水锅炉下限为 84。"
+      }
+    ],
+    "baseline:electricity|seasonal_cooling_efficiency": [
+      {
+        "value": 3.1946,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "美国联邦最低能效标准（10 CFR 430.32，存量下限口径）",
+        "source_url": "https://www.ecfr.gov/current/title-10/section-430.32",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "10 CFR 430.32(b)(1) Table 6（2014-06-01 至 2026-05-26 的存量标准）：“Without reverse cycle, with louvered sides and with a certified cooling capacity of 8,000 to 13,999 Btu/h 10.9” CEER ÷ 3.412。取最常见容量档；存量基线用旧标准下限是有意选择。"
+      }
+    ]
+  }
+}

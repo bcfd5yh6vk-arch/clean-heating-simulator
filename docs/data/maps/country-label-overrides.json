@@ -1,0 +1,18 @@
+{
+  "_status": "IN_USE",
+  "_owner": "Guo Hang（产品负责人）",
+  "_note": "国家/地区显示名与类型的覆盖。键为 admin0-boundaries.geojson 里的 iso3。这里是产品对边界与称谓的立场所在，属产品决策，不由 CS 决定。scripts/build_map_data.py 不会覆盖本文件，反而会在重新生成 admin0-boundaries.geojson 时把这里的值应用进去 —— 所以改称谓只改这一个文件就够了，不要直接编辑 geojson（那个文件每次构建都会被重写）。",
+  "_why_this_file_exists": "上游 Natural Earth 对争议地区的切分与标注是它自己的编辑立场（例如它把台湾的 name_zh 写作「中华民国」，把港澳作为独立 admin0 要素）。产品需要自己的口径，但又不该为此去改识别代码或维护一份手改的边界文件。",
+  "overrides": {
+    "TWN": {
+      "name_zh": "中国台湾",
+      "type": "Country"
+    },
+    "HKG": {
+      "name_zh": "中国香港"
+    },
+    "MAC": {
+      "name_zh": "中国澳门"
+    }
+  }
+}

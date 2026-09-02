@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-root data-i18n-title="g0.title">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Climate Adaptation Energy Advisor</title>
+<meta name="description" content="Find a heating and cooling path that fits your home, your local climate, and your budget." />
+<style>
+  /* ------------------------------------------------------------------
+     Design tokens.
+
+     方向：产品的根本轴线是「取暖 ↔ 制冷」，跨气候带成立 —— 这正是 V2
+     相对 China Pilot 的全部卖点。所以主色取冷调钢蓝（华北冬季，故事起点），
+     暖赭作为「取暖侧」的数据色，另有一条 Köppen 气候带色条作结构线。
+     不沿用 V1 的森林绿渐变：那套配色对「环保项目」通用，对本产品不特指。
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:      #EDF0F3;
+    --surface:     #FFFFFF;
+    --sunken:      #E2E7EC;
+    --ink:         #12171D;
+    --ink-2:       #3A454F;
+    --ink-3:       #6C7885;
+    --rule:        #CFD6DD;
+    --rule-soft:   #E1E6EB;
+
+    --cold:        #1E5F8E;
+    --cold-hover:  #17496D;
+    --cold-ink:    #17496D;
+    --on-cold:     #FFFFFF;
+    --ember:       #B4551F;
+
+    /* Köppen 气候带 —— 只用于那条色条与要点标记 */
+    --z-polar:       #7C99B4;
+    --z-continental: #2F6E96;
+    --z-temperate:   #3F7A56;
+    --z-arid:        #A98235;
+    --z-tropical:    #1F7F79;
+
+    --measure: 34rem;
+    --s-1: 0.8125rem;
+    --s0:  1rem;
+    --s1:  1.1875rem;
+    --s2:  1.5rem;
+    --s3:  clamp(2rem, 4.6vw, 3.15rem);
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #0F141A;
+      --surface:   #161C23;
+      --sunken:    #1D242C;
+      --ink:       #E7ECF1;
+      --ink-2:     #B3BDC7;
+      --ink-3:     #7F8B97;
+      --rule:      #2A333C;
+      --rule-soft: #222932;
+
+      --cold:       #6BA6D4;
+      --cold-hover: #8FBFE3;
+      --cold-ink:   #9CC6E7;
+      --on-cold:    #0F141A;
+      --ember:      #DC8B55;
+
+      --z-polar:       #8FA9C1;
+      --z-continental: #4E8CB4;
+      --z-temperate:   #5A9A74;
+      --z-arid:        #C2A057;
+      --z-tropical:    #3E9E97;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:    #0F141A;
+    --surface:   #161C23;
+    --sunken:    #1D242C;
+    --ink:       #E7ECF1;
+    --ink-2:     #B3BDC7;
+    --ink-3:     #7F8B97;
+    --rule:      #2A333C;
+    --rule-soft: #222932;
+
+    --cold:       #6BA6D4;
+    --cold-hover: #8FBFE3;
+    --cold-ink:   #9CC6E7;
+    --on-cold:    #0F141A;
+    --ember:      #DC8B55;
+
+    --z-polar:       #8FA9C1;
+    --z-continental: #4E8CB4;
+    --z-temperate:   #5A9A74;
+    --z-arid:        #C2A057;
+    --z-tropical:    #3E9E97;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--s0);
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* 在 i18n 字典载入前隐藏正文，避免闪现未替换的 key */
+  body[data-i18n-state="loading"] main,
+  body[data-i18n-state="loading"] .masthead__inner,
+  body[data-i18n-state="loading"] footer { visibility: hidden; }
+
+  .shell {
+    width: 100%;
+    max-width: 68rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.1rem, 4vw, 2.75rem);
+  }
+
+  /* ---------------- masthead ---------------- */
+  .masthead { background: var(--surface); border-bottom: 1px solid var(--rule); }
+
+  .masthead__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.6rem;
+    padding-block: 0.95rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    font-size: var(--s0);
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    text-decoration: none;
+    margin-inline-end: auto;
+  }
+  .brand:hover { color: var(--cold-ink); }
+
+  .navlinks { display: flex; gap: 1.3rem; align-items: center; }
+  .navlinks a {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 0.925rem;
+  }
+  .navlinks a:hover { color: var(--cold-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  .lang { display: flex; align-items: center; gap: 0.5rem; }
+  .lang__label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .lang__select {
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.25rem 0.5rem;
+    min-height: 2rem;
+  }
+
+  /* ---------------- climate band ----------------
+     Köppen 气候带色条：编码「本工具跨气候带成立」这件事，不是装饰。
+     各段宽度按主要气候带的粗略陆地占比给，非精确数据。 */
+  .band { display: flex; height: 5px; width: 100%; }
+  .band > i { flex: 1 1 0; display: block; }
+  .band > i:nth-child(1) { background: var(--z-polar); }
+  .band > i:nth-child(2) { background: var(--z-continental); flex-grow: 1.6; }
+  .band > i:nth-child(3) { background: var(--z-temperate); flex-grow: 1.35; }
+  .band > i:nth-child(4) { background: var(--z-arid); }
+  .band > i:nth-child(5) { background: var(--z-tropical); flex-grow: 0.8; }
+
+  /* ---------------- hero ---------------- */
+  main { flex: 1 0 auto; }
+
+  .hero { padding-block: clamp(2.75rem, 7vw, 5rem) clamp(2rem, 4vw, 3rem); }
+
+  .hero__eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1.1rem;
+  }
+  .hero__eyebrow::after {
+    content: "";
+    height: 1px;
+    flex: 1 1 auto;
+    max-width: 7rem;
+    background: var(--rule);
+  }
+
+  h1 {
+    font-size: var(--s3);
+    line-height: 1.1;
+    letter-spacing: -0.026em;
+    font-weight: 800;
+    margin: 0 0 0.85rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  :root[lang^="zh"] h1, html[lang^="zh"] h1 { letter-spacing: -0.01em; max-width: 15ch; }
+
+  .hero__sub {
+    font-size: var(--s1);
+    color: var(--ink-2);
+    max-width: var(--measure);
+    margin: 0 0 2rem;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.75rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.6rem 1.55rem;
+    background: var(--cold);
+    color: var(--on-cold);
+    font: inherit;
+    font-weight: 650;
+    border: 1px solid var(--cold);
+    border-radius: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 140ms ease, border-color 140ms ease;
+  }
+  .btn:hover { background: var(--cold-hover); border-color: var(--cold-hover); }
+
+  .textlink {
+    color: var(--cold-ink);
+    text-decoration: none;
+    font-size: 0.95rem;
+    border-bottom: 1px solid transparent;
+    padding-bottom: 1px;
+  }
+  .textlink:hover { border-bottom-color: currentColor; }
+
+  a:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 2px solid var(--cold);
+    outline-offset: 3px;
+  }
+
+  /* ---------------- value props ---------------- */
+  .props {
+    border-top: 1px solid var(--rule);
+    padding-block: clamp(2rem, 4vw, 3rem) clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .prop__tick {
+    width: 1.75rem;
+    height: 3px;
+    display: block;
+    margin-bottom: 0.85rem;
+  }
+  .props > div:nth-child(1) .prop__tick { background: var(--z-continental); }
+  .props > div:nth-child(2) .prop__tick { background: var(--z-temperate); }
+  .props > div:nth-child(3) .prop__tick { background: var(--z-arid); }
+
+  .prop h2 {
+    font-size: var(--s0);
+    font-weight: 700;
+    margin: 0 0 0.3rem;
+    letter-spacing: -0.006em;
+  }
+  .prop p { margin: 0; color: var(--ink-2); font-size: 0.945rem; }
+
+  /* ---------------- footer ---------------- */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+    padding-block: 1.5rem 2.25rem;
+    flex-shrink: 0;
+  }
+  .disclaimer {
+    font-size: 0.855rem;
+    font-style: italic;
+    color: var(--ink-3);
+    max-width: 46rem;
+    margin: 0 0 0.9rem;
+  }
+  .footmeta {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body data-i18n-state="loading">
+
+  <header class="masthead">
+    <div class="shell masthead__inner">
+      <a class="brand" href="/global" data-i18n="nav.projectName">Climate Adaptation Energy Advisor</a>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="/china" data-i18n="nav.chinaPilot">China Pilot</a>
+        <a href="/impact" data-i18n="nav.impact">Impact</a>
+      </nav>
+      <div class="lang">
+        <label class="lang__label" for="localeSelect" data-i18n="nav.languageLabel">Language</label>
+        <select class="lang__select" id="localeSelect">
+          <option value="en" data-i18n="nav.languageEn">English</option>
+          <option value="zh" data-i18n="nav.languageZh">中文</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Köppen 气候带：本工具跨气候带成立 -->
+  <div class="band" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <main>
+    <section class="shell hero">
+      <p class="hero__eyebrow">Köppen&nbsp;·&nbsp;Af Aw BS BW Cf Cs Df Dw ET</p>
+
+      <h1 data-i18n="g0.title">Climate Adaptation Energy Advisor</h1>
+      <p class="hero__sub" data-i18n="g0.subtitle">
+        Find a heating and cooling path that fits your home, your local climate, and your budget.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn" id="startCta" href="/advisor" data-i18n="g0.primaryCta">Start from the map — about 3 minutes</a>
+        <a class="textlink" href="/story" data-i18n="g0.secondaryCta">See my story →</a>
+      </div>
+
+    </section>
+
+    <section class="shell props">
+      <div class="prop">
+        <span class="prop__tick" aria-hidden="true"></span>
+        <h2 data-i18n="g0.bullet1.title">Household-first</h2>
+        <p data-i18n="g0.bullet1.body">Enter income, home size, and energy bills. See what fits you.</p>
+      </div>
+      <div class="prop">
+        <span class="prop__tick" aria-hidden="true"></span>
+        <h2 data-i18n="g0.bullet2.title">Scores you can trace</h2>
+        <p data-i18n="g0.bullet2.body">Each path gets a fitness score from clear rules—not AI guesswork.</p>
+      </div>
+      <div class="prop">
+        <span class="prop__tick" aria-hidden="true"></span>
+        <h2 data-i18n="g0.bullet3.title">Plain-language guide</h2>
+        <p data-i18n="g0.bullet3.body">AI explains trade-offs and technologies you may not know in your country.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">
+      <p class="disclaimer" data-i18n="g0.disclaimer">
+        Decision support only. Not engineering design, installation quote, or legal advice.
+        Local installers must confirm sizing and safety.
+      </p>
+      <p class="footmeta" data-i18n="g0.footer">Anonymous · No account required · ~3 min</p>
+    </div>
+  </footer>
+
+  <script src="/docs/global/i18n.js"></script>
+</body>
+</html>

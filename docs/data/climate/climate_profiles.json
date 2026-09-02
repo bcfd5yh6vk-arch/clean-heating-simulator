@@ -1,0 +1,1698 @@
+{
+  "_status": "POPULATED",
+  "_owner": "Guo Hang（产品负责人）· 数据由 scripts/fetch_climate_data.py 生成",
+  "_vintage": {
+    "retrieved_at": "2026-08-18",
+    "source_period": "1991-2020",
+    "refresh_cadence_days": 3650,
+    "stale_after": "2036-08-15",
+    "rationale": "同上；另外 Köppen 分类本身也随气候标准值一起更新（Beck et al. 的版本迭代周期也是数年级）。",
+    "refresh_by": "重跑 scripts/fetch_climate_data.py"
+  },
+  "_note": "中美之外的国家用 Köppen 标准 profile（规格 §G1 Step 2/4）。本文件由脚本生成，不要手工编辑 —— 重跑脚本会覆盖。",
+  "_source": {
+    "name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+    "home": "https://power.larc.nasa.gov/",
+    "period": "1991-2020"
+  },
+  "_main_group_fallback": "本文件只提供 30 个细分类，没有 A/B/C/D/E 主类条目。细分类查不到时 pipeline.js 会尝试主类回退，届时会落空并如实显示为无数据 —— 这是刻意的：主类跨度太大（比如 D 从 Dfa 到 Dfd），用一条曲线代表它会误导。",
+  "_humidity_rule": "humidity_level 由 koppen_code 推出：B 类为 dry；第二个字母 f/m 为 humid；w/s 为 mixed；E 类留空。confidence 一律 medium。",
+  "profiles": [
+    {
+      "koppen_code": "Af",
+      "display_name_en": "Tropical, rainforest",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Jakarta",
+          "lon": 106.827,
+          "lat": -6.172,
+          "population": 9125000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          26.8,
+          26.6,
+          27.1,
+          27.5,
+          27.7,
+          27.2,
+          26.7,
+          26.8,
+          27.5,
+          28.0,
+          27.8,
+          27.2
+        ],
+        "precipitation_mm_monthly": [
+          341.6,
+          337.4,
+          232.8,
+          192.9,
+          139.8,
+          90.9,
+          78.7,
+          53.3,
+          65.1,
+          133.3,
+          195.6,
+          231.6
+        ],
+        "extreme_low_temp_proxy_c": 22.9,
+        "extreme_high_temp_proxy_c": 32.6,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=106.8270&latitude=-6.1720&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=106.8270&latitude=-6.1720&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Am",
+      "display_name_en": "Tropical, monsoon",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Mumbai",
+          "lon": 72.876,
+          "lat": 19.068,
+          "population": 18978000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          23.1,
+          25.4,
+          28.6,
+          30.6,
+          31.0,
+          28.6,
+          26.6,
+          26.0,
+          26.1,
+          26.1,
+          24.5,
+          23.1
+        ],
+        "precipitation_mm_monthly": [
+          1.2,
+          1.7,
+          3.1,
+          2.4,
+          27.0,
+          496.8,
+          792.7,
+          530.4,
+          352.8,
+          112.5,
+          15.9,
+          5.3
+        ],
+        "extreme_low_temp_proxy_c": 13.4,
+        "extreme_high_temp_proxy_c": 42.5,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=72.8760&latitude=19.0680&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=72.8760&latitude=19.0680&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Aw",
+      "display_name_en": "Tropical, savannah",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Kolkata",
+          "lon": 88.369,
+          "lat": 22.57,
+          "population": 14787000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          17.6,
+          22.2,
+          27.6,
+          31.2,
+          31.6,
+          29.8,
+          28.6,
+          28.2,
+          27.6,
+          25.9,
+          21.9,
+          17.8
+        ],
+        "precipitation_mm_monthly": [
+          13.3,
+          20.7,
+          31.6,
+          47.7,
+          135.8,
+          229.8,
+          317.8,
+          308.1,
+          255.0,
+          134.8,
+          26.7,
+          7.8
+        ],
+        "extreme_low_temp_proxy_c": 7.0,
+        "extreme_high_temp_proxy_c": 42.9,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=88.3690&latitude=22.5700&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=88.3690&latitude=22.5700&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "BSh",
+      "display_name_en": "Arid, steppe, hot",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Delhi",
+          "lon": 77.228,
+          "lat": 28.672,
+          "population": 15926000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          13.8,
+          17.4,
+          23.5,
+          30.3,
+          35.1,
+          36.0,
+          32.5,
+          29.9,
+          28.3,
+          25.1,
+          20.1,
+          15.5
+        ],
+        "precipitation_mm_monthly": [
+          17.1,
+          21.8,
+          15.2,
+          12.3,
+          27.6,
+          83.7,
+          202.1,
+          212.0,
+          119.4,
+          14.9,
+          4.2,
+          7.8
+        ],
+        "extreme_low_temp_proxy_c": 3.5,
+        "extreme_high_temp_proxy_c": 46.8,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "dry",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=77.2280&latitude=28.6720&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=77.2280&latitude=28.6720&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "BSk",
+      "display_name_en": "Arid, steppe, cold",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Beijing",
+          "lon": 116.394,
+          "lat": 39.902,
+          "population": 11106000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -5.3,
+          -1.6,
+          4.8,
+          13.2,
+          20.3,
+          24.8,
+          26.5,
+          24.9,
+          19.6,
+          11.7,
+          2.7,
+          -3.8
+        ],
+        "precipitation_mm_monthly": [
+          1.9,
+          4.8,
+          8.4,
+          22.2,
+          39.4,
+          80.1,
+          163.7,
+          114.4,
+          57.6,
+          27.9,
+          12.9,
+          2.2
+        ],
+        "extreme_low_temp_proxy_c": -15.2,
+        "extreme_high_temp_proxy_c": 38.4,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "dry",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=116.3940&latitude=39.9020&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=116.3940&latitude=39.9020&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "BWh",
+      "display_name_en": "Arid, desert, hot",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Karachi",
+          "lon": 66.988,
+          "lat": 24.872,
+          "population": 12130000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          19.7,
+          21.3,
+          24.4,
+          27.4,
+          29.6,
+          30.5,
+          29.7,
+          28.5,
+          28.0,
+          27.6,
+          24.9,
+          21.5
+        ],
+        "precipitation_mm_monthly": [
+          9.6,
+          4.2,
+          5.6,
+          0.9,
+          11.5,
+          13.5,
+          39.1,
+          55.8,
+          17.7,
+          6.5,
+          0.9,
+          4.6
+        ],
+        "extreme_low_temp_proxy_c": 11.9,
+        "extreme_high_temp_proxy_c": 38.0,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "dry",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=66.9880&latitude=24.8720&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=66.9880&latitude=24.8720&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "BWk",
+      "display_name_en": "Arid, desert, cold",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Isfahan",
+          "lon": 51.698,
+          "lat": 32.702,
+          "population": 1628000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          2.4,
+          4.4,
+          8.7,
+          14.5,
+          20.6,
+          26.2,
+          28.7,
+          27.2,
+          22.9,
+          16.7,
+          8.9,
+          4.2
+        ],
+        "precipitation_mm_monthly": [
+          20.2,
+          16.8,
+          25.1,
+          21.6,
+          9.9,
+          2.4,
+          0.6,
+          0.6,
+          0.9,
+          3.1,
+          20.7,
+          24.5
+        ],
+        "extreme_low_temp_proxy_c": -6.2,
+        "extreme_high_temp_proxy_c": 40.0,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "dry",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=51.6980&latitude=32.7020&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=51.6980&latitude=32.7020&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cfa",
+      "display_name_en": "Temperate, no dry season, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Tokyo",
+          "lon": 139.749,
+          "lat": 35.687,
+          "population": 35676000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          4.8,
+          5.4,
+          8.7,
+          13.5,
+          18.1,
+          21.7,
+          25.4,
+          26.7,
+          23.5,
+          18.1,
+          12.7,
+          7.4
+        ],
+        "precipitation_mm_monthly": [
+          76.0,
+          69.7,
+          130.8,
+          133.8,
+          145.4,
+          181.5,
+          160.6,
+          123.4,
+          208.8,
+          223.2,
+          110.7,
+          70.4
+        ],
+        "extreme_low_temp_proxy_c": -1.6,
+        "extreme_high_temp_proxy_c": 34.1,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=139.7490&latitude=35.6870&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=139.7490&latitude=35.6870&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cfb",
+      "display_name_en": "Temperate, no dry season, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Paris",
+          "lon": 2.353,
+          "lat": 48.858,
+          "population": 9904000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          3.0,
+          3.6,
+          6.8,
+          10.0,
+          13.8,
+          17.1,
+          19.3,
+          19.1,
+          15.5,
+          11.3,
+          6.6,
+          3.5
+        ],
+        "precipitation_mm_monthly": [
+          53.9,
+          47.6,
+          47.1,
+          44.7,
+          62.0,
+          57.6,
+          52.7,
+          54.2,
+          50.1,
+          59.8,
+          60.6,
+          72.2
+        ],
+        "extreme_low_temp_proxy_c": -6.7,
+        "extreme_high_temp_proxy_c": 31.1,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=2.3530&latitude=48.8580&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=2.3530&latitude=48.8580&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cfc",
+      "display_name_en": "Temperate, no dry season, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Reykjavík",
+          "lon": -21.937,
+          "lat": 64.143,
+          "population": 166212,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -0.1,
+          -0.2,
+          0.5,
+          2.8,
+          5.8,
+          9.1,
+          11.0,
+          10.3,
+          7.7,
+          4.1,
+          1.5,
+          0.1
+        ],
+        "precipitation_mm_monthly": [
+          171.4,
+          163.0,
+          158.4,
+          110.1,
+          98.3,
+          82.2,
+          98.3,
+          126.8,
+          166.2,
+          146.0,
+          152.4,
+          171.1
+        ],
+        "extreme_low_temp_proxy_c": -9.1,
+        "extreme_high_temp_proxy_c": 16.6,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-21.9370&latitude=64.1430&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-21.9370&latitude=64.1430&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Csa",
+      "display_name_en": "Temperate, dry summer, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Los Angeles",
+          "lon": -118.232,
+          "lat": 34.049,
+          "population": 12500000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          11.8,
+          12.1,
+          13.5,
+          15.1,
+          17.4,
+          20.2,
+          23.1,
+          24.1,
+          22.9,
+          19.4,
+          15.2,
+          11.7
+        ],
+        "precipitation_mm_monthly": [
+          86.2,
+          91.8,
+          56.1,
+          18.9,
+          9.3,
+          2.4,
+          2.2,
+          1.2,
+          3.3,
+          15.5,
+          23.4,
+          61.1
+        ],
+        "extreme_low_temp_proxy_c": 2.5,
+        "extreme_high_temp_proxy_c": 35.7,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-118.2320&latitude=34.0490&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-118.2320&latitude=34.0490&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Csb",
+      "display_name_en": "Temperate, dry summer, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Bogotá",
+          "lon": -74.085,
+          "lat": 4.598,
+          "population": 7772000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          18.7,
+          19.2,
+          19.3,
+          19.0,
+          18.6,
+          18.1,
+          18.0,
+          18.2,
+          18.6,
+          18.4,
+          18.2,
+          18.5
+        ],
+        "precipitation_mm_monthly": [
+          54.6,
+          84.8,
+          139.5,
+          221.7,
+          219.2,
+          157.8,
+          132.7,
+          113.8,
+          129.6,
+          190.0,
+          168.3,
+          106.0
+        ],
+        "extreme_low_temp_proxy_c": 11.0,
+        "extreme_high_temp_proxy_c": 28.7,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-74.0850&latitude=4.5980&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-74.0850&latitude=4.5980&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Csc",
+      "display_name_en": "Temperate, dry summer, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Csc zone median point",
+          "lon": -71.15,
+          "lat": -44.05,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          10.1,
+          10.2,
+          8.2,
+          5.0,
+          2.4,
+          -0.5,
+          -1.3,
+          0.1,
+          2.2,
+          4.5,
+          6.8,
+          8.8
+        ],
+        "precipitation_mm_monthly": [
+          59.2,
+          51.8,
+          70.7,
+          90.0,
+          124.9,
+          151.2,
+          127.7,
+          112.8,
+          68.1,
+          84.9,
+          75.6,
+          64.2
+        ],
+        "extreme_low_temp_proxy_c": -10.3,
+        "extreme_high_temp_proxy_c": 24.0,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-71.1500&latitude=-44.0500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-71.1500&latitude=-44.0500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cwa",
+      "display_name_en": "Temperate, dry winter, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Dhaka",
+          "lon": 90.407,
+          "lat": 23.725,
+          "population": 12797394,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          18.1,
+          22.1,
+          27.0,
+          29.8,
+          29.8,
+          28.9,
+          28.4,
+          28.2,
+          27.8,
+          26.5,
+          23.0,
+          19.2
+        ],
+        "precipitation_mm_monthly": [
+          8.1,
+          19.9,
+          46.5,
+          128.7,
+          263.8,
+          315.9,
+          377.6,
+          318.1,
+          242.7,
+          157.8,
+          33.3,
+          14.3
+        ],
+        "extreme_low_temp_proxy_c": 9.4,
+        "extreme_high_temp_proxy_c": 40.1,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=90.4070&latitude=23.7250&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=90.4070&latitude=23.7250&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cwb",
+      "display_name_en": "Temperate, dry winter, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Mexico City",
+          "lon": -99.133,
+          "lat": 19.444,
+          "population": 19028000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          10.3,
+          12.1,
+          14.1,
+          16.1,
+          17.0,
+          16.1,
+          14.9,
+          14.6,
+          14.0,
+          12.9,
+          11.6,
+          10.8
+        ],
+        "precipitation_mm_monthly": [
+          10.8,
+          9.8,
+          13.0,
+          21.3,
+          53.9,
+          133.5,
+          147.6,
+          148.8,
+          143.1,
+          66.0,
+          19.5,
+          6.5
+        ],
+        "extreme_low_temp_proxy_c": -0.3,
+        "extreme_high_temp_proxy_c": 29.3,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-99.1330&latitude=19.4440&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-99.1330&latitude=19.4440&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Cwc",
+      "display_name_en": "Temperate, dry winter, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Cwc zone median point",
+          "lon": -68.75,
+          "lat": -17.25,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          9.7,
+          9.5,
+          9.3,
+          8.2,
+          6.0,
+          4.7,
+          4.3,
+          5.6,
+          7.3,
+          9.0,
+          10.1,
+          10.1
+        ],
+        "precipitation_mm_monthly": [
+          115.3,
+          89.0,
+          66.3,
+          25.8,
+          8.1,
+          6.9,
+          9.9,
+          18.0,
+          19.2,
+          34.7,
+          36.9,
+          81.5
+        ],
+        "extreme_low_temp_proxy_c": -6.1,
+        "extreme_high_temp_proxy_c": 22.3,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-68.7500&latitude=-17.2500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-68.7500&latitude=-17.2500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dfa",
+      "display_name_en": "Cold, no dry season, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Chicago",
+          "lon": -87.635,
+          "lat": 41.848,
+          "population": 8990000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -2.8,
+          -1.9,
+          2.0,
+          6.6,
+          11.6,
+          17.7,
+          22.0,
+          22.2,
+          18.7,
+          12.1,
+          5.5,
+          0.2
+        ],
+        "precipitation_mm_monthly": [
+          52.1,
+          50.1,
+          60.8,
+          98.7,
+          111.6,
+          106.8,
+          94.9,
+          101.7,
+          85.8,
+          93.3,
+          67.2,
+          54.9
+        ],
+        "extreme_low_temp_proxy_c": -14.1,
+        "extreme_high_temp_proxy_c": 29.3,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-87.6350&latitude=41.8480&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-87.6350&latitude=41.8480&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dfb",
+      "display_name_en": "Cold, no dry season, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Moscow",
+          "lon": 37.614,
+          "lat": 55.754,
+          "population": 10452000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -10.4,
+          -9.5,
+          -4.2,
+          4.2,
+          12.0,
+          16.1,
+          18.5,
+          16.7,
+          11.0,
+          4.0,
+          -3.3,
+          -8.2
+        ],
+        "precipitation_mm_monthly": [
+          48.4,
+          40.9,
+          41.9,
+          47.1,
+          77.8,
+          84.0,
+          91.8,
+          76.3,
+          66.0,
+          70.7,
+          55.2,
+          49.6
+        ],
+        "extreme_low_temp_proxy_c": -26.8,
+        "extreme_high_temp_proxy_c": 27.9,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=37.6140&latitude=55.7540&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=37.6140&latitude=55.7540&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dfc",
+      "display_name_en": "Cold, no dry season, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Surgut",
+          "lon": 73.425,
+          "lat": 61.26,
+          "population": 400000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -22.6,
+          -19.5,
+          -10.1,
+          -3.1,
+          5.7,
+          14.1,
+          17.1,
+          13.7,
+          7.1,
+          -1.3,
+          -14.6,
+          -20.6
+        ],
+        "precipitation_mm_monthly": [
+          28.5,
+          26.9,
+          39.7,
+          56.7,
+          85.9,
+          109.8,
+          93.0,
+          118.4,
+          80.4,
+          66.0,
+          45.3,
+          36.3
+        ],
+        "extreme_low_temp_proxy_c": -44.6,
+        "extreme_high_temp_proxy_c": 26.6,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=73.4250&latitude=61.2600&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=73.4250&latitude=61.2600&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dfd",
+      "display_name_en": "Cold, no dry season, very cold winter",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Dfd zone median point",
+          "lon": 132.85,
+          "lat": 62.35,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -39.1,
+          -35.6,
+          -21.6,
+          -7.0,
+          5.7,
+          15.3,
+          18.7,
+          14.9,
+          5.3,
+          -9.1,
+          -28.8,
+          -39.5
+        ],
+        "precipitation_mm_monthly": [
+          9.9,
+          7.8,
+          12.4,
+          24.0,
+          51.1,
+          57.0,
+          64.8,
+          53.9,
+          53.1,
+          31.9,
+          18.6,
+          9.0
+        ],
+        "extreme_low_temp_proxy_c": -52.5,
+        "extreme_high_temp_proxy_c": 30.9,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "humid",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=132.8500&latitude=62.3500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=132.8500&latitude=62.3500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dsa",
+      "display_name_en": "Cold, dry summer, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Kabul",
+          "lon": 69.181,
+          "lat": 34.519,
+          "population": 3277000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -0.4,
+          1.0,
+          6.5,
+          12.1,
+          16.7,
+          20.9,
+          23.1,
+          21.8,
+          17.9,
+          12.2,
+          6.7,
+          2.3
+        ],
+        "precipitation_mm_monthly": [
+          31.3,
+          51.2,
+          63.2,
+          63.0,
+          37.5,
+          22.5,
+          27.6,
+          36.9,
+          28.2,
+          23.9,
+          21.6,
+          16.1
+        ],
+        "extreme_low_temp_proxy_c": -12.3,
+        "extreme_high_temp_proxy_c": 35.1,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=69.1810&latitude=34.5190&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=69.1810&latitude=34.5190&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dsb",
+      "display_name_en": "Cold, dry summer, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Ardabil",
+          "lon": 48.3,
+          "lat": 38.25,
+          "population": 414603,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -2.4,
+          -1.3,
+          3.0,
+          8.5,
+          13.7,
+          18.0,
+          19.9,
+          19.9,
+          16.2,
+          10.8,
+          3.8,
+          -0.5
+        ],
+        "precipitation_mm_monthly": [
+          47.7,
+          45.9,
+          49.3,
+          37.5,
+          27.0,
+          17.7,
+          13.3,
+          19.2,
+          68.4,
+          92.1,
+          80.7,
+          48.1
+        ],
+        "extreme_low_temp_proxy_c": -15.1,
+        "extreme_high_temp_proxy_c": 34.9,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=48.3000&latitude=38.2500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=48.3000&latitude=38.2500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dsc",
+      "display_name_en": "Cold, dry summer, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Anchorage",
+          "lon": -149.887,
+          "lat": 61.214,
+          "population": 260283,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -9.0,
+          -7.1,
+          -5.7,
+          0.3,
+          6.1,
+          11.0,
+          13.3,
+          12.4,
+          8.0,
+          1.2,
+          -5.2,
+          -7.7
+        ],
+        "precipitation_mm_monthly": [
+          52.7,
+          50.7,
+          40.3,
+          37.8,
+          47.4,
+          57.9,
+          83.7,
+          107.3,
+          113.7,
+          86.2,
+          69.9,
+          65.4
+        ],
+        "extreme_low_temp_proxy_c": -23.2,
+        "extreme_high_temp_proxy_c": 21.1,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-149.8870&latitude=61.2140&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-149.8870&latitude=61.2140&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dsd",
+      "display_name_en": "Cold, dry summer, very cold winter",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Dsd zone median point",
+          "lon": 135.65,
+          "lat": 67.75,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -39.6,
+          -37.7,
+          -26.1,
+          -12.2,
+          0.4,
+          11.2,
+          14.2,
+          10.6,
+          1.4,
+          -13.1,
+          -30.0,
+          -38.5
+        ],
+        "precipitation_mm_monthly": [
+          9.6,
+          7.8,
+          10.5,
+          16.2,
+          44.0,
+          69.6,
+          74.7,
+          60.4,
+          46.8,
+          24.2,
+          17.1,
+          11.2
+        ],
+        "extreme_low_temp_proxy_c": -51.8,
+        "extreme_high_temp_proxy_c": 25.9,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=135.6500&latitude=67.7500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=135.6500&latitude=67.7500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dwa",
+      "display_name_en": "Cold, dry winter, hot summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Seoul",
+          "lon": 126.998,
+          "lat": 37.568,
+          "population": 9796000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -3.2,
+          -1.0,
+          3.6,
+          9.7,
+          15.6,
+          20.6,
+          24.0,
+          24.8,
+          20.2,
+          13.7,
+          6.4,
+          -0.7
+        ],
+        "precipitation_mm_monthly": [
+          20.8,
+          30.2,
+          40.6,
+          69.6,
+          92.4,
+          124.8,
+          332.6,
+          278.7,
+          138.3,
+          55.5,
+          48.6,
+          24.5
+        ],
+        "extreme_low_temp_proxy_c": -12.7,
+        "extreme_high_temp_proxy_c": 31.4,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=126.9980&latitude=37.5680&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=126.9980&latitude=37.5680&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dwb",
+      "display_name_en": "Cold, dry winter, warm summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Tianshui",
+          "lon": 105.918,
+          "lat": 34.602,
+          "population": 1225000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -3.2,
+          -0.1,
+          4.8,
+          11.1,
+          15.6,
+          19.5,
+          21.4,
+          20.4,
+          15.5,
+          9.5,
+          3.4,
+          -1.9
+        ],
+        "precipitation_mm_monthly": [
+          4.3,
+          7.0,
+          17.4,
+          33.9,
+          61.7,
+          79.2,
+          105.1,
+          93.6,
+          82.5,
+          48.4,
+          12.6,
+          2.5
+        ],
+        "extreme_low_temp_proxy_c": -12.6,
+        "extreme_high_temp_proxy_c": 32.5,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=105.9180&latitude=34.6020&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=105.9180&latitude=34.6020&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dwc",
+      "display_name_en": "Cold, dry winter, cold summer",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Erdenet",
+          "lon": 104.118,
+          "lat": 49.053,
+          "population": 79647,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -19.6,
+          -15.3,
+          -6.3,
+          2.7,
+          9.8,
+          16.3,
+          18.8,
+          16.1,
+          8.9,
+          0.3,
+          -9.3,
+          -16.9
+        ],
+        "precipitation_mm_monthly": [
+          2.8,
+          3.1,
+          6.5,
+          12.9,
+          26.7,
+          54.6,
+          81.5,
+          72.5,
+          30.6,
+          12.4,
+          6.6,
+          4.0
+        ],
+        "extreme_low_temp_proxy_c": -30.1,
+        "extreme_high_temp_proxy_c": 32.4,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=104.1180&latitude=49.0530&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=104.1180&latitude=49.0530&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "Dwd",
+      "display_name_en": "Cold, dry winter, very cold winter",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "Dwd zone median point",
+          "lon": 136.25,
+          "lat": 64.55,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -36.6,
+          -35.1,
+          -24.8,
+          -11.9,
+          -0.7,
+          9.8,
+          13.1,
+          9.3,
+          0.3,
+          -15.0,
+          -29.9,
+          -36.6
+        ],
+        "precipitation_mm_monthly": [
+          8.4,
+          6.4,
+          11.2,
+          27.0,
+          56.7,
+          93.3,
+          105.7,
+          79.0,
+          65.7,
+          31.3,
+          14.7,
+          7.8
+        ],
+        "extreme_low_temp_proxy_c": -48.1,
+        "extreme_high_temp_proxy_c": 22.2,
+        "extreme_proxy_confidence": "high",
+        "humidity_level": "mixed",
+        "humidity_confidence": "medium"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=136.2500&latitude=64.5500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=136.2500&latitude=64.5500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "EF",
+      "display_name_en": "Polar, frost",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "EF zone median point",
+          "lon": 20.05,
+          "lat": -80.05,
+          "population": null,
+          "rule": "zone_median_grid_cell"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          -27.8,
+          -36.6,
+          -47.6,
+          -54.0,
+          -55.6,
+          -56.0,
+          -58.8,
+          -59.0,
+          -57.8,
+          -49.9,
+          -36.9,
+          -27.7
+        ],
+        "precipitation_mm_monthly": [
+          3.4,
+          3.4,
+          3.7,
+          3.3,
+          3.1,
+          2.7,
+          1.9,
+          1.9,
+          2.1,
+          2.2,
+          2.4,
+          3.1
+        ],
+        "extreme_low_temp_proxy_c": -70.5,
+        "extreme_high_temp_proxy_c": -19.5,
+        "extreme_proxy_confidence": "high"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=20.0500&latitude=-80.0500&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=20.0500&latitude=-80.0500&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    },
+    {
+      "koppen_code": "ET",
+      "display_name_en": "Polar, tundra",
+      "fallback_level": "koppen_subtype",
+      "representative_locations": [
+        {
+          "name": "La Paz",
+          "lon": -68.152,
+          "lat": -16.496,
+          "population": 1590000,
+          "rule": "largest_city_in_zone"
+        }
+      ],
+      "selection_rule": "largest_city_in_zone：在 docs/data/maps/koppen-1991-2020.png 上取该气候区内人口最多（≥50,000）的城市（Natural Earth 10m populated places）。zone_median_grid_cell：该区内没有城市时（冰盖等），取全部格点的中位位置并吸附到最近同类格点。单点取值，不做多点平均。选点在写入前逐条用同一份栅格复核，不符则整批报错退出。",
+      "climate": {
+        "temperature_c_monthly": [
+          8.9,
+          8.7,
+          8.6,
+          8.0,
+          6.6,
+          5.5,
+          5.0,
+          5.9,
+          7.3,
+          8.5,
+          9.2,
+          9.2
+        ],
+        "precipitation_mm_monthly": [
+          132.1,
+          103.9,
+          78.4,
+          33.6,
+          11.2,
+          9.3,
+          11.8,
+          18.9,
+          23.7,
+          45.9,
+          48.3,
+          96.7
+        ],
+        "extreme_low_temp_proxy_c": -5.5,
+        "extreme_high_temp_proxy_c": 20.1,
+        "extreme_proxy_confidence": "high"
+      },
+      "source_name": "NASA POWER (MERRA-2 / SRB), 1991–2020 climatology",
+      "source_urls": [
+        "https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=T2M%2CPRECTOTCORR&community=RE&longitude=-68.1520&latitude=-16.4960&start=1991&end=2020&format=JSON",
+        "https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M_MIN%2CT2M_MAX&community=RE&longitude=-68.1520&latitude=-16.4960&start=19910101&end=20201231&format=JSON"
+      ],
+      "retrieved_at": "2026-08-18"
+    }
+  ]
+}

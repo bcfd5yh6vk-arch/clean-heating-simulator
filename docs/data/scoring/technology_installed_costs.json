@@ -1,0 +1,231 @@
+{
+  "_status": "POPULATED",
+  "_owner": "由 scripts/fetch_installed_costs.py 生成，不要手工编辑（转录表在脚本内，改数须过 PDF 核验）",
+  "_vintage": {
+    "retrieved_at": "2026-08-23",
+    "source_period": "2022$/2023（EIA 2023-03 报告）",
+    "refresh_cadence_days": 365,
+    "stale_after": "2027-08-23",
+    "rationale": "装机成本受补贴政策、供应链和人工费影响，是变化最快的一类，且地域差异极大。EIA 该研究非年度更新，365 天到期时先查有没有新版报告，没有就顺延并记录。",
+    "refresh_by": "重跑 scripts/fetch_installed_costs.py"
+  },
+  "field_key": "technology_installed_costs",
+  "unit": "currency（整套代表系统的安装总价；currency 字段标明币种）",
+  "provenance_note": "禁止用厂商报价单或论坛均价顶替；金额为 2022 美元，是全美代表值，未含州际差异与补贴。",
+  "_not_covered": "ashp_ductless：EIA 表值是单区 12 kBtu/h 代表机型（其脚注按 24 kBtu 分体机估算），不能当整宅系统成本，宁缺毋滥（CS-DECISIONS D8）。ashp_air_to_water / electric_boiler / district_* / 太阳能与被动措施：附录 A 无对应居民品类。中国与欧盟：无可引用官方安装成本口径，整体缺席（§7.11 null 分支）。",
+  "entries": {
+    "gas_furnace": [
+      {
+        "value": 4150.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Gas-Fired Furnaces (North)」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。80 kBtu/h 非风冷式；列序 IB/IB/现行标准(3,690)/ES V4.1(4,130)/Typical(4,150)/High。Rest of Country 区 Typical = 4,130。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "oil_heating": [
+      {
+        "value": 5150.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Oil-Fired Furnaces」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。105 kBtu/h；原文给典型值区间 3,480–6,820（上下两行），value 取区间中点，low/high 为原文界。人工转录，脚本以原文数字串逐行核验",
+        "low": 3480.0,
+        "mid": 5150.0,
+        "high": 6820.0
+      }
+    ],
+    "gas_boiler": [
+      {
+        "value": 5940.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Gas-Fired Boilers」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。100 kBtu/h 热水锅炉；列序 IB(7,760)/IB(5,940)/现行标准(8,700)/Typical(5,940)/ES V3.0(6,700)/High(6,710)。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "electric_resistance": [
+      {
+        "value": 1480.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Electric Resistance Furnaces」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。68 kBtu/h 风管式电阻暖炉为代表机型；踢脚线电暖器成本更低但无整宅口径。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "central_ac": [
+      {
+        "value": 5320.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Central Air Conditioners – North (Not Hot-Dry or Hot-Humid)」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。3 吨分体 coil-only；列序 IB/IB/现行标准(5,250)/Typical(5,320)/ES V5.0(5,520)/High(5,980)。South 区 Typical = 5,390。2023 新标准组无 Typical 列。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "window_ac": [
+      {
+        "value": 565.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Room Air Conditioners」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。10 kBtu/h 常见档（Product Class 3）；原文给典型值区间 490–640（上下两行），value 取中点。人工转录，脚本以原文数字串逐行核验",
+        "low": 490.0,
+        "mid": 565.0,
+        "high": 640.0
+      }
+    ],
+    "portable_ac": [
+      {
+        "value": 700.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Portable Air Conditioners」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。6.6 kBtu/h；安装成本≈零售价（原文注明安装与维护成本可忽略）。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "evaporative_direct": [
+      {
+        "value": 1360.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Swamp Coolers」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。窗式直接蒸发冷风机，3,800 CFM。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "ashp_ducted": [
+      {
+        "value": 6940.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2023",
+        "aggregation_method": "「Residential Air-Source Heat Pumps」节 Total Installed Cost (2022$) 的 2023 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。36 kBtu/h（3 吨）风管分体 blower-coil；取 2023 新标准组 Typical（2022 组 Typical = 6,880）。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "gshp": [
+      {
+        "value": 19000.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Ground-Source Heat Pumps」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。3 吨闭环含地埋环路；原文给典型值区间 14,880–23,120（上下两行），value 取中点。人工转录，脚本以原文数字串逐行核验",
+        "low": 14880.0,
+        "mid": 19000.0,
+        "high": 23120.0
+      }
+    ],
+    "wood_stove": [
+      {
+        "value": 7090.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Cordwood Stoves」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。50 kBtu/h 非催化型（市场主流），含壁炉台与不锈钢烟囱内衬；催化型 Typical = 8,460。人工转录，脚本以原文数字串逐行核验"
+      }
+    ],
+    "biomass_pellet": [
+      {
+        "value": 4520.0,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Updated Buildings Sector Appliance and Equipment Costs and Efficiencies（2023-03，附录 A）",
+        "source_url": "https://www.eia.gov/analysis/studies/buildings/equipcosts/pdf/appendix-a.pdf",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "currency": "USD",
+        "period": "2022",
+        "aggregation_method": "「Residential Wood Pellet Stoves」节 Total Installed Cost (2022$) 的 2022 年 Typical；2022 美元，未做通胀调整，全美代表值（未含州际差异与补贴）。颗粒炉，含安装。人工转录，脚本以原文数字串逐行核验"
+      }
+    ]
+  }
+}

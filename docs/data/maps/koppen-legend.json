@@ -1,0 +1,239 @@
+{
+  "_note": "像素值即分类索引；0 = 无数据（海洋等）。经纬度→像素为线性映射，见 grid。self_check 由浏览器在加载后逐条核对，用于捕捉色彩管理改写像素值这类静默错误。",
+  "source": {
+    "name": "Köppen-Geiger climate classification maps 1991–2020, 0.1° (Beck et al. 2023)",
+    "home": "https://www.gloh2o.org/koppen/",
+    "license": "CC BY 4.0",
+    "citation": "Beck, H. E., T. R. McVicar, N. Vergopolan, A. Berg, N. J. Lutsko, A. Dufour, Z. Zeng, X. Jiang, A. I. J. M. van Dijk, and D. G. Miralles. High-resolution (1 km) Köppen-Geiger maps for 1901-2099 based on constrained CMIP6 projections, Scientific Data 10, 724 (2023).",
+    "member": "1991_2020/koppen_geiger_0p1.tif"
+  },
+  "grid": {
+    "width": 3600,
+    "height": 1800,
+    "lon_min": -180.0,
+    "lat_max": 90.0,
+    "cell_size_deg": 0.1,
+    "crs": "EPSG:4326",
+    "nodata_index": 0
+  },
+  "resolution_note_en": "0.1 degree (~11 km at the equator). Koppen zones are broad regions, but this grid will misclassify points near coastlines and in mountainous terrain. It identifies which standard climate-zone profile applies; it is not a point measurement.",
+  "resolution_note_zh": "0.1 度（赤道约 11 km）。Köppen 分区本身是大范围的，但这个网格在海岸线和山区会错分类。它只用于判断该用哪个标准气候区 profile，不是对该点的实测。",
+  "classes": [
+    {
+      "index": 1,
+      "code": "Af",
+      "description_en": "Tropical, rainforest"
+    },
+    {
+      "index": 2,
+      "code": "Am",
+      "description_en": "Tropical, monsoon"
+    },
+    {
+      "index": 3,
+      "code": "Aw",
+      "description_en": "Tropical, savannah"
+    },
+    {
+      "index": 4,
+      "code": "BWh",
+      "description_en": "Arid, desert, hot"
+    },
+    {
+      "index": 5,
+      "code": "BWk",
+      "description_en": "Arid, desert, cold"
+    },
+    {
+      "index": 6,
+      "code": "BSh",
+      "description_en": "Arid, steppe, hot"
+    },
+    {
+      "index": 7,
+      "code": "BSk",
+      "description_en": "Arid, steppe, cold"
+    },
+    {
+      "index": 8,
+      "code": "Csa",
+      "description_en": "Temperate, dry summer, hot summer"
+    },
+    {
+      "index": 9,
+      "code": "Csb",
+      "description_en": "Temperate, dry summer, warm summer"
+    },
+    {
+      "index": 10,
+      "code": "Csc",
+      "description_en": "Temperate, dry summer, cold summer"
+    },
+    {
+      "index": 11,
+      "code": "Cwa",
+      "description_en": "Temperate, dry winter, hot summer"
+    },
+    {
+      "index": 12,
+      "code": "Cwb",
+      "description_en": "Temperate, dry winter, warm summer"
+    },
+    {
+      "index": 13,
+      "code": "Cwc",
+      "description_en": "Temperate, dry winter, cold summer"
+    },
+    {
+      "index": 14,
+      "code": "Cfa",
+      "description_en": "Temperate, no dry season, hot summer"
+    },
+    {
+      "index": 15,
+      "code": "Cfb",
+      "description_en": "Temperate, no dry season, warm summer"
+    },
+    {
+      "index": 16,
+      "code": "Cfc",
+      "description_en": "Temperate, no dry season, cold summer"
+    },
+    {
+      "index": 17,
+      "code": "Dsa",
+      "description_en": "Cold, dry summer, hot summer"
+    },
+    {
+      "index": 18,
+      "code": "Dsb",
+      "description_en": "Cold, dry summer, warm summer"
+    },
+    {
+      "index": 19,
+      "code": "Dsc",
+      "description_en": "Cold, dry summer, cold summer"
+    },
+    {
+      "index": 20,
+      "code": "Dsd",
+      "description_en": "Cold, dry summer, very cold winter"
+    },
+    {
+      "index": 21,
+      "code": "Dwa",
+      "description_en": "Cold, dry winter, hot summer"
+    },
+    {
+      "index": 22,
+      "code": "Dwb",
+      "description_en": "Cold, dry winter, warm summer"
+    },
+    {
+      "index": 23,
+      "code": "Dwc",
+      "description_en": "Cold, dry winter, cold summer"
+    },
+    {
+      "index": 24,
+      "code": "Dwd",
+      "description_en": "Cold, dry winter, very cold winter"
+    },
+    {
+      "index": 25,
+      "code": "Dfa",
+      "description_en": "Cold, no dry season, hot summer"
+    },
+    {
+      "index": 26,
+      "code": "Dfb",
+      "description_en": "Cold, no dry season, warm summer"
+    },
+    {
+      "index": 27,
+      "code": "Dfc",
+      "description_en": "Cold, no dry season, cold summer"
+    },
+    {
+      "index": 28,
+      "code": "Dfd",
+      "description_en": "Cold, no dry season, very cold winter"
+    },
+    {
+      "index": 29,
+      "code": "ET",
+      "description_en": "Polar, tundra"
+    },
+    {
+      "index": 30,
+      "code": "EF",
+      "description_en": "Polar, frost"
+    }
+  ],
+  "self_check": [
+    {
+      "label": "Sahara",
+      "lon": 25.0,
+      "lat": 25.0,
+      "x": 2050,
+      "y": 650,
+      "expected_index": 4
+    },
+    {
+      "label": "Amazon",
+      "lon": -60.0,
+      "lat": -3.0,
+      "x": 1200,
+      "y": 930,
+      "expected_index": 1
+    },
+    {
+      "label": "Siberia",
+      "lon": 100.0,
+      "lat": 65.0,
+      "x": 2800,
+      "y": 250,
+      "expected_index": 27
+    },
+    {
+      "label": "Greenland interior",
+      "lon": -40.0,
+      "lat": 72.0,
+      "x": 1400,
+      "y": 180,
+      "expected_index": 30
+    },
+    {
+      "label": "Australian interior",
+      "lon": 132.0,
+      "lat": -25.0,
+      "x": 3120,
+      "y": 1150,
+      "expected_index": 4
+    },
+    {
+      "label": "North China Plain",
+      "lon": 116.0,
+      "lat": 37.0,
+      "x": 2960,
+      "y": 530,
+      "expected_index": 21
+    },
+    {
+      "label": "US Midwest",
+      "lon": -93.0,
+      "lat": 42.0,
+      "x": 870,
+      "y": 480,
+      "expected_index": 25
+    },
+    {
+      "label": "Western Europe",
+      "lon": 4.0,
+      "lat": 50.0,
+      "x": 1840,
+      "y": 400,
+      "expected_index": 15
+    }
+  ]
+}

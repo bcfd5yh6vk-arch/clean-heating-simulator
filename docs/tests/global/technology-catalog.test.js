@@ -193,10 +193,12 @@ test("visibility 34. phase2 technology ids do not appear in public prototype fil
   assert.equal(/water_source_hp|evaporative_indirect|radiant_cooling|absorption_cooling/.test(text), false);
 });
 
-test("visibility 35. China Pilot remains root route", () => {
+test("visibility 35. China Pilot keeps a dedicated route", () => {
+  // 本仓库 `/` 仍是 China Pilot；`/china` 也指向同一页，全球站独立部署时才把 `/` 让出去。
   const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../../vercel.json"), "utf8"));
-  const root = vercel.rewrites.find((rewrite) => rewrite.source === "/");
-  assert.equal(root.destination, "/index.html");
+  const china = vercel.rewrites.find((rewrite) => rewrite.source === "/china");
+  assert.ok(china, "vercel.json must keep a /china route for the China Pilot");
+  assert.equal(china.destination, "/index.html");
 });
 
 test("catalog counts. complete internal catalog has requested status counts", () => {

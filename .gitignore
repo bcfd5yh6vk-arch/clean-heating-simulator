@@ -2,8 +2,16 @@
 __pycache__/
 *.py[cod]
 .env
+.env.local
 .tools/
 .vercel
 node_modules/
 docs/dist/
+docs/global/engine.bundle.js
 .~*
+
+# 全球版同学仓不同步、也不应再提交的内容
+scripts/scrape_sat_vocabulary.py
+research/data/sat_*_knowledge_questions.json
+research/data/sat_*_knowledge_questions.docx
+research/data/simulation_sessions_backup*.csv

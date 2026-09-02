@@ -1,0 +1,2490 @@
+{
+  "_status": "POPULATED",
+  "_owner": "由 scripts/fetch_emission_factors.py 生成，不要手工编辑",
+  "_vintage": {
+    "retrieved_at": "2026-08-23",
+    "source_period": "IPCC 2006 缺省值（2019 Refinement 未改动这些燃料）",
+    "refresh_cadence_days": 1825,
+    "stale_after": "2031-08-22",
+    "rationale": "燃料的含碳量是物理性质，IPCC 缺省值多年不变（2006 指南沿用至今，2019 精细化版本也未改动主要燃料的缺省因子）。放 5 年是安全的。",
+    "refresh_by": "重跑 scripts/fetch_emission_factors.py"
+  },
+  "field_key": "fuel_emission_factors",
+  "unit": "kgCO2e per kWh（燃料净热值基）",
+  "provenance_note": "禁止手挑“典型燃料品质”替代 IPCC 缺省值；散煤因煤种差异 confidence=low。biomass 不在此文件：净碳强度取决于原料来源与再生周期（carbon_model=biomass_context_dependent），district_heating/cooling 因子是逐网络的，都没有可引用的公开缺省值——缺就是缺，走 §7.11。",
+  "_gwp_note": "CO2e 采用 AR5 GWP100（CH4=28、N2O=265）。换 GWP 集只需改 GWP100_AR5 常数重跑。",
+  "entries": {
+    "natural_gas": [
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.202559,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Natural Gas；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 56100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      }
+    ],
+    "lpg": [
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.227759,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Liquefied Petroleum Gases；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 63100/5/0.1 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      }
+    ],
+    "heating_oil": [
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.26834,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Gas/Diesel Oil；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "medium",
+        "aggregation_method": "IPCC 缺省值 74100/10/0.6 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      }
+    ],
+    "solid_fuel": [
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      },
+      {
+        "value": 0.372231,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "IPCC 2006 GL Vol.2 Ch.2 Table 2.5 (Residential), Other Bituminous Coal；CO2e = CO2 + 28·CH4 + 265·N2O（AR5 GWP100，18/CMA.1 口径）",
+        "source_url": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/vol2.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "low",
+        "aggregation_method": "IPCC 缺省值 94600/300/1.5 kg{CO2,CH4,N2O}/TJ × 3.6e-6 TJ/kWh。燃料含碳量是物理性质，各国条目同值，逐国落条目只为满足 §7.4 的按国解析。",
+        "period": "IPCC 2006"
+      }
+    ]
+  }
+}

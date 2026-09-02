@@ -12,12 +12,14 @@ const {
   mapCurrentCoolingToBaseline,
   screenTechnologies,
   generateCandidatePaths,
-  scoreAndSort,
+  scorePaths,
   getMvpScreeningCatalog,
 } = require("../../dist/global");
 
 const catalog = require("../../data/technologies/technology_catalog.json");
 const technologies = getMvpScreeningCatalog(catalog);
+const { fixtureBundle, climateWithMonthly, GEO } = require("./fixtures/scoring-data");
+const catalogById = new Map(catalog.map((t) => [t.tech_id, t]));
 
 const household = {
   household_size: 4,
@@ -72,8 +74,17 @@ function runPipeline(custom = {}) {
   const baseline = buildBaselineProfile(h, f, r);
   const screening = screenTechnologies(r, c, h, f, custom.technologies || technologies);
   const paths = generateCandidatePaths(screening.passed, baseline, r, c, h, custom.technologies || technologies);
-  const ranked = scoreAndSort(paths, baseline, h, r, c, f, custom.technologies || technologies);
-  return { h, f, r, c, baseline, screening, paths, ranked };
+  // 四维引擎需要月均温与 LOCAL_PUBLIC 数据；真实数据尚未提供，测试用合成夹具
+  const climateForScoring = { ...climateWithMonthly, ...c };
+  const { ranked, unrankable } = scorePaths(paths, {
+    household: h,
+    feasibility: f,
+    climate: climateForScoring,
+    geo: GEO,
+    data: fixtureBundle,
+    catalog: catalogById,
+  });
+  return { h, f, r, c, baseline, screening, paths, ranked, unrankable };
 }
 
 test("1. G3 question model does not include future technology display names", () => {
@@ -296,13 +307,26 @@ test("35. Baseline does not automatically become a recommended path", () => {
   assert.equal(ranked.some((path) => path.path_id === "baseline"), false);
 });
 
-test("36. eligible_with_warning paths enter G4 ranking", () => {
-  const { screening, ranked } = runPipeline({
+test("36. eligible_with_warning paths still reach G4 (ranked or Could-not-rank)", () => {
+  // 本用例保护的是「带警告但通过筛选的技术不能被悄悄丢掉」。
+  // §7.10 的 UI 映射：insufficient_data 仍然出现在 G4（Could not rank 区），
+  // 只有 hard-excluded 才进 Not feasible 列表。因此断言覆盖两条列表。
+  //
+  // 注意：本夹具下该路径确实落在 Could-not-rank —— 因为 G3 的
+  // `delivered_fuel_heating` 不区分液化气与燃油，无法确定基线燃料价格，
+  // 于是 §7.5.3 的账单反推不成立。这是引擎的正确行为，也是一个真实的
+  // G3 问卷粒度缺口，已记入交接问题清单。
+  const { screening, ranked, unrankable } = runPipeline({
     feasibility: { outdoor_space: "not_sure", renovation_tolerance: "not_sure" },
   });
   const warned = screening.passed.find((tech) => tech.screening_status === "eligible_with_warning");
   assert.ok(warned);
-  assert.equal(ranked.some((path) => path.primary_tech_ids.includes(warned.tech_id)), true);
+  const inG4 = [...ranked, ...unrankable].some((path) =>
+    path.primary_tech_ids.includes(warned.tech_id),
+  );
+  assert.equal(inG4, true);
+  // 且不得出现在硬排除列表里
+  assert.equal(screening.excluded.some((item) => item.tech_id === warned.tech_id), false);
 });
 
 test("37. G4 excluded block has readable reasons", () => {
@@ -310,13 +334,20 @@ test("37. G4 excluded block has readable reasons", () => {
   assert.equal(screening.excluded.every((item) => item.reason_en.length > 0 && item.reason_zh.length > 0), true);
 });
 
-test("38. Five-dimension scoring still runs", () => {
+test("38. Four-dimension scoring runs and the deprecated five-dimension model is gone", () => {
+  // spec §7.10：旧五维 {cost,carbon,comfort,climate,simple} 已废弃，不得再实现
   const { ranked } = runPipeline();
-  assert.ok(ranked[0].dimensions.cost >= 0);
-  assert.ok(ranked[0].dimensions.carbon >= 0);
-  assert.ok(ranked[0].dimensions.comfort >= 0);
-  assert.ok(ranked[0].dimensions.climate >= 0);
-  assert.ok(ranked[0].dimensions.simple >= 0);
+  assert.ok(ranked.length > 0);
+  const dims = ranked[0].dimensions;
+  assert.deepEqual(
+    Object.keys(dims).sort(),
+    ["affordability", "climate_resilience", "environment", "practicality"],
+  );
+  for (const legacy of ["cost", "carbon", "comfort", "simple"]) {
+    assert.equal(legacy in dims, false, `deprecated dimension ${legacy} must not reappear`);
+  }
+  assert.ok(ranked[0].fitness >= 0 && ranked[0].fitness <= 100);
+  assert.equal(ranked[0].rank, 1);
 });
 
 test("39. AI is not referenced by screening or scoring source", () => {
@@ -324,10 +355,18 @@ test("39. AI is not referenced by screening or scoring source", () => {
   assert.equal(/\b(LLM|DeepSeek|prompt|model inference)\b/i.test(source), false);
 });
 
-test("40. China Pilot entry point is not replaced by /global", () => {
+test("40. China Pilot keeps the original root URL; Global lives under /global", () => {
+  // 本仓库对外的中国站网址不能改：`/` 仍是 China Pilot。
+  // 同学仓的独立全球站才把 `/` 让给落地页。这里用 `/global` `/advisor` `/story` `/impact`。
   const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "../../../vercel.json"), "utf8"));
-  const root = vercel.rewrites.find((rewrite) => rewrite.source === "/");
-  assert.equal(root.destination, "/index.html");
+  const bySource = Object.fromEntries(vercel.rewrites.map((rewrite) => [rewrite.source, rewrite.destination]));
+
+  assert.equal(bySource["/"], "/index.html", "root must stay the China Pilot");
+  assert.equal(bySource["/china"], "/index.html");
+  assert.equal(bySource["/global"], "/docs/global/landing.html");
+  assert.equal(bySource["/advisor"], "/docs/global/index.html");
+  assert.equal(bySource["/story"], "/docs/global/story.html");
+  assert.equal(bySource["/impact"], "/docs/global/impact.html");
 });
 
 test("41. Current setup mapping keeps broad answers broad", () => {

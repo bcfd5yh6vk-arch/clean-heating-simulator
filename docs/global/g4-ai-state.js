@@ -141,6 +141,37 @@
     return aiAnalysis.targetPathId !== selectedPathId;
   }
 
+  /**
+   * §3.4 的临时处置（CS-DECISIONS D14）：辅助措施尚无「降低有用负荷」的公开口径，
+   * 会出现只差辅助措施、四维与综合分完全相同的成对路径。展示层把主技术相同且
+   * 四维+综合分完全一致的路径合并为一行（代表 = 组内 rank 最小者，即引擎并列
+   * 次序的赢家），其余作为同分变体列名。只影响 G4 列表：引擎输出、
+   * G6（rankedPaths[0]）与 AI 上下文仍是全量路径。
+   */
+  function groupRankedPathsForDisplay(rankedPaths) {
+    const groups = [];
+    const byKey = new Map();
+    (rankedPaths || []).forEach((path) => {
+      const d = path.dimensions || {};
+      const key = [
+        (path.primary_tech_ids || []).join("+"), path.fitness,
+        d.affordability, d.climate_resilience, d.environment, d.practicality,
+      ].join("|");
+      const group = byKey.get(key);
+      if (!group) {
+        const fresh = { representative: path, variants: [] };
+        byKey.set(key, fresh);
+        groups.push(fresh);
+      } else if (path.rank != null && (group.representative.rank == null || path.rank < group.representative.rank)) {
+        group.variants.push(group.representative);
+        group.representative = path;
+      } else {
+        group.variants.push(path);
+      }
+    });
+    return groups;
+  }
+
   function usesInlinePanelOnly() {
     return true;
   }
@@ -157,6 +188,7 @@
     resetAIAnalysis,
     buildScoringInputHash,
     shouldShowPathMismatchHint,
+    groupRankedPathsForDisplay,
     usesInlinePanelOnly,
   };
 });

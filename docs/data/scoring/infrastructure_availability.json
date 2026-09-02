@@ -1,0 +1,2140 @@
+{
+  "_status": "POPULATED",
+  "_owner": "由 scripts/fetch_infrastructure.py 生成，不要手工编辑",
+  "_vintage": {
+    "retrieved_at": "2026-08-23",
+    "source_period": "2024 (住建部)/2024 (EIA)/1999/2024 (世行)",
+    "refresh_cadence_days": 730,
+    "stale_after": "2028-08-22",
+    "rationale": "管网服务区扩张缓慢；而且规格 §7.3 明令它不得用于硬排除技术，过期的后果相对轻。",
+    "refresh_by": "重跑 scripts/fetch_infrastructure.py"
+  },
+  "field_key": "infrastructure_availability",
+  "unit": "boolean（true = 官方统计证明该类基础设施在该地区存在）",
+  "provenance_note": "只写 true 条目：引擎里 false 与缺失同效（都落 unknown 证据级），而「不存在」在统计上无法与「没统计到」区分。true 的判据是存在性，不是入户率。",
+  "_not_covered": "delivered_fuel / solid_fuel_supply / district_cooling_network：无官方存在性口径。美国集中供热：个别城市蒸汽网，州级判定无意义。中国集中供热阈值 500 万㎡ 的理由与被排除的近零省（川/黔/滇/藏）见 CS-DECISIONS D9。",
+  "entries": {
+    "district_heating_network": [
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "BJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 76200 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "TJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 60926 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HE",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 122070 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 86804 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NM",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 73511 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "LN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 150982 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "JL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 70895 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 92653 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "JS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 4553 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 2695 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SD",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 220163 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HA",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 68233 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HB",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 1774 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 62592 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 32997 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "QH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 7371 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 16643 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "XJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市集中供热面积 50345 万㎡ ≥ 500 万㎡ 阈值（阈值决策见 CS-DECISIONS D9；口径为设市城市城区，不含县城）",
+        "period": "2024"
+      }
+    ],
+    "piped_gas": [
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "BJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1925463 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "TJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 707613 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HE",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 716486 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 345855 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NM",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 287493 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "LN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 357911 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "JL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 234214 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 194535 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1048340 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "JS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1779759 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "ZJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1133887 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 537801 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "FJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 385712 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "JX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 273480 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SD",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1230978 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HA",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 669339 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HB",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 676882 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 364573 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GD",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1444274 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 218203 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HI",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 36376 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "CQ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 648787 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SC",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 1114619 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GZ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 219288 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "YN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 94728 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "XZ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 6325 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 688296 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 257128 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "QH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 184770 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 124318 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "XJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "住房和城乡建设部《2024年城市建设统计年鉴》（表6-1 按省分列的城市集中供热；表5-2-1 按省分列的城市天然气；表1-1 城市市政公用设施水平）（2024 年数据）",
+        "source_url": "https://www.mohurd.gov.cn/gongkai/fdzdgknr/sjfb/tjxx/jstjnj/index.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "城市天然气供气总量 656796 万m³ > 0，城市管网存在（农村通气率另议，此处仅为存在性）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AK",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 143614 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 799428 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AR",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 568727 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "AZ",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1395584 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "CA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 11428636 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "CO",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1937980 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "CT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 597512 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "DC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 153561 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "DE",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 203443 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "FL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 945906 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "GA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1915244 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "HI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 28624 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "IA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 969793 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "ID",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 475518 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "IL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 4002563 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "IN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1866080 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "KS",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 892739 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "KY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 795860 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "LA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 927737 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1604279 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MD",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1210355 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "ME",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 42989 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 3441467 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1663597 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MO",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1461770 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MS",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 425053 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "MT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 295415 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1444353 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "ND",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 158611 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NE",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 560551 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NH",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 116692 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NJ",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 2839369 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NM",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 619406 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NV",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 966710 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "NY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 4617162 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "OH",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 3501459 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "OK",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 989595 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "OR",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 809918 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "PA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 2895337 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "RI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 253412 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 837026 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "SD",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 212508 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "TN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1252232 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "TX",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 5308705 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "UT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1102955 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "VA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1303910 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "VT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 49358 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "WA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1287447 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "WI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 1887729 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "WV",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 336511 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "admin1",
+          "code": "WY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EIA Natural Gas Number of Residential Consumers (VN3), 2024",
+        "source_url": "https://api.eia.gov/v2/natural-gas/cons/num/data/?api_key=<REDACTED>&frequency=annual&data%5B0%5D=value&facets%5Bprocess%5D%5B%5D=VN3&sort%5B0%5D%5Bcolumn%5D=period&sort%5B0%5D%5Bdirection%5D=desc&length=5000",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "州内居民燃气用户 174634 户 > 0，配气网存在（存在性口径，非入户率）",
+        "period": "2024"
+      }
+    ],
+    "electricity": [
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/ALB/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/AUT/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/BEL/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/BGR/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/BIH/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/CHE/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/CHN/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/CYP/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/CZE/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/DEU/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/DNK/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/ESP/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/EST/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/FIN/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/FRA/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/GBR/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/GEO/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/GRC/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/HRV/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/HUN/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/IRL/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/ISL/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/ITA/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "LIE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/LIE/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/LTU/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/LUX/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/LVA/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/MDA/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/MKD/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/MLT/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/MNE/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/NLD/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/NOR/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/POL/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/PRT/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/ROU/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/SRB/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/SVK/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/SVN/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/SWE/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/TUR/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/UKR/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 2024",
+        "source_url": "https://api.worldbank.org/v2/country/USA/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "2024"
+      },
+      {
+        "value": true,
+        "geography": {
+          "level": "country",
+          "code": "XKX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "World Bank EG.ELC.ACCS.ZS (Access to electricity, % of population), 1999",
+        "source_url": "https://api.worldbank.org/v2/country/XKX/indicator/EG.ELC.ACCS.ZS",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "通电人口比例 100.0% ≥ 99%",
+        "period": "1999"
+      }
+    ]
+  }
+}

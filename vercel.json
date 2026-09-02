@@ -1,4 +1,6 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": ".",
   "headers": [
     {
       "source": "/(.*)",
@@ -8,7 +10,11 @@
     }
   ],
   "rewrites": [
-    { "source": "/global", "destination": "/docs/global/index.html" },
-    { "source": "/", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/china", "destination": "/index.html" },
+    { "source": "/global", "destination": "/docs/global/landing.html" },
+    { "source": "/advisor", "destination": "/docs/global/index.html" },
+    { "source": "/story", "destination": "/docs/global/story.html" },
+    { "source": "/impact", "destination": "/docs/global/impact.html" }
   ]
 }

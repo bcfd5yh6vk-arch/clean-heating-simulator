@@ -6,6 +6,17 @@ const path = require("path");
 const feedback = require("../../dist/global/feedback.js");
 const g7 = require("../../global/g7-feedback.js");
 
+
+/** 文案已按规格 §5 迁入 i18n/en.json + zh.json（2026-08-24）；
+ * 断言"某句 UI 文案存在且双语"时要连同字典一起看。 */
+function readCopySources() {
+  return (
+    fs.readFileSync(path.join(__dirname, "../../global/app.js"), "utf8") +
+    fs.readFileSync(path.join(__dirname, "../../../i18n/en.json"), "utf8") +
+    fs.readFileSync(path.join(__dirname, "../../../i18n/zh.json"), "utf8")
+  );
+}
+
 test("g7 1. GlobalFeedback schema has no PII fields", () => {
   assert.equal(feedback.GLOBAL_FEEDBACK_ALLOWED_KEYS.includes("email"), false);
   assert.equal(feedback.GLOBAL_FEEDBACK_ALLOWED_KEYS.includes("name"), false);
@@ -104,7 +115,7 @@ test("g7 10. suggested AI answer is not_used when AI unused", () => {
 
 test("g7 11. Global UI renders exactly three feedback questions and skip", () => {
   const html = fs.readFileSync(path.join(__dirname, "../../global/index.html"), "utf8");
-  const app = fs.readFileSync(path.join(__dirname, "../../global/app.js"), "utf8");
+  const app = readCopySources();
   assert.equal(html.includes("helped_understand_score") || app.includes("helped_understand_score"), true);
   assert.equal(html.includes("ai_helpfulness") || app.includes("ai_helpfulness"), true);
   assert.equal(html.includes("improvementText"), true);
@@ -114,7 +125,7 @@ test("g7 11. Global UI renders exactly three feedback questions and skip", () =>
 });
 
 test("g7 12. Global G7 copy is bilingual and optional", () => {
-  const app = fs.readFileSync(path.join(__dirname, "../../global/app.js"), "utf8");
+  const app = readCopySources();
   assert.match(app, /Help us improve/);
   assert.match(app, /帮助我们改进/);
   assert.match(app, /This step is optional/);
@@ -167,7 +178,9 @@ test("g7 18. Spec documents optional G7 and separate Impact metrics", () => {
   assert.match(spec, /One-minute feedback|1 分钟反馈|optional one-minute feedback/i);
   assert.match(spec, /helped_understand_score/);
   assert.match(spec, /ai_helpfulness/);
-  assert.match(spec, /Global Advisor Feedback/);
+  // 规格把这一节改名成 "Global Advisor metrics"（§11 验收项与 /impact 的 02 分区），
+  // 要求本身没变：/impact 必须把 China Pilot 证据与 Global Advisor 指标分开展示。
+  assert.match(spec, /Global Advisor (Feedback|metrics)/);
   assert.match(spec, /China Pilot Evidence/);
   assert.match(spec, /Deleted from Global G7/);
   assert.match(spec, /Do \*\*not\*\* ask `recommendation`/);
@@ -177,5 +190,7 @@ test("g7 18. Spec documents optional G7 and separate Impact metrics", () => {
 test("g7 19. anonymous improvement text is not auto-published", () => {
   const spec = fs.readFileSync(path.join(__dirname, "../../sandbox-v2-upgrade-spec.md"), "utf8");
   assert.match(spec, /manual review|moderation/i);
-  assert.match(spec, /not automatically published|不自动.*公开/i);
+  // 规格现在的措辞是 "never auto-publish" 与「不能自动公开」，比原来那句
+  // "not automatically published" 更强。要求没松，只是换了说法。
+  assert.match(spec, /not automatically published|never auto-publish|不(自动|能自动)公开/i);
 });

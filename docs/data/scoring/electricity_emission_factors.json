@@ -1,0 +1,4217 @@
+{
+  "_status": "POPULATED",
+  "_owner": "由 scripts/fetch_emission_factors.py 生成，不要手工编辑",
+  "_vintage": {
+    "retrieved_at": "2026-08-23",
+    "source_period": "2009–2025/2023 (MEE)/2023 (eGRID)",
+    "refresh_cadence_days": 400,
+    "stale_after": "2027-09-27",
+    "rationale": "电网排放因子随发电结构逐年变化，各国官方口径基本是年度发布（eGRID 年度、中国生态环境部年度）。",
+    "refresh_by": "重跑 scripts/fetch_emission_factors.py"
+  },
+  "field_key": "electricity_emission_factors",
+  "unit": "kgCO2e per kWh",
+  "provenance_note": "禁止把中国「电力二氧化碳排放因子」与「电力碳足迹因子」混用——后者是生命周期口径，数值系统性偏高。",
+  "_scope_note": "气体覆盖口径不一且逐条已标注：中国省级（MEE）与国家级（Ember）为 CO2，美国州级（eGRID）为 CO2e（含 CH4/N2O），差异一般 <2%。西藏无官方省级因子，§7.4 回退到国家级 CHN 条目。",
+  "entries": {
+    "grid": [
+      {
+        "value": 0.6553,
+        "geography": {
+          "level": "admin1",
+          "code": "AH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5554,
+        "geography": {
+          "level": "admin1",
+          "code": "BJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5581,
+        "geography": {
+          "level": "admin1",
+          "code": "CQ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4211,
+        "geography": {
+          "level": "admin1",
+          "code": "FJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4419,
+        "geography": {
+          "level": "admin1",
+          "code": "GD",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4471,
+        "geography": {
+          "level": "admin1",
+          "code": "GS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4476,
+        "geography": {
+          "level": "admin1",
+          "code": "GX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5683,
+        "geography": {
+          "level": "admin1",
+          "code": "GZ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5897,
+        "geography": {
+          "level": "admin1",
+          "code": "HA",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4044,
+        "geography": {
+          "level": "admin1",
+          "code": "HB",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6516,
+        "geography": {
+          "level": "admin1",
+          "code": "HE",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.3648,
+        "geography": {
+          "level": "admin1",
+          "code": "HI",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5229,
+        "geography": {
+          "level": "admin1",
+          "code": "HL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4976,
+        "geography": {
+          "level": "admin1",
+          "code": "HN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4671,
+        "geography": {
+          "level": "admin1",
+          "code": "JL",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5827,
+        "geography": {
+          "level": "admin1",
+          "code": "JS",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5836,
+        "geography": {
+          "level": "admin1",
+          "code": "JX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4878,
+        "geography": {
+          "level": "admin1",
+          "code": "LN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6479,
+        "geography": {
+          "level": "admin1",
+          "code": "NM",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6187,
+        "geography": {
+          "level": "admin1",
+          "code": "NX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.1796,
+        "geography": {
+          "level": "admin1",
+          "code": "QH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.1564,
+        "geography": {
+          "level": "admin1",
+          "code": "SC",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6191,
+        "geography": {
+          "level": "admin1",
+          "code": "SD",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.5737,
+        "geography": {
+          "level": "admin1",
+          "code": "SH",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6335,
+        "geography": {
+          "level": "admin1",
+          "code": "SN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6634,
+        "geography": {
+          "level": "admin1",
+          "code": "SX",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6796,
+        "geography": {
+          "level": "admin1",
+          "code": "TJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.6021,
+        "geography": {
+          "level": "admin1",
+          "code": "XJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.1333,
+        "geography": {
+          "level": "admin1",
+          "code": "YN",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.4974,
+        "geography": {
+          "level": "admin1",
+          "code": "ZJ",
+          "country_iso3": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "关于发布2023年电力二氧化碳排放因子的公告（生态环境部 国家统计局 公告 2025年 第47号，2025-12-31发布），省级·全部电力（附件表3「2023年省级电力平均二氧化碳排放因子」，即全部电力口径；非表4扣除市场化非化石电量口径，非表5化石能源电力口径）",
+        "source_url": "https://www.mee.gov.cn/xxgk2018/xxgk/xxgk01/202512/t20251231_1139517.html",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "生态环境部/国家统计局年度公告省级平均因子；口径为 CO2。curated 录入（PDF 无法程序化抓取），校验记录见 scripts/curated_cn_grid_ef.json 的 _curation_note",
+        "period": "2023"
+      },
+      {
+        "value": 0.369431,
+        "geography": {
+          "level": "admin1",
+          "code": "AK",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.323854,
+        "geography": {
+          "level": "admin1",
+          "code": "AL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.452873,
+        "geography": {
+          "level": "admin1",
+          "code": "AR",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.312572,
+        "geography": {
+          "level": "admin1",
+          "code": "AZ",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.179064,
+        "geography": {
+          "level": "admin1",
+          "code": "CA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.494905,
+        "geography": {
+          "level": "admin1",
+          "code": "CO",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.245246,
+        "geography": {
+          "level": "admin1",
+          "code": "CT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.179174,
+        "geography": {
+          "level": "admin1",
+          "code": "DC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.319407,
+        "geography": {
+          "level": "admin1",
+          "code": "DE",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.357945,
+        "geography": {
+          "level": "admin1",
+          "code": "FL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.325428,
+        "geography": {
+          "level": "admin1",
+          "code": "GA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.632616,
+        "geography": {
+          "level": "admin1",
+          "code": "HI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.287648,
+        "geography": {
+          "level": "admin1",
+          "code": "IA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.142374,
+        "geography": {
+          "level": "admin1",
+          "code": "ID",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.215201,
+        "geography": {
+          "level": "admin1",
+          "code": "IL",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.664741,
+        "geography": {
+          "level": "admin1",
+          "code": "IN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.332612,
+        "geography": {
+          "level": "admin1",
+          "code": "KS",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.792428,
+        "geography": {
+          "level": "admin1",
+          "code": "KY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.346122,
+        "geography": {
+          "level": "admin1",
+          "code": "LA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.376527,
+        "geography": {
+          "level": "admin1",
+          "code": "MA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.236869,
+        "geography": {
+          "level": "admin1",
+          "code": "MD",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.143714,
+        "geography": {
+          "level": "admin1",
+          "code": "ME",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.361709,
+        "geography": {
+          "level": "admin1",
+          "code": "MI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.341251,
+        "geography": {
+          "level": "admin1",
+          "code": "MN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.659792,
+        "geography": {
+          "level": "admin1",
+          "code": "MO",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.375699,
+        "geography": {
+          "level": "admin1",
+          "code": "MS",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.482586,
+        "geography": {
+          "level": "admin1",
+          "code": "MT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.284147,
+        "geography": {
+          "level": "admin1",
+          "code": "NC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.588696,
+        "geography": {
+          "level": "admin1",
+          "code": "ND",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.465305,
+        "geography": {
+          "level": "admin1",
+          "code": "NE",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.125292,
+        "geography": {
+          "level": "admin1",
+          "code": "NH",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.213265,
+        "geography": {
+          "level": "admin1",
+          "code": "NJ",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.350916,
+        "geography": {
+          "level": "admin1",
+          "code": "NM",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.29205,
+        "geography": {
+          "level": "admin1",
+          "code": "NV",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.211653,
+        "geography": {
+          "level": "admin1",
+          "code": "NY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.484559,
+        "geography": {
+          "level": "admin1",
+          "code": "OH",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.294306,
+        "geography": {
+          "level": "admin1",
+          "code": "OK",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.165544,
+        "geography": {
+          "level": "admin1",
+          "code": "OR",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.293869,
+        "geography": {
+          "level": "admin1",
+          "code": "PA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.381019,
+        "geography": {
+          "level": "admin1",
+          "code": "RI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.254176,
+        "geography": {
+          "level": "admin1",
+          "code": "SC",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.152217,
+        "geography": {
+          "level": "admin1",
+          "code": "SD",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.2999,
+        "geography": {
+          "level": "admin1",
+          "code": "TN",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.349801,
+        "geography": {
+          "level": "admin1",
+          "code": "TX",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.644661,
+        "geography": {
+          "level": "admin1",
+          "code": "UT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.244758,
+        "geography": {
+          "level": "admin1",
+          "code": "VA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.023695,
+        "geography": {
+          "level": "admin1",
+          "code": "VT",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.120921,
+        "geography": {
+          "level": "admin1",
+          "code": "WA",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.527787,
+        "geography": {
+          "level": "admin1",
+          "code": "WI",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.893064,
+        "geography": {
+          "level": "admin1",
+          "code": "WV",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.831554,
+        "geography": {
+          "level": "admin1",
+          "code": "WY",
+          "country_iso3": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "EPA eGRID2023（rev2）ST 表 STC2ERTA：州年度 CO2e 总输出排放率",
+        "source_url": "https://www.epa.gov/system/files/documents/2025-06/egrid2023_data_rev2.xlsx",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "lb/MWh × 0.45359237 ÷ 1000 → kgCO2e/kWh；口径为 CO2e（含 CH4/N2O）",
+        "period": "2023"
+      },
+      {
+        "value": 0.55,
+        "geography": {
+          "level": "country",
+          "code": "ABW"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.13131,
+        "geography": {
+          "level": "country",
+          "code": "AFG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.18538,
+        "geography": {
+          "level": "country",
+          "code": "AGO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.02518,
+        "geography": {
+          "level": "country",
+          "code": "ALB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.46751,
+        "geography": {
+          "level": "country",
+          "code": "ARE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.346,
+        "geography": {
+          "level": "country",
+          "code": "ARG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.21193,
+        "geography": {
+          "level": "country",
+          "code": "ARM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.61111,
+        "geography": {
+          "level": "country",
+          "code": "ASM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.5946,
+        "geography": {
+          "level": "country",
+          "code": "ATG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.52518,
+        "geography": {
+          "level": "country",
+          "code": "AUS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.11691,
+        "geography": {
+          "level": "country",
+          "code": "AUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.6319,
+        "geography": {
+          "level": "country",
+          "code": "AZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.18367,
+        "geography": {
+          "level": "country",
+          "code": "BDI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.14982,
+        "geography": {
+          "level": "country",
+          "code": "BEL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.58416,
+        "geography": {
+          "level": "country",
+          "code": "BEN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.56213,
+        "geography": {
+          "level": "country",
+          "code": "BFA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.69613,
+        "geography": {
+          "level": "country",
+          "code": "BGD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.27555,
+        "geography": {
+          "level": "country",
+          "code": "BGR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.90224,
+        "geography": {
+          "level": "country",
+          "code": "BHR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.65333,
+        "geography": {
+          "level": "country",
+          "code": "BHS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.57064,
+        "geography": {
+          "level": "country",
+          "code": "BIH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.30925,
+        "geography": {
+          "level": "country",
+          "code": "BLR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.17021,
+        "geography": {
+          "level": "country",
+          "code": "BLZ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.63934,
+        "geography": {
+          "level": "country",
+          "code": "BMU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.48129,
+        "geography": {
+          "level": "country",
+          "code": "BOL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.10995,
+        "geography": {
+          "level": "country",
+          "code": "BRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.5946,
+        "geography": {
+          "level": "country",
+          "code": "BRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.89209,
+        "geography": {
+          "level": "country",
+          "code": "BRN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.02364,
+        "geography": {
+          "level": "country",
+          "code": "BTN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.85131,
+        "geography": {
+          "level": "country",
+          "code": "BWA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.0,
+        "geography": {
+          "level": "country",
+          "code": "CAF"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.19072,
+        "geography": {
+          "level": "country",
+          "code": "CAN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.03922,
+        "geography": {
+          "level": "country",
+          "code": "CHE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.28949,
+        "geography": {
+          "level": "country",
+          "code": "CHL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.52534,
+        "geography": {
+          "level": "country",
+          "code": "CHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.40501,
+        "geography": {
+          "level": "country",
+          "code": "CIV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.2259,
+        "geography": {
+          "level": "country",
+          "code": "CMR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.02764,
+        "geography": {
+          "level": "country",
+          "code": "COD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.71612,
+        "geography": {
+          "level": "country",
+          "code": "COG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.25,
+        "geography": {
+          "level": "country",
+          "code": "COK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.18681,
+        "geography": {
+          "level": "country",
+          "code": "COL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.64286,
+        "geography": {
+          "level": "country",
+          "code": "COM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.46154,
+        "geography": {
+          "level": "country",
+          "code": "CPV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.0242,
+        "geography": {
+          "level": "country",
+          "code": "CRI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.64282,
+        "geography": {
+          "level": "country",
+          "code": "CUB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6338,
+        "geography": {
+          "level": "country",
+          "code": "CYM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.489,
+        "geography": {
+          "level": "country",
+          "code": "CYP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.40146,
+        "geography": {
+          "level": "country",
+          "code": "CZE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.32965,
+        "geography": {
+          "level": "country",
+          "code": "DEU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.45,
+        "geography": {
+          "level": "country",
+          "code": "DJI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6,
+        "geography": {
+          "level": "country",
+          "code": "DMA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.11441,
+        "geography": {
+          "level": "country",
+          "code": "DNK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.53748,
+        "geography": {
+          "level": "country",
+          "code": "DOM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.63294,
+        "geography": {
+          "level": "country",
+          "code": "DZA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.15902,
+        "geography": {
+          "level": "country",
+          "code": "ECU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.56323,
+        "geography": {
+          "level": "country",
+          "code": "EGY"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.57778,
+        "geography": {
+          "level": "country",
+          "code": "ERI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.66667,
+        "geography": {
+          "level": "country",
+          "code": "ESH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2009",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2009"
+      },
+      {
+        "value": 0.1536,
+        "geography": {
+          "level": "country",
+          "code": "ESP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.31915,
+        "geography": {
+          "level": "country",
+          "code": "EST"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.02308,
+        "geography": {
+          "level": "country",
+          "code": "ETH"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.05747,
+        "geography": {
+          "level": "country",
+          "code": "FIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.27826,
+        "geography": {
+          "level": "country",
+          "code": "FJI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "FLK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.04144,
+        "geography": {
+          "level": "country",
+          "code": "FRA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.34694,
+        "geography": {
+          "level": "country",
+          "code": "FRO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.52308,
+        "geography": {
+          "level": "country",
+          "code": "GAB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.21741,
+        "geography": {
+          "level": "country",
+          "code": "GBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.14593,
+        "geography": {
+          "level": "country",
+          "code": "GEO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.46889,
+        "geography": {
+          "level": "country",
+          "code": "GHA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.59091,
+        "geography": {
+          "level": "country",
+          "code": "GIB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.18114,
+        "geography": {
+          "level": "country",
+          "code": "GIN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.49701,
+        "geography": {
+          "level": "country",
+          "code": "GLP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.66667,
+        "geography": {
+          "level": "country",
+          "code": "GMB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.625,
+        "geography": {
+          "level": "country",
+          "code": "GNB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6443,
+        "geography": {
+          "level": "country",
+          "code": "GNQ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.31509,
+        "geography": {
+          "level": "country",
+          "code": "GRC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.66667,
+        "geography": {
+          "level": "country",
+          "code": "GRD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.15,
+        "geography": {
+          "level": "country",
+          "code": "GRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.30146,
+        "geography": {
+          "level": "country",
+          "code": "GTM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.2449,
+        "geography": {
+          "level": "country",
+          "code": "GUF"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.60753,
+        "geography": {
+          "level": "country",
+          "code": "GUM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.64493,
+        "geography": {
+          "level": "country",
+          "code": "GUY"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.67548,
+        "geography": {
+          "level": "country",
+          "code": "HKG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.32212,
+        "geography": {
+          "level": "country",
+          "code": "HND"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.1585,
+        "geography": {
+          "level": "country",
+          "code": "HRV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.53488,
+        "geography": {
+          "level": "country",
+          "code": "HTI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.16302,
+        "geography": {
+          "level": "country",
+          "code": "HUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.68025,
+        "geography": {
+          "level": "country",
+          "code": "IDN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.67013,
+        "geography": {
+          "level": "country",
+          "code": "IND"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.25654,
+        "geography": {
+          "level": "country",
+          "code": "IRL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.65953,
+        "geography": {
+          "level": "country",
+          "code": "IRN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.6831,
+        "geography": {
+          "level": "country",
+          "code": "IRQ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.02782,
+        "geography": {
+          "level": "country",
+          "code": "ISL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.49269,
+        "geography": {
+          "level": "country",
+          "code": "ISR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.28478,
+        "geography": {
+          "level": "country",
+          "code": "ITA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.56301,
+        "geography": {
+          "level": "country",
+          "code": "JAM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.52979,
+        "geography": {
+          "level": "country",
+          "code": "JOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.47726,
+        "geography": {
+          "level": "country",
+          "code": "JPN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.80532,
+        "geography": {
+          "level": "country",
+          "code": "KAZ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.09544,
+        "geography": {
+          "level": "country",
+          "code": "KEN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.15273,
+        "geography": {
+          "level": "country",
+          "code": "KGZ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.49887,
+        "geography": {
+          "level": "country",
+          "code": "KHM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.5,
+        "geography": {
+          "level": "country",
+          "code": "KIR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6087,
+        "geography": {
+          "level": "country",
+          "code": "KNA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.41706,
+        "geography": {
+          "level": "country",
+          "code": "KOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.63531,
+        "geography": {
+          "level": "country",
+          "code": "KWT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.23208,
+        "geography": {
+          "level": "country",
+          "code": "LAO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.38951,
+        "geography": {
+          "level": "country",
+          "code": "LBN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.31579,
+        "geography": {
+          "level": "country",
+          "code": "LBR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.82683,
+        "geography": {
+          "level": "country",
+          "code": "LBY"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.65,
+        "geography": {
+          "level": "country",
+          "code": "LCA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.32928,
+        "geography": {
+          "level": "country",
+          "code": "LKA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.02083,
+        "geography": {
+          "level": "country",
+          "code": "LSO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2022",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2022"
+      },
+      {
+        "value": 0.13836,
+        "geography": {
+          "level": "country",
+          "code": "LTU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.12338,
+        "geography": {
+          "level": "country",
+          "code": "LUX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.13876,
+        "geography": {
+          "level": "country",
+          "code": "LVA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.47436,
+        "geography": {
+          "level": "country",
+          "code": "MAC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.5964,
+        "geography": {
+          "level": "country",
+          "code": "MAR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.63312,
+        "geography": {
+          "level": "country",
+          "code": "MDA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.4321,
+        "geography": {
+          "level": "country",
+          "code": "MDG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.61177,
+        "geography": {
+          "level": "country",
+          "code": "MDV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.47402,
+        "geography": {
+          "level": "country",
+          "code": "MEX"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.44135,
+        "geography": {
+          "level": "country",
+          "code": "MKD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.53859,
+        "geography": {
+          "level": "country",
+          "code": "MLI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.48402,
+        "geography": {
+          "level": "country",
+          "code": "MLT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.50299,
+        "geography": {
+          "level": "country",
+          "code": "MMR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.26423,
+        "geography": {
+          "level": "country",
+          "code": "MNE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.81631,
+        "geography": {
+          "level": "country",
+          "code": "MNG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.12936,
+        "geography": {
+          "level": "country",
+          "code": "MOZ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.51208,
+        "geography": {
+          "level": "country",
+          "code": "MRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "MSR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.5298,
+        "geography": {
+          "level": "country",
+          "code": "MTQ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.64223,
+        "geography": {
+          "level": "country",
+          "code": "MUS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.05465,
+        "geography": {
+          "level": "country",
+          "code": "MWI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.60197,
+        "geography": {
+          "level": "country",
+          "code": "MYS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.04878,
+        "geography": {
+          "level": "country",
+          "code": "NAM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.5609,
+        "geography": {
+          "level": "country",
+          "code": "NCL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.67368,
+        "geography": {
+          "level": "country",
+          "code": "NER"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.45571,
+        "geography": {
+          "level": "country",
+          "code": "NGA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.30089,
+        "geography": {
+          "level": "country",
+          "code": "NIC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.25356,
+        "geography": {
+          "level": "country",
+          "code": "NLD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.02811,
+        "geography": {
+          "level": "country",
+          "code": "NOR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.02426,
+        "geography": {
+          "level": "country",
+          "code": "NPL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6,
+        "geography": {
+          "level": "country",
+          "code": "NRU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.09276,
+        "geography": {
+          "level": "country",
+          "code": "NZL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.54447,
+        "geography": {
+          "level": "country",
+          "code": "OMN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.34656,
+        "geography": {
+          "level": "country",
+          "code": "PAK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.22115,
+        "geography": {
+          "level": "country",
+          "code": "PAN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.23825,
+        "geography": {
+          "level": "country",
+          "code": "PER"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.58829,
+        "geography": {
+          "level": "country",
+          "code": "PHL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.51374,
+        "geography": {
+          "level": "country",
+          "code": "PNG"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.5886,
+        "geography": {
+          "level": "country",
+          "code": "POL"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.65466,
+        "geography": {
+          "level": "country",
+          "code": "PRI"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.34059,
+        "geography": {
+          "level": "country",
+          "code": "PRK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.12791,
+        "geography": {
+          "level": "country",
+          "code": "PRT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.0247,
+        "geography": {
+          "level": "country",
+          "code": "PRY"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.41414,
+        "geography": {
+          "level": "country",
+          "code": "PSE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.43056,
+        "geography": {
+          "level": "country",
+          "code": "PYF"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.58152,
+        "geography": {
+          "level": "country",
+          "code": "QAT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.39414,
+        "geography": {
+          "level": "country",
+          "code": "REU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.25075,
+        "geography": {
+          "level": "country",
+          "code": "ROU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.44973,
+        "geography": {
+          "level": "country",
+          "code": "RUS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.35398,
+        "geography": {
+          "level": "country",
+          "code": "RWA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.69195,
+        "geography": {
+          "level": "country",
+          "code": "SAU"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.15369,
+        "geography": {
+          "level": "country",
+          "code": "SDN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.53997,
+        "geography": {
+          "level": "country",
+          "code": "SEN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.49709,
+        "geography": {
+          "level": "country",
+          "code": "SGP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "SHN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.63636,
+        "geography": {
+          "level": "country",
+          "code": "SLB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.04762,
+        "geography": {
+          "level": "country",
+          "code": "SLE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.13932,
+        "geography": {
+          "level": "country",
+          "code": "SLV"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.51163,
+        "geography": {
+          "level": "country",
+          "code": "SOM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.6,
+        "geography": {
+          "level": "country",
+          "code": "SPM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.6958,
+        "geography": {
+          "level": "country",
+          "code": "SRB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.64286,
+        "geography": {
+          "level": "country",
+          "code": "SSD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.55556,
+        "geography": {
+          "level": "country",
+          "code": "STP"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.32184,
+        "geography": {
+          "level": "country",
+          "code": "SUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.09485,
+        "geography": {
+          "level": "country",
+          "code": "SVK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.18329,
+        "geography": {
+          "level": "country",
+          "code": "SVN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.03526,
+        "geography": {
+          "level": "country",
+          "code": "SWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.13115,
+        "geography": {
+          "level": "country",
+          "code": "SWZ"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.55556,
+        "geography": {
+          "level": "country",
+          "code": "SYC"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.70619,
+        "geography": {
+          "level": "country",
+          "code": "SYR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.62963,
+        "geography": {
+          "level": "country",
+          "code": "TCA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.62162,
+        "geography": {
+          "level": "country",
+          "code": "TCD"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.42254,
+        "geography": {
+          "level": "country",
+          "code": "TGO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.54574,
+        "geography": {
+          "level": "country",
+          "code": "THA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.07256,
+        "geography": {
+          "level": "country",
+          "code": "TJK"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 1.30627,
+        "geography": {
+          "level": "country",
+          "code": "TKM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.66667,
+        "geography": {
+          "level": "country",
+          "code": "TLS"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.57143,
+        "geography": {
+          "level": "country",
+          "code": "TON"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.68168,
+        "geography": {
+          "level": "country",
+          "code": "TTO"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.56029,
+        "geography": {
+          "level": "country",
+          "code": "TUN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.47474,
+        "geography": {
+          "level": "country",
+          "code": "TUR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.63321,
+        "geography": {
+          "level": "country",
+          "code": "TWN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.34502,
+        "geography": {
+          "level": "country",
+          "code": "TZA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.05852,
+        "geography": {
+          "level": "country",
+          "code": "UGA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.25047,
+        "geography": {
+          "level": "country",
+          "code": "UKR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2022",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2022"
+      },
+      {
+        "value": 0.0804,
+        "geography": {
+          "level": "country",
+          "code": "URY"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.3844,
+        "geography": {
+          "level": "country",
+          "code": "USA"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 1.0,
+        "geography": {
+          "level": "country",
+          "code": "UZB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.6,
+        "geography": {
+          "level": "country",
+          "code": "VCT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.08586,
+        "geography": {
+          "level": "country",
+          "code": "VEN"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.64706,
+        "geography": {
+          "level": "country",
+          "code": "VGB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.63235,
+        "geography": {
+          "level": "country",
+          "code": "VIR"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.46073,
+        "geography": {
+          "level": "country",
+          "code": "VNM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.5,
+        "geography": {
+          "level": "country",
+          "code": "VUT"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2023",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2023"
+      },
+      {
+        "value": 0.375,
+        "geography": {
+          "level": "country",
+          "code": "WSM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.59238,
+        "geography": {
+          "level": "country",
+          "code": "YEM"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.69929,
+        "geography": {
+          "level": "country",
+          "code": "ZAF"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2025",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2025"
+      },
+      {
+        "value": 0.11968,
+        "geography": {
+          "level": "country",
+          "code": "ZMB"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      },
+      {
+        "value": 0.38402,
+        "geography": {
+          "level": "country",
+          "code": "ZWE"
+        },
+        "source_type": "LOCAL_PUBLIC",
+        "source_name": "Ember Yearly Electricity Data（经 Our World in Data carbon-intensity-electricity 镜像），2024",
+        "source_url": "https://ourworldindata.org/grapher/carbon-intensity-electricity.csv?v=1&csvType=full&useColumnShortNames=true",
+        "retrieved_at": "2026-08-23",
+        "confidence": "high",
+        "aggregation_method": "Ember 发电碳强度年度值；口径为 CO2（不含 CH4/N2O），与全温室气体口径差异一般 <2%",
+        "period": "2024"
+      }
+    ]
+  }
+}

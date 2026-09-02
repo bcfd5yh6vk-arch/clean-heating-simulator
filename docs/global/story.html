@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" data-i18n-root>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Story · Climate Adaptation Energy Advisor</title>
+<meta name="description" content="From a household-energy study in northern China to a global climate-adaptation decision tool." />
+<style>
+  /* ------------------------------------------------------------------
+     Design tokens — 与 docs/global/landing.html 完全同源，逐字沿用。
+     两个页面必须读起来是同一个产品：同一套冷调钢蓝 + 暖赭，
+     同一条 Köppen 气候带色条，同一套字体栈。
+     本页只新增「尺寸 / 节奏」类 token（--s2h / --rhythm 等），
+     不新增任何颜色；任何颜色都必须走下面这三块里定义好的 token。
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:      #EDF0F3;
+    --surface:     #FFFFFF;
+    --sunken:      #E2E7EC;
+    --ink:         #12171D;
+    --ink-2:       #3A454F;
+    --ink-3:       #6C7885;
+    --rule:        #CFD6DD;
+    --rule-soft:   #E1E6EB;
+
+    --cold:        #1E5F8E;
+    --cold-hover:  #17496D;
+    --cold-ink:    #17496D;
+    --on-cold:     #FFFFFF;
+    --ember:       #B4551F;
+
+    /* Köppen 气候带 —— 只用于那条色条与要点标记 */
+    --z-polar:       #7C99B4;
+    --z-continental: #2F6E96;
+    --z-temperate:   #3F7A56;
+    --z-arid:        #A98235;
+    --z-tropical:    #1F7F79;
+
+    --measure: 34rem;
+    --s-1: 0.8125rem;
+    --s0:  1rem;
+    --s1:  1.1875rem;
+    --s2:  1.5rem;
+    --s3:  clamp(2rem, 4.6vw, 3.15rem);
+
+    /* 本页新增：editorial 版式用的字号与纵向节奏，纯尺寸、无颜色 */
+    --s2h: clamp(1.45rem, 2.9vw, 2.1rem);
+    --rhythm: clamp(2.75rem, 6vw, 4.75rem);
+
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono: ui-monospace, "Cascadia Code", "SF Mono", Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:    #0F141A;
+      --surface:   #161C23;
+      --sunken:    #1D242C;
+      --ink:       #E7ECF1;
+      --ink-2:     #B3BDC7;
+      --ink-3:     #7F8B97;
+      --rule:      #2A333C;
+      --rule-soft: #222932;
+
+      --cold:       #6BA6D4;
+      --cold-hover: #8FBFE3;
+      --cold-ink:   #9CC6E7;
+      --on-cold:    #0F141A;
+      --ember:      #DC8B55;
+
+      --z-polar:       #8FA9C1;
+      --z-continental: #4E8CB4;
+      --z-temperate:   #5A9A74;
+      --z-arid:        #C2A057;
+      --z-tropical:    #3E9E97;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:    #0F141A;
+    --surface:   #161C23;
+    --sunken:    #1D242C;
+    --ink:       #E7ECF1;
+    --ink-2:     #B3BDC7;
+    --ink-3:     #7F8B97;
+    --rule:      #2A333C;
+    --rule-soft: #222932;
+
+    --cold:       #6BA6D4;
+    --cold-hover: #8FBFE3;
+    --cold-ink:   #9CC6E7;
+    --on-cold:    #0F141A;
+    --ember:      #DC8B55;
+
+    --z-polar:       #8FA9C1;
+    --z-continental: #4E8CB4;
+    --z-temperate:   #5A9A74;
+    --z-arid:        #C2A057;
+    --z-tropical:    #3E9E97;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--s0);
+    line-height: 1.68;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  /* 在 i18n 字典载入前隐藏正文，避免闪现未替换的 key */
+  body[data-i18n-state="loading"] main,
+  body[data-i18n-state="loading"] .masthead__inner,
+  body[data-i18n-state="loading"] .backbar,
+  body[data-i18n-state="loading"] footer { visibility: hidden; }
+
+  .shell {
+    width: 100%;
+    max-width: 68rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.1rem, 4vw, 2.75rem);
+  }
+
+  /* ---------------- masthead（与 landing 一致） ---------------- */
+  .masthead { background: var(--surface); border-bottom: 1px solid var(--rule); }
+
+  .masthead__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.6rem;
+    padding-block: 0.95rem;
+  }
+
+  .brand {
+    font-weight: 700;
+    font-size: var(--s0);
+    letter-spacing: -0.012em;
+    color: var(--ink);
+    text-decoration: none;
+    margin-inline-end: auto;
+  }
+  .brand:hover { color: var(--cold-ink); }
+
+  .navlinks { display: flex; gap: 1.3rem; align-items: center; }
+  .navlinks a {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 0.925rem;
+  }
+  .navlinks a:hover { color: var(--cold-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+  .lang { display: flex; align-items: center; gap: 0.5rem; }
+  .lang__label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .lang__select {
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    padding: 0.25rem 0.5rem;
+    min-height: 2rem;
+  }
+
+  /* ---------------- climate band（与 landing 一致） ---------------- */
+  .band { display: flex; height: 5px; width: 100%; }
+  .band > i { flex: 1 1 0; display: block; }
+  .band > i:nth-child(1) { background: var(--z-polar); }
+  .band > i:nth-child(2) { background: var(--z-continental); flex-grow: 1.6; }
+  .band > i:nth-child(3) { background: var(--z-temperate); flex-grow: 1.35; }
+  .band > i:nth-child(4) { background: var(--z-arid); }
+  .band > i:nth-child(5) { background: var(--z-tropical); flex-grow: 0.8; }
+
+  /* ---------------- back to advisor ---------------- */
+  .backbar { background: var(--surface); border-bottom: 1px solid var(--rule-soft); }
+  .backbar__inner { padding-block: 0.7rem; }
+  .backlink {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    color: var(--cold-ink);
+    text-decoration: none;
+    font-size: 0.925rem;
+    border-bottom: 1px solid transparent;
+  }
+  .backlink:hover { border-bottom-color: currentColor; }
+
+  main { flex: 1 0 auto; }
+
+  /* ---------------- shared editorial pieces ---------------- */
+  .kicker {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1.05rem;
+  }
+  .kicker::after {
+    content: "";
+    height: 1px;
+    flex: 1 1 auto;
+    max-width: 7rem;
+    background: var(--rule);
+  }
+
+  h1 {
+    font-size: var(--s3);
+    line-height: 1.1;
+    letter-spacing: -0.026em;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+  html[lang^="zh"] h1 { letter-spacing: -0.01em; max-width: 15ch; }
+
+  h2 {
+    font-size: var(--s2h);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    font-weight: 750;
+    margin: 0 0 1.1rem;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+  html[lang^="zh"] h2 { letter-spacing: -0.005em; max-width: 20ch; }
+
+  .lede { font-size: var(--s1); color: var(--ink-2); max-width: var(--measure); margin: 0 0 1.25rem; }
+  .body { color: var(--ink-2); max-width: var(--measure); margin: 0 0 1.25rem; }
+
+  .section {
+    border-top: 1px solid var(--rule);
+    padding-block: var(--rhythm);
+  }
+
+  /* 图文并排：桌面文左图右；窄屏图落到文字下面（规格实现约束 4） */
+  .split {
+    display: grid;
+    grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+    gap: clamp(1.75rem, 4vw, 3.25rem);
+    align-items: start;
+  }
+
+  figure { margin: 0; }
+  .photo {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 2px;
+    background: var(--sunken);
+  }
+
+  /* ---------------- hero ---------------- */
+  .hero { padding-block: clamp(2.5rem, 6vw, 4.25rem) var(--rhythm); }
+  .hero__support {
+    font-size: var(--s0);
+    color: var(--ink);
+    max-width: var(--measure);
+    margin: 0 0 0.85rem;
+    border-left: 3px solid var(--cold);
+    padding-left: 0.9rem;
+  }
+  .byline {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.09em;
+    color: var(--ink-3);
+    margin: 0;
+  }
+
+  /* ---------------- 01 ---------------- */
+  .pullquote {
+    font-size: var(--s2);
+    line-height: 1.35;
+    letter-spacing: -0.014em;
+    font-weight: 650;
+    color: var(--ink);
+    margin: 1.75rem 0 1.5rem;
+    padding-left: 1.05rem;
+    border-left: 3px solid var(--ember);
+    max-width: 30ch;
+    text-wrap: balance;
+  }
+  .labels {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule-soft);
+  }
+
+  /* ---------------- 02 timeline ---------------- */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline > li {
+    position: relative;
+    padding-left: 1.9rem;
+    padding-bottom: 1.9rem;
+  }
+  .timeline > li:last-child { padding-bottom: 0; }
+  /* 竖线 */
+  .timeline > li::before {
+    content: "";
+    position: absolute;
+    left: 0.3rem;
+    top: 1.35rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--rule);
+  }
+  .timeline > li:last-child::before { display: none; }
+  /* 节点 */
+  .timeline > li::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 0.7rem;
+    height: 0.7rem;
+    border-radius: 50%;
+  }
+  .timeline > li:nth-child(1)::after { background: var(--z-continental); }
+  .timeline > li:nth-child(2)::after { background: var(--z-temperate); }
+  .timeline > li:nth-child(3)::after { background: var(--z-arid); }
+  .timeline > li:nth-child(4)::after { background: var(--z-tropical); }
+
+  .timeline__label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 0.35rem;
+  }
+  .timeline__body { margin: 0; color: var(--ink-2); max-width: 40ch; }
+
+  .evidence {
+    margin-top: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--rule-soft);
+    border-left: 3px solid var(--ember);
+    padding: 0.85rem 1.1rem;
+    max-width: 42ch;
+  }
+  .evidence__headline {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ember);
+    display: block;
+    margin: 0 0 0.3rem;
+  }
+  .evidence__body { margin: 0; font-size: 0.9rem; color: var(--ink-2); }
+
+  /* ---------------- 03 steps ---------------- */
+  .steps {
+    list-style: none;
+    margin: 0 0 1.75rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(1.35rem, 3vw, 2.35rem);
+  }
+  @media (min-width: 34rem) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 62rem) { .steps { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .step__n {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.13em;
+    color: var(--ink-3);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  .step__tick { width: 1.75rem; height: 3px; display: block; margin-bottom: 0.8rem; }
+  .steps > li:nth-child(1) .step__tick { background: var(--z-continental); }
+  .steps > li:nth-child(2) .step__tick { background: var(--z-temperate); }
+  .steps > li:nth-child(3) .step__tick { background: var(--z-arid); }
+  .steps > li:nth-child(4) .step__tick { background: var(--z-tropical); }
+  .step__title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 0.4rem;
+  }
+  .step__body { margin: 0; color: var(--ink-2); font-size: 0.945rem; }
+
+  .flowline {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: var(--ink);
+    background: var(--sunken);
+    border: 1px solid var(--rule-soft);
+    padding: 0.85rem 1.1rem;
+    margin: 0;
+    overflow-x: auto;
+  }
+
+  /* ---------------- 04 stats ---------------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: clamp(1.35rem, 3vw, 2.5rem);
+    margin: 0 0 1.6rem;
+  }
+  .stat { border-top: 2px solid var(--rule); padding-top: 0.85rem; }
+  .stat--counted { border-top-color: var(--cold); }
+  .stat__value {
+    display: block;
+    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+  }
+  /* 占位状态：没有真实数据时不显示任何数字，只显示规格规定的等待文案 */
+  .stat__value--pending { min-height: 2.5rem; display: flex; align-items: center; }
+  .chip {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: var(--ink-3);
+    border: 1px dashed var(--rule);
+    border-radius: 2px;
+    padding: 0.3rem 0.55rem;
+    line-height: 1.35;
+  }
+  .stat__label { display: block; color: var(--ink-2); font-size: 0.925rem; }
+
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.9rem;
+    border-top: 1px solid var(--rule-soft);
+    padding-top: 1.1rem;
+    margin: 0 0 1.6rem;
+  }
+  .stat-row__label { color: var(--ink-2); font-size: 0.925rem; }
+
+  .note {
+    font-size: 0.855rem;
+    color: var(--ink-3);
+    max-width: 46rem;
+    margin: 0;
+    padding-left: 1rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  /* ---------------- 06 directions ---------------- */
+  .directions {
+    list-style: none;
+    margin: 1.75rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: clamp(1.35rem, 3vw, 2.35rem);
+  }
+  .direction__tick { width: 1.75rem; height: 3px; display: block; margin-bottom: 0.8rem; }
+  .directions > li:nth-child(1) .direction__tick { background: var(--z-continental); }
+  .directions > li:nth-child(2) .direction__tick { background: var(--z-temperate); }
+  .directions > li:nth-child(3) .direction__tick { background: var(--z-arid); }
+  .direction__label {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin: 0 0 0.4rem;
+  }
+  .direction__body { margin: 0; color: var(--ink-2); font-size: 0.945rem; }
+
+  /* ---------------- final CTA ---------------- */
+  .final {
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+  }
+  .final__inner { padding-block: var(--rhythm); }
+  .final h2 { margin-bottom: 0.6rem; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.6rem 1.55rem;
+    background: var(--cold);
+    color: var(--on-cold);
+    font: inherit;
+    font-weight: 650;
+    border: 1px solid var(--cold);
+    border-radius: 2px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 140ms ease, border-color 140ms ease;
+  }
+  .btn:hover { background: var(--cold-hover); border-color: var(--cold-hover); }
+
+  a:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 2px solid var(--cold);
+    outline-offset: 3px;
+  }
+
+  /* ---------------- footer ---------------- */
+  footer {
+    background: var(--surface);
+    border-top: 1px solid var(--rule);
+    padding-block: 1.5rem 2.25rem;
+    flex-shrink: 0;
+  }
+  .disclaimer {
+    font-size: 0.855rem;
+    font-style: italic;
+    color: var(--ink-3);
+    max-width: 46rem;
+    margin: 0;
+  }
+
+  /* ---------------- responsive ---------------- */
+  @media (max-width: 56rem) {
+    .split { grid-template-columns: minmax(0, 1fr); }
+    /* 窄屏：图排到文字之后，绝不让文字压在照片上 */
+    .split > figure { order: 2; }
+    .split > .split__text { order: 1; }
+    .photo { width: 100%; }
+    h1 { max-width: none; }
+    h2 { max-width: none; }
+  }
+
+  @media (max-width: 34rem) {
+    .stat__value--pending { min-height: 0; }
+    .masthead__inner { gap: 0.6rem 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+
+<body data-i18n-state="loading">
+
+  <header class="masthead">
+    <div class="shell masthead__inner">
+      <a class="brand" href="/global" data-i18n="nav.projectName">Climate Adaptation Energy Advisor</a>
+      <nav class="navlinks" aria-label="Primary">
+        <a href="/china" data-i18n="nav.chinaPilot">China Pilot</a>
+        <a href="/impact" data-i18n="nav.impact">Impact</a>
+      </nav>
+      <div class="lang">
+        <label class="lang__label" for="localeSelect" data-i18n="nav.languageLabel">Language</label>
+        <select class="lang__select" id="localeSelect">
+          <option value="en" data-i18n="nav.languageEn">English</option>
+          <option value="zh" data-i18n="nav.languageZh">中文</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Köppen 气候带：本工具跨气候带成立 -->
+  <div class="band" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+
+  <!-- 页顶返回入口 → G0 Landing -->
+  <div class="backbar">
+    <div class="shell backbar__inner">
+      <a class="backlink" href="/global" data-i18n="story.backLink">← Back to the advisor</a>
+    </div>
+  </div>
+
+  <main>
+
+    <!-- ============ Hero ============ -->
+    <section class="shell hero split" aria-labelledby="storyTitle">
+      <div class="split__text">
+        <p class="kicker" data-i18n="story.hero.eyebrow">MY STORY</p>
+        <h1 id="storyTitle" data-i18n="story.hero.heading">From cleaner skies to a harder question at home.</h1>
+        <p class="lede" data-i18n="story.hero.body">I started this project with a simple question: when cleaner-energy transitions change how families heat and cool their homes, who helps ordinary households understand what actually fits their climate, budget, and living conditions?</p>
+        <p class="hero__support" data-i18n="story.hero.supporting">From a household-energy study in northern China to a global climate-adaptation decision tool.</p>
+        <p class="byline" data-i18n="story.hero.byline">A student-led climate and household energy project.</p>
+      </div>
+      <figure>
+        <img class="photo"
+             src="/docs/story/images/story-hero-rooftop-solar.jpg"
+             width="1024" height="768"
+             loading="lazy" decoding="async"
+             alt="Rooftop solar array on a building photographed for the project"
+             data-i18n-attr="alt:story.hero.imageAlt" />
+      </figure>
+    </section>
+
+    <!-- ============ 01 · The Question ============ -->
+    <section class="shell section" aria-labelledby="s01Title">
+      <div class="split">
+        <div class="split__text">
+          <p class="kicker" data-i18n="story.s01.eyebrow">01 · THE QUESTION</p>
+          <h2 id="s01Title" data-i18n="story.s01.heading">Cleaner air can be a success. The transition can still be difficult at home.</h2>
+          <p class="body" data-i18n="story.s01.body">Energy transitions are often measured through emissions, infrastructure and policy. But households experience them through everyday questions: How much will this cost? Will the home stay warm in winter or cool in summer? How difficult is installation? What happens when a family does not know which technologies are available?</p>
+          <p class="pullquote" data-i18n="story.s01.pullQuote">A climate solution also has to make sense at the household level.</p>
+          <p class="labels" data-i18n="story.s01.labels">Cost · Climate resilience · Household constraints · Access to information</p>
+        </div>
+        <figure>
+          <img class="photo"
+               src="/docs/story/images/story-01-question-gas-meter.jpg"
+               width="768" height="1024"
+               loading="lazy" decoding="async"
+               alt="Smart gas meter (NB-IoT) on a brick wall"
+               data-i18n-attr="alt:story.s01.imageAlt" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 02 · How It Grew ============ -->
+    <section class="shell section" aria-labelledby="s02Title">
+      <p class="kicker" data-i18n="story.s02.eyebrow">02 · HOW IT GREW</p>
+      <h2 id="s02Title" data-i18n="story.s02.heading">One question became a pilot, and the pilot became a broader tool.</h2>
+
+      <div class="split">
+        <div class="split__text">
+          <ol class="timeline">
+            <li>
+              <p class="timeline__label" data-i18n="story.s02.t1.label">RESEARCH</p>
+              <p class="timeline__body" data-i18n="story.s02.t1.body">I began by studying how household heating transitions can create different experiences for policy, climate outcomes and household well-being.</p>
+            </li>
+            <li>
+              <p class="timeline__label" data-i18n="story.s02.t2.label">CHINA PILOT</p>
+              <p class="timeline__body" data-i18n="story.s02.t2.body">I then developed an interactive China pilot to explore how people understand household heating choices and their trade-offs.</p>
+              <div class="evidence">
+                <strong class="evidence__headline" data-i18n="story.s02.evidence.headline">50+ internal-test participants</strong>
+                <p class="evidence__body" data-i18n="story.s02.evidence.body">Limited internal testing with students from my school and a small number of farmers and village committee staff from communities in Hebei. The China pilot has not been publicly released.</p>
+              </div>
+            </li>
+            <li>
+              <p class="timeline__label" data-i18n="story.s02.t3.label">GLOBAL ADVISOR</p>
+              <p class="timeline__body" data-i18n="story.s02.t3.body">The next step was to expand the question beyond one region and beyond heating alone: What happens when climate, household income, cooling needs, installation constraints and different technologies all have to be considered together?</p>
+            </li>
+            <li>
+              <p class="timeline__label" data-i18n="story.s02.t4.label">NOW</p>
+              <p class="timeline__body" data-i18n="story.s02.t4.body">The result is the Climate Adaptation Energy Advisor: a tool where deterministic rules calculate the ranking and AI helps people understand what the results mean.</p>
+            </li>
+          </ol>
+        </div>
+        <figure>
+          <img class="photo"
+               src="/docs/story/images/story-02-china-pilot-ui.jpg"
+               width="1013" height="1024"
+               loading="lazy" decoding="async"
+               alt="Screenshot of the China Pilot welcome screen"
+               data-i18n-attr="alt:story.s02.imageAlt" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 03 · How the Tool Works（不配图，用步骤示意） ============ -->
+    <section class="shell section" aria-labelledby="s03Title">
+      <p class="kicker" data-i18n="story.s03.eyebrow">03 · HOW THE TOOL WORKS</p>
+      <h2 id="s03Title" data-i18n="story.s03.heading">The score comes from the data. The explanation comes from AI.</h2>
+
+      <ol class="steps">
+        <li>
+          <span class="step__n" aria-hidden="true">01</span>
+          <span class="step__tick" aria-hidden="true"></span>
+          <p class="step__title" data-i18n="story.s03.step1.title">YOUR HOME</p>
+          <p class="step__body" data-i18n="story.s03.step1.body">The tool starts with what matters to the household: income, home size, energy bills, heating and cooling needs, and practical home conditions.</p>
+        </li>
+        <li>
+          <span class="step__n" aria-hidden="true">02</span>
+          <span class="step__tick" aria-hidden="true"></span>
+          <p class="step__title" data-i18n="story.s03.step2.title">LOCAL PUBLIC DATA</p>
+          <p class="step__body" data-i18n="story.s03.step2.body">It combines those answers with traceable public data for the user's location, such as climate, energy prices and emissions factors.</p>
+        </li>
+        <li>
+          <span class="step__n" aria-hidden="true">03</span>
+          <span class="step__tick" aria-hidden="true"></span>
+          <p class="step__title" data-i18n="story.s03.step3.title">DETERMINISTIC SCORING</p>
+          <p class="step__body" data-i18n="story.s03.step3.body">Eligible paths are compared through transparent formulas for affordability, climate resilience, environmental impact and practicality.</p>
+        </li>
+        <li>
+          <span class="step__n" aria-hidden="true">04</span>
+          <span class="step__tick" aria-hidden="true"></span>
+          <p class="step__title" data-i18n="story.s03.step4.title">AI EXPLANATION</p>
+          <p class="step__body" data-i18n="story.s03.step4.body">AI explains the existing scores in plain language. It does not calculate, change or reorder the results.</p>
+        </li>
+      </ol>
+
+      <p class="flowline" data-i18n="story.s03.flow">User answers + local public data → deterministic scoring → AI explanation</p>
+    </section>
+
+    <!-- ============ 04 · Early Impact（不配图；无真实数据时不显示任何数字） ============ -->
+    <section class="shell section" aria-labelledby="s04Title">
+      <p class="kicker" data-i18n="story.s04.eyebrow">04 · EARLY IMPACT</p>
+      <h2 id="s04Title" data-i18n="story.s04.heading">What we are learning so far</h2>
+
+      <div class="stats">
+        <div class="stat stat--counted">
+          <span class="stat__value" data-i18n="story.s04.metric1.value">50+</span>
+          <span class="stat__label" data-i18n="story.s04.metric1.label">China pilot internal-test participants</span>
+        </div>
+        <!-- 占位：真实计数接入前，这里按规格显示 "Early feedback collecting now"，不写任何数字 -->
+        <div class="stat">
+          <span class="stat__value stat__value--pending" data-metric="global_site_visit_count" data-metric-state="pending">
+            <span class="chip" data-i18n="story.s04.pending">Early feedback collecting now</span>
+          </span>
+          <span class="stat__label" data-i18n="story.s04.metric2.label">Global site visits</span>
+        </div>
+        <div class="stat">
+          <span class="stat__value stat__value--pending" data-metric="global_feedback_count" data-metric-state="pending">
+            <span class="chip" data-i18n="story.s04.pending">Early feedback collecting now</span>
+          </span>
+          <span class="stat__label" data-i18n="story.s04.metric3.label">Global feedback responses</span>
+        </div>
+      </div>
+
+      <!-- understanding_positive_rate：只有 G7 反馈样本足够时才显示百分比，否则保持占位 -->
+      <p class="stat-row" data-metric="understanding_positive_rate" data-metric-state="pending">
+        <span class="chip" data-i18n="story.s04.pending">Early feedback collecting now</span>
+        <span class="stat-row__label" data-i18n="story.s04.metric4.label">said the tool helped them better understand their options</span>
+      </p>
+
+      <p class="note" data-i18n="story.s04.disclaimer">Early and exploratory evidence. The China pilot was conducted as limited internal testing with students and participants from several Hebei village communities and was not publicly released. Global site visits represent recorded website visits, not verified unique individuals.</p>
+    </section>
+
+    <!-- ============ 05 · Built from a Student Question（本轮不配图） ============ -->
+    <section class="shell section" aria-labelledby="s05Title">
+      <!-- 规格里 05 的标题有三种写法；按 section 清单取 "Built from a Student Question"，
+           所以这里的 eyebrow 只保留编号，避免与下面的标题逐字重复。 -->
+      <p class="kicker" data-i18n="story.s05.eyebrow">05</p>
+      <h2 id="s05Title" data-i18n="story.s05.heading">Built from a student question</h2>
+      <p class="lede" data-i18n="story.s05.body">I initiated the research question and led the project from the early study and China pilot through the design of the global advisor. My work has included project design, research, participant recruitment, analysis, product direction and the development of the decision framework. Also Listen to the opinions of industry insiders and feedbacks from users; collaborated with others during the process to refine the website model</p>
+    </section>
+
+    <!-- ============ 06 · What's Next ============ -->
+    <section class="shell section" aria-labelledby="s06Title">
+      <p class="kicker" data-i18n="story.s06.eyebrow">06 · WHAT'S NEXT</p>
+      <h2 id="s06Title" data-i18n="story.s06.heading">There is no single best technology for every household.</h2>
+      <p class="body" data-i18n="story.s06.body">The next goal is not to tell every family to choose the same solution. It is to make complex household energy choices easier to understand across different climates, incomes and homes.</p>
+
+      <ul class="directions">
+        <li>
+          <span class="direction__tick" aria-hidden="true"></span>
+          <p class="direction__label" data-i18n="story.s06.d1.label">MORE PLACES</p>
+          <p class="direction__body" data-i18n="story.s06.d1.body">Expand reliable local public data to more countries and regions.</p>
+        </li>
+        <li>
+          <span class="direction__tick" aria-hidden="true"></span>
+          <p class="direction__label" data-i18n="story.s06.d2.label">MORE HOUSEHOLDS</p>
+          <p class="direction__body" data-i18n="story.s06.d2.body">Learn from a wider range of households, including people with tighter budgets or fewer local energy choices.</p>
+        </li>
+        <li>
+          <span class="direction__tick" aria-hidden="true"></span>
+          <p class="direction__label" data-i18n="story.s06.d3.label">BETTER EVIDENCE</p>
+          <p class="direction__body" data-i18n="story.s06.d3.body">Use real user feedback to improve the questions, scoring transparency and explanations.</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ============ Final CTA（页底唯一 CTA） ============ -->
+    <section class="final" aria-labelledby="ctaTitle">
+      <div class="shell final__inner">
+        <h2 id="ctaTitle" data-i18n="story.cta.heading">What could fit your home?</h2>
+        <p class="body" data-i18n="story.cta.body">Explore heating and cooling paths using your own household information and local climate.</p>
+        <a class="btn" href="/advisor" data-i18n="story.cta.button">Start your home assessment</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="shell">
+      <p class="disclaimer" data-i18n="g0.disclaimer">
+        Decision support only. Not engineering design, installation quote, or legal advice.
+        Local installers must confirm sizing and safety.
+      </p>
+    </div>
+  </footer>
+
+  <script src="/docs/global/i18n.js"></script>
+</body>
+</html>

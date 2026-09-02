@@ -4,7 +4,9 @@
   "description": "一个面向保定煤改X区域的清洁取暖转型模拟沙盘，用农户家庭数据比较不同取暖路径的可负担性，并为村级清洁取暖决策提供参考。",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "tsc && npm run bundle",
+    "bundle": "esbuild docs/src/global/index.ts --bundle --format=iife --global-name=GlobalEngine --target=es2019 --outfile=docs/global/engine.bundle.js",
     "typecheck": "tsc --noEmit",
     "test": "npm run build && node --test docs/tests/global/*.test.js"
   },
@@ -21,6 +23,8 @@
   },
   "homepage": "https://github.com/bcfd5yh6vk-arch/clean-heating-simulator#readme",
   "devDependencies": {
-    "typescript": "^7.0.2"
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
   }
 }
