@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>气候与家 · 游园海报</title>
+<!--
+  目的：游园会墙上的大海报。路过的人 30 秒看懂：我的故事 + 今天玩气候。
+  受众：带孩子的家长，不是评审委员。
+  色板：ground #EDF0F3 / ink #12171D / cold #1E5F8E / ember #B4551F / leaf #3F7A56 / arid #A98235
+  字体：标题用宋体，正文用系统黑体。自然教育展板，不是科技公司落地页。
+  布局：顶上气候色条 → 左故事三图 → 右今天的物候条和扫码。
+  签名元素：十二个月色格（和网站选点后的物候条同一套逻辑）。
+-->
+<style>
+  :root {
+    --ground: #EDF0F3;
+    --paper: #F7F4EE;
+    --ink: #12171D;
+    --muted: #3A454F;
+    --cold: #1E5F8E;
+    --ember: #B4551F;
+    --leaf: #3F7A56;
+    --arid: #A98235;
+    --polar: #7C99B4;
+    --rule: #CFD6DD;
+    --serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", "STSong", serif;
+    --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #d8dde3; color: var(--ink); }
+  body { font-family: var(--sans); padding: 16px; }
+  .toolbar {
+    max-width: 920px;
+    margin: 0 auto 14px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .toolbar strong { color: var(--ink); }
+  .poster {
+    width: 420mm;
+    height: 594mm;
+    margin: 0 auto;
+    background: var(--paper);
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    padding: 14mm 16mm 12mm;
+    box-shadow: 0 18px 40px rgba(18, 23, 29, 0.18);
+  }
+  .band { display: flex; height: 8px; margin: 0 -16mm 8mm; }
+  .band i { display: block; flex: 1; }
+  .band i:nth-child(1) { background: var(--polar); }
+  .band i:nth-child(2) { background: var(--cold); flex-grow: 1.5; }
+  .band i:nth-child(3) { background: var(--leaf); flex-grow: 1.2; }
+  .band i:nth-child(4) { background: var(--arid); }
+  .band i:nth-child(5) { background: #1F7F79; flex-grow: 0.8; }
+  .kicker {
+    font-size: 11pt;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cold);
+    font-weight: 700;
+    margin: 0 0 4mm;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 28pt;
+    line-height: 1.2;
+    margin: 0 0 4mm;
+    font-weight: 700;
+  }
+  .lede {
+    font-size: 13pt;
+    line-height: 1.55;
+    max-width: 36em;
+    margin: 0 0 8mm;
+    color: var(--muted);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 8mm;
+    flex: 1;
+    min-height: 0;
+  }
+  h2 {
+    font-family: var(--serif);
+    font-size: 16pt;
+    margin: 0 0 3mm;
+  }
+  .story {
+    display: grid;
+    grid-template-rows: auto auto auto;
+    gap: 5mm;
+  }
+  figure {
+    margin: 0;
+    background: #fff;
+    border: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  figure img { display: block; width: 100%; height: 48mm; object-fit: cover; }
+  figcaption {
+    padding: 2.5mm 3mm 3mm;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+  figcaption b { display: block; font-size: 11pt; margin-bottom: 1mm; }
+  .today {
+    background: #fff;
+    border: 1px solid var(--rule);
+    padding: 5mm;
+    display: flex;
+    flex-direction: column;
+    gap: 4mm;
+  }
+  .year {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1.5mm;
+  }
+  .year span {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 22mm;
+    color: #fff;
+    font-size: 8pt;
+    font-weight: 700;
+    padding-bottom: 1.5mm;
+  }
+  .year span:nth-child(1), .year span:nth-child(12) { background: var(--polar); }
+  .year span:nth-child(2) { background: #7C99B4; }
+  .year span:nth-child(3), .year span:nth-child(11) { background: var(--cold); }
+  .year span:nth-child(4), .year span:nth-child(10) { background: var(--leaf); }
+  .year span:nth-child(5), .year span:nth-child(9) { background: #5A9A74; }
+  .year span:nth-child(6), .year span:nth-child(7), .year span:nth-child(8) { background: var(--ember); }
+  .today p { margin: 0; font-size: 11pt; line-height: 1.5; color: var(--muted); }
+  .qr-row {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 38mm 1fr;
+    gap: 4mm;
+    align-items: center;
+    background: var(--ground);
+    padding: 4mm;
+  }
+  .qr-row img { width: 38mm; height: 38mm; background: #fff; }
+  .qr-row strong { display: block; font-size: 12pt; margin-bottom: 1mm; }
+  .foot {
+    margin-top: 6mm;
+    font-size: 9pt;
+    color: var(--muted);
+    border-top: 1px solid var(--rule);
+    padding-top: 3mm;
+    display: flex;
+    justify-content: space-between;
+    gap: 8mm;
+  }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .toolbar { display: none; }
+    .poster { box-shadow: none; width: 420mm; height: 594mm; }
+    @page { size: A2; margin: 0; }
+  }
+  @media screen and (max-width: 1100px) {
+    .poster { width: auto; height: auto; }
+  }
+</style>
+</head>
+<body>
+  <p class="toolbar">打印：打开本页 → Chrome「打印」→ 纸张选 <strong>A2</strong>，打开「背景图形」。复印店出 A1 时，按 141% 放大即可。本地预览：<code>/outreach/poster</code></p>
+  <article class="poster">
+    <div class="band" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <p class="kicker">自然教育游园 · 气候与家</p>
+    <h1>这块地的气候，也是家里的冬天。</h1>
+    <p class="lede">树按冷热换叶子，房子按冷热决定要不要烧火。我做了一个可以点地图的工具：先看当地一年怎么过，再比较适合这户人家的取暖或制冷路径。</p>
+    <div class="grid">
+      <div>
+        <h2>我的故事</h2>
+        <div class="story">
+          <figure>
+            <img src="/docs/story/images/story-hero-rooftop-solar.jpg" alt="屋顶光伏" />
+            <figcaption><b>天变蓝了，家里的账还在。</b>华北煤改之后空气好了，取暖怎么选却更难。政策看排放，家里看的是冬天冷不冷、钱够不够。</figcaption>
+          </figure>
+          <figure>
+            <img src="/docs/story/images/story-01-question-gas-meter.jpg" alt="燃气表" />
+            <figcaption><b>问题落在一户一户上。</b>我先在河北村子里做了中国试点，大约 50 人内部试用，没有公开发布过面向公众的招募。</figcaption>
+          </figure>
+          <figure>
+            <img src="/docs/story/images/story-02-china-pilot-ui.jpg" alt="试点界面" />
+            <figcaption><b>同一条问题，推到地图上。</b>全球版按气候带和公开数据打分。分数是公式算的，AI 只解释已经算好的结果。</figcaption>
+          </figure>
+        </div>
+      </div>
+      <aside class="today">
+        <h2>今天在园子里玩什么</h2>
+        <p>先在纸图上找到自己住的气候带。格子颜色按冷热排：蓝是冷月，赭是热月。华北一带，冷月里树会歇一阵，家里往往也要取暖。这不是两件无关的事。</p>
+        <div class="year" aria-label="华北一带示意的一年">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+          <span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+        </div>
+        <p>这十二格是示意，不是今天园子里的实测。网站上点到你的城市，会用 1991-2020 的月平均气温和降水，讲当地气候、物候，以及为什么。不编当地物种，免得指错。</p>
+        <div class="qr-row">
+          <img src="./qr-climate.svg" alt="网站二维码" />
+          <div>
+            <strong>扫一扫，点自己的城市</strong>
+            气候教育：看这一年户外怎么过。<br />
+            能源选择：再比较适合你家的取暖或制冷路径。<br />
+            climate.ponderin.cn
+          </div>
+        </div>
+      </aside>
+    </div>
+    <p class="foot">
+      <span>Climate Adaptation Energy Advisor · 学生项目 · 决策参考，不是安装报价</span>
+      <span>中国试点仍在 clean-heating-simulator.com</span>
+    </p>
+  </article>
+</body>
+</html>

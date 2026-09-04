@@ -15,6 +15,8 @@
     { "source": "/global", "destination": "/docs/global/landing.html" },
     { "source": "/advisor", "destination": "/docs/global/index.html" },
     { "source": "/story", "destination": "/docs/global/story.html" },
-    { "source": "/impact", "destination": "/docs/global/impact.html" }
+    { "source": "/impact", "destination": "/docs/global/impact.html" },
+    { "source": "/outreach/poster", "destination": "/docs/outreach/fair-poster.html" },
+    { "source": "/outreach/cards", "destination": "/docs/outreach/fair-cards.html" }
   ]
 }

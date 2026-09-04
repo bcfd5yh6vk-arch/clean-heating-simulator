@@ -131,6 +131,7 @@
     el.card = document.getElementById("g1Card");
     el.notice = document.getElementById("g1Notice");
     el.charts = document.getElementById("g1Charts");
+    el.nature = document.getElementById("g1Nature");
     el.status = document.getElementById("g1Status");
     if (!el.canvas || !el.card) return Promise.resolve(false);
 
@@ -309,6 +310,7 @@
     if (!geo || !window.GlobalEngine.isUsableLocation(geo)) {
       el.card.innerHTML = '<p class="help">' + escapeHtml(t("pickPrompt")) + "</p>";
       if (el.charts) el.charts.innerHTML = "";
+      renderNature(null);
       if (el.status) el.status.textContent = t("pickPrompt");
       return;
     }
@@ -364,6 +366,7 @@
         resolutionLabel(resolution);
     }
     renderCharts(climate);
+    renderNature(climate);
   }
 
   /* ---- 图表 ------------------------------------------------------------ */
@@ -555,6 +558,135 @@
         renderCharts(climate);
       });
     }
+  }
+
+  function nt(key) {
+    if (!window.GlobalI18n) return key;
+    var v = window.GlobalI18n.t("g1nature." + key);
+    return v === "g1nature." + key ? key : v;
+  }
+
+  function natureLine(kind, copyRef) {
+    var template = nt(kind + "." + copyRef.key);
+    var months = t("months");
+    if (window.GlobalEngine && window.GlobalEngine.fillNatureCopy) {
+      return window.GlobalEngine.fillNatureCopy(template, copyRef.params || {}, months);
+    }
+    return template;
+  }
+
+  function yearStripSvg(months) {
+    var colors = (window.GlobalEngine && window.GlobalEngine.MONTH_BAND_COLOR) || {
+      ice: "#7C99B4", cold: "#2F6E96", cool: "#3F7A56", mild: "#5A9A74", warm: "#A98235", hot: "#B4551F"
+    };
+    var short = t("monthsShort");
+    var w = 360;
+    var gap = 3;
+    var cell = (w - gap * 13) / 12;
+    var svg = '<svg class="g1-year" viewBox="0 0 ' + w + ' 86" role="img" aria-label="' + escapeHtml(nt("yearCaption")) + '">';
+    months.forEach(function (m, i) {
+      var x = gap + i * (cell + gap);
+      var fill = colors[m.band] || "#888";
+      svg += '<rect x="' + x.toFixed(1) + '" y="8" width="' + cell.toFixed(1) + '" height="44" rx="6" fill="' + fill + '"/>';
+      if (typeof m.precip_mm === "number") {
+        var dots = m.wet === "wet" ? 5 : m.wet === "dry" ? 1 : 3;
+        for (var d = 0; d < dots; d += 1) {
+          var cx = x + cell * (0.25 + (d % 3) * 0.25);
+          var cy = 18 + Math.floor(d / 3) * 12;
+          svg += '<circle cx="' + cx.toFixed(1) + '" cy="' + cy + '" r="2.2" fill="#fff" opacity="0.85"/>';
+        }
+      }
+      svg += '<text class="g1-tick" x="' + (x + cell / 2).toFixed(1) + '" y="68" text-anchor="middle">' + escapeHtml(short[i] || "") + "</text>";
+    });
+    svg += "</svg>";
+    return svg;
+  }
+
+  function natureIcon(kind, lesson) {
+    var accent = "#1E5F8E";
+    var ember = "#B4551F";
+    var leaf = "#3F7A56";
+    if (kind === "climate") {
+      if (lesson.family.indexOf("polar") === 0 || lesson.family.indexOf("continental") === 0) {
+        return '<svg viewBox="0 0 160 72" aria-hidden="true"><circle cx="118" cy="22" r="14" fill="' + ember + '" opacity="0.85"/><rect x="18" y="40" width="124" height="18" rx="9" fill="' + accent + '"/><rect x="36" y="28" width="18" height="22" fill="#dfe8ef"/><rect x="70" y="22" width="18" height="28" fill="#dfe8ef"/><rect x="104" y="30" width="18" height="20" fill="#dfe8ef"/></svg>';
+      }
+      if (lesson.family.indexOf("arid") === 0) {
+        return '<svg viewBox="0 0 160 72" aria-hidden="true"><circle cx="124" cy="20" r="16" fill="' + ember + '"/><path d="M8 58 Q40 28 80 58 T152 58" fill="none" stroke="#A98235" stroke-width="8" stroke-linecap="round"/></svg>';
+      }
+      return '<svg viewBox="0 0 160 72" aria-hidden="true"><circle cx="36" cy="22" r="14" fill="' + ember + '"/><ellipse cx="108" cy="28" rx="32" ry="16" fill="' + accent + '" opacity="0.75"/><rect x="20" y="48" width="120" height="10" rx="5" fill="' + leaf + '"/></svg>';
+    }
+    if (kind === "phenology") {
+      if (lesson.phenology_key === "evergreen" || lesson.phenology_key === "rain_pulse") {
+        return '<svg viewBox="0 0 160 72" aria-hidden="true"><rect x="74" y="36" width="12" height="28" fill="#6b4a2b"/><circle cx="80" cy="28" r="22" fill="' + leaf + '"/><circle cx="62" cy="34" r="12" fill="#5A9A74"/></svg>';
+      }
+      if (lesson.phenology_key === "wait_for_rain") {
+        return '<svg viewBox="0 0 160 72" aria-hidden="true"><rect x="74" y="40" width="10" height="22" fill="#6b4a2b"/><path d="M80 18 L104 48 L56 48 Z" fill="#A98235"/><circle cx="28" cy="20" r="4" fill="' + accent + '"/><circle cx="40" cy="12" r="3" fill="' + accent + '"/></svg>';
+      }
+      if (lesson.phenology_key === "ice_year" || lesson.phenology_key === "short_thaw") {
+        return '<svg viewBox="0 0 160 72" aria-hidden="true"><circle cx="80" cy="36" r="20" fill="#dfe8ef" stroke="' + accent + '" stroke-width="3"/><path d="M80 16 V56 M60 36 H100 M66 22 L94 50 M94 22 L66 50" stroke="' + accent + '" stroke-width="3"/></svg>';
+      }
+      return '<svg viewBox="0 0 160 72" aria-hidden="true"><rect x="76" y="34" width="10" height="28" fill="#6b4a2b"/><path d="M50 38 Q80 6 110 38" fill="none" stroke="#A98235" stroke-width="6"/><circle cx="58" cy="44" r="5" fill="#B4551F"/><circle cx="102" cy="46" r="5" fill="#B4551F"/></svg>';
+    }
+    return '<svg viewBox="0 0 160 72" aria-hidden="true"><rect x="70" y="12" width="18" height="48" rx="9" fill="#dfe8ef" stroke="' + ember + '" stroke-width="3"/><rect x="74" y="36" width="10" height="20" rx="4" fill="' + ember + '"/><circle cx="32" cy="28" r="8" fill="' + accent + '" opacity="0.8"/></svg>';
+  }
+
+  function renderNature(climate) {
+    if (!el.nature) return;
+    var E = window.GlobalEngine;
+    var geo = state.geo;
+    if (!geo || !E || !E.isUsableLocation(geo) || !E.explainNatureClimate) {
+      el.nature.innerHTML = "";
+      el.nature.className = "g1-nature hidden";
+      return;
+    }
+    if (!climate) {
+      el.nature.innerHTML = "";
+      el.nature.className = "g1-nature hidden";
+      return;
+    }
+
+    var lesson = E.explainNatureClimate({
+      temperature_c_monthly: climate.temperature_c_monthly,
+      precipitation_mm_monthly: climate.precipitation_mm_monthly,
+      koppen_code: climate.koppen_code || geo.koppen_code
+    });
+
+    if (lesson.status !== "ok") {
+      el.nature.className = "g1-nature";
+      el.nature.innerHTML =
+        "<p class='g1-nature-kicker'>" + escapeHtml(nt("step")) + "</p>" +
+        "<h3>" + escapeHtml(nt("title")) + "</h3>" +
+        "<p class='warning'>" + escapeHtml(nt("unavailable")) + "</p>" +
+        "<p class='g1-nature-note'>" + escapeHtml(nt("disclaimer")) + "</p>";
+      return;
+    }
+
+    var whyHtml = lesson.why.map(function (item) {
+      return "<p>" + escapeHtml(natureLine("why", item)) + "</p>";
+    }).join("");
+
+    el.nature.className = "g1-nature";
+    el.nature.innerHTML =
+      "<p class='g1-nature-kicker'>" + escapeHtml(nt("step")) + "</p>" +
+      "<h3>" + escapeHtml(nt("title")) + "</h3>" +
+      yearStripSvg(lesson.months) +
+      "<p class='g1-year-caption'>" + escapeHtml(nt("yearCaption")) + "</p>" +
+      "<div class='g1-nature-cards'>" +
+        "<article class='g1-nature-card'>" + natureIcon("climate", lesson) +
+          "<h4>" + escapeHtml(nt("climateLabel")) + "</h4>" +
+          "<p>" + escapeHtml(natureLine("climate", lesson.climate)) + "</p>" +
+        "</article>" +
+        "<article class='g1-nature-card'>" + natureIcon("phenology", lesson) +
+          "<h4>" + escapeHtml(nt("phenoLabel")) + "</h4>" +
+          "<p>" + escapeHtml(natureLine("phenology", lesson.phenology)) + "</p>" +
+        "</article>" +
+        "<article class='g1-nature-card'>" + natureIcon("why", lesson) +
+          "<h4>" + escapeHtml(nt("whyLabel")) + "</h4>" + whyHtml +
+        "</article>" +
+      "</div>" +
+      "<p class='g1-nature-home'><strong>" + escapeHtml(nt("homeLabel")) + "</strong> " +
+        escapeHtml(natureLine("home", lesson.home)) + "</p>" +
+      "<p class='g1-nature-note'>" + escapeHtml(nt("disclaimer")) + "</p>";
   }
 
   /* ---- 对外接口 -------------------------------------------------------- */

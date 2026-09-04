@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>气候与家 · 游园小卡</title>
+<style>
+  :root {
+    --paper: #F7F4EE;
+    --ink: #12171D;
+    --muted: #3A454F;
+    --cold: #1E5F8E;
+    --ember: #B4551F;
+    --leaf: #3F7A56;
+    --serif: "Songti SC", "Noto Serif SC", "STSong", serif;
+    --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: #d8dde3;
+    font-family: var(--sans);
+    color: var(--ink);
+  }
+  .toolbar { max-width: 210mm; margin: 0 auto 12px; font-size: 0.9rem; color: var(--muted); line-height: 1.5; }
+  .sheet {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: #fff;
+    padding: 8mm;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 8mm;
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid #cfd6dd;
+    padding: 7mm 7mm 6mm;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 4mm;
+    background: linear-gradient(90deg, #7C99B4 0 20%, #1E5F8E 20% 40%, #3F7A56 40% 60%, #A98235 60% 80%, #1F7F79 80% 100%);
+  }
+  .tag {
+    margin-top: 3mm;
+    font-size: 9pt;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cold);
+    font-weight: 700;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: 16pt;
+    line-height: 1.25;
+    margin: 2mm 0 3mm;
+  }
+  p { margin: 0 0 2.5mm; font-size: 10.5pt; line-height: 1.45; color: var(--muted); }
+  ul { margin: 0 0 3mm; padding-left: 1.1em; color: var(--ink); font-size: 10.5pt; line-height: 1.45; }
+  .bottom {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 28mm 1fr;
+    gap: 4mm;
+    align-items: center;
+  }
+  .bottom img { width: 28mm; height: 28mm; background: #fff; }
+  .url { font-size: 9pt; color: var(--cold); font-weight: 700; word-break: break-all; }
+  @media print {
+    body { padding: 0; background: #fff; }
+    .toolbar { display: none; }
+    @page { size: A4; margin: 0; }
+    .sheet { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+  <p class="toolbar">一张 A4 印 4 张小卡。打印时打开「背景图形」，单面即可。裁切线就是卡片边。本地预览：<code>/outreach/cards</code></p>
+  <div class="sheet">
+    <article class="card">
+      <div class="tag">气候教育</div>
+      <h1>点地图，看这块地一年怎么过</h1>
+      <p>冷月、热月、雨落在哪几个月，决定树会不会歇一阵。扫码进入，选好地方，用图看气候特征和物候，以及为什么。</p>
+      <div class="bottom">
+        <img src="./qr-climate.svg" alt="二维码" />
+        <div>
+          <div class="url">climate.ponderin.cn</div>
+          选点后先看自然教育课，大约一分钟。
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="tag">能源转型 · 家庭选择</div>
+      <h1>同一份气候，再问家里适不适合</h1>
+      <p>分数按公开数据和固定公式算，不是 AI 编的。帮你比较取暖或制冷路径，不是报价单，装之前仍要找本地师傅。</p>
+      <div class="bottom">
+        <img src="./qr-climate.svg" alt="二维码" />
+        <div>
+          <div class="url">climate.ponderin.cn</div>
+          中文页面，匿名，不用注册。
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="tag">气候教育</div>
+      <h1>点地图，看这块地一年怎么过</h1>
+      <p>冷月、热月、雨落在哪几个月，决定树会不会歇一阵。扫码进入，选好地方，用图看气候特征和物候，以及为什么。</p>
+      <div class="bottom">
+        <img src="./qr-climate.svg" alt="二维码" />
+        <div>
+          <div class="url">climate.ponderin.cn</div>
+          选点后先看自然教育课，大约一分钟。
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="tag">能源转型 · 家庭选择</div>
+      <h1>同一份气候，再问家里适不适合</h1>
+      <p>分数按公开数据和固定公式算，不是 AI 编的。帮你比较取暖或制冷路径，不是报价单，装之前仍要找本地师傅。</p>
+      <div class="bottom">
+        <img src="./qr-climate.svg" alt="二维码" />
+        <div>
+          <div class="url">climate.ponderin.cn</div>
+          中文页面，匿名，不用注册。
+        </div>
+      </div>
+    </article>
+  </div>
+</body>
+</html>

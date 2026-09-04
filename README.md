@@ -74,5 +74,7 @@ npm run dev        # http://127.0.0.1:5173
 | `/advisor` | 地图 + 问卷 + 结果 |
 | `/story` | My Story |
 | `/impact` | Impact & Evidence |
+| `/outreach/poster` | 游园会大海报（打印 A2） |
+| `/outreach/cards` | 游园会小卡（打印 A4） |
 
 `npm test` 会编译打分引擎并跑全球版测试。要调用 AI 或写入研究库时，在项目根建 `.env.local`，写入 `DEEPSEEK_API_KEY`、`SUPABASE_URL`、`SUPABASE_ANON_KEY`，不要提交这个文件。

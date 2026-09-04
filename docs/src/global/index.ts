@@ -9,6 +9,7 @@ export * from "./geo/pointInPolygon";
 export * from "./geo/boundaryIndex";
 export * from "./geo/koppenGrid";
 export * from "./geo/resolveLocation";
+export * from "./natureEducation";
 
 /* 四维打分引擎（§7.5–§7.10）。旧五维 scoreAndSort 已按规格移除。 */
 export * from "../scoring";

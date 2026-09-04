@@ -367,6 +367,8 @@ test("40. China Pilot keeps the original root URL; Global lives under /global", 
   assert.equal(bySource["/advisor"], "/docs/global/index.html");
   assert.equal(bySource["/story"], "/docs/global/story.html");
   assert.equal(bySource["/impact"], "/docs/global/impact.html");
+  assert.equal(bySource["/outreach/poster"], "/docs/outreach/fair-poster.html");
+  assert.equal(bySource["/outreach/cards"], "/docs/outreach/fair-cards.html");
 });
 
 test("41. Current setup mapping keeps broad answers broad", () => {
